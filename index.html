@@ -4,29 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zperiod</title>
+    <title>Interactive Periodic Table &amp; Chemical Equation Balancer | Free Chemistry Tool – Zperiod</title>
 
     <!-- SEO Meta Tags -->
     <meta name="description"
-        content="Zperiod is an interactive periodic table designed for Grade 9-12 chemistry students. Master chemistry visually with 3D atom models, ion engine, and exam-ready tools.">
+        content="Zperiod is a free interactive chemistry platform with an animated periodic table, 3D atom models, a chemical equation balancer, empirical formula calculator, and exam-ready tools for Grade 9-12 students.">
     <meta name="keywords"
-        content="periodic table, chemistry, elements, ions, interactive, education, science, atoms, molecules, molar mass, equation balancer">
+        content="periodic table, interactive periodic table, chemistry elements, chemical equation balancer, balance chemical equations, empirical formula calculator, molar mass calculator, 3D atom model, chemistry learning tool, free chemistry tool, ion table, chemistry education">
     <meta name="author" content="Philip">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://zperiod.app/">
 
-    <!-- Open Graph (Facebook, LinkedIn) -->
-    <meta property="og:title" content="Zperiod">
+    <!-- Open Graph (Facebook, LinkedIn, Discord, Reddit) -->
+    <meta property="og:title" content="Interactive Periodic Table & Chemical Equation Balancer | Zperiod">
     <meta property="og:description"
-        content="Master chemistry visually with 3D atom models, ion engine, and exam-ready tools. Designed for Grade 9-12 students.">
+        content="Free interactive chemistry platform with 3D atom models, a chemical equation balancer, empirical formula calculator, and 118 elements at your fingertips.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="logo.svg">
+    <meta property="og:url" content="https://zperiod.app/">
+    <meta property="og:image" content="https://zperiod.app/images/preview-modal.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Zperiod interactive periodic table showing a 3D atom model">
+    <meta property="og:site_name" content="Zperiod">
+    <meta property="og:locale" content="en_US">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Zperiod">
+    <meta name="twitter:title" content="Interactive Periodic Table & Chemical Equation Balancer | Zperiod">
     <meta name="twitter:description"
-        content="Master chemistry visually with 3D atom models, ion engine, and exam-ready tools.">
-    <meta name="twitter:image" content="logo.svg">
+        content="Free interactive chemistry platform with 3D atom models, equation balancer, and 118 elements.">
+    <meta name="twitter:image" content="https://zperiod.app/images/preview-modal.png">
+    <meta name="twitter:image:alt" content="Zperiod interactive periodic table showing a 3D atom model">
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Zperiod",
+      "url": "https://zperiod.app/",
+      "description": "Free interactive periodic table with 3D atom models, chemical equation balancer, empirical formula calculator, and chemistry learning tools for Grade 9-12 students.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "screenshot": "https://zperiod.app/images/preview-modal.png",
+      "featureList": [
+        "Interactive Periodic Table with 118 elements",
+        "3D Atom Models with electron shell visualization",
+        "Chemical Equation Balancer with scale animation",
+        "Empirical & Molecular Formula Calculator",
+        "Molar Mass Calculator",
+        "Ion Reference Table",
+        "Worksheet Generator with PDF export"
+      ],
+      "educationalLevel": "Grade 9-12",
+      "about": {
+        "@type": "Thing",
+        "name": "Chemistry"
+      }
+    }
+    </script>
 
     <link rel="icon" type="image/svg+xml" href="logo.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,7 +103,7 @@
     <div id="desktop-only-overlay" class="desktop-only-overlay">
         <!-- Fallback for desktop (hidden by CSS) -->
         <div class="desktop-only-content">
-            <h1 class="desktop-only-title">Desktop Experience Only</h1>
+            <h2 class="desktop-only-title">Desktop Experience Only</h2>
             <p class="desktop-only-text">Please access Zperiod on a desktop browser.</p>
         </div>
 
@@ -72,7 +113,7 @@
             <section class="ml-hero">
                 <div class="ml-hero-bg"></div>
                 <div class="ml-hero-content">
-                    <img src="logo.svg" alt="Zperiod" class="ml-logo">
+                    <img src="logo.svg" alt="Zperiod – Interactive Periodic Table" class="ml-logo">
                     <h1 class="ml-title">Zperiod</h1>
                     <p class="ml-subtitle">Master Chemistry.<br>Visually &amp; Instantly.</p>
                     <div class="ml-badge-row">
@@ -110,7 +151,7 @@
                     <p class="ml-feature-desc">All 118 elements with category color-coding, phase data at STP, and
                         instant access to comprehensive chemical information.</p>
                     <div class="ml-img-frame">
-                        <img src="images/preview-table.png" alt="Interactive Periodic Table" loading="lazy">
+                        <img src="images/preview-table.png" alt="Interactive periodic table with color-coded element categories and phase data" loading="lazy">
                     </div>
                 </div>
 
@@ -121,7 +162,7 @@
                     <p class="ml-feature-desc">Interactive 3D atom structures with electron shells, swipeable info
                         cards, and detailed properties for every element.</p>
                     <div class="ml-img-frame">
-                        <img src="images/preview-modal.png" alt="3D Atom Model" loading="lazy">
+                        <img src="images/preview-modal.png" alt="3D atom model showing electron shells and element properties" loading="lazy">
                     </div>
                 </div>
 
@@ -132,7 +173,7 @@
                     <p class="ml-feature-desc">Balance chemical equations with a real-time physics-based scale
                         visualization and one-click auto-balance.</p>
                     <div class="ml-img-frame">
-                        <img src="images/preview-tools.png" alt="Equation Balancer" loading="lazy">
+                        <img src="images/preview-tools.png" alt="Chemical equation balancer with real-time scale visualization" loading="lazy">
                     </div>
                 </div>
 
@@ -143,7 +184,7 @@
                     <p class="ml-feature-desc">Generate print-ready balanced equation worksheets with adjustable
                         difficulty, multiple reaction types, and PDF export.</p>
                     <div class="ml-img-frame">
-                        <img src="images/preview-worksheet.png" alt="Worksheet Generator" loading="lazy">
+                        <img src="images/preview-worksheet.png" alt="Chemistry worksheet generator with balanced equation exercises" loading="lazy">
                     </div>
                 </div>
             </section>
@@ -186,7 +227,7 @@
 
             <!-- Footer -->
             <footer class="ml-footer">
-                <img src="logo.svg" alt="Zperiod" class="ml-footer-logo">
+                <img src="logo.svg" alt="Zperiod logo" class="ml-footer-logo">
                 <p>&copy; 2026 Philip. All rights reserved.</p>
             </footer>
         </div>
@@ -297,12 +338,15 @@
         </div>
     </div>
 
+    <!-- Visually hidden H1 for desktop app (SEO) -->
+    <h1 class="sr-only">Zperiod – Interactive Periodic Table &amp; Chemical Equation Balancer</h1>
+
     <!-- Global Fixed Navigation -->
     <nav class="global-nav" id="global-nav">
         <!-- 左侧：品牌区 -->
         <div class="nav-brand-section">
             <a href="#" class="nav-logo-link" data-page="table">
-                <img src="logo.svg" alt="Zperiod" class="nav-logo">
+                <img src="logo.svg" alt="Zperiod home" class="nav-logo">
             </a>
             <a href="#" class="nav-brand" data-page="table">Zperiod</a>
         </div>

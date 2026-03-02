@@ -3,6 +3,8 @@ import {
   balanceEquationModal,
   calculateMolarMassModal,
   calculateEmpiricalModal,
+  validateEmpiricalInputs,
+  normalizeSymbol,
   formatFormulaHTML,
   atomicMasses,
 } from "./js/modules/chemistryTools.js";
@@ -1549,8 +1551,6 @@ function generateEmpiricalToolContent() {
   return `
         <style>
             /* ===== Apple-Style Empirical Formula Calculator ===== */
-            /* Typography: Inter Variable / SF Pro inspired */
-
             .emp-calc-wrapper {
                 --glass-bg: rgba(255, 255, 255, 0.72);
                 --glass-border: rgba(255, 255, 255, 0.6);
@@ -1561,9 +1561,7 @@ function generateEmpiricalToolContent() {
                 --accent-purple: #af52de;
                 --accent-green: #30d158;
                 --surface-elevated: rgba(255, 255, 255, 0.9);
-
                 font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-
                 display: flex;
                 flex-direction: column;
                 min-height: 100%;
@@ -1571,7 +1569,6 @@ function generateEmpiricalToolContent() {
                 box-sizing: border-box;
             }
 
-            /* ===== Two Column Layout ===== */
             .emp-grid {
                 display: grid;
                 grid-template-columns: 300px 1fr;
@@ -1580,21 +1577,11 @@ function generateEmpiricalToolContent() {
                 flex: 1 0 auto;
                 min-height: 0;
             }
-
             @media (max-width: 720px) {
-                .emp-grid {
-                    grid-template-columns: 1fr;
-                    grid-template-rows: auto auto;
-                    height: auto;
-                }
+                .emp-grid { grid-template-columns: 1fr; grid-template-rows: auto auto; height: auto; }
             }
 
-            /* ===== Left Column: Controls ===== */
-            .emp-controls {
-                display: flex;
-                flex-direction: column;
-                align-self: start;
-            }
+            .emp-controls { display: flex; flex-direction: column; align-self: start; }
 
             .emp-glass-card {
                 background: var(--glass-bg);
@@ -1607,58 +1594,32 @@ function generateEmpiricalToolContent() {
             }
 
             .emp-section-label {
-                font-size: 11px;
-                font-weight: 600;
-                color: var(--text-secondary);
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
-                margin-bottom: 10px;
+                font-size: 11px; font-weight: 600; color: var(--text-secondary);
+                text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
             }
 
-            /* Element Inputs */
-            .emp-input-stack {
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-            }
+            .emp-input-stack { display: flex; flex-direction: column; gap: 6px; }
 
             .emp-input-row {
-                display: flex;
-                align-items: center;
-                gap: 8px;
+                display: flex; align-items: flex-start; gap: 8px;
+                position: relative;
             }
 
             .emp-el-input {
-                width: 42px;
-                height: 42px;
-                min-width: 42px;
+                width: 42px; height: 42px; min-width: 42px;
                 background: linear-gradient(145deg, #9ca3af, #d1d5db);
-                border: none;
-                border-radius: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 15px;
-                font-weight: 800;
-                color: #fff;
-                text-align: center;
-                text-transform: uppercase;
-                flex-shrink: 0;
+                border: 2px solid transparent; border-radius: 10px;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 15px; font-weight: 800; color: #fff;
+                text-align: center; flex-shrink: 0;
                 transition: all 0.2s ease;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
             }
-
             .emp-el-input:focus {
-                outline: none;
-                transform: scale(1.05);
+                outline: none; transform: scale(1.05);
                 box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
             }
-
-            .emp-el-input::placeholder {
-                color: rgba(255,255,255,0.7);
-                font-weight: 600;
-            }
-
+            .emp-el-input::placeholder { color: rgba(255,255,255,0.7); font-weight: 600; }
             .emp-el-input.has-value { background: linear-gradient(145deg, #6366f1, #8b5cf6); }
             .emp-el-input.el-C { background: linear-gradient(145deg, #374151, #4b5563); }
             .emp-el-input.el-H { background: linear-gradient(145deg, #3b82f6, #60a5fa); }
@@ -1672,213 +1633,139 @@ function generateEmpiricalToolContent() {
             .emp-el-input.el-Ca { background: linear-gradient(145deg, #84cc16, #a3e635); }
             .emp-el-input.el-Fe { background: linear-gradient(145deg, #b45309, #d97706); }
             .emp-el-input.el-Mg { background: linear-gradient(145deg, #14b8a6, #2dd4bf); }
+            .emp-el-input.emp-invalid { border-color: #ef4444 !important; }
+
+            .emp-value-col {
+                flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0;
+            }
 
             .emp-value-wrapper {
-                flex: 1;
-                position: relative;
-                display: flex;
-                align-items: center;
-                min-width: 0;
+                flex: 1; position: relative; display: flex; align-items: center; min-width: 0;
             }
 
             .emp-input-field {
-                width: 100%;
-                height: 42px;
+                width: 100%; height: 42px;
                 background: rgba(255,255,255,0.9);
-                border: 1px solid rgba(0,0,0,0.08);
-                border-radius: 10px;
+                border: 1.5px solid rgba(0,0,0,0.08); border-radius: 10px;
                 padding: 0 26px 0 12px;
-                font-size: 15px;
-                font-weight: 600;
-                color: var(--text-primary);
-                transition: all 0.2s ease;
-                font-variant-numeric: tabular-nums;
+                font-size: 15px; font-weight: 600; color: var(--text-primary);
+                transition: all 0.2s ease; font-variant-numeric: tabular-nums;
             }
-
             .emp-input-field:focus {
-                outline: none;
-                border-color: var(--accent-purple);
-                box-shadow: 0 0 0 3px rgba(175, 82, 222, 0.15);
-                background: #fff;
+                outline: none; border-color: var(--accent-purple);
+                box-shadow: 0 0 0 3px rgba(175, 82, 222, 0.15); background: #fff;
             }
-
-            .emp-input-field::placeholder {
-                color: var(--text-tertiary);
-                font-weight: 400;
-            }
+            .emp-input-field::placeholder { color: var(--text-tertiary); font-weight: 400; }
+            .emp-input-field.emp-invalid { border-color: #ef4444 !important; }
 
             .emp-unit {
-                position: absolute;
-                right: 10px;
-                font-size: 13px;
-                font-weight: 600;
-                color: var(--text-tertiary);
+                position: absolute; right: 10px;
+                font-size: 13px; font-weight: 600; color: var(--text-tertiary);
                 pointer-events: none;
             }
 
-            /* Divider */
+            /* Inline row error */
+            .emp-row-error {
+                font-size: 11px; font-weight: 500; color: #ef4444;
+                min-height: 14px; line-height: 14px;
+                padding-left: 2px;
+                opacity: 0; transition: opacity 0.15s ease;
+            }
+            .emp-row-error.visible { opacity: 1; }
+
+            /* Global error banner */
+            .emp-global-error {
+                display: none; align-items: center; gap: 8px;
+                margin-top: 8px; padding: 10px 14px;
+                background: rgba(239, 68, 68, 0.08);
+                border: 1px solid rgba(239, 68, 68, 0.2);
+                border-radius: 10px;
+                font-size: 12px; font-weight: 600; color: #dc2626;
+                line-height: 1.4;
+            }
+            .emp-global-error.visible { display: flex; }
+            .emp-global-error svg { flex-shrink: 0; width: 16px; height: 16px; }
+
             .emp-divider {
                 height: 1px;
                 background: linear-gradient(90deg, transparent, rgba(0,0,0,0.08), transparent);
                 margin: 10px 0;
             }
 
-            /* Molecular Mass */
             .emp-mol-mass-label {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                margin-bottom: 6px;
+                display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
             }
-
             .emp-mol-mass-label span {
-                font-size: 11px;
-                font-weight: 600;
-                color: var(--text-secondary);
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
+                font-size: 11px; font-weight: 600; color: var(--text-secondary);
+                text-transform: uppercase; letter-spacing: 0.06em;
             }
-
             .emp-optional-pill {
-                font-size: 9px;
-                font-weight: 600;
-                padding: 2px 6px;
-                background: rgba(0,0,0,0.04);
-                color: var(--text-tertiary);
-                border-radius: 4px;
-                text-transform: uppercase;
+                font-size: 9px; font-weight: 600; padding: 2px 6px;
+                background: rgba(0,0,0,0.04); color: var(--text-tertiary);
+                border-radius: 4px; text-transform: uppercase;
             }
-
             .emp-mol-input {
-                width: 100%;
-                height: 42px;
+                width: 100%; height: 42px;
                 background: rgba(255,255,255,0.9);
-                border: 1px solid rgba(0,0,0,0.08);
-                border-radius: 10px;
-                padding: 0 12px;
-                font-size: 15px;
-                font-weight: 600;
-                color: var(--text-primary);
-                transition: all 0.2s ease;
+                border: 1.5px solid rgba(0,0,0,0.08); border-radius: 10px;
+                padding: 0 12px; font-size: 15px; font-weight: 600;
+                color: var(--text-primary); transition: all 0.2s ease;
             }
-
             .emp-mol-input:focus {
-                outline: none;
-                border-color: var(--accent-purple);
-                box-shadow: 0 0 0 3px rgba(175, 82, 222, 0.15);
-                background: #fff;
+                outline: none; border-color: var(--accent-purple);
+                box-shadow: 0 0 0 3px rgba(175, 82, 222, 0.15); background: #fff;
             }
 
-            /* CTA Button */
             .emp-calc-btn {
-                width: 100%;
-                height: 44px;
-                margin-top: 6px;
+                width: 100%; height: 44px; margin-top: 6px;
                 background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
-                color: #fff;
-                border: none;
-                border-radius: 12px;
-                font-size: 14px;
-                font-weight: 600;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
+                color: #fff; border: none; border-radius: 12px;
+                font-size: 14px; font-weight: 600; cursor: pointer;
+                display: flex; align-items: center; justify-content: center; gap: 8px;
                 transition: all 0.2s ease;
                 box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
             }
-
-            .emp-calc-btn:hover {
+            .emp-calc-btn:hover:not(:disabled) {
                 transform: translateY(-1px);
                 box-shadow: 0 6px 18px rgba(139, 92, 246, 0.5), inset 0 1px 0 rgba(255,255,255,0.2);
             }
-
-            .emp-calc-btn:active {
+            .emp-calc-btn:active:not(:disabled) {
                 transform: translateY(0);
                 box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
             }
-
-            .emp-calc-btn svg {
-                width: 16px;
-                height: 16px;
+            .emp-calc-btn:disabled {
+                opacity: 0.45; cursor: not-allowed; transform: none;
             }
+            .emp-calc-btn svg { width: 16px; height: 16px; }
 
-            /* Action Buttons Row */
-            .emp-quick-actions {
-                display: flex;
-                align-items: center;
-                justify-content: flex-end;
-                gap: 6px;
-                margin-top: 6px;
-            }
+            .emp-quick-actions { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 6px; }
 
             .emp-icon-btn {
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                border: none;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                width: 32px; height: 32px; border-radius: 50%; border: none;
+                cursor: pointer; display: flex; align-items: center; justify-content: center;
                 transition: all 0.2s ease;
             }
+            .emp-icon-btn svg { width: 14px; height: 14px; }
+            .emp-icon-btn.add { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); }
+            .emp-icon-btn.add:hover { background: rgba(139, 92, 246, 0.2); transform: scale(1.1); }
+            .emp-icon-btn.add:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+            .emp-icon-btn.remove { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+            .emp-icon-btn.remove:hover { background: rgba(239, 68, 68, 0.2); transform: scale(1.1); }
+            .emp-icon-btn.remove:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+            .emp-icon-btn.reset { background: rgba(0,0,0,0.04); color: var(--text-tertiary); }
+            .emp-icon-btn.reset:hover { background: rgba(0,0,0,0.08); transform: scale(1.1); }
+            .emp-icon-btn.random { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #16a34a; box-shadow: 0 2px 6px rgba(34, 197, 94, 0.15); }
+            .emp-icon-btn.random:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 3px 10px rgba(34, 197, 94, 0.25); }
 
-            .emp-icon-btn svg {
-                width: 14px;
-                height: 14px;
+            /* Row status indicator */
+            .emp-row-status {
+                width: 20px; height: 42px; display: flex; align-items: center; justify-content: center;
+                font-size: 14px; flex-shrink: 0; opacity: 0; transition: opacity 0.15s ease;
             }
+            .emp-row-status.visible { opacity: 1; }
 
-            .emp-icon-btn.add {
-                background: rgba(139, 92, 246, 0.1);
-                color: var(--accent-purple);
-            }
-
-            .emp-icon-btn.add:hover {
-                background: rgba(139, 92, 246, 0.2);
-                transform: scale(1.1);
-            }
-
-            .emp-icon-btn.add:disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
-                transform: none;
-            }
-
-            .emp-icon-btn.remove {
-                background: rgba(239, 68, 68, 0.1);
-                color: #ef4444;
-            }
-
-            .emp-icon-btn.remove:hover {
-                background: rgba(239, 68, 68, 0.2);
-                transform: scale(1.1);
-            }
-
-            .emp-icon-btn.remove:disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
-                transform: none;
-            }
-
-            .emp-icon-btn.random {
-                background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-                color: #16a34a;
-                box-shadow: 0 2px 6px rgba(34, 197, 94, 0.15);
-            }
-
-            .emp-icon-btn.random:hover {
-                transform: scale(1.1) rotate(15deg);
-                box-shadow: 0 3px 10px rgba(34, 197, 94, 0.25);
-            }
-
-            /* ===== Right Column: Results Hero ===== */
-            .emp-results {
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-            }
+            /* ===== Right: Results ===== */
+            .emp-results { display: flex; flex-direction: column; height: 100%; }
 
             .emp-results-glass {
                 background: var(--glass-bg);
@@ -1888,21 +1775,15 @@ function generateEmpiricalToolContent() {
                 border-radius: 18px;
                 padding: 24px;
                 box-shadow: var(--glass-shadow);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-                flex: 1;
-                overflow: hidden;
+                display: flex; flex-direction: column; align-items: center;
+                justify-content: center; text-align: center;
+                flex: 1; overflow: hidden;
             }
 
-            /* Result Animation */
             .emp-result-display.visible .emp-atom-chip {
                 animation: atomPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
                 opacity: 0;
             }
-
             .emp-result-display.visible .emp-atom-chip:nth-child(1) { animation-delay: 0.1s; }
             .emp-result-display.visible .emp-atom-chip:nth-child(2) { animation-delay: 0.2s; }
             .emp-result-display.visible .emp-atom-chip:nth-child(3) { animation-delay: 0.3s; }
@@ -1911,189 +1792,94 @@ function generateEmpiricalToolContent() {
             .emp-result-display.visible .emp-atom-chip:nth-child(6) { animation-delay: 0.6s; }
 
             @keyframes atomPop {
-                0% {
-                    opacity: 0;
-                    transform: scale(0) rotate(-20deg);
-                }
-                70% {
-                    transform: scale(1.15) rotate(5deg);
-                }
-                100% {
-                    opacity: 1;
-                    transform: scale(1) rotate(0);
-                }
+                0% { opacity: 0; transform: scale(0) rotate(-20deg); }
+                70% { transform: scale(1.15) rotate(5deg); }
+                100% { opacity: 1; transform: scale(1) rotate(0); }
             }
-
             .emp-result-display.visible .emp-hero-formula {
                 animation: heroReveal 0.5s ease forwards;
             }
-
             @keyframes heroReveal {
-                0% {
-                    opacity: 0;
-                    transform: translateY(10px) scale(0.9);
-                }
-                100% {
-                    opacity: 1;
-                    transform: translateY(0) scale(1);
-                }
+                0% { opacity: 0; transform: translateY(10px) scale(0.9); }
+                100% { opacity: 1; transform: translateY(0) scale(1); }
             }
 
-            /* Empty State */
-            .emp-empty-state {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 20px;
-            }
+            .emp-empty-state { display: flex; flex-direction: column; align-items: center; padding: 20px; }
 
-            .emp-floating-atoms {
-                position: relative;
-                width: 150px;
-                height: 90px;
-                margin-bottom: 24px;
-            }
-
+            .emp-floating-atoms { position: relative; width: 150px; height: 90px; margin-bottom: 24px; }
             .emp-atom {
-                position: absolute;
-                width: 40px;
-                height: 40px;
-                border-radius: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: 700;
-                font-size: 15px;
-                color: #fff;
+                position: absolute; width: 40px; height: 40px; border-radius: 10px;
+                display: flex; align-items: center; justify-content: center;
+                font-weight: 700; font-size: 15px; color: #fff;
                 box-shadow: 0 4px 14px rgba(0,0,0,0.18);
                 animation: atomFloat 3.5s ease-in-out infinite;
             }
-
             .emp-atom.a1 { background: linear-gradient(145deg, #374151, #4b5563); left: 0; top: 16px; animation-delay: 0s; }
             .emp-atom.a2 { background: linear-gradient(145deg, #3b82f6, #60a5fa); left: 55px; top: 0; animation-delay: 0.25s; }
             .emp-atom.a3 { background: linear-gradient(145deg, #ef4444, #f87171); left: 110px; top: 20px; animation-delay: 0.5s; }
             .emp-atom.a4 { background: linear-gradient(145deg, #22c55e, #4ade80); left: 55px; top: 48px; animation-delay: 0.75s; }
+            @keyframes atomFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.02); } }
 
-            @keyframes atomFloat {
-                0%, 100% { transform: translateY(0) scale(1); }
-                50% { transform: translateY(-5px) scale(1.02); }
-            }
+            .emp-empty-text { color: var(--text-tertiary); font-size: 14px; font-weight: 500; line-height: 1.5; }
 
-            .emp-empty-text {
-                color: var(--text-tertiary);
-                font-size: 14px;
-                font-weight: 500;
-                line-height: 1.5;
-            }
-
-            /* Results Display */
             .emp-result-display {
-                display: none;
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-                gap: 20px;
+                display: none; flex-direction: column; align-items: center; width: 100%; gap: 20px;
             }
+            .emp-result-display.visible { display: flex; }
 
-            .emp-result-display.visible {
-                display: flex;
-            }
-
-            /* Empirical (Secondary) */
-            .emp-empirical-result {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 4px;
-            }
-
+            .emp-empirical-result { display: flex; flex-direction: column; align-items: center; gap: 4px; }
             .emp-result-subtitle {
-                font-size: 10px;
-                font-weight: 600;
-                color: var(--text-tertiary);
-                text-transform: uppercase;
-                letter-spacing: 0.08em;
+                font-size: 10px; font-weight: 600; color: var(--text-tertiary);
+                text-transform: uppercase; letter-spacing: 0.08em;
             }
-
             .emp-empirical-pill {
-                display: inline-flex;
-                align-items: center;
-                height: 28px;
-                padding: 0 14px;
+                display: inline-flex; align-items: center; height: 28px; padding: 0 14px;
                 background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
-                border: 1px solid #ddd6fe;
-                border-radius: 14px;
-                font-size: 15px;
-                font-weight: 700;
-                color: #7c3aed;
-                font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-                letter-spacing: 0.01em;
+                border: 1px solid #ddd6fe; border-radius: 14px;
+                font-size: 15px; font-weight: 700; color: #7c3aed;
+                font-family: 'SF Mono', 'Monaco', 'Consolas', monospace; letter-spacing: 0.01em;
             }
 
-            /* Molecular (Hero) */
-            .emp-molecular-result {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 8px;
-            }
-
+            .emp-molecular-result { display: flex; flex-direction: column; align-items: center; gap: 8px; }
             .emp-hero-formula {
-                font-size: 3.2rem;
-                font-weight: 800;
-                color: var(--text-primary);
-                font-family: 'Inter', -apple-system, sans-serif;
-                letter-spacing: -0.03em;
-                line-height: 1.1;
+                font-size: 3.2rem; font-weight: 800; color: var(--text-primary);
+                letter-spacing: -0.03em; line-height: 1.1;
             }
-
             .emp-hero-formula sub {
-                font-size: 0.55em;
-                vertical-align: baseline;
-                position: relative;
-                top: 0.25em;
-                font-weight: 700;
-                color: var(--accent-purple);
+                font-size: 0.55em; vertical-align: baseline; position: relative;
+                top: 0.25em; font-weight: 700; color: var(--accent-purple);
             }
+            .emp-hero-mass { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
 
-            .emp-hero-mass {
-                font-size: 13px;
-                font-weight: 500;
-                color: var(--text-secondary);
+            /* Mol mass warning */
+            .emp-molmass-warning {
+                display: none; font-size: 12px; font-weight: 500; color: #d97706;
+                background: rgba(217, 119, 6, 0.08); border: 1px solid rgba(217, 119, 6, 0.18);
+                border-radius: 10px; padding: 8px 14px; text-align: center;
+                line-height: 1.4; max-width: 360px;
             }
+            .emp-molmass-warning.visible { display: block; }
 
-            /* Element Visualization */
+            /* Normalised banner */
+            .emp-normalised-tag {
+                display: none; font-size: 11px; font-weight: 600; color: #6366f1;
+                background: rgba(99, 102, 241, 0.08); border-radius: 8px;
+                padding: 4px 12px;
+            }
+            .emp-normalised-tag.visible { display: inline-block; }
+
             .emp-atoms-visual {
-                display: flex;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: 10px;
-                margin-top: 8px;
-                padding: 14px 20px;
-                background: rgba(0,0,0,0.02);
-                border-radius: 14px;
+                display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
+                margin-top: 8px; padding: 14px 20px;
+                background: rgba(0,0,0,0.02); border-radius: 14px;
             }
-
-            .emp-atom-chip {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 4px;
-            }
-
+            .emp-atom-chip { display: flex; flex-direction: column; align-items: center; gap: 4px; }
             .emp-atom-circle {
-                width: 44px;
-                height: 44px;
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 17px;
-                font-weight: 700;
-                color: #fff;
+                width: 44px; height: 44px; border-radius: 12px;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 17px; font-weight: 700; color: #fff;
                 box-shadow: 0 3px 10px rgba(0,0,0,0.15);
             }
-
             .emp-atom-circle.el-C { background: linear-gradient(145deg, #374151, #4b5563); }
             .emp-atom-circle.el-H { background: linear-gradient(145deg, #3b82f6, #60a5fa); }
             .emp-atom-circle.el-O { background: linear-gradient(145deg, #ef4444, #f87171); }
@@ -2112,179 +1898,83 @@ function generateEmpiricalToolContent() {
             .emp-atom-circle.el-K { background: linear-gradient(145deg, #ec4899, #f472b6); }
             .emp-atom-circle.el-Mg { background: linear-gradient(145deg, #14b8a6, #2dd4bf); }
             .emp-atom-circle.el-default { background: linear-gradient(145deg, #6b7280, #9ca3af); }
+            .emp-atom-count { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
 
-            .emp-atom-count {
-                font-size: 12px;
-                font-weight: 600;
-                color: var(--text-secondary);
-            }
-
-            /* Steps Toggle - Now horizontal bar at bottom */
-            .emp-steps-wrapper {
-                margin-top: 12px;
-                width: 100%;
-            }
-
+            .emp-steps-wrapper { margin-top: 12px; width: 100%; }
             .emp-steps-toggle {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 6px;
-                width: 100%;
-                padding: 10px 14px;
+                display: flex; align-items: center; justify-content: center; gap: 6px;
+                width: 100%; padding: 10px 14px;
                 background: rgba(139, 92, 246, 0.06);
-                border: 1px solid rgba(139, 92, 246, 0.15);
-                border-radius: 10px;
-                font-size: 12px;
-                font-weight: 600;
-                color: var(--accent-purple);
-                cursor: pointer;
-                transition: all 0.15s ease;
+                border: 1px solid rgba(139, 92, 246, 0.15); border-radius: 10px;
+                font-size: 12px; font-weight: 600; color: var(--accent-purple);
+                cursor: pointer; transition: all 0.15s ease;
             }
+            .emp-steps-toggle:hover { background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.25); }
+            .emp-steps-toggle svg { width: 14px; height: 14px; transition: transform 0.2s ease; }
+            .emp-steps-toggle.open svg { transform: rotate(180deg); }
 
-            .emp-steps-toggle:hover {
-                background: rgba(139, 92, 246, 0.1);
-                border-color: rgba(139, 92, 246, 0.25);
-            }
-
-            .emp-steps-toggle svg {
-                width: 14px;
-                height: 14px;
-                transition: transform 0.2s ease;
-            }
-
-            .emp-steps-toggle.open svg {
-                transform: rotate(180deg);
-            }
-
-            /* Steps Content - Full width section below, fits content */
-            .emp-steps-bar {
-                margin-top: 0;
-                flex-shrink: 0;
-            }
-
+            .emp-steps-bar { margin-top: 0; flex-shrink: 0; }
             .emp-steps-content {
-                display: none;
-                width: 100%;
-                margin-top: 20px;
-                margin-bottom: 60px;
+                display: none; width: 100%; margin-top: 20px; margin-bottom: 60px;
                 padding: 16px 40px;
                 background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
-                border: 1px solid rgba(139, 92, 246, 0.12);
-                border-radius: 16px;
-                text-align: left;
-                font-size: 14px;
-                color: var(--text-secondary);
-                line-height: 1.75;
+                border: 1px solid rgba(139, 92, 246, 0.12); border-radius: 16px;
+                text-align: left; font-size: 14px; color: var(--text-secondary); line-height: 1.75;
                 box-sizing: border-box;
             }
-
-            .emp-steps-content.visible {
-                display: block;
-                animation: stepsFade 0.3s ease;
-            }
-
-            @keyframes stepsFade {
-                from { opacity: 0; transform: translateY(-10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-
+            .emp-steps-content.visible { display: block; animation: stepsFade 0.3s ease; }
+            @keyframes stepsFade { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
             .emp-steps-content h4 {
-                font-size: 15px;
-                font-weight: 700;
-                color: var(--accent-purple);
-                text-transform: uppercase;
-                letter-spacing: 0.08em;
-                margin: 0 0 20px 0;
-                padding-bottom: 12px;
+                font-size: 15px; font-weight: 700; color: var(--accent-purple);
+                text-transform: uppercase; letter-spacing: 0.08em;
+                margin: 0 0 20px 0; padding-bottom: 12px;
                 border-bottom: 1px solid rgba(139, 92, 246, 0.1);
             }
-
-            .emp-steps-content ol,
-            .emp-steps-content ul {
-                margin: 0 0 16px 0;
-                padding-left: 20px;
-            }
-
-            .emp-steps-content > ol {
-                margin-bottom: 0;
-            }
-
-            .emp-steps-content li {
-                margin-bottom: 8px;
-                font-size: 14px;
-            }
-
-            .emp-steps-content li ul {
-                margin-top: 6px;
-                margin-bottom: 12px;
-            }
-
-            .emp-steps-content li ul li {
-                margin-bottom: 4px;
-                font-size: 13px;
-                color: var(--text-tertiary);
-            }
-
-            .emp-steps-content strong {
-                color: var(--text-primary);
-                font-weight: 600;
-            }
-
-            .emp-steps-content hr {
-                border: none;
-                height: 1px;
-                background: rgba(139, 92, 246, 0.15);
-                margin: 20px 0;
-            }
-
-            .emp-steps-content p {
-                margin: 6px 0;
-                font-size: 14px;
-            }
-
-            /* Molecular Formula Section */
+            .emp-steps-content ol, .emp-steps-content ul { margin: 0 0 16px 0; padding-left: 20px; }
+            .emp-steps-content > ol { margin-bottom: 0; }
+            .emp-steps-content li { margin-bottom: 8px; font-size: 14px; }
+            .emp-steps-content li ul { margin-top: 6px; margin-bottom: 12px; }
+            .emp-steps-content li ul li { margin-bottom: 4px; font-size: 13px; color: var(--text-tertiary); }
+            .emp-steps-content strong { color: var(--text-primary); font-weight: 600; }
+            .emp-steps-content hr { border: none; height: 1px; background: rgba(139, 92, 246, 0.15); margin: 20px 0; }
+            .emp-steps-content p { margin: 6px 0; font-size: 14px; }
             .emp-steps-content h4:not(:first-child) {
-                margin-top: 24px;
-                padding-top: 20px;
-                border-top: 1px solid rgba(139, 92, 246, 0.1);
-                border-bottom: none;
-                padding-bottom: 0;
+                margin-top: 24px; padding-top: 20px;
+                border-top: 1px solid rgba(139, 92, 246, 0.1); border-bottom: none; padding-bottom: 0;
             }
         </style>
 
         <div class="tool-padding-label">Empirical & Molecular Formula</div>
         <div class="emp-calc-wrapper">
-
-            <!-- Two Column Grid -->
             <div class="emp-grid">
                 <!-- Left: Controls -->
                 <div class="emp-controls">
                     <div class="emp-glass-card">
                         <div class="emp-section-label">Element Composition</div>
 
-                        <div class="emp-input-stack" id="modal-element-inputs">
-                            <!-- JS will populate -->
-                        </div>
+                        <div class="emp-input-stack" id="modal-element-inputs"></div>
 
                         <div class="emp-quick-actions">
-                            <button class="emp-icon-btn remove" id="emp-remove-element-btn" title="Remove Element">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <line x1="5" y1="12" x2="19" y2="12"/>
-                                </svg>
+                            <button class="emp-icon-btn remove" id="emp-remove-element-btn" title="Remove last element row">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
                             </button>
-                            <button class="emp-icon-btn add" id="emp-add-element-btn" title="Add Element">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <line x1="12" y1="5" x2="12" y2="19"/>
-                                    <line x1="5" y1="12" x2="19" y2="12"/>
-                                </svg>
+                            <button class="emp-icon-btn add" id="emp-add-element-btn" title="Add element row">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                             </button>
-                            <button class="emp-icon-btn random" id="emp-random-fill-btn" title="Random Compound">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 12a9 9 0 11-9-9c2.52 0 4.85.83 6.72 2.24"/>
-                                    <path d="M21 3v6h-6"/>
-                                </svg>
+                            <button class="emp-icon-btn reset" id="emp-reset-btn" title="Reset all fields">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 1 9 9 9.01 9.01 0 0 1-8.7-6.7"/><path d="M3 3v6h6"/></svg>
                             </button>
+                            <button class="emp-icon-btn random" id="emp-random-fill-btn" title="Fill with a random compound">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 11-9-9c2.52 0 4.85.83 6.72 2.24"/><path d="M21 3v6h-6"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Global error banner -->
+                        <div class="emp-global-error" id="emp-global-error">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <span id="emp-global-error-text"></span>
                         </div>
 
                         <div class="emp-divider"></div>
@@ -2293,7 +1983,7 @@ function generateEmpiricalToolContent() {
                             <span>Molecular Mass</span>
                             <span class="emp-optional-pill">Optional</span>
                         </div>
-                        <input type="number" id="modal-mol-mass" class="emp-mol-input" placeholder="e.g. 180" step="0.1">
+                        <input type="text" inputmode="decimal" id="modal-mol-mass" class="emp-mol-input" placeholder="e.g. 180 g/mol">
 
                         <button id="modal-calc-formula-btn" class="emp-calc-btn">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2308,10 +1998,9 @@ function generateEmpiricalToolContent() {
                     </div>
                 </div>
 
-                <!-- Right: Results Hero -->
+                <!-- Right: Results -->
                 <div class="emp-results">
                     <div class="emp-results-glass" id="lego-stage">
-                        <!-- Empty State -->
                         <div class="emp-empty-state" id="lego-empty">
                             <div class="emp-floating-atoms">
                                 <div class="emp-atom a1">C</div>
@@ -2322,31 +2011,28 @@ function generateEmpiricalToolContent() {
                             <p class="emp-empty-text">Enter element percentages<br>and click Calculate</p>
                         </div>
 
-                        <!-- Results (hidden initially) -->
                         <div class="emp-result-display" id="lego-blocks-area">
-                            <!-- Empirical (Secondary) -->
+                            <div class="emp-normalised-tag" id="emp-normalised-tag">Values normalised to 100 %</div>
+
                             <div class="emp-empirical-result">
                                 <span class="emp-result-subtitle">Empirical Formula</span>
-                                <div class="emp-empirical-pill" id="empirical-formula-display">CH₂</div>
+                                <div class="emp-empirical-pill" id="empirical-formula-display"></div>
                             </div>
 
-                            <!-- Molecular (Hero) -->
-                            <div class="emp-molecular-result" id="molecular-result-card">
+                            <div class="emp-molecular-result" id="molecular-result-card" style="display:none;">
                                 <span class="emp-result-subtitle">Molecular Formula</span>
-                                <div class="emp-hero-formula" id="molecular-formula-display">C₆H₁₂</div>
+                                <div class="emp-hero-formula" id="molecular-formula-display"></div>
                                 <span class="emp-hero-mass" id="result-mass-display"></span>
                             </div>
 
-                            <!-- Atom Visualization -->
+                            <div class="emp-molmass-warning" id="emp-molmass-warning"></div>
+
                             <div class="emp-atoms-visual" id="lego-blocks-visual"></div>
 
-                            <!-- Steps Toggle -->
                             <div class="emp-steps-wrapper">
                                 <button class="emp-steps-toggle" id="calc-details-toggle">
                                     <span>Show calculation steps</span>
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="6 9 12 15 18 9"/>
-                                    </svg>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                                 </button>
                             </div>
                         </div>
@@ -2354,7 +2040,6 @@ function generateEmpiricalToolContent() {
                 </div>
             </div>
 
-            <!-- Steps Bar - Full Width Below Grid -->
             <div class="emp-steps-bar">
                 <div class="emp-steps-content" id="calc-details-content"></div>
             </div>
@@ -2918,36 +2603,109 @@ function attachMolarMassListeners() {
 
 let empiricalElementCount = 3; // Track number of element rows
 
-function attachEmpiricalListeners() {
-  const methodSelect = document.getElementById("modal-formula-method");
-  const inputsContainer = document.getElementById("modal-element-inputs");
-  const btn = document.getElementById("modal-calc-formula-btn");
-  const detailsToggle = document.getElementById("calc-details-toggle");
-  const detailsContent = document.getElementById("calc-details-content");
-  const addElementBtn = document.getElementById("emp-add-element-btn");
-  const randomFillBtn = document.getElementById("emp-random-fill-btn");
+/* ---- Supported element-color CSS classes ---- */
+const EMP_COLORED = ['C','H','O','N','S','P','Cl','Na','K','Ca','Fe','Mg','Br','F','I','Cu','Zn'];
+function empColorClass(sym) {
+  return EMP_COLORED.includes(sym) ? `el-${sym}` : sym ? 'has-value' : '';
+}
 
-  // Initialize with default 3 element rows
+/* ---- Live validation helper — runs on every input change ---- */
+function empLiveValidate() {
+  // Build elements array with UI-row tracking for mapping errors back
+  const validationElements = [];
+  const rowMap = []; // validationElements[idx] → UI row number (1-based)
+
+  for (let i = 1; i <= empiricalElementCount; i++) {
+    const symInput = document.getElementById(`modal-elem${i}-symbol`);
+    const valInput = document.getElementById(`modal-elem${i}-value`);
+    if (!symInput || !valInput) continue;
+
+    const rawSym = symInput.value.trim();
+    const rawVal = valInput.value.trim();
+
+    // Include row if user typed anything in either field
+    if (rawSym || rawVal) {
+      const symbol = normalizeSymbol(rawSym) || rawSym;
+      validationElements.push({ symbol, percent: parseFloat(rawVal) }); // NaN is fine — validator catches it
+      rowMap.push(i);
+    }
+  }
+
+  const molecularMass = parseFloat(document.getElementById('modal-mol-mass')?.value);
+  const { ok, errors } = validateEmpiricalInputs(validationElements, isNaN(molecularMass) ? null : molecularMass);
+
+  const btn = document.getElementById('modal-calc-formula-btn');
+  const globalErr = document.getElementById('emp-global-error');
+  const globalText = document.getElementById('emp-global-error-text');
+
+  // Sort errors into per-row and global buckets
+  const rowMsgs = {};   // uiRow → message
+  const rowFields = {}; // uiRow → 'symbol' | 'value'
+  let globalMsg = '';
+  const hasContent = validationElements.length > 0;
+
+  errors.forEach(e => {
+    if (e.field === 'symbol' || e.field === 'value') {
+      const uiRow = rowMap[e.row];
+      if (uiRow && !rowMsgs[uiRow]) {
+        rowMsgs[uiRow] = e.message;
+        rowFields[uiRow] = e.field;
+      }
+    } else {
+      // global / sum / molMass
+      if (!globalMsg) globalMsg = e.message;
+    }
+  });
+
+  // Update per-row error hints
+  for (let i = 1; i <= empiricalElementCount; i++) {
+    const hint = document.getElementById(`emp-row-error-${i}`);
+    const symEl = document.getElementById(`modal-elem${i}-symbol`);
+    const valEl = document.getElementById(`modal-elem${i}-value`);
+    const msg = rowMsgs[i] || '';
+    const field = rowFields[i] || '';
+
+    if (hint) { hint.textContent = msg; hint.classList.toggle('visible', !!msg); }
+    if (symEl) symEl.classList.toggle('emp-invalid', field === 'symbol');
+    if (valEl) valEl.classList.toggle('emp-invalid', field === 'value');
+  }
+
+  // Global error banner — hide when form is fresh (no content)
+  if (globalErr) {
+    const showGlobal = hasContent && !!globalMsg;
+    globalErr.classList.toggle('visible', showGlobal);
+    if (globalText) globalText.textContent = showGlobal ? globalMsg : '';
+  }
+
+  if (btn) btn.disabled = !ok;
+  return ok;
+}
+
+function attachEmpiricalListeners() {
+  const methodSelect = document.getElementById('modal-formula-method');
+  const btn = document.getElementById('modal-calc-formula-btn');
+  const detailsToggle = document.getElementById('calc-details-toggle');
+  const detailsContent = document.getElementById('calc-details-content');
+  const addElementBtn = document.getElementById('emp-add-element-btn');
+  const removeElementBtn = document.getElementById('emp-remove-element-btn');
+  const resetBtn = document.getElementById('emp-reset-btn');
+  const randomFillBtn = document.getElementById('emp-random-fill-btn');
+
   empiricalElementCount = 3;
   renderEmpiricalInputs();
   updateElementButtons();
 
-  if (methodSelect) {
-    methodSelect.addEventListener("change", () => renderEmpiricalInputs());
-  }
+  if (methodSelect) methodSelect.addEventListener('change', () => renderEmpiricalInputs());
 
   if (addElementBtn) {
-    addElementBtn.addEventListener("click", () => {
+    addElementBtn.addEventListener('click', () => {
       empiricalElementCount++;
       renderEmpiricalInputs();
       updateElementButtons();
     });
   }
-
-  // Remove Element Button
-  const removeElementBtn = document.getElementById("emp-remove-element-btn");
   if (removeElementBtn) {
-    removeElementBtn.addEventListener("click", () => {
+    removeElementBtn.addEventListener('click', () => {
       if (empiricalElementCount > 2) {
         empiricalElementCount--;
         renderEmpiricalInputs();
@@ -2955,66 +2713,70 @@ function attachEmpiricalListeners() {
       }
     });
   }
-
-  if (randomFillBtn) {
-    randomFillBtn.addEventListener("click", () => {
-      const validPresets = EMPIRICAL_PRESETS.filter(
-        (p) => p.elements.length === empiricalElementCount,
-      );
-      if (validPresets.length > 0) {
-        const preset =
-          validPresets[Math.floor(Math.random() * validPresets.length)];
-        fillEmpiricalPreset(preset);
-      } else {
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      empiricalElementCount = 3;
+      renderEmpiricalInputs();
+      updateElementButtons();
+      const molMassInput = document.getElementById('modal-mol-mass');
+      if (molMassInput) molMassInput.value = '';
+      // Clear results
+      const emptyState = document.getElementById('lego-empty');
+      const resultContent = document.getElementById('lego-blocks-area');
+      const detailsCont = document.getElementById('calc-details-content');
+      if (emptyState) {
+        emptyState.innerHTML = `
+          <div class="emp-floating-atoms">
+            <div class="emp-atom a1">C</div><div class="emp-atom a2">H</div>
+            <div class="emp-atom a3">O</div><div class="emp-atom a4">N</div>
+          </div>
+          <p class="emp-empty-text">Enter element percentages<br>and click Calculate</p>`;
+        emptyState.style.display = 'flex';
       }
+      if (resultContent) resultContent.classList.remove('visible');
+      if (detailsCont) detailsCont.classList.remove('visible');
+      empLiveValidate();
+    });
+  }
+  if (randomFillBtn) {
+    randomFillBtn.addEventListener('click', () => {
+      // Pick a random preset, adjusting row count to match
+      const preset = EMPIRICAL_PRESETS[Math.floor(Math.random() * EMPIRICAL_PRESETS.length)];
+      empiricalElementCount = Math.max(preset.elements.length, 2);
+      updateElementButtons();
+      fillEmpiricalPreset(preset);
     });
   }
 
   if (detailsToggle && detailsContent) {
-    detailsToggle.addEventListener("click", () => {
-      const isExpanded = detailsContent.classList.contains("visible");
-
-      const grid = document.querySelector(".emp-grid");
-      if (!isExpanded && grid) {
-        grid.style.height = grid.offsetHeight + "px";
-        grid.style.flex = "none";
-      }
-      if (isExpanded && grid) {
-        grid.style.height = "";
-        grid.style.flex = "";
-      }
-
-      detailsContent.classList.toggle("visible", !isExpanded);
-      detailsToggle.classList.toggle("open", !isExpanded);
-      const btnText = detailsToggle.querySelector("span");
-      if (btnText) {
-        btnText.textContent = isExpanded
-          ? "Show calculation steps"
-          : "Hide calculation steps";
-      }
+    detailsToggle.addEventListener('click', () => {
+      const isExpanded = detailsContent.classList.contains('visible');
+      const grid = document.querySelector('.emp-grid');
+      if (!isExpanded && grid) { grid.style.height = grid.offsetHeight + 'px'; grid.style.flex = 'none'; }
+      if (isExpanded && grid) { grid.style.height = ''; grid.style.flex = ''; }
+      detailsContent.classList.toggle('visible', !isExpanded);
+      detailsToggle.classList.toggle('open', !isExpanded);
+      const btnText = detailsToggle.querySelector('span');
+      if (btnText) btnText.textContent = isExpanded ? 'Show calculation steps' : 'Hide calculation steps';
       if (!isExpanded) {
         setTimeout(() => {
-          const modalBody = document.querySelector(".feature-modal-body");
-          if (modalBody) {
-            modalBody.scrollTo({
-              top: modalBody.scrollHeight,
-              behavior: "smooth",
-            });
-          }
+          const modalBody = document.querySelector('.feature-modal-body');
+          if (modalBody) modalBody.scrollTo({ top: modalBody.scrollHeight, behavior: 'smooth' });
         }, 150);
       }
     });
   }
 
   if (btn) {
-    btn.addEventListener("click", () => {
+    btn.addEventListener('click', () => {
+      if (!empLiveValidate()) return;
       try {
-        const method = methodSelect?.value || "percent";
+        const method = methodSelect?.value || 'percent';
         const data = getEmpiricalData(method);
         const result = calculateEmpiricalModal(data);
         displayEmpiricalResultNew(result);
-        const tips = document.getElementById("empirical-tips");
-        if (tips) tips.style.display = "none";
+        const tips = document.getElementById('empirical-tips');
+        if (tips) tips.style.display = 'none';
       } catch (error) {
         showEmpiricalError(error.message);
       }
@@ -3023,262 +2785,234 @@ function attachEmpiricalListeners() {
 }
 
 function updateElementButtons() {
-  const addBtn = document.getElementById("emp-add-element-btn");
-  const removeBtn = document.getElementById("emp-remove-element-btn");
-
-  if (addBtn) {
-    addBtn.disabled = false;
-  }
-  if (removeBtn) {
-    removeBtn.disabled = empiricalElementCount <= 2;
-  }
+  const addBtn  = document.getElementById('emp-add-element-btn');
+  const removeBtn = document.getElementById('emp-remove-element-btn');
+  if (addBtn) addBtn.disabled = empiricalElementCount >= 6;
+  if (removeBtn) removeBtn.disabled = empiricalElementCount <= 2;
 }
 
-// Render element input rows
 function renderEmpiricalInputs(presetSymbols = null) {
-  const inputsContainer = document.getElementById("modal-element-inputs");
+  const inputsContainer = document.getElementById('modal-element-inputs');
   if (!inputsContainer) return;
 
-  const method =
-    document.getElementById("modal-formula-method")?.value || "percent";
-  const placeholder = method === "percent" ? "40.0" : "2.5";
+  const method = document.getElementById('modal-formula-method')?.value || 'percent';
+  const placeholder = method === 'percent' ? '40.0' : '2.5';
 
-  let html = "";
+  let html = '';
   for (let i = 0; i < empiricalElementCount; i++) {
-    const symbol = presetSymbols ? presetSymbols[i] || "" : "";
-    const colorClass = symbol ? `el-${symbol}` : "";
+    const symbol = presetSymbols ? (presetSymbols[i] || '') : '';
+    const colorClass = empColorClass(symbol);
     const isOptional = i >= 2;
 
     html += `
-            <div class="emp-input-row">
-                <input type="text"
-                    id="modal-elem${i + 1}-symbol"
-                    class="emp-el-input ${colorClass}"
-                    placeholder="?"
-                    maxlength="2"
-                    value="${symbol}"
-                    data-row="${i + 1}">
-                <div class="emp-value-wrapper">
-                    <input type="number"
-                        id="modal-elem${i + 1}-value"
-                        class="emp-input-field"
-                        placeholder="${isOptional ? "optional" : placeholder}"
-                        step="0.1">
-                    <span class="emp-unit">%</span>
-                </div>
-            </div>
-        `;
+      <div class="emp-input-row">
+        <input type="text"
+          id="modal-elem${i + 1}-symbol"
+          class="emp-el-input ${colorClass}"
+          placeholder="?"
+          maxlength="2"
+          value="${symbol}"
+          data-row="${i + 1}"
+          autocomplete="off"
+          spellcheck="false">
+        <div class="emp-value-col">
+          <div class="emp-value-wrapper">
+            <input type="text" inputmode="decimal"
+              id="modal-elem${i + 1}-value"
+              class="emp-input-field"
+              placeholder="${isOptional ? 'optional' : placeholder}"
+              autocomplete="off">
+            <span class="emp-unit">%</span>
+          </div>
+          <div class="emp-row-error" id="emp-row-error-${i + 1}"></div>
+        </div>
+      </div>`;
   }
   inputsContainer.innerHTML = html;
 
-  // Add symbol input listeners for color updates
+  // Attach per-row listeners
   for (let i = 1; i <= empiricalElementCount; i++) {
-    const symbolInput = document.getElementById(`modal-elem${i}-symbol`);
-    if (symbolInput) {
-      symbolInput.addEventListener("input", (e) => {
-        const val = e.target.value.trim().toUpperCase();
-        e.target.value = val;
-        // Update color based on element - list of supported elements
-        const coloredElements = [
-          "C",
-          "H",
-          "O",
-          "N",
-          "S",
-          "P",
-          "Cl",
-          "Na",
-          "K",
-          "Ca",
-          "Fe",
-          "Mg",
-        ];
-        const colorClass = coloredElements.includes(val)
-          ? `el-${val}`
-          : val
-            ? "has-value"
-            : "";
-        e.target.className = `emp-el-input ${colorClass}`;
+    const symInput = document.getElementById(`modal-elem${i}-symbol`);
+    const valInput = document.getElementById(`modal-elem${i}-value`);
+
+    if (symInput) {
+      // Auto-format on blur
+      symInput.addEventListener('blur', () => {
+        const raw = symInput.value.trim();
+        if (!raw) return;
+        const norm = normalizeSymbol(raw);
+        if (norm) {
+          symInput.value = norm;
+          symInput.className = `emp-el-input ${empColorClass(norm)}`;
+        } else {
+          // Keep what user typed but mark red
+          symInput.className = 'emp-el-input emp-invalid';
+        }
+        empLiveValidate();
+      });
+      // Live color update while typing
+      symInput.addEventListener('input', () => {
+        const val = symInput.value.trim();
+        const norm = normalizeSymbol(val);
+        if (norm) {
+          symInput.className = `emp-el-input ${empColorClass(norm)}`;
+        } else if (val) {
+          symInput.className = 'emp-el-input has-value';
+        } else {
+          symInput.className = 'emp-el-input';
+        }
+        empLiveValidate();
       });
     }
+    if (valInput) {
+      valInput.addEventListener('input', () => empLiveValidate());
+      valInput.addEventListener('blur', () => empLiveValidate());
+    }
   }
+
+  // Also listen to molecular mass changes
+  const molInput = document.getElementById('modal-mol-mass');
+  if (molInput) {
+    molInput.addEventListener('input', () => empLiveValidate());
+    molInput.addEventListener('blur', () => empLiveValidate());
+  }
+
+  empLiveValidate();
 }
 
 function fillEmpiricalPreset(preset) {
-  const symbols = preset.elements
-    .slice(0, empiricalElementCount)
-    .map((e) => e.s);
-  while (symbols.length < empiricalElementCount) {
-    symbols.push("");
-  }
+  const symbols = preset.elements.slice(0, empiricalElementCount).map(e => e.s);
+  while (symbols.length < empiricalElementCount) symbols.push('');
   renderEmpiricalInputs(symbols);
 
   preset.elements.slice(0, empiricalElementCount).forEach((elem, i) => {
     const valueInput = document.getElementById(`modal-elem${i + 1}-value`);
-    if (valueInput) {
-      valueInput.value = elem.v;
-    }
+    if (valueInput) valueInput.value = elem.v;
   });
 
-  // Fill molecular mass
-  const molMassInput = document.getElementById("modal-mol-mass");
-  if (molMassInput && preset.molMass) {
-    molMassInput.value = preset.molMass;
-  }
+  const molMassInput = document.getElementById('modal-mol-mass');
+  if (molMassInput) molMassInput.value = preset.molMass || '';
+
+  empLiveValidate();
 }
 
 function showEmpiricalError(message) {
-  const emptyState = document.getElementById("lego-empty");
-  const resultContent = document.getElementById("lego-blocks-area");
-  const detailsContent = document.getElementById("calc-details-content");
+  const emptyState = document.getElementById('lego-empty');
+  const resultContent = document.getElementById('lego-blocks-area');
+  const detailsContent = document.getElementById('calc-details-content');
 
-  // Hide steps
-  if (detailsContent) {
-    detailsContent.classList.remove("visible");
-  }
+  if (detailsContent) detailsContent.classList.remove('visible');
 
   if (emptyState) {
     emptyState.innerHTML = `
-            <div style="color: #ef4444; font-size: 14px; padding: 20px; text-align: center;">
-                <svg style="width: 40px; height: 40px; margin-bottom: 12px; opacity: 0.7;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="12" y1="8" x2="12" y2="12"/>
-                    <line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-                <div style="font-weight: 600; margin-bottom: 8px;">${message}</div>
-                <div style="font-size: 12px; color: #86868b;">Check your input and try again</div>
-            </div>
-        `;
-    emptyState.style.display = "flex";
+      <div style="color: #ef4444; font-size: 14px; padding: 20px; text-align: center;">
+        <svg style="width: 40px; height: 40px; margin-bottom: 12px; opacity: 0.7;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <div style="font-weight: 600; margin-bottom: 8px;">${message}</div>
+        <div style="font-size: 12px; color: #86868b;">Check your input and try again</div>
+      </div>`;
+    emptyState.style.display = 'flex';
   }
-  if (resultContent) {
-    resultContent.classList.remove("visible");
-  }
+  if (resultContent) resultContent.classList.remove('visible');
 }
 
 function displayEmpiricalResultNew(result) {
-  const emptyState = document.getElementById("lego-empty");
-  const resultContent = document.getElementById("lego-blocks-area");
-  const legoStage = document.getElementById("lego-stage");
-  const empiricalDisplay = document.getElementById("empirical-formula-display");
-  const molecularCard = document.getElementById("molecular-result-card");
-  const molecularDisplay = document.getElementById("molecular-formula-display");
-  const massDisplay = document.getElementById("result-mass-display");
-  const blocksVisual = document.getElementById("lego-blocks-visual");
-  const detailsContent = document.getElementById("calc-details-content");
+  const emptyState = document.getElementById('lego-empty');
+  const resultContent = document.getElementById('lego-blocks-area');
+  const empiricalDisplay = document.getElementById('empirical-formula-display');
+  const molecularCard = document.getElementById('molecular-result-card');
+  const molecularDisplay = document.getElementById('molecular-formula-display');
+  const massDisplay = document.getElementById('result-mass-display');
+  const blocksVisual = document.getElementById('lego-blocks-visual');
+  const detailsContent = document.getElementById('calc-details-content');
+  const normTag = document.getElementById('emp-normalised-tag');
+  const molMassWarn = document.getElementById('emp-molmass-warning');
 
   // Hide empty state, show result
-  if (emptyState) emptyState.style.display = "none";
-  if (resultContent) resultContent.classList.add("visible");
+  if (emptyState) emptyState.style.display = 'none';
+  if (resultContent) resultContent.classList.add('visible');
 
-  // Update empirical formula (secondary, in pill)
-  if (empiricalDisplay) {
-    empiricalDisplay.textContent = result.empiricalFormula;
-  }
+  // Normalised tag
+  if (normTag) normTag.classList.toggle('visible', !!result.normalised);
 
-  // Update molecular formula (hero display)
+  // Empirical formula pill
+  if (empiricalDisplay) empiricalDisplay.textContent = result.empiricalFormula;
+
+  // Molecular formula — only show when we actually computed one
   if (molecularCard && molecularDisplay) {
-    if (result.molecularFormula && result.multiplier > 1) {
-      molecularCard.style.display = "flex";
-      // Convert to proper HTML subscripts for hero display
+    if (result.molecularFormula) {
+      molecularCard.style.display = 'flex';
       molecularDisplay.innerHTML = formatFormulaHTML(result.molecularFormula);
       if (massDisplay) {
-        massDisplay.textContent = result.molecularMass
-          ? `${result.molecularMass} g/mol`
-          : "";
+        massDisplay.textContent = result.molecularMass ? `${result.molecularMass} g/mol` : '';
       }
     } else {
-      // Show empirical as main if no molecular
-      molecularCard.style.display = "flex";
+      // No molecular formula — show empirical as hero
+      molecularCard.style.display = 'flex';
       molecularDisplay.innerHTML = formatFormulaHTML(result.empiricalFormula);
       if (massDisplay) {
-        massDisplay.textContent = `${result.empiricalMass.toFixed(2)} g/mol`;
+        massDisplay.textContent = `${result.empiricalMass.toFixed(2)} g/mol (empirical)`;
       }
     }
   }
 
-  // Render atom chips
+  // Molar mass warning
+  if (molMassWarn) {
+    if (result.molMassError) {
+      molMassWarn.textContent = result.molMassError;
+      molMassWarn.classList.add('visible');
+    } else {
+      molMassWarn.textContent = '';
+      molMassWarn.classList.remove('visible');
+    }
+  }
+
+  // Atom chips
   if (blocksVisual) {
-    const displayElements =
-      result.molecularFormula && result.multiplier > 1
-        ? result.empirical.map((e) => ({
-          ...e,
-          count: e.count * result.multiplier,
-        }))
-        : result.empirical;
+    const displayElements = result.molecularFormula && result.multiplier > 1
+      ? result.empirical.map(e => ({ ...e, count: e.count * result.multiplier }))
+      : result.empirical;
 
-    // All supported element colors
-    const coloredElements = [
-      "C",
-      "H",
-      "O",
-      "N",
-      "S",
-      "P",
-      "Cl",
-      "Br",
-      "F",
-      "I",
-      "Fe",
-      "Cu",
-      "Zn",
-      "Ca",
-      "Na",
-      "K",
-      "Mg",
-    ];
-
-    let atomsHTML = "";
-    displayElements.forEach((elem) => {
-      const colorClass = coloredElements.includes(elem.symbol)
-        ? `el-${elem.symbol}`
-        : "el-default";
-
+    let atomsHTML = '';
+    displayElements.forEach(elem => {
+      const colorClass = EMP_COLORED.includes(elem.symbol) ? `el-${elem.symbol}` : 'el-default';
       atomsHTML += `
-                <div class="emp-atom-chip">
-                    <div class="emp-atom-circle ${colorClass}">${elem.symbol}</div>
-                    <span class="emp-atom-count">×${elem.count}</span>
-                </div>
-            `;
+        <div class="emp-atom-chip">
+          <div class="emp-atom-circle ${colorClass}">${elem.symbol}</div>
+          <span class="emp-atom-count">&times;${elem.count}</span>
+        </div>`;
     });
     blocksVisual.innerHTML = atomsHTML;
   }
 
-  // Update calculation details
-  if (detailsContent) {
-    detailsContent.innerHTML = result.explanation;
-  }
+  // Calculation details
+  if (detailsContent) detailsContent.innerHTML = result.explanation;
 }
-
 
 function getEmpiricalData(method) {
   const elements = [];
 
-  // Dynamic element count - check up to 6 rows
   for (let i = 1; i <= 6; i++) {
     const symbolInput = document.getElementById(`modal-elem${i}-symbol`);
     const valueInput = document.getElementById(`modal-elem${i}-value`);
-
     if (!symbolInput || !valueInput) continue;
 
-    let symbol = symbolInput?.value?.trim() || "";
-    const value = parseFloat(valueInput?.value);
+    const raw = symbolInput.value.trim();
+    const symbol = normalizeSymbol(raw) || raw; // keep raw for validation to flag
+    const value = parseFloat(valueInput.value);
 
-    if (symbol && !isNaN(value) && value > 0) {
-      // Correct capitalization (first letter uppercase, rest lowercase)
-      const correctedSymbol =
-        symbol.charAt(0).toUpperCase() + symbol.slice(1).toLowerCase();
-      if (method === "percent") {
-        elements.push({ symbol: correctedSymbol, percent: value });
+    // Include row only if user typed something in either field
+    if (raw || valueInput.value.trim()) {
+      if (method === 'percent') {
+        elements.push({ symbol, percent: isNaN(value) ? 0 : value });
       } else {
-        elements.push({ symbol: correctedSymbol, mass: value });
+        elements.push({ symbol, mass: isNaN(value) ? 0 : value });
       }
     }
   }
 
-  const molecularMass = parseFloat(
-    document.getElementById("modal-mol-mass")?.value,
-  );
+  const molecularMass = parseFloat(document.getElementById('modal-mol-mass')?.value);
   return {
     elements,
     molecularMass: isNaN(molecularMass) ? null : molecularMass,

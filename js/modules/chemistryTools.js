@@ -957,104 +957,271 @@ export function formatFormulaHTML(formula) {
 }
 
 // ===== Empirical Formula Calculator =====
+
+// Metal symbols list (for formula ordering: metals before nonmetals)
+const METALS = new Set([
+  'Li','Be','Na','Mg','Al','K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn',
+  'Ga','Rb','Sr','Y','Zr','Nb','Mo','Tc','Ru','Rh','Pd','Ag','Cd','In','Sn',
+  'Cs','Ba','La','Ce','Pr','Nd','Pm','Sm','Eu','Gd','Tb','Dy','Ho','Er','Tm','Yb','Lu',
+  'Hf','Ta','W','Re','Os','Ir','Pt','Au','Hg','Tl','Pb','Bi','Po',
+  'Fr','Ra','Ac','Th','Pa','U','Np','Pu','Am','Cm','Bk','Cf','Es','Fm','Md','No','Lr',
+  'Rf','Db','Sg','Bh','Hs','Mt','Ds','Rg','Cn','Nh','Fl','Mc','Lv','Ts','Og'
+]);
+
+/**
+ * Normalise an element symbol: first letter upper, rest lower.
+ * Returns null if the symbol is not in the atomicMasses table.
+ */
+export function normalizeSymbol(raw) {
+  if (!raw) return null;
+  const s = raw.trim();
+  if (s.length === 0 || s.length > 2) return null;
+  const norm = s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+  return atomicMasses[norm] !== undefined ? norm : null;
+}
+
+/**
+ * Validate all inputs, returning an object { ok, errors[] }
+ * Each error: { row, field, message }
+ */
+export function validateEmpiricalInputs(elements, molecularMass) {
+  const errors = [];
+
+  if (elements.length < 2) {
+    errors.push({ row: -1, field: 'global', message: 'Enter at least 2 elements.' });
+  }
+
+  const seenSymbols = new Set();
+  let percentSum = 0;
+
+  elements.forEach((el, i) => {
+    // Symbol check
+    if (!el.symbol || el.symbol.trim() === '') {
+      errors.push({ row: i, field: 'symbol', message: 'Enter an element symbol' });
+    } else {
+      const norm = normalizeSymbol(el.symbol);
+      if (!norm) {
+        errors.push({ row: i, field: 'symbol', message: `"${el.symbol}" is not a valid element` });
+      } else if (seenSymbols.has(norm)) {
+        errors.push({ row: i, field: 'symbol', message: `Duplicate element: ${norm}` });
+      } else {
+        seenSymbols.add(norm);
+      }
+    }
+
+    // Percent check
+    if (el.percent === undefined || el.percent === null || el.percent === '' || isNaN(Number(el.percent))) {
+      errors.push({ row: i, field: 'value', message: 'Enter a number' });
+    } else {
+      const v = Number(el.percent);
+      if (v <= 0 || v > 100) {
+        errors.push({ row: i, field: 'value', message: 'Must be 0–100 %' });
+      } else {
+        percentSum += v;
+      }
+    }
+  });
+
+  // Percent sum check (strict: must be within ±1%)
+  if (errors.filter(e => e.field === 'value').length === 0 && elements.length >= 2) {
+    if (Math.abs(percentSum - 100) > 1.0) {
+      errors.push({
+        row: -1, field: 'sum',
+        message: `Percentages sum to ${percentSum.toFixed(1)}%, expected ~100%`
+      });
+    }
+  }
+
+  // Molecular mass check
+  if (molecularMass !== null && molecularMass !== undefined && molecularMass !== '') {
+    const mm = Number(molecularMass);
+    if (isNaN(mm) || mm <= 0) {
+      errors.push({ row: -1, field: 'molMass', message: 'Molar mass must be a positive number' });
+    }
+  }
+
+  return { ok: errors.length === 0, errors };
+}
+
+/**
+ * GCD of two positive integers
+ */
+function gcdTwo(a, b) {
+  a = Math.round(Math.abs(a));
+  b = Math.round(Math.abs(b));
+  while (b) { [a, b] = [b, a % b]; }
+  return a;
+}
+
+/**
+ * GCD of an integer array
+ */
+function gcdArr(arr) {
+  return arr.reduce((g, v) => gcdTwo(g, v));
+}
+
+/**
+ * Simplify mole ratios to smallest whole-number subscripts.
+ * Algorithm:
+ *  1. Divide all by min → raw ratios
+ *  2. Try multipliers 1‒8; accept if all values are within ±0.08 of an integer.
+ *  3. Reduce result by GCD.
+ *  4. Fail if no multiplier works.
+ */
+function simplifyRatiosModal(ratios) {
+  const TOL = 0.08;
+  const MAX_MULT = 8;
+
+  for (let mult = 1; mult <= MAX_MULT; mult++) {
+    const scaled = ratios.map(r => r.ratio * mult);
+    const allInt = scaled.every(v => Math.abs(v - Math.round(v)) < TOL);
+    if (allInt) {
+      let counts = scaled.map(v => Math.round(v) || 1);
+      // GCD reduce
+      const g = gcdArr(counts);
+      counts = counts.map(c => c / g);
+      return ratios.map((r, i) => ({ symbol: r.symbol, count: counts[i] }));
+    }
+  }
+
+  // Fallback: round to nearest, warn
+  return null;
+}
+
+/**
+ * Order elements for formula display:
+ *  - If mix of metals + nonmetals → metals first (by periodic table order), then nonmetals.
+ *  - Otherwise, Hill system: C first, H second, rest alphabetical.
+ */
+function orderElements(elements) {
+  const hasMetal = elements.some(e => METALS.has(e.symbol));
+  const hasNonMetal = elements.some(e => !METALS.has(e.symbol));
+
+  if (hasMetal && hasNonMetal) {
+    // Metals first, then nonmetals (alphabetical within each group)
+    const metals = elements.filter(e => METALS.has(e.symbol)).sort((a, b) => a.symbol.localeCompare(b.symbol));
+    const nonmetals = elements.filter(e => !METALS.has(e.symbol)).sort((a, b) => a.symbol.localeCompare(b.symbol));
+    return [...metals, ...nonmetals];
+  }
+
+  // Hill system: C first, H second, rest alphabetical
+  const sorted = [...elements].sort((a, b) => {
+    if (a.symbol === 'C') return -1;
+    if (b.symbol === 'C') return 1;
+    if (a.symbol === 'H') return -1;
+    if (b.symbol === 'H') return 1;
+    return a.symbol.localeCompare(b.symbol);
+  });
+  return sorted;
+}
+
 export function calculateEmpiricalModal(data) {
   const { elements, molecularMass } = data;
 
-  if (elements.length === 0) {
-    throw new Error("Please enter at least one element.");
+  if (!elements || elements.length < 2) {
+    throw new Error("Please enter at least 2 elements with valid data.");
   }
 
-  // Step 1: Convert to moles
-  const moles = elements.map((elem) => {
-    const atomicMass = atomicMasses[elem.symbol];
-    if (!atomicMass) {
-      throw new Error(`Unknown element: ${elem.symbol}`);
-    }
+  // — Normalize percentages to exactly 100 —
+  const rawSum = elements.reduce((s, e) => s + e.percent, 0);
+  const normalised = (Math.abs(rawSum - 100) > 0.01);
+  const scaleFactor = 100 / rawSum;
+  const elems = elements.map(e => ({
+    symbol: e.symbol,
+    percent: e.percent * scaleFactor,
+  }));
 
-    let molesValue;
-    if (elem.percent !== undefined) {
-      // From percent: assume 100g total
-      molesValue = elem.percent / atomicMass;
-    } else {
-      // From mass
-      molesValue = elem.mass / atomicMass;
-    }
+  // — Step 1: Convert to moles (assume 100 g sample) —
+  const moles = elems.map(elem => {
+    const aw = atomicMasses[elem.symbol];
+    const molesVal = elem.percent / aw;
     return {
       symbol: elem.symbol,
-      moles: molesValue,
-      original: elem.percent || elem.mass,
+      grams: elem.percent,
+      atomicWeight: aw,
+      moles: molesVal,
+      originalPercent: elements.find(e => e.symbol === elem.symbol).percent,
     };
   });
 
-  // Step 2: Find smallest mole value
-  const minMoles = Math.min(...moles.map((m) => m.moles));
-
-  // Step 3: Divide by smallest
-  const ratios = moles.map((m) => ({
+  // — Step 2: Divide by smallest —
+  const minMoles = Math.min(...moles.map(m => m.moles));
+  const ratios = moles.map(m => ({
     symbol: m.symbol,
     moles: m.moles,
     ratio: m.moles / minMoles,
-    original: m.original,
+    grams: m.grams,
+    atomicWeight: m.atomicWeight,
+    originalPercent: m.originalPercent,
   }));
 
-  // Step 4: Simplify to whole numbers
-  const empirical = simplifyRatiosModal(ratios);
-  const empiricalFormula = empirical
-    .map((r) => r.symbol + (r.count > 1 ? subscript(r.count) : ""))
-    .join("");
+  // — Step 3: Simplify to integers —
+  const simplified = simplifyRatiosModal(ratios);
+  if (!simplified) {
+    throw new Error("Cannot determine empirical formula — ratios are too far from whole numbers. Check your data.");
+  }
 
-  // Calculate empirical mass
+  // — Order for display —
+  const ordered = orderElements(simplified);
+
+  // Build formula string
+  const empiricalFormula = ordered
+    .map(r => r.symbol + (r.count > 1 ? subscript(r.count) : ''))
+    .join('');
+
+  // Empirical mass
   let empiricalMass = 0;
-  empirical.forEach((elem) => {
-    const atomicMass = atomicMasses[elem.symbol];
-    if (atomicMass) {
-      empiricalMass += atomicMass * elem.count;
-    }
+  ordered.forEach(elem => {
+    empiricalMass += atomicMasses[elem.symbol] * elem.count;
   });
 
-  // Build explanation
-  let explanation = "<h4>Calculation Steps:</h4>";
-  explanation += "<ol>";
-  explanation +=
-    "<li><strong>Step 1: Convert to moles</strong> (Mass ÷ Atomic Mass)</li>";
-  explanation += "<ul>";
-  moles.forEach((m) => {
-    const atomicMass = atomicMasses[m.symbol];
-    explanation += `<li>${m.symbol}: ${m.original} ÷ ${atomicMass} = ${m.moles.toFixed(4)} mol</li>`;
+  // ===== Build detailed explanation =====
+  let explanation = "<h4>Calculation Steps</h4><ol>";
+  explanation += "<li><strong>Assume 100 g sample</strong> — each % becomes grams directly.</li>";
+  if (normalised) {
+    explanation += `<li><strong>Note:</strong> Percentages summed to ${rawSum.toFixed(1)}%; values normalised to 100%.</li>`;
+  }
+  explanation += "<li><strong>Convert grams → moles</strong> (g ÷ atomic mass):</li><ul>";
+  moles.forEach(m => {
+    explanation += `<li>${m.symbol}: ${m.grams.toFixed(2)} g ÷ ${m.atomicWeight} g/mol = <strong>${m.moles.toFixed(4)} mol</strong></li>`;
   });
   explanation += "</ul>";
-
-  explanation += `<li><strong>Step 2: Divide by smallest</strong> (${minMoles.toFixed(4)} mol)</li>`;
-  explanation += "<ul>";
-  ratios.forEach((r) => {
-    explanation += `<li>${r.symbol}: ${r.moles.toFixed(4)} ÷ ${minMoles.toFixed(4)} = ${r.ratio.toFixed(2)}</li>`;
+  explanation += `<li><strong>Divide all by smallest</strong> (${minMoles.toFixed(4)} mol):</li><ul>`;
+  ratios.forEach(r => {
+    explanation += `<li>${r.symbol}: ${r.moles.toFixed(4)} ÷ ${minMoles.toFixed(4)} = <strong>${r.ratio.toFixed(3)}</strong></li>`;
   });
   explanation += "</ul>";
-
-  explanation += "<li><strong>Step 3: Round to whole numbers</strong></li>";
-  explanation += `<li><strong>Result:</strong> Empirical Formula = <strong>${empiricalFormula}</strong></li>`;
+  explanation += "<li><strong>Round to whole-number ratio:</strong></li><ul>";
+  ordered.forEach(r => {
+    explanation += `<li>${r.symbol} → <strong>${r.count}</strong></li>`;
+  });
+  explanation += "</ul>";
+  explanation += `<li><strong>Empirical formula:</strong> <strong>${empiricalFormula}</strong> (${empiricalMass.toFixed(2)} g/mol)</li>`;
   explanation += "</ol>";
 
-  explanation += `<p><strong>Empirical Molar Mass:</strong> ${empiricalMass.toFixed(2)} g/mol</p>`;
-
+  // ===== Molecular formula (only if molar mass provided) =====
   let molecularFormula = null;
-  let multiplier = 1; // 默认倍数为1
+  let multiplier = 1;
+  let molMassError = null;
 
-  if (molecularMass) {
-    multiplier = Math.round(molecularMass / empiricalMass);
-    molecularFormula = empirical
-      .map(
-        (r) =>
-          r.symbol +
-          (r.count * multiplier > 1 ? subscript(r.count * multiplier) : ""),
-      )
-      .join("");
+  if (molecularMass !== null && molecularMass !== undefined && Number(molecularMass) > 0) {
+    const mm = Number(molecularMass);
+    const rawN = mm / empiricalMass;
+    const n = Math.round(rawN);
 
-    explanation += "<hr>";
-    explanation += "<h4>Molecular Formula:</h4>";
-    explanation += `<p><strong>Molecular Mass given:</strong> ${molecularMass} g/mol</p>`;
-    explanation += `<p><strong>Multiplier:</strong> ${molecularMass} ÷ ${empiricalMass.toFixed(2)} = ${multiplier}</p>`;
-    explanation += `<p><strong>Molecular Formula:</strong> <strong>${molecularFormula}</strong></p>`;
+    if (n < 1 || Math.abs(rawN - n) > 0.1) {
+      molMassError = `Molar mass ${mm} g/mol does not match empirical formula mass ${empiricalMass.toFixed(2)} g/mol (ratio = ${rawN.toFixed(2)}, not close to an integer).`;
+    } else {
+      multiplier = n;
+      molecularFormula = ordered
+        .map(r => r.symbol + (r.count * n > 1 ? subscript(r.count * n) : ''))
+        .join('');
+
+      explanation += "<hr><h4>Molecular Formula</h4>";
+      explanation += `<p>Given molar mass: <strong>${mm} g/mol</strong></p>`;
+      explanation += `<p>n = ${mm} ÷ ${empiricalMass.toFixed(2)} = <strong>${rawN.toFixed(2)} ≈ ${n}</strong></p>`;
+      explanation += `<p>Molecular formula = empirical × ${n} = <strong>${molecularFormula}</strong></p>`;
+    }
   }
 
   return {
@@ -1062,46 +1229,12 @@ export function calculateEmpiricalModal(data) {
     molecularFormula,
     explanation,
     empiricalMass,
-    molecularMass,
-    empirical, // 积木渲染需要的原始数据
-    multiplier: multiplier || 1, // 倍数，默认为1
+    molecularMass: molecularMass ? Number(molecularMass) : null,
+    empirical: ordered,
+    multiplier,
+    molMassError,
+    normalised,
   };
-}
-
-function simplifyRatiosModal(ratios) {
-  // 先检查是否所有比例都接近整数
-  const allClose = ratios.every(
-    (r) => Math.abs(r.ratio - Math.round(r.ratio)) < 0.1,
-  );
-
-  if (allClose) {
-    // 所有比例都接近整数，直接四舍五入
-    return ratios.map((r) => ({
-      symbol: r.symbol,
-      count: Math.round(r.ratio) || 1,
-    }));
-  }
-
-  // 有小数比例，需要找到一个公共倍数使所有比例都变成整数
-  // 尝试倍数 2, 3, 4, ..., 10
-  for (let mult = 2; mult <= 10; mult++) {
-    const scaled = ratios.map((r) => r.ratio * mult);
-    const allInteger = scaled.every((v) => Math.abs(v - Math.round(v)) < 0.1);
-
-    if (allInteger) {
-      // 找到合适的倍数，对所有元素应用
-      return ratios.map((r) => ({
-        symbol: r.symbol,
-        count: Math.round(r.ratio * mult) || 1,
-      }));
-    }
-  }
-
-  // 没找到合适的倍数，使用最接近的整数
-  return ratios.map((r) => ({
-    symbol: r.symbol,
-    count: Math.round(r.ratio) || 1,
-  }));
 }
 
 function subscript(num) {
