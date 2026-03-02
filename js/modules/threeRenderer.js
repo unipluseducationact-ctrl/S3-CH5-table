@@ -379,6 +379,11 @@ export function reset3DView() {
 export function animateAtom() {
   if (!renderer) return;
   animationId = requestAnimationFrame(animateAtom);
+
+  // Global animation speed/pause support
+  const isPaused = window._zperiodAnimPaused || false;
+  const speedMul = (typeof window._zperiodAnimSpeed === 'number') ? window._zperiodAnimSpeed : 0.6;
+
   const time = Date.now() * 0.001;
   if (atomGroup) {
     const nucleusGroup = atomGroup.getObjectByName("nucleusGroup");
@@ -432,8 +437,8 @@ export function animateAtom() {
     atomGroup.rotation.y += 0.002 * ease;
     if (t >= 1) isIntroAnimating = false;
   } else if (!isTopViewMode) {
-    // Only rotate if not in top view mode
-    atomGroup.rotation.y += 0.002;
+    // Only rotate if not in top view mode & not paused
+    if (!isPaused) atomGroup.rotation.y += 0.002 * speedMul;
   }
   if (atomGroup && atomGroup.userData.popStartTime) {
     const popElapsed = (Date.now() - atomGroup.userData.popStartTime) * 0.001;
@@ -449,20 +454,20 @@ export function animateAtom() {
     }
   }
   const wobbleGroup = atomGroup.getObjectByName("wobbleGroup");
-  if (wobbleGroup && !isTopViewMode) {
-    wobbleGroup.rotation.y += 0.002;
-    wobbleGroup.rotation.z = Math.sin(time * 0.5) * 0.2;
-    wobbleGroup.rotation.x = Math.cos(time * 0.3) * 0.1;
+  if (wobbleGroup && !isTopViewMode && !isPaused) {
+    wobbleGroup.rotation.y += 0.002 * speedMul;
+    wobbleGroup.rotation.z = Math.sin(time * 0.5 * speedMul) * 0.2;
+    wobbleGroup.rotation.x = Math.cos(time * 0.3 * speedMul) * 0.1;
   }
   const nucleusGroupAnim = atomGroup.getObjectByName("nucleusGroup");
-  if (nucleusGroupAnim && !isTopViewMode) {
-    nucleusGroupAnim.rotation.y -= 0.005;
-    nucleusGroupAnim.rotation.x = Math.sin(time * 0.2) * 0.1;
+  if (nucleusGroupAnim && !isTopViewMode && !isPaused) {
+    nucleusGroupAnim.rotation.y -= 0.005 * speedMul;
+    nucleusGroupAnim.rotation.x = Math.sin(time * 0.2 * speedMul) * 0.1;
   }
   electrons.forEach((el) => {
-    // Only animate electrons if not in top view mode
-    if (!isTopViewMode) {
-      el.userData.angle += el.userData.speed;
+    // Only animate electrons if not in top view mode & not paused
+    if (!isTopViewMode && !isPaused) {
+      el.userData.angle += el.userData.speed * speedMul;
     }
     const r = el.userData.radius;
     el.position.x = r * Math.cos(el.userData.angle);

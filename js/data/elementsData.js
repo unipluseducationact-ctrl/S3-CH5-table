@@ -1,3573 +1,9141 @@
 // ========================================
-// Element Data - Extracted from script.js
-// Pure static data: finallyData + elements array
+// Element Data - Skeleton Format (Single Source of Truth)
+// Keyed by atomic number. All chemistry data lives here.
+// Grid layout data (row, column, series) lives in `elements` array.
 // ========================================
 
 export const finallyData = {
-  H: {
-    discovery: "1766",
-    avgAtomicMass: "1.008",
-    discoveredBy: "Henry Cavendish",
-    namedBy: "Antoine Lavoisier",
-    stse: "Energy transition (Fuel Cells); Hydrogen as energy carrier; Heavy Water (D₂O) in CANDU reactors.",
-    uses: "Ammonia Production, Hydrogenation.",
-    hazards: "Highly flammable, Explosion risk.",
-    valenceElectrons: 1,
-    commonIons: "H⁺ (Hydron), H⁻ (Hydride)",
-    oxidationStates: ["+1", "-1"],
-    electronConfig: "1s¹",
-    electronegativity: 2.2,
-    ionization: "1312 kJ/mol",
-    density: "0.0899 g/L",
-    melt: "-259.1°C",
-    boil: "-252.8°C",
-    isotopes: [
-      { name: "H-1", neutron: "0n", percent: "Stable" },
-      { name: "H-2", neutron: "1n", percent: "Stable" },
-      { name: "H-3", neutron: "2n", percent: "Radioactive" },
-    ],
-  },
-  He: {
-    discovery: "1895 (Isolated)",
-    avgAtomicMass: "4.0026",
-    discoveredBy: "William Ramsay, Per Teodor Cleve",
-    namedBy: "Lockyer & Frankland",
-    stse: "Cryogenics (MRI supermagnets); Non-renewable resource conservation.",
-    uses: "MRI cooling, Lifting gas (balloons), Shielding gas (welding).",
-    hazards: "Asphyxiant in confined spaces.",
-    valenceElectrons: 2,
-    commonIons: "None (inert)",
-    oxidationStates: ["0"],
-    electronConfig: "1s²",
-    electronegativity: null,
-    ionization: "2372 kJ/mol",
-    density: "0.1786 g/L",
-    melt: "— (Pressurized only)",
-    boil: "-268.9°C",
-    isotopes: [
-      { name: "He-3", neutron: "1n", percent: "Stable" },
-      { name: "He-4", neutron: "2n", percent: "Stable" },
-    ],
-  },
-  Li: {
-    discovery: "1817",
-    avgAtomicMass: "6.94",
-    discoveredBy: "Johan August Arfwedson",
-    namedBy: "Jöns Jakob Berzelius",
-    stse: "Battery technology (EV revolution); Mental health (Mood stabilizers).",
-    uses: "Li-ion batteries, Ceramics, Lubricants.",
-    hazards: "Reacts vigorously with water; Corrosive.",
-    valenceElectrons: 1,
-    commonIons: "Li⁺",
-    oxidationStates: ["+1"],
-    electronConfig: "[He] 2s¹",
-    electronegativity: 0.98,
-    ionization: "520 kJ/mol",
-    density: "0.534 g/cm³",
-    melt: "180.5°C",
-    boil: "1342°C",
-    isotopes: [
-      { name: "Li-6", neutron: "3n", percent: "Stable" },
-      { name: "Li-7", neutron: "4n", percent: "Stable" },
-    ],
-  },
-  Be: {
-    discovery: "1798",
-    avgAtomicMass: "9.0122",
-    discoveredBy: "Louis-Nicolas Vauquelin",
-    namedBy: "Friedrich Wöhler",
-    stse: "Aerospace engineering (James Webb Telescope mirrors); Nuclear physics (Neutron reflector).",
-    uses: "X-ray windows, Non-sparking tools (alloys).",
-    hazards: "Highly toxic (Berylliosis); Carcinogenic.",
-    valenceElectrons: 2,
-    commonIons: "Be²⁺",
-    oxidationStates: ["+2"],
-    electronConfig: "[He] 2s²",
-    electronegativity: 1.57,
-    ionization: "900 kJ/mol",
-    density: "1.85 g/cm³",
-    melt: "1287°C",
-    boil: "2469°C",
-    isotopes: [{ name: "Be-9", neutron: "5n", percent: "Stable" }],
-  },
-  B: {
-    discovery: "1808",
-    avgAtomicMass: "10.81",
-    discoveredBy: "Gay-Lussac & Thénard (and Davy)",
-    namedBy: 'Derived from "Borax"',
-    stse: "Agriculture (Essential plant nutrient); Nuclear safety (Control rods).",
-    uses: "Pyrex glass (Borosilicate), Fiberglass, Detergents.",
-    hazards: "Low toxicity as element; some compounds toxic.",
-    valenceElectrons: 3,
-    commonIons: "B³⁺ (rarely ionic)",
-    oxidationStates: ["+3"],
-    electronConfig: "[He] 2s² 2p¹",
-    electronegativity: 2.04,
-    ionization: "801 kJ/mol",
-    density: "2.34 g/cm³",
-    melt: "2076°C",
-    boil: "3927°C",
-    isotopes: [
-      { name: "B-10", neutron: "5n", percent: "Stable" },
-      { name: "B-11", neutron: "6n", percent: "Stable" },
-    ],
-  },
-  C: {
-    discovery: "Prehistoric",
-    avgAtomicMass: "12.011",
-    discoveredBy: "Ancient Civilizations",
-    namedBy: "Antoine Lavoisier",
-    stse: "Climate Change (Carbon Cycle); Organic Chemistry (Basis of Life); Radiocarbon dating.",
-    uses: "Steel manufacturing, Filters, Gemstones, Fuels.",
-    hazards: "CO/CO₂ from combustion; dust inhalation.",
-    valenceElectrons: 4,
-    commonIons: "N/A (Forms covalent bonds)",
-    oxidationStates: ["+4", "-4"],
-    electronConfig: "[He] 2s² 2p²",
-    electronegativity: 2.55,
-    ionization: "1086 kJ/mol",
-    density: "2.26 g/cm³ (Graphite)",
-    melt: "Sublimes (~3642°C)",
-    boil: "Sublimes",
-    isotopes: [
-      { name: "C-12", neutron: "6n", percent: "Stable" },
-      { name: "C-13", neutron: "7n", percent: "Stable" },
-      { name: "C-14", neutron: "8n", percent: "Radioactive" },
-    ],
-  },
-  N: {
-    discovery: "1772",
-    avgAtomicMass: "14.007",
-    discoveredBy: "Daniel Rutherford",
-    namedBy: "Jean-Antoine Chaptal",
-    stse: "Agriculture (Haber-Bosch Process/Fertilizers); Cryogenics (Liquid N₂).",
-    uses: "Fertilizers, Explosives, Food packaging (inert atmosphere).",
-    hazards: "Asphyxiant (displaces oxygen).",
-    valenceElectrons: 5,
-    commonIons: "N³⁻ (Nitride)",
-    oxidationStates: ["-3", "+3", "+5"],
-    electronConfig: "[He] 2s² 2p³",
-    electronegativity: 3.04,
-    ionization: "1402 kJ/mol",
-    density: "1.25 g/L",
-    melt: "-210.0°C",
-    boil: "-195.8°C",
-    isotopes: [
-      { name: "N-14", neutron: "7n", percent: "Stable" },
-      { name: "N-15", neutron: "8n", percent: "Stable" },
-    ],
-  },
-  O: {
-    discovery: "1774",
-    avgAtomicMass: "15.999",
-    discoveredBy: "Joseph Priestley / Carl Wilhelm Scheele",
-    namedBy: "Antoine Lavoisier",
-    stse: "Biological respiration; Combustion engines; Ozone layer protection.",
-    uses: "Steel making, Medical life support, Water treatment.",
-    hazards: "Oxidizer (accelerates fire).",
-    valenceElectrons: 6,
-    commonIons: "O²⁻ (Oxide)",
-    oxidationStates: ["-2"],
-    electronConfig: "[He] 2s² 2p⁴",
-    electronegativity: 3.44,
-    ionization: "1314 kJ/mol",
-    density: "1.43 g/L",
-    melt: "-218.8°C",
-    boil: "-183.0°C",
-    isotopes: [
-      { name: "O-16", neutron: "8n", percent: "Stable" },
-      { name: "O-17", neutron: "9n", percent: "Stable" },
-      { name: "O-18", neutron: "10n", percent: "Stable" },
-    ],
-  },
-  F: {
-    discovery: "1886",
-    avgAtomicMass: "19.00",
-    discoveredBy: "Henri Moissan",
-    namedBy: "Humphry Davy (suggested)",
-    stse: "Dental health (Water fluoridation); Nuclear fuel (UF₆ enrichment).",
-    uses: "Teflon (PTFE), Toothpaste, Refrigerants.",
-    hazards: "Highly toxic, Corrosive, Reacts with almost everything.",
-    valenceElectrons: 7,
-    commonIons: "F⁻ (Fluoride)",
-    oxidationStates: ["-1"],
-    electronConfig: "[He] 2s² 2p⁵",
-    electronegativity: 3.98,
-    ionization: "1681 kJ/mol",
-    density: "1.70 g/L",
-    melt: "-219.6°C",
-    boil: "-188.1°C",
-    isotopes: [{ name: "F-19", neutron: "10n", percent: "Stable" }],
-  },
-  Ne: {
-    discovery: "1898",
-    avgAtomicMass: "20.180",
-    discoveredBy: "William Ramsay & Morris Travers",
-    namedBy: "Ramsay (from Greek neos)",
-    stse: "Lighting technology; Lasers.",
-    uses: "Neon signs, High-voltage indicators, Cryogenics.",
-    hazards: "Asphyxiant.",
-    valenceElectrons: 8,
-    commonIons: "None (inert)",
-    oxidationStates: ["0"],
-    electronConfig: "[He] 2s² 2p⁶",
-    electronegativity: null,
-    ionization: "2080 kJ/mol",
-    density: "0.90 g/L",
-    melt: "-248.6°C",
-    boil: "-246.0°C",
-    isotopes: [
-      { name: "Ne-20", neutron: "10n", percent: "Stable" },
-      { name: "Ne-21", neutron: "11n", percent: "Stable" },
-      { name: "Ne-22", neutron: "12n", percent: "Stable" },
-    ],
-  },
-  Na: {
-    discovery: "1807",
-    avgAtomicMass: "22.990",
-    discoveredBy: "Humphry Davy",
-    namedBy: "Humphry Davy",
-    stse: "Human biology (Nerve impulses); Nuclear reactors (Coolant in fast breeders).",
-    uses: "Table salt (NaCl), Street lights, Soap making.",
-    hazards: "Reacts violently with water.",
-    valenceElectrons: 1,
-    commonIons: "Na⁺",
-    oxidationStates: ["+1"],
-    electronConfig: "[Ne] 3s¹",
-    electronegativity: 0.93,
-    ionization: "496 kJ/mol",
-    density: "0.968 g/cm³",
-    melt: "97.8°C",
-    boil: "883°C",
-    isotopes: [{ name: "Na-23", neutron: "12n", percent: "Stable" }],
-  },
-  Mg: {
-    discovery: "1755 (Identified); 1808 (Isolated)",
-    avgAtomicMass: "24.305",
-    discoveredBy: "Joseph Black (Id.); Humphry Davy (Iso.)",
-    namedBy: "Derived from Magnesia district",
-    stse: "Biological photosynthesis (Chlorophyll center); Lightweight alloys.",
-    uses: "Aerospace alloys, Flares/Fireworks, Antacids.",
-    hazards: "Flammable (metal fire difficult to extinguish).",
-    valenceElectrons: 2,
-    commonIons: "Mg²⁺",
-    oxidationStates: ["+2"],
-    electronConfig: "[Ne] 3s²",
-    electronegativity: 1.31,
-    ionization: "738 kJ/mol",
-    density: "1.74 g/cm³",
-    melt: "650°C",
-    boil: "1090°C",
-    isotopes: [
-      { name: "Mg-24", neutron: "12n", percent: "Stable" },
-      { name: "Mg-25", neutron: "13n", percent: "Stable" },
-      { name: "Mg-26", neutron: "14n", percent: "Stable" },
-    ],
-  },
-  Al: {
-    discovery: "1825",
-    avgAtomicMass: "26.982",
-    discoveredBy: "Hans Christian Ørsted",
-    namedBy: "Humphry Davy",
-    stse: "Recycling (Infinite recyclability); Transportation efficiency (Lightweighting).",
-    uses: "Aircraft structures, Cans/Foil, Power lines.",
-    hazards: "Dust is flammable/explosive.",
-    valenceElectrons: 3,
-    commonIons: "Al³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Ne] 3s² 3p¹",
-    electronegativity: 1.61,
-    ionization: "578 kJ/mol",
-    density: "2.70 g/cm³",
-    melt: "660.3°C",
-    boil: "2470°C",
-    isotopes: [{ name: "Al-27", neutron: "14n", percent: "Stable" }],
-  },
-  Si: {
-    discovery: "1824",
-    avgAtomicMass: "28.085",
-    discoveredBy: "Jöns Jakob Berzelius",
-    namedBy: "Thomas Thomson",
-    stse: "The Digital Age (Semiconductors/Microchips); Solar energy (Photovoltaics).",
-    uses: "Electronics, Glass/Concrete (as Silicates), Silicones.",
-    hazards: "Silicosis (chronic dust inhalation).",
-    valenceElectrons: 4,
-    commonIons: "N/A (Forms covalent networks)",
-    oxidationStates: ["+4"],
-    electronConfig: "[Ne] 3s² 3p²",
-    electronegativity: 1.9,
-    ionization: "787 kJ/mol",
-    density: "2.33 g/cm³",
-    melt: "1414°C",
-    boil: "3265°C",
-    isotopes: [
-      { name: "Si-28", neutron: "14n", percent: "Stable" },
-      { name: "Si-29", neutron: "15n", percent: "Stable" },
-      { name: "Si-30", neutron: "16n", percent: "Stable" },
-    ],
-  },
-  P: {
-    discovery: "1669",
-    avgAtomicMass: "30.974",
-    discoveredBy: "Hennig Brand",
-    namedBy: "Derived from Greek Light-bearing",
-    stse: "Agriculture (Essential fertilizer); Biology (DNA backbone/ATP); Eutrophication.",
-    uses: "Fertilizers, Matchboxes (Red P), Steel production.",
-    hazards: "White P is highly toxic and pyrophoric (ignites in air).",
-    valenceElectrons: 5,
-    commonIons: "P³⁻ (Phosphide), PO₄³⁻ (Phosphate)",
-    oxidationStates: ["-3", "+3", "+5"],
-    electronConfig: "[Ne] 3s² 3p³",
-    electronegativity: 2.19,
-    ionization: "1012 kJ/mol",
-    density: "1.82 g/cm³ (White P)",
-    melt: "44.1°C (White P)",
-    boil: "280.5°C",
-    isotopes: [{ name: "P-31", neutron: "16n", percent: "Stable" }],
-  },
-  S: {
-    discovery: "Prehistoric",
-    avgAtomicMass: "32.06",
-    discoveredBy: "Ancient Civilizations",
-    namedBy: "Antoine Lavoisier (established as element)",
-    stse: "Industrial Chemistry (Sulfuric acid production); Environmental Science (Acid Rain/SO₂).",
-    uses: "Fertilizers, Gunpowder, Vulcanization of rubber.",
-    hazards: "SO₂ gas is toxic and corrosive.",
-    valenceElectrons: 6,
-    commonIons: "S²⁻ (Sulfide), SO₄²⁻ (Sulfate)",
-    oxidationStates: ["-2", "+4", "+6"],
-    electronConfig: "[Ne] 3s² 3p⁴",
-    electronegativity: 2.58,
-    ionization: "1000 kJ/mol",
-    density: "2.07 g/cm³ (Alpha)",
-    melt: "115.2°C",
-    boil: "444.6°C",
-    isotopes: [
-      { name: "S-32", neutron: "16n", percent: "Stable" },
-      { name: "S-33", neutron: "17n", percent: "Stable" },
-      { name: "S-34", neutron: "18n", percent: "Stable" },
-      { name: "S-36", neutron: "20n", percent: "Stable" },
-    ],
-  },
-  Cl: {
-    discovery: "1774",
-    avgAtomicMass: "35.45",
-    discoveredBy: "Carl Wilhelm Scheele",
-    namedBy: "Humphry Davy (from Greek chloros)",
-    stse: "Public Health (Water chlorination/Disinfection); Chemical Warfare (WWI Choking gas).",
-    uses: "PVC (Plastics), Bleach, Water purification.",
-    hazards: "Highly toxic gas, Pulmonary irritant.",
-    valenceElectrons: 7,
-    commonIons: "Cl⁻ (Chloride)",
-    oxidationStates: ["-1", "+1", "+3", "+5", "+7"],
-    electronConfig: "[Ne] 3s² 3p⁵",
-    electronegativity: 3.16,
-    ionization: "1251 kJ/mol",
-    density: "3.21 g/L",
-    melt: "-101.5°C",
-    boil: "-34.0°C",
-    isotopes: [
-      { name: "Cl-35", neutron: "18n", percent: "Stable" },
-      { name: "Cl-37", neutron: "20n", percent: "Stable" },
-    ],
-  },
-  Ar: {
-    discovery: "1894",
-    avgAtomicMass: "39.948",
-    discoveredBy: "Lord Rayleigh & William Ramsay",
-    namedBy: "From Greek argos (lazy/inactive)",
-    stse: "Preservation (Museum documents stored in Ar); Atmospheric science.",
-    uses: "Welding (Shielding gas), Incandescent light bulbs, Double-pane windows.",
-    hazards: "Asphyxiant in confined spaces.",
-    valenceElectrons: 8,
-    commonIons: "None (inert)",
-    oxidationStates: ["0"],
-    electronConfig: "[Ne] 3s² 3p⁶",
-    electronegativity: null,
-    ionization: "1521 kJ/mol",
-    density: "1.78 g/L",
-    melt: "-189.4°C",
-    boil: "-185.8°C",
-    isotopes: [
-      { name: "Ar-36", neutron: "18n", percent: "Stable" },
-      { name: "Ar-38", neutron: "20n", percent: "Stable" },
-      { name: "Ar-40", neutron: "22n", percent: "Stable" },
-    ],
-  },
-  K: {
-    discovery: "1807",
-    avgAtomicMass: "39.098",
-    discoveredBy: "Humphry Davy",
-    namedBy: "Humphry Davy (from 'Potash')",
-    stse: "Agriculture (NPK Fertilizers); Geology (K-Ar dating); Biology (Nerve transmission).",
-    uses: "Fertilizers, Soaps, Gunpowder (KNO₃).",
-    hazards: "Reacts violently with water.",
-    valenceElectrons: 1,
-    commonIons: "K⁺",
-    oxidationStates: ["+1"],
-    electronConfig: "[Ar] 4s¹",
-    electronegativity: 0.82,
-    ionization: "419 kJ/mol",
-    density: "0.862 g/cm³",
-    melt: "63.5°C",
-    boil: "759°C",
-    isotopes: [
-      { name: "K-39", neutron: "20n", percent: "Stable" },
-      { name: "K-40", neutron: "21n", percent: "Radioactive" },
-      { name: "K-41", neutron: "22n", percent: "Stable" },
-    ],
-  },
-  Ca: {
-    discovery: "1808",
-    avgAtomicMass: "40.078",
-    discoveredBy: "Humphry Davy",
-    namedBy: "From Latin calx (lime)",
-    stse: "Construction (Concrete/Cement chemistry); Human Anatomy (Bones/Teeth structure).",
-    uses: "Cement, Steelmaking (Desulfurization), Dietary supplements.",
-    hazards: "Reacts with water (slowly compared to Na/K).",
-    valenceElectrons: 2,
-    commonIons: "Ca²⁺",
-    oxidationStates: ["+2"],
-    electronConfig: "[Ar] 4s²",
-    electronegativity: 1.0,
-    ionization: "590 kJ/mol",
-    density: "1.55 g/cm³",
-    melt: "842°C",
-    boil: "1484°C",
-    isotopes: [
-      { name: "Ca-40", neutron: "20n", percent: "Stable" },
-      { name: "Ca-42", neutron: "22n", percent: "Stable" },
-      { name: "Ca-43", neutron: "23n", percent: "Stable" },
-      { name: "Ca-44", neutron: "24n", percent: "Stable" },
-      { name: "Ca-46", neutron: "26n", percent: "Stable" },
-      { name: "Ca-48", neutron: "28n", percent: "Stable" },
-    ],
-  },
-  Sc: {
-    discovery: "1879",
-    avgAtomicMass: "44.956",
-    discoveredBy: "Lars Fredrik Nilson",
-    namedBy: "From Latin Scandia (Scandinavia)",
-    stse: "Prediction validation (Mendeleev predicted it as 'Eka-boron').",
-    uses: "Aerospace alloys (Aluminum-Scandium for MiG fighters), Stadium lighting.",
-    hazards: "Elemental dust is flammable.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Sc³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Ar] 3d¹ 4s²",
-    electronegativity: 1.36,
-    ionization: "633 kJ/mol",
-    density: "2.99 g/cm³",
-    melt: "1541°C",
-    boil: "2836°C",
-    isotopes: [{ name: "Sc-45", neutron: "24n", percent: "Stable" }],
-  },
-  Ti: {
-    discovery: "1791",
-    avgAtomicMass: "47.867",
-    discoveredBy: "William Gregor",
-    namedBy: "Martin Heinrich Klaproth (Titans of mythology)",
-    stse: "Medical Engineering (Biocompatible implants); Aerospace (High strength-to-weight ratio).",
-    uses: "Joint replacements, Aircraft engines, White pigment (TiO₂).",
-    hazards: "Nontoxic (biologically inert).",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Ti⁴⁺, Ti³⁺",
-    oxidationStates: ["+4", "+3"],
-    electronConfig: "[Ar] 3d² 4s²",
-    electronegativity: 1.54,
-    ionization: "659 kJ/mol",
-    density: "4.51 g/cm³",
-    melt: "1668°C",
-    boil: "3287°C",
-    isotopes: [
-      { name: "Ti-46", neutron: "24n", percent: "Stable" },
-      { name: "Ti-47", neutron: "25n", percent: "Stable" },
-      { name: "Ti-48", neutron: "26n", percent: "Stable" },
-      { name: "Ti-49", neutron: "27n", percent: "Stable" },
-      { name: "Ti-50", neutron: "28n", percent: "Stable" },
-    ],
-  },
-  V: {
-    discovery: "1801",
-    avgAtomicMass: "50.942",
-    discoveredBy: "Andrés Manuel del Río",
-    namedBy: "Nils Gabriel Sefström (Vanadis, Norse goddess)",
-    stse: "Materials Science (High-speed steel tools).",
-    uses: "Ferrovanadium alloys (Tools, Axles), Sulfuric acid catalyst (V₂O₅).",
-    hazards: "Compounds (especially V₂O₅) are toxic.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "V⁵⁺, V⁴⁺, V³⁺, V²⁺",
-    oxidationStates: ["+5", "+4", "+3", "+2"],
-    electronConfig: "[Ar] 3d³ 4s²",
-    electronegativity: 1.63,
-    ionization: "651 kJ/mol",
-    density: "6.11 g/cm³",
-    melt: "1910°C",
-    boil: "3407°C",
-    isotopes: [
-      { name: "V-50", neutron: "27n", percent: "Radioactive" },
-      { name: "V-51", neutron: "28n", percent: "Stable" },
-    ],
-  },
-  Cr: {
-    discovery: "1797",
-    avgAtomicMass: "51.996",
-    discoveredBy: "Louis-Nicolas Vauquelin",
-    namedBy: "From Greek chroma (color)",
-    stse: "Corrosion protection (Stainless steel passivation); Environmental Toxicology (Hexavalent chromium).",
-    uses: "Stainless steel (minimum 10.5%), Chrome plating, Pigments.",
-    hazards: "Cr(VI) is carcinogenic; Cr(III) is essential trace element.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Cr³⁺, Cr⁶⁺",
-    oxidationStates: ["+3", "+6"],
-    electronConfig: "[Ar] 3d⁵ 4s¹ [Exception]",
-    electronegativity: 1.66,
-    ionization: "653 kJ/mol",
-    density: "7.19 g/cm³",
-    melt: "1907°C",
-    boil: "2671°C",
-    isotopes: [
-      { name: "Cr-50", neutron: "26n", percent: "Stable" },
-      { name: "Cr-52", neutron: "28n", percent: "Stable" },
-      { name: "Cr-53", neutron: "29n", percent: "Stable" },
-      { name: "Cr-54", neutron: "30n", percent: "Stable" },
-    ],
-  },
-  Mn: {
-    discovery: "1774",
-    avgAtomicMass: "54.938",
-    discoveredBy: "Johan Gottlieb Gahn",
-    namedBy: "Derived from Magnesia",
-    stse: "Metallurgy (Essential for steel strength); Batteries (Alkaline cells).",
-    uses: "Steel alloys, Aluminum beverage cans, Dry cell batteries (MnO₂).",
-    hazards: "Manganism (neurotoxicity) from chronic dust inhalation.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Mn²⁺, Mn⁴⁺, Mn⁷⁺",
-    oxidationStates: ["+2", "+3", "+4", "+6", "+7"],
-    electronConfig: "[Ar] 3d⁵ 4s²",
-    electronegativity: 1.55,
-    ionization: "717 kJ/mol",
-    density: "7.21 g/cm³",
-    melt: "1246°C",
-    boil: "2061°C",
-    isotopes: [{ name: "Mn-55", neutron: "30n", percent: "Stable" }],
-  },
-  Fe: {
-    discovery: "Prehistoric (~4000 BCE)",
-    avgAtomicMass: "55.845",
-    discoveredBy: "Ancient Civilizations (Iron Age)",
-    namedBy: "From Anglo-Saxon iren (Symbol Fe from Latin ferrum)",
-    stse: "Civilization development (Steel infrastructure); Biology (Hemoglobin/Oxygen transport).",
-    uses: "Construction (Steel), Vehicles, Machinery.",
-    hazards: "Low toxicity; acute overdose toxic.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Fe²⁺ (Ferrous), Fe³⁺ (Ferric)",
-    oxidationStates: ["+2", "+3"],
-    electronConfig: "[Ar] 3d⁶ 4s²",
-    electronegativity: 1.83,
-    ionization: "763 kJ/mol",
-    density: "7.87 g/cm³",
-    melt: "1538°C",
-    boil: "2862°C",
-    isotopes: [
-      { name: "Fe-54", neutron: "28n", percent: "Stable" },
-      { name: "Fe-56", neutron: "30n", percent: "Stable" },
-      { name: "Fe-57", neutron: "31n", percent: "Stable" },
-      { name: "Fe-58", neutron: "32n", percent: "Stable" },
-    ],
-  },
-  Co: {
-    discovery: "1735",
-    avgAtomicMass: "58.933",
-    discoveredBy: "Georg Brandt",
-    namedBy: "From German Kobold (goblin/spirit)",
-    stse: "Renewable Energy (EV Batteries); Medical (Radiation therapy Co-60); Biology (Vitamin B12).",
-    uses: "Lithium-ion battery cathodes, Superalloys (Turbines), Blue pigments.",
-    hazards: "Toxic; Skin sensitizer.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Co²⁺, Co³⁺",
-    oxidationStates: ["+2", "+3"],
-    electronConfig: "[Ar] 3d⁷ 4s²",
-    electronegativity: 1.88,
-    ionization: "760 kJ/mol",
-    density: "8.90 g/cm³",
-    melt: "1495°C",
-    boil: "2927°C",
-    isotopes: [{ name: "Co-59", neutron: "32n", percent: "Stable" }],
-  },
-  Ni: {
-    discovery: "1751",
-    avgAtomicMass: "58.693",
-    discoveredBy: "Axel Fredrik Cronstedt",
-    namedBy: "From Kupfernickel (Devil's copper)",
-    stse: "Currency (Coins); Alloys (Stainless steel); Catalysis (Hydrogenation).",
-    uses: "Stainless steel, Batteries, Plating, Coins.",
-    hazards: "Common allergen (contact dermatitis).",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Ni²⁺",
-    oxidationStates: ["+2"],
-    electronConfig: "[Ar] 3d⁸ 4s²",
-    electronegativity: 1.91,
-    ionization: "737 kJ/mol",
-    density: "8.90 g/cm³",
-    melt: "1455°C",
-    boil: "2730°C",
-    isotopes: [
-      { name: "Ni-58", neutron: "30n", percent: "Stable" },
-      { name: "Ni-60", neutron: "32n", percent: "Stable" },
-      { name: "Ni-61", neutron: "33n", percent: "Stable" },
-      { name: "Ni-62", neutron: "34n", percent: "Stable" },
-      { name: "Ni-64", neutron: "36n", percent: "Stable" },
-    ],
-  },
-  Cu: {
-    discovery: "Prehistoric (~9000 BCE)",
-    avgAtomicMass: "63.546",
-    discoveredBy: "Middle Eastern Civilizations",
-    namedBy: "From Latin Cyprium (Metal of Cyprus)",
-    stse: "Electrification (Global grid); Antimicrobial properties (Hospital surfaces).",
-    uses: "Wiring, Plumbing, Alloys (Bronze/Brass).",
-    hazards: "Toxic to invertebrates/aquatic life; essential for humans.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Cu⁺, Cu²⁺",
-    oxidationStates: ["+1", "+2"],
-    electronConfig: "[Ar] 3d¹⁰ 4s¹ [Exception]",
-    electronegativity: 1.9,
-    ionization: "746 kJ/mol",
-    density: "8.96 g/cm³",
-    melt: "1085°C",
-    boil: "2562°C",
-    isotopes: [
-      { name: "Cu-63", neutron: "34n", percent: "Stable" },
-      { name: "Cu-65", neutron: "36n", percent: "Stable" },
-    ],
-  },
-  Zn: {
-    discovery: "~1000 CE (India); 1746 (Europe isolation)",
-    avgAtomicMass: "65.38",
-    discoveredBy: "Indian metallurgists; Andreas Sigismund Marggraf",
-    namedBy: "Paracelsus (from German Zinke)",
-    stse: "Corrosion protection (Sacrificial anode); Biochemistry (Enzyme cofactor).",
-    uses: "Galvanizing steel, Die-casting, Brass alloy.",
-    hazards: "Metal fume fever (from welding).",
-    valenceElectrons: "2 (d-subshell is full)",
-    commonIons: "Zn²⁺",
-    oxidationStates: ["+2"],
-    electronConfig: "[Ar] 3d¹⁰ 4s²",
-    electronegativity: 1.65,
-    ionization: "906 kJ/mol",
-    density: "7.14 g/cm³",
-    melt: "419.5°C",
-    boil: "907°C",
-    isotopes: [
-      { name: "Zn-64", neutron: "34n", percent: "Stable" },
-      { name: "Zn-66", neutron: "36n", percent: "Stable" },
-      { name: "Zn-67", neutron: "37n", percent: "Stable" },
-      { name: "Zn-68", neutron: "38n", percent: "Stable" },
-      { name: "Zn-70", neutron: "40n", percent: "Stable" },
-    ],
-  },
-  Ga: {
-    discovery: "1875",
-    avgAtomicMass: "69.723",
-    discoveredBy: "Paul-Émile Lecoq de Boisbaudran",
-    namedBy: "Lecoq de Boisbaudran (Gallia/France)",
-    stse: "Semiconductor physics (LEDs/Lasers); Mendeleev's 'Eka-aluminum'.",
-    uses: "Blue/Violet LEDs (GaN), Integrated circuits, High-temp thermometers.",
-    hazards: "Corrosive to aluminum (liquid metal embrittlement).",
-    valenceElectrons: 3,
-    commonIons: "Ga³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Ar] 3d¹⁰ 4s² 4p¹",
-    electronegativity: 1.81,
-    ionization: "579 kJ/mol",
-    density: "5.91 g/cm³",
-    melt: "29.8°C [Melts in hand]",
-    boil: "2400°C",
-    isotopes: [
-      { name: "Ga-69", neutron: "38n", percent: "Stable" },
-      { name: "Ga-71", neutron: "40n", percent: "Stable" },
-    ],
-  },
-  Ge: {
-    discovery: "1886",
-    avgAtomicMass: "72.630",
-    discoveredBy: "Clemens Winkler",
-    namedBy: "Winkler (Germania/Germany)",
-    stse: "Electronics history (First transistors were Ge); Fiber optics.",
-    uses: "Fiber optics, Infrared optics, Polymerization catalysts.",
-    hazards: "Some organic compounds toxic.",
-    valenceElectrons: 4,
-    commonIons: "Ge⁴⁺",
-    oxidationStates: ["+4", "+2"],
-    electronConfig: "[Ar] 3d¹⁰ 4s² 4p²",
-    electronegativity: 2.01,
-    ionization: "762 kJ/mol",
-    density: "5.32 g/cm³",
-    melt: "938°C",
-    boil: "2833°C",
-    isotopes: [
-      { name: "Ge-70", neutron: "38n", percent: "Stable" },
-      { name: "Ge-72", neutron: "40n", percent: "Stable" },
-      { name: "Ge-73", neutron: "41n", percent: "Stable" },
-      { name: "Ge-74", neutron: "42n", percent: "Stable" },
-    ],
-  },
-  As: {
-    discovery: "~1250 (Isolated)",
-    avgAtomicMass: "74.922",
-    discoveredBy: "Albertus Magnus (attributed)",
-    namedBy: "From Persian zarnikh (yellow orpiment)",
-    stse: "Toxicology (Historical poison); Semiconductor doping (n-type).",
-    uses: "Semiconductors (GaAs), Wood preservatives (historical), Alloys.",
-    hazards: "Highly toxic; Carcinogenic.",
-    valenceElectrons: 5,
-    commonIons: "As³⁻, As³⁺, As⁵⁺",
-    oxidationStates: ["-3", "+3", "+5"],
-    electronConfig: "[Ar] 3d¹⁰ 4s² 4p³",
-    electronegativity: 2.18,
-    ionization: "947 kJ/mol",
-    density: "5.73 g/cm³",
-    melt: "Sublimes (817°C at high pressure)",
-    boil: "Sublimes (614°C)",
-    isotopes: [{ name: "As-75", neutron: "42n", percent: "Stable" }],
-  },
-  Se: {
-    discovery: "1817",
-    avgAtomicMass: "78.971",
-    discoveredBy: "Jöns Jakob Berzelius",
-    namedBy: "From Greek selene (Moon)",
-    stse: "Xerox process (Photoconductivity); Biological trace element.",
-    uses: "Photocopying, Glass decolorizing, Solar cells.",
-    hazards: "Toxic in large amounts; essential in trace amounts.",
-    valenceElectrons: 6,
-    commonIons: "Se²⁻ (Selenide)",
-    oxidationStates: ["-2", "+4", "+6"],
-    electronConfig: "[Ar] 3d¹⁰ 4s² 4p⁴",
-    electronegativity: 2.55,
-    ionization: "941 kJ/mol",
-    density: "4.81 g/cm³",
-    melt: "221°C",
-    boil: "685°C",
-    isotopes: [
-      { name: "Se-74", neutron: "40n", percent: "Stable" },
-      { name: "Se-76", neutron: "42n", percent: "Stable" },
-      { name: "Se-77", neutron: "43n", percent: "Stable" },
-      { name: "Se-78", neutron: "44n", percent: "Stable" },
-      { name: "Se-80", neutron: "46n", percent: "Stable" },
-      { name: "Se-82", neutron: "48n", percent: "Stable" },
-    ],
-  },
-  Br: {
-    discovery: "1826",
-    avgAtomicMass: "79.904",
-    discoveredBy: "Antoine Jérôme Balard",
-    namedBy: "From Greek bromos (stench)",
-    stse: "Flame retardants; Ozone depletion.",
-    uses: "Flame retardants, Drilling fluids, Photographic film (AgBr).",
-    hazards: "Corrosive liquid; vapor is highly toxic.",
-    valenceElectrons: 7,
-    commonIons: "Br⁻ (Bromide)",
-    oxidationStates: ["-1", "+1", "+5"],
-    electronConfig: "[Ar] 3d¹⁰ 4s² 4p⁵",
-    electronegativity: 2.96,
-    ionization: "1140 kJ/mol",
-    density: "3.10 g/cm³ (Liquid)",
-    melt: "-7.2°C",
-    boil: "58.8°C",
-    isotopes: [
-      { name: "Br-79", neutron: "44n", percent: "Stable" },
-      { name: "Br-81", neutron: "46n", percent: "Stable" },
-    ],
-  },
-  Kr: {
-    discovery: "1898",
-    avgAtomicMass: "83.798",
-    discoveredBy: "William Ramsay & Morris Travers",
-    namedBy: "From Greek kryptos (hidden)",
-    stse: "Measurement standards (Meter was defined by Kr-86 light 1960-1983).",
-    uses: "High-speed photography flashes, Fluorescent bulbs, Double-pane windows.",
-    hazards: "Asphyxiant; Radioactive ⁸⁵Kr is a fission product.",
-    valenceElectrons: 8,
-    commonIons: "None (inert)",
-    oxidationStates: ["0", "+2"],
-    electronConfig: "[Ar] 3d¹⁰ 4s² 4p⁶",
-    electronegativity: 3.0,
-    ionization: "1351 kJ/mol",
-    density: "3.75 g/L",
-    melt: "-157.4°C",
-    boil: "-153.2°C",
-    isotopes: [
-      { name: "Kr-78", neutron: "42n", percent: "Stable" },
-      { name: "Kr-80", neutron: "44n", percent: "Stable" },
-      { name: "Kr-82", neutron: "46n", percent: "Stable" },
-      { name: "Kr-83", neutron: "47n", percent: "Stable" },
-      { name: "Kr-84", neutron: "48n", percent: "Stable" },
-      { name: "Kr-86", neutron: "50n", percent: "Stable" },
-    ],
-  },
-  Rb: {
-    discovery: "1861",
-    avgAtomicMass: "85.468",
-    discoveredBy: "Robert Bunsen & Gustav Kirchhoff",
-    namedBy: "From Latin rubidius (deep red, from spectrum)",
-    stse: "Geochronology (Dating of rocks/minerals); Atomic clocks.",
-    uses: "Vacuum tube getters, Photocells, Atomic clocks.",
-    hazards: "Reacts violently with water (ignites spontaneously).",
-    valenceElectrons: 1,
-    commonIons: "Rb⁺",
-    oxidationStates: ["+1"],
-    electronConfig: "[Kr] 5s¹",
-    electronegativity: 0.82,
-    ionization: "403 kJ/mol",
-    density: "1.53 g/cm³",
-    melt: "39.3°C",
-    boil: "688°C",
-    isotopes: [
-      { name: "Rb-85", neutron: "48n", percent: "Stable" },
-      { name: "Rb-87", neutron: "50n", percent: "Radioactive" },
-    ],
-  },
-  Sr: {
-    discovery: "1790 (identified); 1808 (isolated)",
-    avgAtomicMass: "87.62",
-    discoveredBy: "Adair Crawford (Id.); Humphry Davy (Iso.)",
-    namedBy: "From Strontian, Scotland",
-    stse: "Nuclear fallout tracking (Sr-90 mimics Calcium in bones); Fireworks.",
-    uses: "Red fireworks/flares, Glow-in-the-dark paints (SrAl₂O₄).",
-    hazards: "Sr-90 is a dangerous radiotoxin; elemental Sr reacts with water.",
-    valenceElectrons: 2,
-    commonIons: "Sr²⁺",
-    oxidationStates: ["+2"],
-    electronConfig: "[Kr] 5s²",
-    electronegativity: 0.95,
-    ionization: "550 kJ/mol",
-    density: "2.64 g/cm³",
-    melt: "777°C",
-    boil: "1382°C",
-    isotopes: [
-      { name: "Sr-84", neutron: "46n", percent: "Stable" },
-      { name: "Sr-86", neutron: "48n", percent: "Stable" },
-      { name: "Sr-87", neutron: "49n", percent: "Stable" },
-      { name: "Sr-88", neutron: "50n", percent: "Stable" },
-    ],
-  },
-  Y: {
-    discovery: "1794",
-    avgAtomicMass: "88.906",
-    discoveredBy: "Johan Gadolin",
-    namedBy: "From Ytterby, Sweden",
-    stse: "Superconductors (YBCO); LEDs.",
-    uses: "Red phosphors (CRTs/LEDs), Laser crystals (Nd:YAG), Superconductors.",
-    hazards: "Compounds can be toxic; dust is flammable.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Y³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Kr] 4d¹ 5s²",
-    electronegativity: 1.22,
-    ionization: "600 kJ/mol",
-    density: "4.47 g/cm³",
-    melt: "1526°C",
-    boil: "2930°C",
-    isotopes: [{ name: "Y-89", neutron: "50n", percent: "Stable" }],
-  },
-  Zr: {
-    discovery: "1789",
-    avgAtomicMass: "91.224",
-    discoveredBy: "Martin Heinrich Klaproth",
-    namedBy: "From Persian zargun (gold-colored)",
-    stse: "Nuclear energy (Fuel rod cladding due to low neutron absorption); Gemstones.",
-    uses: "Nuclear fuel cladding, Chemical piping, Fake diamonds (CZ).",
-    hazards: "Powder is highly flammable/explosive; biologically inert.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Zr⁴⁺",
-    oxidationStates: ["+4"],
-    electronConfig: "[Kr] 4d² 5s²",
-    electronegativity: 1.33,
-    ionization: "640 kJ/mol",
-    density: "6.52 g/cm³",
-    melt: "1855°C",
-    boil: "4409°C",
-    isotopes: [
-      { name: "Zr-90", neutron: "50n", percent: "Stable" },
-      { name: "Zr-91", neutron: "51n", percent: "Stable" },
-      { name: "Zr-92", neutron: "52n", percent: "Stable" },
-      { name: "Zr-94", neutron: "54n", percent: "Stable" },
-    ],
-  },
-  Nb: {
-    discovery: "1801",
-    avgAtomicMass: "92.906",
-    discoveredBy: "Charles Hatchett",
-    namedBy: "Niobe (daughter of Tantalus)",
-    stse: "MRI Technology (Superconducting magnets); Steel production.",
-    uses: "Superconducting magnets (MRI), Pipelines, Hypoallergenic jewelry.",
-    hazards: "Dust causes eye/skin irritation.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Nb⁵⁺, Nb³⁺",
-    oxidationStates: ["+5", "+3"],
-    electronConfig: "[Kr] 4d⁴ 5s¹ [Exception]",
-    electronegativity: 1.6,
-    ionization: "652 kJ/mol",
-    density: "8.57 g/cm³",
-    melt: "2477°C",
-    boil: "4744°C",
-    isotopes: [{ name: "Nb-93", neutron: "52n", percent: "Stable" }],
-  },
-  Mo: {
-    discovery: "1778",
-    avgAtomicMass: "95.95",
-    discoveredBy: "Carl Wilhelm Scheele",
-    namedBy: "From Greek molybdos (lead-like)",
-    stse: "Enzymatic function (Essential for nitrogen fixation in plants).",
-    uses: "High-strength steel alloys, Lubricants (MoS₂), Nuclear imaging (Mo-99 precursor).",
-    hazards: "Toxic in high doses; essential trace element.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Mo⁶⁺, Mo⁴⁺",
-    oxidationStates: ["+4", "+6"],
-    electronConfig: "[Kr] 4d⁵ 5s¹ [Exception]",
-    electronegativity: 2.16,
-    ionization: "684 kJ/mol",
-    density: "10.28 g/cm³",
-    melt: "2623°C",
-    boil: "4639°C",
-    isotopes: [
-      { name: "Mo-92", neutron: "50n", percent: "Stable" },
-      { name: "Mo-94", neutron: "52n", percent: "Stable" },
-      { name: "Mo-95", neutron: "53n", percent: "Stable" },
-      { name: "Mo-96", neutron: "54n", percent: "Stable" },
-      { name: "Mo-97", neutron: "55n", percent: "Stable" },
-      { name: "Mo-98", neutron: "56n", percent: "Stable" },
-      { name: "Mo-100", neutron: "58n", percent: "Stable" },
-    ],
-  },
-  Tc: {
-    discovery: "1937",
-    avgAtomicMass: "[98] (Radioactive)",
-    discoveredBy: "Carlo Perrier & Emilio Segrè",
-    namedBy: "From Greek technetos (artificial)",
-    stse: "Nuclear Medicine (Tc-99m is the world's most used medical radiotracer).",
-    uses: "Medical imaging (Bone scans, heart scans), Research.",
-    hazards: "Radioactive (radiotoxicity depends on isotope).",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Tc⁷⁺ (Pertechnetate), Tc⁴⁺",
-    oxidationStates: ["+7", "+4"],
-    electronConfig: "[Kr] 4d⁵ 5s²",
-    electronegativity: 1.9,
-    ionization: "702 kJ/mol",
-    density: "11.50 g/cm³",
-    melt: "2157°C",
-    boil: "4265°C",
-    isotopes: [{ name: "Tc-99", neutron: "56n", percent: "Radioactive" }],
-  },
-  Ru: {
-    discovery: "1844",
-    avgAtomicMass: "101.07",
-    discoveredBy: "Karl Ernst Claus",
-    namedBy: "From Ruthenia (Latin for Russia)",
-    stse: "Green Chemistry (Catalysts); Electronics (Chip resistors).",
-    uses: "Electrical contacts, Hard disk drives, Solar energy.",
-    hazards: "RuO₄ is highly toxic and volatile.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Ru³⁺, Ru⁴⁺",
-    oxidationStates: ["+3", "+4", "+8"],
-    electronConfig: "[Kr] 4d⁷ 5s¹ [Exception]",
-    electronegativity: 2.2,
-    ionization: "710 kJ/mol",
-    density: "12.45 g/cm³",
-    melt: "2334°C",
-    boil: "4150°C",
-    isotopes: [
-      { name: "Ru-96", neutron: "52n", percent: "Stable" },
-      { name: "Ru-98", neutron: "54n", percent: "Stable" },
-      { name: "Ru-99", neutron: "55n", percent: "Stable" },
-      { name: "Ru-100", neutron: "56n", percent: "Stable" },
-      { name: "Ru-101", neutron: "57n", percent: "Stable" },
-      { name: "Ru-102", neutron: "58n", percent: "Stable" },
-      { name: "Ru-104", neutron: "60n", percent: "Stable" },
-    ],
-  },
-  Rh: {
-    discovery: "1803",
-    avgAtomicMass: "102.91",
-    discoveredBy: "William Hyde Wollaston",
-    namedBy: "From Greek rhodon (rose, due to salt color)",
-    stse: "Automotive Industry (Catalytic converters for NOx reduction).",
-    uses: "Catalytic converters (80% of use), Jewelry plating (white gold finish).",
-    hazards: "Compounds are toxic/carcinogenic; metal is inert.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Rh³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Kr] 4d⁸ 5s¹ [Exception]",
-    electronegativity: 2.28,
-    ionization: "720 kJ/mol",
-    density: "12.41 g/cm³",
-    melt: "1964°C",
-    boil: "3695°C",
-    isotopes: [{ name: "Rh-103", neutron: "58n", percent: "Stable" }],
-  },
-  Pd: {
-    discovery: "1803",
-    avgAtomicMass: "106.42",
-    discoveredBy: "William Hyde Wollaston",
-    namedBy: "From asteroid Pallas",
-    stse: "Hydrogen Economy (Can absorb 900x volume of H₂); Catalytic converters.",
-    uses: "Catalytic converters, Dentistry, Fuel cells, Hydrogen purification.",
-    hazards: "Low toxicity, but can cause allergic reactions.",
-    valenceElectrons: "Variable (outer d only here)",
-    commonIons: "Pd²⁺, Pd⁴⁺",
-    oxidationStates: ["+2", "+4"],
-    electronConfig: "[Kr] 4d¹⁰ [Exception - empty s-orbital]",
-    electronegativity: 2.2,
-    ionization: "804 kJ/mol",
-    density: "12.02 g/cm³",
-    melt: "1555°C",
-    boil: "2963°C",
-    isotopes: [
-      { name: "Pd-102", neutron: "56n", percent: "Stable" },
-      { name: "Pd-104", neutron: "58n", percent: "Stable" },
-      { name: "Pd-105", neutron: "59n", percent: "Stable" },
-      { name: "Pd-106", neutron: "60n", percent: "Stable" },
-      { name: "Pd-108", neutron: "62n", percent: "Stable" },
-      { name: "Pd-110", neutron: "64n", percent: "Stable" },
-    ],
-  },
-  Ag: {
-    discovery: "Prehistoric (~3000 BCE)",
-    avgAtomicMass: "107.87",
-    discoveredBy: "Ancient Civilizations",
-    namedBy: "Anglo-Saxon seolfor (Symbol Ag from Latin argentum)",
-    stse: "Medicine (Antibacterial properties); Photography (Traditional film chemistry).",
-    uses: "Jewelry, Electronics (Best conductor), Mirrors, Solar panels.",
-    hazards:
-      "Argyria (skin turns blue from chronic exposure); toxic to aquatic life.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Ag⁺",
-    oxidationStates: ["+1"],
-    electronConfig: "[Kr] 4d¹⁰ 5s¹ [Exception]",
-    electronegativity: 1.93,
-    ionization: "731 kJ/mol",
-    density: "10.49 g/cm³",
-    melt: "962°C",
-    boil: "2162°C",
-    isotopes: [
-      { name: "Ag-107", neutron: "60n", percent: "Stable" },
-      { name: "Ag-109", neutron: "62n", percent: "Stable" },
-    ],
-  },
-  Cd: {
-    discovery: "1817",
-    avgAtomicMass: "112.41",
-    discoveredBy: "Friedrich Stromeyer",
-    namedBy: "From Latin cadmia (calamine)",
-    stse: "Environmental Pollution (Ni-Cd battery disposal); Pigments.",
-    uses: "Ni-Cd Batteries (being phased out), Solar cells (CdTe), Pigments.",
-    hazards: "Highly toxic; Carcinogen; Accumulates in kidneys.",
-    valenceElectrons: "2 (d-subshell is full)",
-    commonIons: "Cd²⁺",
-    oxidationStates: ["+2"],
-    electronConfig: "[Kr] 4d¹⁰ 5s²",
-    electronegativity: 1.69,
-    ionization: "868 kJ/mol",
-    density: "8.65 g/cm³",
-    melt: "321°C",
-    boil: "767°C",
-    isotopes: [
-      { name: "Cd-110", neutron: "62n", percent: "Stable" },
-      { name: "Cd-111", neutron: "63n", percent: "Stable" },
-      { name: "Cd-112", neutron: "64n", percent: "Stable" },
-      { name: "Cd-113", neutron: "65n", percent: "Stable" },
-      { name: "Cd-114", neutron: "66n", percent: "Stable" },
-      { name: "Cd-116", neutron: "68n", percent: "Stable" },
-    ],
-  },
-  In: {
-    discovery: "1863",
-    avgAtomicMass: "114.82",
-    discoveredBy: "Ferdinand Reich & H.T. Richter",
-    namedBy: "From Indigo spectrum line",
-    stse: "Touchscreen Technology (Indium Tin Oxide films).",
-    uses: "LCD/OLED screens (ITO), Solders, Semiconductors.",
-    hazards: "Compounds are toxic; damage lungs/kidneys.",
-    valenceElectrons: 3,
-    commonIons: "In³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Kr] 4d¹⁰ 5s² 5p¹",
-    electronegativity: 1.78,
-    ionization: "558 kJ/mol",
-    density: "7.31 g/cm³",
-    melt: "156.6°C",
-    boil: "2072°C",
-    isotopes: [
-      { name: "In-113", neutron: "64n", percent: "Stable" },
-      { name: "In-115", neutron: "66n", percent: "Radioactive" },
-    ],
-  },
-  Sn: {
-    discovery: "Prehistoric (~3000 BCE)",
-    avgAtomicMass: "118.71",
-    discoveredBy: "Ancient Civilizations (Bronze Age)",
-    namedBy: "Anglo-Saxon tin (Symbol Sn from Latin stannum)",
-    stse: "Food Safety (Tin cans); Metallurgy (Bronze/Solder).",
-    uses: "Solder (electronics), Plating (steel cans), Bronze alloys.",
-    hazards: "Organic tin compounds are toxic; metal is non-toxic.",
-    valenceElectrons: 4,
-    commonIons: "Sn²⁺ (Stannous), Sn⁴⁺ (Stannic)",
-    oxidationStates: ["+2", "+4"],
-    electronConfig: "[Kr] 4d¹⁰ 5s² 5p²",
-    electronegativity: 1.96,
-    ionization: "709 kJ/mol",
-    density: "7.31 g/cm³ (White Sn)",
-    melt: "232°C",
-    boil: "2602°C",
-    isotopes: [
-      { name: "Sn-112", neutron: "62n", percent: "Stable" },
-      { name: "Sn-114", neutron: "64n", percent: "Stable" },
-      { name: "Sn-115", neutron: "65n", percent: "Stable" },
-      { name: "Sn-116", neutron: "66n", percent: "Stable" },
-      { name: "Sn-117", neutron: "67n", percent: "Stable" },
-      { name: "Sn-118", neutron: "68n", percent: "Stable" },
-      { name: "Sn-119", neutron: "69n", percent: "Stable" },
-      { name: "Sn-120", neutron: "70n", percent: "Stable" },
-      { name: "Sn-122", neutron: "72n", percent: "Stable" },
-      { name: "Sn-124", neutron: "74n", percent: "Stable" },
-    ],
-  },
-  Sb: {
-    discovery: "~3000 BCE",
-    avgAtomicMass: "121.76",
-    discoveredBy: "Ancient Civilizations",
-    namedBy: "Symbol Sb from Latin stibium (eyeliner)",
-    stse: "Fire Safety (Flame retardants); Lead-acid battery chemistry.",
-    uses: "Flame retardants (Sb₂O₃), Lead-acid battery hardening, Microelectronics.",
-    hazards: "Toxic (similar to Arsenic); causes poisoning.",
-    valenceElectrons: 5,
-    commonIons: "Sb³⁺, Sb⁵⁺, Sb³⁻",
-    oxidationStates: ["+3", "+5", "-3"],
-    electronConfig: "[Kr] 4d¹⁰ 5s² 5p³",
-    electronegativity: 2.05,
-    ionization: "834 kJ/mol",
-    density: "6.70 g/cm³",
-    melt: "631°C",
-    boil: "1587°C",
-    isotopes: [
-      { name: "Sb-121", neutron: "70n", percent: "Stable" },
-      { name: "Sb-123", neutron: "72n", percent: "Stable" },
-    ],
-  },
-  Te: {
-    discovery: "1782",
-    avgAtomicMass: "127.60",
-    discoveredBy: "Franz-Joseph Müller von Reichenstein",
-    namedBy: "From Latin tellus (Earth)",
-    stse: "Renewable Energy (CdTe Solar Panels); Rewritable optical discs.",
-    uses: "Solar panels, Alloys (improve machinability), Thermoelectric devices.",
-    hazards: "Toxic; ingestion causes garlic-like breath.",
-    valenceElectrons: 6,
-    commonIons: "Te²⁻, Te⁴⁺",
-    oxidationStates: ["-2", "+4", "+6"],
-    electronConfig: "[Kr] 4d¹⁰ 5s² 5p⁴",
-    electronegativity: 2.1,
-    ionization: "869 kJ/mol",
-    density: "6.24 g/cm³",
-    melt: "450°C",
-    boil: "988°C",
-    isotopes: [
-      { name: "Te-125", neutron: "73n", percent: "Stable" },
-      { name: "Te-126", neutron: "74n", percent: "Stable" },
-      { name: "Te-128", neutron: "76n", percent: "Stable" },
-      { name: "Te-130", neutron: "78n", percent: "Radioactive" },
-    ],
-  },
-  I: {
-    discovery: "1811",
-    avgAtomicMass: "126.90",
-    discoveredBy: "Bernard Courtois",
-    namedBy: "From Greek iodes (violet)",
-    stse: "Public Health (Iodized salt prevents goiter); Nuclear Safety (I-131 protection).",
-    uses: "Disinfectant (Betadine), Contrast media (X-ray), Thyroid nutrient.",
-    hazards: "Vapors irritate eyes/lungs; stains skin.",
-    valenceElectrons: 7,
-    commonIons: "I⁻ (Iodide)",
-    oxidationStates: ["-1", "+1", "+5", "+7"],
-    electronConfig: "[Kr] 4d¹⁰ 5s² 5p⁵",
-    electronegativity: 2.66,
-    ionization: "1008 kJ/mol",
-    density: "4.93 g/cm³",
-    melt: "113.7°C",
-    boil: "184.3°C",
-    isotopes: [{ name: "I-127", neutron: "74n", percent: "Stable" }],
-  },
-  Xe: {
-    discovery: "1898",
-    avgAtomicMass: "131.29",
-    discoveredBy: "William Ramsay & Morris Travers",
-    namedBy: "From Greek xenos (stranger)",
-    stse: "Space Propulsion (Ion thrusters); Medical Anesthesia.",
-    uses: "Ion propulsion engines (satellites), High-intensity strobe lights, General anesthetic.",
-    hazards: "Asphyxiant; compounds (e.g., oxides) can be explosive.",
-    valenceElectrons: 8,
-    commonIons: "None (inert, but forms compounds like XeF₄)",
-    oxidationStates: ["0", "+2", "+4", "+6"],
-    electronConfig: "[Kr] 4d¹⁰ 5s² 5p⁶",
-    electronegativity: 2.6,
-    ionization: "1170 kJ/mol",
-    density: "5.90 g/L",
-    melt: "-111.8°C",
-    boil: "-108.1°C",
-    isotopes: [
-      { name: "Xe-124", neutron: "70n", percent: "Stable" },
-      { name: "Xe-126", neutron: "72n", percent: "Stable" },
-      { name: "Xe-128", neutron: "74n", percent: "Stable" },
-      { name: "Xe-129", neutron: "75n", percent: "Stable" },
-      { name: "Xe-130", neutron: "76n", percent: "Stable" },
-      { name: "Xe-131", neutron: "77n", percent: "Stable" },
-      { name: "Xe-132", neutron: "78n", percent: "Stable" },
-      { name: "Xe-134", neutron: "80n", percent: "Stable" },
-      { name: "Xe-136", neutron: "82n", percent: "Stable" },
-    ],
-  },
-  Cs: {
-    discovery: "1860",
-    avgAtomicMass: "132.91",
-    discoveredBy: "Robert Bunsen & Gustav Kirchhoff",
-    namedBy: "From Latin caesius (sky blue spectrum line)",
-    stse: "Global Timekeeping (Definition of the Second based on Cs-133).",
-    uses: "Atomic clocks (GPS standard), Drilling fluids (Cesium formate), Photoelectric cells.",
-    hazards: "Reacts explosively with cold water.",
-    valenceElectrons: 1,
-    commonIons: "Cs⁺",
-    oxidationStates: ["+1"],
-    electronConfig: "[Xe] 6s¹",
-    electronegativity: 0.79,
-    ionization: "376 kJ/mol",
-    density: "1.93 g/cm³",
-    melt: "28.5°C [Melts near room temp]",
-    boil: "671°C",
-    isotopes: [{ name: "Cs-133", neutron: "78n", percent: "Stable" }],
-  },
-  Ba: {
-    discovery: "1808",
-    avgAtomicMass: "137.33",
-    discoveredBy: "Humphry Davy",
-    namedBy: "From Greek barys (heavy)",
-    stse: "Medical Imaging (Barium swallow X-rays); Oil Well Drilling.",
-    uses: "Drilling muds (Barite), Fireworks (Green color), Medical contrast agent.",
-    hazards: "Soluble compounds are toxic; BaSO₄ is safe (insoluble).",
-    valenceElectrons: 2,
-    commonIons: "Ba²⁺",
-    oxidationStates: ["+2"],
-    electronConfig: "[Xe] 6s²",
-    electronegativity: 0.89,
-    ionization: "503 kJ/mol",
-    density: "3.62 g/cm³",
-    melt: "727°C",
-    boil: "1897°C",
-    isotopes: [
-      { name: "Ba-134", neutron: "78n", percent: "Stable" },
-      { name: "Ba-135", neutron: "79n", percent: "Stable" },
-      { name: "Ba-136", neutron: "80n", percent: "Stable" },
-      { name: "Ba-137", neutron: "81n", percent: "Stable" },
-      { name: "Ba-138", neutron: "82n", percent: "Stable" },
-    ],
-  },
-  La: {
-    discovery: "1839",
-    avgAtomicMass: "138.91",
-    discoveredBy: "Carl Gustaf Mosander",
-    namedBy: "From Greek lanthanein (to lie hidden)",
-    stse: "Hybrid Vehicles (NiMH batteries).",
-    uses: "Camera lenses (High refractive index glass), Hybrid car batteries, Lighter flints.",
-    hazards: "Low toxicity; dust is flammable.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "La³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Xe] 5d¹ 6s²",
-    electronegativity: 1.1,
-    ionization: "538 kJ/mol",
-    density: "6.15 g/cm³",
-    melt: "920°C",
-    boil: "3464°C",
-    isotopes: [
-      { name: "La-138", neutron: "81n", percent: "Radioactive" },
-      { name: "La-139", neutron: "82n", percent: "Stable" },
-    ],
-  },
-  Ce: {
-    discovery: "1803",
-    avgAtomicMass: "140.12",
-    discoveredBy: "Martin Heinrich Klaproth, Jöns Jakob Berzelius",
-    namedBy: "From asteroid Ceres",
-    stse: "Emissions Control (Diesel additives); Self-cleaning ovens.",
-    uses: "Catalytic converters, Mischmetal (lighter flints), Glass polishing.",
-    hazards: "Pyrophoric (sparks when struck); low toxicity.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Ce³⁺, Ce⁴⁺",
-    oxidationStates: ["+3", "+4"],
-    electronConfig: "[Xe] 4f¹ 5d¹ 6s²",
-    electronegativity: 1.12,
-    ionization: "534 kJ/mol",
-    density: "6.77 g/cm³",
-    melt: "795°C",
-    boil: "3443°C",
-    isotopes: [
-      { name: "Ce-136", neutron: "78n", percent: "Stable" },
-      { name: "Ce-138", neutron: "80n", percent: "Stable" },
-      { name: "Ce-140", neutron: "82n", percent: "Stable" },
-      { name: "Ce-142", neutron: "84n", percent: "Stable" },
-    ],
-  },
-  Pr: {
-    discovery: "1885",
-    avgAtomicMass: "140.91",
-    discoveredBy: "Carl Auer von Welsbach",
-    namedBy: "From Greek prasios didymos (green twin)",
-    stse: "Renewable Energy (Magnets in wind turbines).",
-    uses: "High-strength magnets (alloyed with Nd), Didymium glass (welder's goggles), Yellow pigments.",
-    hazards: "Low toxicity; dust is flammable.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Pr³⁺",
-    oxidationStates: ["+3", "+4"],
-    electronConfig: "[Xe] 4f³ 6s²",
-    electronegativity: 1.13,
-    ionization: "527 kJ/mol",
-    density: "6.77 g/cm³",
-    melt: "935°C",
-    boil: "3520°C",
-    isotopes: [{ name: "Pr-141", neutron: "82n", percent: "Stable" }],
-  },
-  Nd: {
-    discovery: "1885",
-    avgAtomicMass: "144.24",
-    discoveredBy: "Carl Auer von Welsbach",
-    namedBy: "From Greek neos didymos (new twin)",
-    stse: "Green Technology (Essential for EV motors and Wind Turbines).",
-    uses: "Strongest permanent magnets (NdFeB), Lasers (Nd:YAG), Glass coloring (purple).",
-    hazards: "Dust is flammable; magnets can cause pinching injuries.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Nd³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Xe] 4f⁴ 6s²",
-    electronegativity: 1.14,
-    ionization: "533 kJ/mol",
-    density: "7.01 g/cm³",
-    melt: "1024°C",
-    boil: "3074°C",
-    isotopes: [
-      { name: "Nd-142", neutron: "82n", percent: "Stable" },
-      { name: "Nd-143", neutron: "83n", percent: "Stable" },
-      { name: "Nd-144", neutron: "84n", percent: "Stable" },
-      { name: "Nd-145", neutron: "85n", percent: "Stable" },
-      { name: "Nd-146", neutron: "86n", percent: "Stable" },
-      { name: "Nd-148", neutron: "88n", percent: "Stable" },
-    ],
-  },
-  Pm: {
-    discovery: "1945",
-    avgAtomicMass: "[145] (Radioactive)",
-    discoveredBy: "Marinsky, Glendenin, Coryell",
-    namedBy: "From Prometheus (Greek titan who stole fire)",
-    stse: "Nuclear Batteries (Betavoltaics).",
-    uses: "Nuclear batteries for guided missiles/pacemakers, Luminous paint.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Pm³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Xe] 4f⁵ 6s²",
-    electronegativity: 1.13,
-    ionization: "540 kJ/mol",
-    density: "7.26 g/cm³",
-    melt: "1042°C",
-    boil: "3000°C",
-    isotopes: [{ name: "Pm-145", neutron: "84n", percent: "Radioactive" }],
-  },
-  Sm: {
-    discovery: "1879",
-    avgAtomicMass: "150.36",
-    discoveredBy: "Lecoq de Boisbaudran",
-    namedBy: "From Mineral Samarskite",
-    stse: "Magnet Technology (SmCo magnets).",
-    uses: "Samarium-Cobalt magnets (high temp stability), Cancer treatment (Sm-153).",
-    hazards: "Low toxicity.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Sm³⁺, Sm²⁺",
-    oxidationStates: ["+3", "+2"],
-    electronConfig: "[Xe] 4f⁶ 6s²",
-    electronegativity: 1.17,
-    ionization: "545 kJ/mol",
-    density: "7.52 g/cm³",
-    melt: "1072°C",
-    boil: "1794°C",
-    isotopes: [
-      { name: "Sm-144", neutron: "82n", percent: "Stable" },
-      { name: "Sm-147", neutron: "85n", percent: "Radioactive" },
-      { name: "Sm-149", neutron: "87n", percent: "Stable" },
-      { name: "Sm-150", neutron: "88n", percent: "Stable" },
-      { name: "Sm-152", neutron: "90n", percent: "Stable" },
-      { name: "Sm-154", neutron: "92n", percent: "Stable" },
-    ],
-  },
-  Eu: {
-    discovery: "1901",
-    avgAtomicMass: "151.96",
-    discoveredBy: "Eugène-Anatole Demarçay",
-    namedBy: "From Europe",
-    stse: "Anti-counterfeiting (Glowing dyes in Euro banknotes).",
-    uses: "Red phosphors in TV screens/LEDs, Fluorescent probes.",
-    hazards: "Reacts vividly with water; non-toxic.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Eu³⁺, Eu²⁺",
-    oxidationStates: ["+3", "+2"],
-    electronConfig: "[Xe] 4f⁷ 6s²",
-    electronegativity: 1.2,
-    ionization: "547 kJ/mol",
-    density: "5.24 g/cm³",
-    melt: "822°C",
-    boil: "1529°C",
-    isotopes: [
-      { name: "Eu-151", neutron: "88n", percent: "Stable" },
-      { name: "Eu-153", neutron: "90n", percent: "Stable" },
-    ],
-  },
-  Gd: {
-    discovery: "1880",
-    avgAtomicMass: "157.25",
-    discoveredBy: "Jean Charles Galissard de Marignac",
-    namedBy: "From Mineral Gadolinite (after Johan Gadolin)",
-    stse: "Medical Imaging (MRI Contrast Agents).",
-    uses: "MRI Contrast agents (Magnevist), Neutron shielding, Magnetic refrigeration.",
-    hazards: "Free ion is toxic; chelated form used medically.",
-    valenceElectrons: "Variable (outer s + d + f)",
-    commonIons: "Gd³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Xe] 4f⁷ 5d¹ 6s² [Stable half-shell]",
-    electronegativity: 1.2,
-    ionization: "593 kJ/mol",
-    density: "7.90 g/cm³",
-    melt: "1313°C",
-    boil: "3273°C",
-    isotopes: [
-      { name: "Gd-154", neutron: "90n", percent: "Stable" },
-      { name: "Gd-155", neutron: "91n", percent: "Stable" },
-      { name: "Gd-156", neutron: "92n", percent: "Stable" },
-      { name: "Gd-157", neutron: "93n", percent: "Stable" },
-      { name: "Gd-158", neutron: "94n", percent: "Stable" },
-      { name: "Gd-160", neutron: "96n", percent: "Stable" },
-    ],
-  },
-  Tb: {
-    discovery: "1843",
-    avgAtomicMass: "158.93",
-    discoveredBy: "Carl Gustaf Mosander",
-    namedBy: "From Ytterby, Sweden",
-    stse: "Green Energy (Low-energy lighting phosphors).",
-    uses: "Green phosphors (fluorescent lamps), Terfenol-D (magnetostrictive alloy).",
-    hazards: "Low toxicity.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Tb³⁺",
-    oxidationStates: ["+3", "+4"],
-    electronConfig: "[Xe] 4f⁹ 6s²",
-    electronegativity: 1.1,
-    ionization: "566 kJ/mol",
-    density: "8.23 g/cm³",
-    melt: "1356°C",
-    boil: "3230°C",
-    isotopes: [{ name: "Tb-159", neutron: "94n", percent: "Stable" }],
-  },
-  Dy: {
-    discovery: "1886",
-    avgAtomicMass: "162.50",
-    discoveredBy: "Lecoq de Boisbaudran",
-    namedBy: "From Greek dysprositos (hard to get)",
-    stse: "Electric Vehicles (Magnet additives).",
-    uses: "Neodymium magnet additive (increases heat resistance), Control rods.",
-    hazards: "Low toxicity; dust is flammable.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Dy³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Xe] 4f¹⁰ 6s²",
-    electronegativity: 1.22,
-    ionization: "573 kJ/mol",
-    density: "8.54 g/cm³",
-    melt: "1412°C",
-    boil: "2567°C",
-    isotopes: [
-      { name: "Dy-156", neutron: "90n", percent: "Stable" },
-      { name: "Dy-158", neutron: "92n", percent: "Stable" },
-      { name: "Dy-160", neutron: "94n", percent: "Stable" },
-      { name: "Dy-161", neutron: "95n", percent: "Stable" },
-      { name: "Dy-162", neutron: "96n", percent: "Stable" },
-      { name: "Dy-163", neutron: "97n", percent: "Stable" },
-      { name: "Dy-164", neutron: "98n", percent: "Stable" },
-    ],
-  },
-  Ho: {
-    discovery: "1878",
-    avgAtomicMass: "164.93",
-    discoveredBy: "Jacques-Louis Soret",
-    namedBy: "From Holmia (Latin for Stockholm)",
-    stse: "Medical Surgery (Ho:YAG Lasers).",
-    uses: "Surgical lasers (kidney stones), Strongest magnetic fields (magnetic flux concentrator).",
-    hazards: "Low toxicity.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Ho³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Xe] 4f¹¹ 6s²",
-    electronegativity: 1.23,
-    ionization: "581 kJ/mol",
-    density: "8.80 g/cm³",
-    melt: "1474°C",
-    boil: "2700°C",
-    isotopes: [{ name: "Ho-165", neutron: "98n", percent: "Stable" }],
-  },
-  Er: {
-    discovery: "1843",
-    avgAtomicMass: "167.26",
-    discoveredBy: "Carl Gustaf Mosander",
-    namedBy: "From Ytterby, Sweden",
-    stse: "Telecommunications (Fiber optic signal amplifiers).",
-    uses: "EDFA (Erbium-Doped Fiber Amplifiers), Dermatology lasers, Pink glass coloring.",
-    hazards: "Low toxicity.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Er³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Xe] 4f¹² 6s²",
-    electronegativity: 1.24,
-    ionization: "589 kJ/mol",
-    density: "9.07 g/cm³",
-    melt: "1529°C",
-    boil: "2868°C",
-    isotopes: [
-      { name: "Er-162", neutron: "94n", percent: "Stable" },
-      { name: "Er-164", neutron: "96n", percent: "Stable" },
-      { name: "Er-166", neutron: "98n", percent: "Stable" },
-      { name: "Er-167", neutron: "99n", percent: "Stable" },
-      { name: "Er-168", neutron: "100n", percent: "Stable" },
-      { name: "Er-170", neutron: "102n", percent: "Stable" },
-    ],
-  },
-  Tm: {
-    discovery: "1879",
-    avgAtomicMass: "168.93",
-    discoveredBy: "Per Teodor Cleve",
-    namedBy: "From Thule (mythical North)",
-    stse: "Portable X-rays (Tm-170 source).",
-    uses: "Portable X-ray machines, Lasers, Euro banknotes.",
-    hazards: "Low toxicity.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Tm³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Xe] 4f¹³ 6s²",
-    electronegativity: 1.25,
-    ionization: "597 kJ/mol",
-    density: "9.32 g/cm³",
-    melt: "1545°C",
-    boil: "1950°C",
-    isotopes: [{ name: "Tm-169", neutron: "100n", percent: "Stable" }],
-  },
-  Yb: {
-    discovery: "1878",
-    avgAtomicMass: "173.05",
-    discoveredBy: "Jean Charles Galissard de Marignac",
-    namedBy: "From Ytterby, Sweden",
-    stse: "Atomic Clocks (World's most stable clocks).",
-    uses: "Fiber lasers, Stress gauges, Atomic clocks.",
-    hazards: "Eye/skin irritant.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Yb³⁺, Yb²⁺",
-    oxidationStates: ["+3", "+2"],
-    electronConfig: "[Xe] 4f¹⁴ 6s²",
-    electronegativity: 1.1,
-    ionization: "603 kJ/mol",
-    density: "6.90 g/cm³",
-    melt: "824°C",
-    boil: "1196°C",
-    isotopes: [
-      { name: "Yb-168", neutron: "98n", percent: "Stable" },
-      { name: "Yb-170", neutron: "100n", percent: "Stable" },
-      { name: "Yb-171", neutron: "101n", percent: "Stable" },
-      { name: "Yb-172", neutron: "102n", percent: "Stable" },
-      { name: "Yb-173", neutron: "103n", percent: "Stable" },
-      { name: "Yb-174", neutron: "104n", percent: "Stable" },
-      { name: "Yb-176", neutron: "106n", percent: "Stable" },
-    ],
-  },
-  Lu: {
-    discovery: "1907",
-    avgAtomicMass: "174.97",
-    discoveredBy: "Georges Urbain",
-    namedBy: "From Lutetia (Paris)",
-    stse: "Cancer Therapy (Lu-177 radiotherapy); Petroleum cracking.",
-    uses: "PET scan detectors (LSO crystals), Cancer treatment, Catalysts.",
-    hazards: "Low toxicity.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Lu³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Xe] 4f¹⁴ 5d¹ 6s²",
-    electronegativity: 1.27,
-    ionization: "524 kJ/mol",
-    density: "9.84 g/cm³",
-    melt: "1663°C",
-    boil: "3402°C",
-    isotopes: [
-      { name: "Lu-175", neutron: "104n", percent: "Stable" },
-      { name: "Lu-176", neutron: "105n", percent: "Radioactive" },
-    ],
-  },
-  Hf: {
-    discovery: "1923",
-    avgAtomicMass: "178.49",
-    discoveredBy: "Dirk Coster & George de Hevesy",
-    namedBy: "From Hafnia (Copenhagen)",
-    stse: "Nuclear Reactors (Control rods); Microprocessors.",
-    uses: "Nuclear control rods (absorbs neutrons), Plasma cutting tips, Intel chips (high-k dielectric).",
-    hazards: "Fine dust is pyrophoric.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Hf⁴⁺",
-    oxidationStates: ["+4"],
-    electronConfig: "[Xe] 4f¹⁴ 5d² 6s²",
-    electronegativity: 1.3,
-    ionization: "659 kJ/mol",
-    density: "13.31 g/cm³",
-    melt: "2233°C",
-    boil: "4603°C",
-    isotopes: [
-      { name: "Hf-176", neutron: "104n", percent: "Stable" },
-      { name: "Hf-177", neutron: "105n", percent: "Stable" },
-      { name: "Hf-178", neutron: "106n", percent: "Stable" },
-      { name: "Hf-179", neutron: "107n", percent: "Stable" },
-      { name: "Hf-180", neutron: "108n", percent: "Stable" },
-    ],
-  },
-  Ta: {
-    discovery: "1802",
-    avgAtomicMass: "180.95",
-    discoveredBy: "Anders Gustaf Ekeberg",
-    namedBy: "From Tantalus (Greek mythology)",
-    stse: 'Electronics Supply Chain ("Conflict mineral").',
-    uses: "Capacitors in smartphones/laptops, Surgical implants (inert).",
-    hazards: "Low toxicity; biocompatible.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Ta⁵⁺",
-    oxidationStates: ["+5"],
-    electronConfig: "[Xe] 4f¹⁴ 5d³ 6s²",
-    electronegativity: 1.5,
-    ionization: "761 kJ/mol",
-    density: "16.69 g/cm³",
-    melt: "3017°C",
-    boil: "5458°C",
-    isotopes: [
-      { name: "Ta-180", neutron: "107n", percent: "Stable" },
-      { name: "Ta-181", neutron: "108n", percent: "Stable" },
-    ],
-  },
-  W: {
-    discovery: "1783",
-    avgAtomicMass: "183.84",
-    discoveredBy: "Juan José & Fausto Elhuyar",
-    namedBy: "Swedish tung sten (heavy stone); Symbol W from Wolfram",
-    stse: "Lighting (Incandescent filaments); Military (Kinetic bombardment).",
-    uses: "Light bulb filaments, TIG welding, Armor-piercing ammunition.",
-    hazards: "Dust irritates lungs; largely non-toxic.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "W⁶⁺",
-    oxidationStates: ["+6", "+4"],
-    electronConfig: "[Xe] 4f¹⁴ 5d⁴ 6s²",
-    electronegativity: 2.36,
-    ionization: "770 kJ/mol",
-    density: "19.25 g/cm³",
-    melt: "3422°C [Highest of all metals]",
-    boil: "5930°C",
-    isotopes: [
-      { name: "W-182", neutron: "108n", percent: "Stable" },
-      { name: "W-183", neutron: "109n", percent: "Stable" },
-      { name: "W-184", neutron: "110n", percent: "Stable" },
-      { name: "W-186", neutron: "112n", percent: "Stable" },
-    ],
-  },
-  Re: {
-    discovery: "1925",
-    avgAtomicMass: "186.21",
-    discoveredBy: "Walter Noddack, Ida Tacke, Otto Berg",
-    namedBy: "From Rhenus (Rhine River)",
-    stse: "Aerospace (Jet engine superalloys).",
-    uses: "Jet engine turbine blades, Thermocouples, Catalysts.",
-    hazards: "Low toxicity.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Re⁷⁺, Re⁴⁺",
-    oxidationStates: ["+7", "+6", "+4"],
-    electronConfig: "[Xe] 4f¹⁴ 5d⁵ 6s²",
-    electronegativity: 1.9,
-    ionization: "760 kJ/mol",
-    density: "21.02 g/cm³",
-    melt: "3186°C",
-    boil: "5596°C",
-    isotopes: [
-      { name: "Re-185", neutron: "110n", percent: "Stable" },
-      { name: "Re-187", neutron: "112n", percent: "Radioactive" },
-    ],
-  },
-  Os: {
-    discovery: "1803",
-    avgAtomicMass: "190.23",
-    discoveredBy: "Smithson Tennant",
-    namedBy: "From Greek osme (smell)",
-    stse: "Density limits (Densest naturally occurring substance).",
-    uses: "Fountain pen tips, Electrical contacts, Fingerprint detection.",
-    hazards: "OsO₄ is extremely toxic and volatile (causes blindness).",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Os⁴⁺, Os⁸⁺ (OsO₄)",
-    oxidationStates: ["+4", "+8"],
-    electronConfig: "[Xe] 4f¹⁴ 5d⁶ 6s²",
-    electronegativity: 2.2,
-    ionization: "840 kJ/mol",
-    density: "22.59 g/cm³ [Densest element]",
-    melt: "3033°C",
-    boil: "5012°C",
-    isotopes: [
-      { name: "Os-186", neutron: "110n", percent: "Stable" },
-      { name: "Os-187", neutron: "111n", percent: "Stable" },
-      { name: "Os-188", neutron: "112n", percent: "Stable" },
-      { name: "Os-189", neutron: "113n", percent: "Stable" },
-      { name: "Os-190", neutron: "114n", percent: "Stable" },
-      { name: "Os-192", neutron: "116n", percent: "Stable" },
-    ],
-  },
-  Ir: {
-    discovery: "1803",
-    avgAtomicMass: "192.22",
-    discoveredBy: "Smithson Tennant",
-    namedBy: "From Greek iris (rainbow, due to salt colors)",
-    stse: "Geology (K-Pg boundary layer evidence for Dinosaur extinction).",
-    uses: "Spark plugs, Crucibles, Standard Metre Bar (Pt-Ir alloy).",
-    hazards: "Low toxicity; dust is flammable.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Ir⁴⁺, Ir³⁺",
-    oxidationStates: ["+4", "+3"],
-    electronConfig: "[Xe] 4f¹⁴ 5d⁷ 6s²",
-    electronegativity: 2.2,
-    ionization: "880 kJ/mol",
-    density: "22.56 g/cm³ [2nd densest]",
-    melt: "2446°C",
-    boil: "4428°C",
-    isotopes: [
-      { name: "Ir-191", neutron: "114n", percent: "Stable" },
-      { name: "Ir-193", neutron: "116n", percent: "Stable" },
-    ],
-  },
-  Pt: {
-    discovery: "1735",
-    avgAtomicMass: "195.08",
-    discoveredBy: "Antonio de Ulloa",
-    namedBy: "From Spanish platina (little silver)",
-    stse: "Green Technology (Hydrogen Fuel Cells); Medicine (Chemotherapy).",
-    uses: "Catalytic converters, Jewelry, Pacemaker electrodes, Cisplatin (cancer drug).",
-    hazards: "Metallic Pt is inert; salts can cause asthma.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Pt²⁺, Pt⁴⁺",
-    oxidationStates: ["+2", "+4"],
-    electronConfig: "[Xe] 4f¹⁴ 5d⁹ 6s¹ [Exception]",
-    electronegativity: 2.28,
-    ionization: "870 kJ/mol",
-    density: "21.45 g/cm³",
-    melt: "1768°C",
-    boil: "3825°C",
-    isotopes: [
-      { name: "Pt-190", neutron: "112n", percent: "Radioactive" },
-      { name: "Pt-192", neutron: "114n", percent: "Stable" },
-      { name: "Pt-194", neutron: "116n", percent: "Stable" },
-      { name: "Pt-195", neutron: "117n", percent: "Stable" },
-      { name: "Pt-196", neutron: "118n", percent: "Stable" },
-      { name: "Pt-198", neutron: "120n", percent: "Stable" },
-    ],
-  },
-  Au: {
-    discovery: "Prehistoric (~6000 BCE)",
-    avgAtomicMass: "196.97",
-    discoveredBy: "Ancient Civilizations",
-    namedBy: "Anglo-Saxon gold (Symbol Au from Latin aurum)",
-    stse: "Economics (Gold Standard); Electronics (Corrosion-free contacts).",
-    uses: "Currency/Jewelry, Electronics plating, Radiation shielding.",
-    hazards: "Non-toxic (edible in leaf form).",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Au⁺ (Aurous), Au³⁺ (Auric)",
-    oxidationStates: ["+1", "+3"],
-    electronConfig: "[Xe] 4f¹⁴ 5d¹⁰ 6s¹ [Exception]",
-    electronegativity: 2.54,
-    ionization: "890 kJ/mol",
-    density: "19.30 g/cm³",
-    melt: "1064°C",
-    boil: "2970°C",
-    isotopes: [{ name: "Au-197", neutron: "118n", percent: "Stable" }],
-  },
-  Hg: {
-    discovery: "~1500 BCE",
-    avgAtomicMass: "200.59",
-    discoveredBy: "Ancient Egyptians/Chinese",
-    namedBy: "From Planet Mercury (Symbol Hg from hydrargyrum)",
-    stse: "Environmental Toxicology (Minamata disease); Bioaccumulation in fish.",
-    uses: "Thermometers (historical), Dental amalgam, Fluorescent bulbs.",
-    hazards: "Highly toxic neurotoxin (vapor and compounds).",
-    valenceElectrons: 2,
-    commonIons: "Hg₂²⁺ (Mercurous), Hg²⁺ (Mercuric)",
-    oxidationStates: ["+1", "+2"],
-    electronConfig: "[Xe] 4f¹⁴ 5d¹⁰ 6s²",
-    electronegativity: 2.0,
-    ionization: "1007 kJ/mol",
-    density: "13.53 g/cm³",
-    melt: "-38.8°C",
-    boil: "356.7°C",
-    isotopes: [
-      { name: "Hg-196", neutron: "116n", percent: "Stable" },
-      { name: "Hg-198", neutron: "118n", percent: "Stable" },
-      { name: "Hg-199", neutron: "119n", percent: "Stable" },
-      { name: "Hg-200", neutron: "120n", percent: "Stable" },
-      { name: "Hg-201", neutron: "121n", percent: "Stable" },
-      { name: "Hg-202", neutron: "122n", percent: "Stable" },
-      { name: "Hg-204", neutron: "124n", percent: "Stable" },
-    ],
-  },
-  Tl: {
-    discovery: "1861",
-    avgAtomicMass: "204.38",
-    discoveredBy: "William Crookes",
-    namedBy: "From Greek thallos (green twig)",
-    stse: 'Forensic Science ("The Poisoner\'s Poison").',
-    uses: "Rat poison (banned), Electronics, Cardiac stress tests (Tl-201).",
-    hazards: "Extremely toxic; accumulates in body.",
-    valenceElectrons: "3 (acts like 1)",
-    commonIons: "Tl⁺, Tl³⁺",
-    oxidationStates: ["+1", "+3"],
-    electronConfig: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹",
-    electronegativity: 1.62,
-    ionization: "589 kJ/mol",
-    density: "11.85 g/cm³",
-    melt: "304°C",
-    boil: "1473°C",
-    isotopes: [
-      { name: "Tl-203", neutron: "122n", percent: "Stable" },
-      { name: "Tl-205", neutron: "124n", percent: "Stable" },
-    ],
-  },
-  Pb: {
-    discovery: "~7000 BCE",
-    avgAtomicMass: "207.2",
-    discoveredBy: "Ancient Civilizations",
-    namedBy: "Anglo-Saxon lead (Symbol Pb from Latin plumbum)",
-    stse: "Public Health (Flint Water Crisis); Environmental banning (Leaded gasoline).",
-    uses: "Car batteries (Pb-acid), Radiation shielding, Bullets.",
-    hazards: "Potent neurotoxin; affects IQ in children.",
-    valenceElectrons: 4,
-    commonIons: "Pb²⁺, Pb⁴⁺",
-    oxidationStates: ["+2", "+4"],
-    electronConfig: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²",
-    electronegativity: 2.33,
-    ionization: "716 kJ/mol",
-    density: "11.34 g/cm³",
-    melt: "327.5°C",
-    boil: "1749°C",
-    isotopes: [
-      { name: "Pb-204", neutron: "122n", percent: "Stable" },
-      { name: "Pb-206", neutron: "124n", percent: "Stable" },
-      { name: "Pb-207", neutron: "125n", percent: "Stable" },
-      { name: "Pb-208", neutron: "126n", percent: "Stable" },
-    ],
-  },
-  Bi: {
-    discovery: "~1000 CE",
-    avgAtomicMass: "208.98",
-    discoveredBy: "Alchemists (confused with Pb/Sn)",
-    namedBy: "German Wismut (white mass)",
-    stse: "Green Chemistry (Non-toxic lead replacement).",
-    uses: "Pepto-Bismol (Stomach relief), Lead-free shot/solder, Fire sprinklers.",
-    hazards: "Low toxicity (unusual for heavy metals).",
-    valenceElectrons: 5,
-    commonIons: "Bi³⁺",
-    oxidationStates: ["+3", "+5"],
-    electronConfig: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³",
-    electronegativity: 2.02,
-    ionization: "703 kJ/mol",
-    density: "9.78 g/cm³",
-    melt: "271.4°C",
-    boil: "1564°C",
-    isotopes: [{ name: "Bi-209", neutron: "126n", percent: "Stable" }],
-  },
-  Po: {
-    discovery: "1898",
-    avgAtomicMass: "[209] (Radioactive)",
-    discoveredBy: "Marie & Pierre Curie",
-    namedBy: "From Poland (Marie's homeland)",
-    stse: "Nuclear Assassination (Litvinenko poisoning); Static elimination.",
-    uses: "Anti-static brushes, Heat source in satellites (rare).",
-    hazards: "Extremely radiotoxic (alpha emitter); fatal in micrograms.",
-    valenceElectrons: 6,
-    commonIons: "Po²⁺, Po⁴⁺",
-    oxidationStates: ["+2", "+4"],
-    electronConfig: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴",
-    electronegativity: 2.0,
-    ionization: "812 kJ/mol",
-    density: "9.20 g/cm³",
-    melt: "254°C",
-    boil: "962°C",
-    isotopes: [
-      { name: "Po-209", neutron: "125n", percent: "Radioactive" },
-      { name: "Po-210", neutron: "126n", percent: "Radioactive" },
-    ],
-  },
-  At: {
-    discovery: "1940",
-    avgAtomicMass: "[210] (Radioactive)",
-    discoveredBy: "Dale R. Corson, Kenneth Ross MacKenzie, Emilio Segrè",
-    namedBy: "From Greek astatos (unstable)",
-    stse: "Targeted Alpha Therapy (Cancer treatment research).",
-    uses: "Medical research only (rarest natural element).",
-    hazards: "Highly radioactive.",
-    valenceElectrons: 7,
-    commonIons: "At⁻ (Astatide)",
-    oxidationStates: ["-1", "+1"],
-    electronConfig: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵",
-    electronegativity: 2.2,
-    ionization: "899 kJ/mol (est)",
-    density: "~6.35 g/cm³",
-    melt: "302°C (est)",
-    boil: "337°C (est)",
-    isotopes: [
-      { name: "At-210", neutron: "125n", percent: "Radioactive" },
-      { name: "At-211", neutron: "126n", percent: "Radioactive" },
-    ],
-  },
-  Rn: {
-    discovery: "1900",
-    avgAtomicMass: "[222] (Radioactive)",
-    discoveredBy: "Friedrich Ernst Dorn",
-    namedBy: "Derived from Radium",
-    stse: "Indoor Air Quality (Lung cancer risk in basements).",
-    uses: "Radiation therapy (historical), Earthquake prediction research.",
-    hazards: "Radioactive gas; carcinogen via inhalation.",
-    valenceElectrons: 8,
-    commonIons: "None",
-    oxidationStates: ["0"],
-    electronConfig: "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶",
-    electronegativity: null,
-    ionization: "1037 kJ/mol",
-    density: "9.73 g/L",
-    melt: "-71°C",
-    boil: "-61.7°C",
-    isotopes: [
-      { name: "Rn-211", neutron: "125n", percent: "Radioactive" },
-      { name: "Rn-220", neutron: "134n", percent: "Radioactive" },
-      { name: "Rn-222", neutron: "136n", percent: "Radioactive" },
-    ],
-  },
-  Fr: {
-    discovery: "1939",
-    avgAtomicMass: "[223] (Radioactive)",
-    discoveredBy: "Marguerite Perey",
-    namedBy: "From France",
-    stse: "Fundamental Physics (Parity violation studies).",
-    uses: "Research only (due to extreme scarcity and radioactivity).",
-    hazards: "Highly radioactive.",
-    valenceElectrons: 1,
-    commonIons: "Fr⁺",
-    oxidationStates: ["+1"],
-    electronConfig: "[Rn] 7s¹",
-    electronegativity: 0.79,
-    ionization: "380 kJ/mol",
-    density: "~2.48 g/cm³ (predicted)",
-    melt: "~27°C (predicted)",
-    boil: "~677°C (predicted)",
-    isotopes: [{ name: "Fr-223", neutron: "136n", percent: "Radioactive" }],
-  },
-  Ra: {
-    discovery: "1898",
-    avgAtomicMass: "[226] (Radioactive)",
-    discoveredBy: "Marie & Pierre Curie",
-    namedBy: "Latin radius (ray)",
-    stse: 'Labor Rights ("Radium Girls" poisoning cases); History of Oncology.',
-    uses: "Historical glow-in-the-dark paint (banned), Cancer treatment (Ra-223).",
-    hazards: "Highly radiotoxic bone seeker (mimics Calcium).",
-    valenceElectrons: 2,
-    commonIons: "Ra²⁺",
-    oxidationStates: ["+2"],
-    electronConfig: "[Rn] 7s²",
-    electronegativity: 0.9,
-    ionization: "509 kJ/mol",
-    density: "5.50 g/cm³",
-    melt: "700°C",
-    boil: "1737°C",
-    isotopes: [
-      { name: "Ra-223", neutron: "135n", percent: "Radioactive" },
-      { name: "Ra-224", neutron: "136n", percent: "Radioactive" },
-      { name: "Ra-226", neutron: "138n", percent: "Radioactive" },
-      { name: "Ra-228", neutron: "140n", percent: "Radioactive" },
-    ],
-  },
-  Ac: {
-    discovery: "1899",
-    avgAtomicMass: "[227] (Radioactive)",
-    discoveredBy: "André-Louis Debierne",
-    namedBy: "Greek aktis (ray)",
-    stse: "Targeted Alpha Therapy (TAT) for cancer.",
-    uses: "Neutron source, Immunotherapy (Ac-225).",
-    hazards: "Highly radioactive.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Ac³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Rn] 6d¹ 7s²",
-    electronegativity: 1.1,
-    ionization: "499 kJ/mol",
-    density: "10.07 g/cm³",
-    melt: "1050°C",
-    boil: "3198°C",
-    isotopes: [{ name: "Ac-227", neutron: "138n", percent: "Radioactive" }],
-  },
-  Th: {
-    discovery: "1829",
-    avgAtomicMass: "232.04",
-    discoveredBy: "Jöns Jakob Berzelius",
-    namedBy: "Thor (Norse god of thunder)",
-    stse: "Future Energy (Thorium molten salt reactors).",
-    uses: "Gas lantern mantles, TIG welding electrodes, Nuclear fuel potential.",
-    hazards: "Low radioactivity; heavy metal toxicity.",
-    valenceElectrons: "Variable (outer s + d + f)",
-    commonIons: "Th⁴⁺",
-    oxidationStates: ["+4"],
-    electronConfig: "[Rn] 6d² 7s²",
-    electronegativity: 1.3,
-    ionization: "587 kJ/mol",
-    density: "11.72 g/cm³",
-    melt: "1750°C",
-    boil: "4788°C",
-    isotopes: [{ name: "Th-232", neutron: "142n", percent: "Radioactive" }],
-  },
-  Pa: {
-    discovery: "1913",
-    avgAtomicMass: "231.04",
-    discoveredBy: "Fajans & Göhring",
-    namedBy: "Greek protos (first) + actinium",
-    stse: "Radiometric dating (Protactinium-Thorium dating).",
-    uses: "Research only.",
-    hazards: "Highly toxic and radioactive.",
-    valenceElectrons: "Variable (outer s + d + f)",
-    commonIons: "Pa⁵⁺",
-    oxidationStates: ["+5", "+4"],
-    electronConfig: "[Rn] 5f² 6d¹ 7s²",
-    electronegativity: 1.5,
-    ionization: "568 kJ/mol",
-    density: "15.37 g/cm³",
-    melt: "1568°C",
-    boil: "4027°C",
-    isotopes: [{ name: "Pa-231", neutron: "140n", percent: "Radioactive" }],
-  },
-  U: {
-    discovery: "1789",
-    avgAtomicMass: "238.03",
-    discoveredBy: "Martin Heinrich Klaproth",
-    namedBy: "Planet Uranus",
-    stse: "Nuclear Age (Fission power, Atomic weapons); Geothermal heat (Earth's core).",
-    uses: "Nuclear fuel, Armor plating (Depleted U), Yellow glass (historical).",
-    hazards: "Radiotoxic and chemotoxic (kidney damage).",
-    valenceElectrons: "Variable (outer s + d + f)",
-    commonIons: "U⁴⁺, U⁶⁺ (Uranyl ion UO₂²⁺)",
-    oxidationStates: ["+3", "+4", "+5", "+6"],
-    electronConfig: "[Rn] 5f³ 6d¹ 7s²",
-    electronegativity: 1.38,
-    ionization: "598 kJ/mol",
-    density: "19.10 g/cm³",
-    melt: "1132°C",
-    boil: "4131°C",
-    isotopes: [
-      { name: "U-235", neutron: "143n", percent: "Radioactive" },
-      { name: "U-238", neutron: "146n", percent: "Radioactive" },
-    ],
-  },
-  Np: {
-    discovery: "1940",
-    avgAtomicMass: "237",
-    discoveredBy: "McMillan & Abelson",
-    namedBy: "Planet Neptune",
-    stse: "First transuranic element.",
-    uses: "Precursor to Pu-238 production; Neutron detectors.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + d + f)",
-    commonIons: "Np⁵⁺",
-    oxidationStates: ["+5"],
-    electronConfig: "[Rn] 5f⁴ 6d¹ 7s²",
-    electronegativity: 1.36,
-    ionization: "605 kJ/mol",
-    density: "20.25 g/cm³",
-    melt: "644°C",
-    boil: "3902°C",
-    isotopes: [{ name: "Np-237", neutron: "144n", percent: "Radioactive" }],
-  },
-  Pu: {
-    discovery: "1940",
-    avgAtomicMass: "244",
-    discoveredBy: "Seaborg, McMillan, Kennedy, Wahl",
-    namedBy: "Planet Pluto",
-    stse: "Global Security (Nuclear non-proliferation); Space Exploration (RTG batteries).",
-    uses: "Nuclear weapons, RTG power for spacecraft (Voyager/Mars rovers).",
-    hazards: "Extremely radiotoxic; criticality hazard.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Pu⁴⁺",
-    oxidationStates: ["+4"],
-    electronConfig: "[Rn] 5f⁶ 7s²",
-    electronegativity: 1.28,
-    ionization: "585 kJ/mol",
-    density: "19.82 g/cm³",
-    melt: "640°C",
-    boil: "3228°C",
-    isotopes: [
-      { name: "Pu-239", neutron: "145n", percent: "Radioactive" },
-      { name: "Pu-244", neutron: "150n", percent: "Radioactive" },
-    ],
-  },
-  Am: {
-    discovery: "1944",
-    avgAtomicMass: "243",
-    discoveredBy: "Glenn T. Seaborg et al.",
-    namedBy: "The Americas",
-    stse: "Domestic Safety (Ionization smoke detectors).",
-    uses: "Smoke detectors (Am-241), Neutron sources.",
-    hazards: "Radioactive (accumulates in bones).",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Am³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Rn] 5f⁷ 7s²",
-    electronegativity: 1.13,
-    ionization: "578 kJ/mol",
-    density: "12.00 g/cm³",
-    melt: "1176°C",
-    boil: "2607°C",
-    isotopes: [
-      { name: "Am-241", neutron: "146n", percent: "Radioactive" },
-      { name: "Am-243", neutron: "148n", percent: "Radioactive" },
-    ],
-  },
-  Cm: {
-    discovery: "1944",
-    avgAtomicMass: "247",
-    discoveredBy: "Seaborg, James, Ghiorso",
-    namedBy: "Marie & Pierre Curie",
-    stse: "Space Exploration (Alpha particle X-ray Spectrometers).",
-    uses: "Alpha source in Mars Rovers (APXS).",
-    hazards: "Highly radioactive.",
-    valenceElectrons: "Variable (outer s + d + f)",
-    commonIons: "Cm³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Rn] 5f⁷ 6d¹ 7s²",
-    electronegativity: 1.28,
-    ionization: "581 kJ/mol",
-    density: "13.51 g/cm³",
-    melt: "1340°C",
-    boil: "3110°C",
-    isotopes: [
-      { name: "Cm-244", neutron: "148n", percent: "Radioactive" },
-      { name: "Cm-247", neutron: "151n", percent: "Radioactive" },
-    ],
-  },
-  Bk: {
-    discovery: "1949",
-    avgAtomicMass: "247",
-    discoveredBy: "Thompson, Ghiorso, Seaborg",
-    namedBy: "Berkeley, California",
-    stse: "Heavy Element Synthesis (Target material).",
-    uses: "Synthesizing Tennessine (Element 117).",
-    hazards: "Highly radioactive.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Bk³⁺, Bk⁴⁺",
-    oxidationStates: ["+3", "+4"],
-    electronConfig: "[Rn] 5f⁹ 7s²",
-    electronegativity: 1.3,
-    ionization: "601 kJ/mol",
-    density: "14.78 g/cm³",
-    melt: "986°C",
-    boil: "2627°C (predicted)",
-    isotopes: [{ name: "Bk-247", neutron: "150n", percent: "Radioactive" }],
-  },
-  Cf: {
-    discovery: "1950",
-    avgAtomicMass: "251",
-    discoveredBy: "Thompson, Street, Ghiorso, Seaborg",
-    namedBy: "State of California",
-    stse: "Industrial Sensing (Neutron moisture gauges).",
-    uses: "Neutron startup source for reactors, Gold/Oil prospecting.",
-    hazards: "Intense neutron emitter.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Cf³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Rn] 5f¹⁰ 7s²",
-    electronegativity: 1.3,
-    ionization: "608 kJ/mol",
-    density: "15.10 g/cm³",
-    melt: "900°C",
-    boil: "1470°C (predicted)",
-    isotopes: [
-      { name: "Cf-251", neutron: "153n", percent: "Radioactive" },
-      { name: "Cf-252", neutron: "154n", percent: "Radioactive" },
-    ],
-  },
-  Es: {
-    discovery: "1952",
-    avgAtomicMass: "252",
-    discoveredBy: "Albert Ghiorso et al.",
-    namedBy: "Albert Einstein",
-    stse: 'Cold War Science (Discovered in "Ivy Mike" H-bomb debris).',
-    uses: "Research only.",
-    hazards: "Highly radioactive.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Es³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Rn] 5f¹¹ 7s²",
-    electronegativity: 1.3,
-    ionization: "619 kJ/mol",
-    density: "8.84 g/cm³",
-    melt: "860°C",
-    boil: "996°C (predicted)",
-    isotopes: [
-      { name: "Es-252", neutron: "153n", percent: "Radioactive" },
-      { name: "Es-253", neutron: "154n", percent: "Radioactive" },
-    ],
-  },
-  Fm: {
-    discovery: "1952",
-    avgAtomicMass: "257",
-    discoveredBy: "Albert Ghiorso et al.",
-    namedBy: "Enrico Fermi",
-    stse: "Limit of neutron capture (Heaviest element formable by bombardment).",
-    uses: "Research only.",
-    hazards: "Highly radioactive.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Fm³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Rn] 5f¹² 7s²",
-    electronegativity: 1.3,
-    ionization: "627 kJ/mol",
-    density: "Unknown",
-    melt: "1527°C",
-    boil: "Unknown",
-    isotopes: [{ name: "Fm-257", neutron: "157n", percent: "Radioactive" }],
-  },
-  Md: {
-    discovery: "1955",
-    avgAtomicMass: "258",
-    discoveredBy: "Ghiorso, Harvey, Choppin, Thompson, Seaborg",
-    namedBy: "Dmitri Mendeleev",
-    stse: '"Atom-at-a-time" synthesis (First element made this way).',
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "Md³⁺, Md²⁺",
-    oxidationStates: ["+3", "+2"],
-    electronConfig: "[Rn] 5f¹³ 7s²",
-    electronegativity: 1.3,
-    ionization: "635 kJ/mol",
-    density: "Unknown",
-    melt: "827°C",
-    boil: "Unknown",
-    isotopes: [{ name: "Md-258", neutron: "157n", percent: "Radioactive" }],
-  },
-  No: {
-    discovery: "1966",
-    avgAtomicMass: "259",
-    discoveredBy: "JINR (Russia)",
-    namedBy: "Alfred Nobel",
-    stse: "Naming controversy (Disputed between USA, Sweden, USSR).",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + f)",
-    commonIons: "No²⁺",
-    oxidationStates: ["+2", "+3"],
-    electronConfig: "[Rn] 5f¹⁴ 7s²",
-    electronegativity: 1.3,
-    ionization: "642 kJ/mol",
-    density: "Unknown",
-    melt: "827°C",
-    boil: "Unknown",
-    isotopes: [{ name: "No-259", neutron: "157n", percent: "Radioactive" }],
-  },
-  Lr: {
-    discovery: "1961",
-    avgAtomicMass: "266",
-    discoveredBy: "Ghiorso et al.",
-    namedBy: "Ernest Lawrence",
-    stse: "Periodicity Debate (Placement in d-block vs f-block).",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: 3,
-    commonIons: "Lr³⁺",
-    oxidationStates: ["+3"],
-    electronConfig: "[Rn] 5f¹⁴ 7s² 7p¹ (Predicted)",
-    electronegativity: 1.3,
-    ionization: "443 kJ/mol",
-    density: "Unknown",
-    melt: "1627°C",
-    boil: "Unknown",
-    isotopes: [
-      { name: "Lr-262", neutron: "159n", percent: "Radioactive" },
-      { name: "Lr-266", neutron: "163n", percent: "Radioactive" },
-    ],
-  },
-  Rf: {
-    discovery: "1964",
-    avgAtomicMass: "267",
-    discoveredBy: "Dubna (USSR) / Berkeley (USA)",
-    namedBy: "Ernest Rutherford",
-    stse: "Cold War Science (Transfermium Wars).",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Rf⁴⁺",
-    oxidationStates: ["+4"],
-    electronConfig: "[Rn] 5f¹⁴ 6d² 7s²",
-    electronegativity: null,
-    ionization: "580 kJ/mol (predicted)",
-    density: "23.2 g/cm³ (predicted)",
-    melt: "2100°C (predicted)",
-    boil: "5500°C (predicted)",
-    isotopes: [{ name: "Rf-267", neutron: "163n", percent: "Radioactive" }],
-  },
-  Db: {
-    discovery: "1968",
-    avgAtomicMass: "268",
-    discoveredBy: "Dubna (USSR) / Berkeley (USA)",
-    namedBy: "Dubna, Russia",
-    stse: "International cooperation (IUPAC naming resolution).",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Db⁵⁺",
-    oxidationStates: ["+5"],
-    electronConfig: "[Rn] 5f¹⁴ 6d³ 7s²",
-    electronegativity: null,
-    ionization: "665 kJ/mol (predicted)",
-    density: "29.3 g/cm³ (predicted)",
-    melt: "N/A",
-    boil: "N/A",
-    isotopes: [{ name: "Db-268", neutron: "163n", percent: "Radioactive" }],
-  },
-  Sg: {
-    discovery: "1974",
-    avgAtomicMass: "269",
-    discoveredBy: "Lawrence Berkeley Lab",
-    namedBy: "Glenn T. Seaborg",
-    stse: "Naming Controversy (First element named after a living person).",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Sg⁶⁺",
-    oxidationStates: ["+6"],
-    electronConfig: "[Rn] 5f¹⁴ 6d⁴ 7s²",
-    electronegativity: null,
-    ionization: "757 kJ/mol (predicted)",
-    density: "35.0 g/cm³ (predicted)",
-    melt: "N/A",
-    boil: "N/A",
-    isotopes: [{ name: "Sg-271", neutron: "165n", percent: "Radioactive" }],
-  },
-  Bh: {
-    discovery: "1981",
-    avgAtomicMass: "270",
-    discoveredBy: "GSI Helmholtz Centre (Germany)",
-    namedBy: "Niels Bohr",
-    stse: "Heavy Ion Research.",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Bh⁷⁺",
-    oxidationStates: ["+7"],
-    electronConfig: "[Rn] 5f¹⁴ 6d⁵ 7s²",
-    electronegativity: null,
-    ionization: "740 kJ/mol (predicted)",
-    density: "37.1 g/cm³ (predicted)",
-    melt: "N/A",
-    boil: "N/A",
-    isotopes: [{ name: "Bh-272", neutron: "165n", percent: "Radioactive" }],
-  },
-  Hs: {
-    discovery: "1984",
-    avgAtomicMass: "277",
-    discoveredBy: "GSI Helmholtz Centre (Germany)",
-    namedBy: "State of Hesse (Hassia)",
-    stse: "Superheavy Chemistry (Proven to form volatile tetroxide HsO₄).",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Hs⁸⁺",
-    oxidationStates: ["+8"],
-    electronConfig: "[Rn] 5f¹⁴ 6d⁶ 7s²",
-    electronegativity: null,
-    ionization: "730 kJ/mol (predicted)",
-    density: "41.0 g/cm³ (predicted)",
-    melt: "N/A",
-    boil: "N/A",
-    isotopes: [{ name: "Hs-277", neutron: "169n", percent: "Radioactive" }],
-  },
-  Mt: {
-    discovery: "1982",
-    avgAtomicMass: "278",
-    discoveredBy: "GSI Helmholtz Centre (Germany)",
-    namedBy: "Lise Meitner",
-    stse: "Women in Science (Meitner discovered fission but was overlooked for Nobel).",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Unknown",
-    oxidationStates: [],
-    electronConfig: "[Rn] 5f¹⁴ 6d⁷ 7s² (Predicted)",
-    electronegativity: null,
-    ionization: "800 kJ/mol (predicted)",
-    density: "37.4 g/cm³ (predicted)",
-    melt: "N/A",
-    boil: "N/A",
-    isotopes: [{ name: "Mt-278", neutron: "169n", percent: "Radioactive" }],
-  },
-  Ds: {
-    discovery: "1994",
-    avgAtomicMass: "281",
-    discoveredBy: "GSI Helmholtz Centre (Germany)",
-    namedBy: "Darmstadt, Germany",
-    stse: "Ion Beam Technology.",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Unknown",
-    oxidationStates: [],
-    electronConfig: "[Rn] 5f¹⁴ 6d⁹ 7s¹ (Predicted)",
-    electronegativity: null,
-    ionization: "N/A",
-    density: "34.8 g/cm³ (predicted)",
-    melt: "N/A",
-    boil: "N/A",
-    isotopes: [{ name: "Ds-281", neutron: "171n", percent: "Radioactive" }],
-  },
-  Rg: {
-    discovery: "1994",
-    avgAtomicMass: "282",
-    discoveredBy: "GSI Helmholtz Centre (Germany)",
-    namedBy: "Wilhelm Röntgen",
-    stse: "History of X-rays.",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: "Variable (outer s + d)",
-    commonIons: "Unknown",
-    oxidationStates: ["+3"],
-    electronConfig: "[Rn] 5f¹⁴ 6d¹⁰ 7s¹ (Predicted)",
-    electronegativity: null,
-    ionization: "N/A",
-    density: "28.7 g/cm³ (predicted)",
-    melt: "N/A",
-    boil: "N/A",
-    isotopes: [{ name: "Rg-282", neutron: "171n", percent: "Radioactive" }],
-  },
-  Cn: {
-    discovery: "1996",
-    avgAtomicMass: "285",
-    discoveredBy: "GSI Helmholtz Centre (Germany)",
-    namedBy: "Nicolaus Copernicus",
-    stse: "Relativistic Chemistry (Acts more like a noble gas than a metal).",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: 2,
-    commonIons: "Cn²⁺ (Predicted)",
-    oxidationStates: ["+2", "+4"],
-    electronConfig: "[Rn] 5f¹⁴ 6d¹⁰ 7s²",
-    electronegativity: null,
-    ionization: "N/A",
-    density: "Unknown",
-    melt: "~10°C (predicted)",
-    boil: "~67°C (predicted)",
-    isotopes: [{ name: "Cn-285", neutron: "173n", percent: "Radioactive" }],
-  },
-  Nh: {
-    discovery: "2003",
-    avgAtomicMass: "286",
-    discoveredBy: "RIKEN (Japan)",
-    namedBy: "From Nihon (Japan)",
-    stse: "First element discovered in Asia.",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: 3,
-    commonIons: "Nh⁺ (Predicted)",
-    oxidationStates: ["+1", "+3"],
-    electronConfig: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹",
-    electronegativity: null,
-    ionization: "N/A",
-    density: "~16 g/cm³ (predicted)",
-    melt: "~430°C (predicted)",
-    boil: "~1130°C (predicted)",
-    isotopes: [{ name: "Nh-286", neutron: "173n", percent: "Radioactive" }],
-  },
-  Fl: {
-    discovery: "1998",
-    avgAtomicMass: "289",
-    discoveredBy: "JINR (Russia)",
-    namedBy: "Flerov Laboratory",
-    stse: '"Island of Stability" research.',
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: 4,
-    commonIons: "Fl²⁺ (Predicted)",
-    oxidationStates: ["+2", "+4"],
-    electronConfig: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²",
-    electronegativity: null,
-    ionization: "N/A",
-    density: "~14 g/cm³ (predicted)",
-    melt: "~-73°C (predicted)",
-    boil: "~107°C (predicted)",
-    isotopes: [{ name: "Fl-289", neutron: "175n", percent: "Radioactive" }],
-  },
-  Mc: {
-    discovery: "2003",
-    avgAtomicMass: "290",
-    discoveredBy: "JINR (Russia) & Vanderbilt/LLNL (USA)",
-    namedBy: "Moscow Region",
-    stse: "Extreme matter synthesis.",
-    uses: "Research only.",
-    hazards: "Highly radioactive.",
-    valenceElectrons: 5,
-    commonIons: "Mc⁺, Mc³⁺ (Predicted)",
-    oxidationStates: ["+1", "+3"],
-    electronConfig: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³",
-    electronegativity: null,
-    ionization: "N/A",
-    density: "~13.5 g/cm³ (predicted)",
-    melt: "~400°C (predicted)",
-    boil: "~1100°C (predicted)",
-    isotopes: [{ name: "Mc-290", neutron: "175n", percent: "Radioactive" }],
-  },
-  Lv: {
-    discovery: "2000",
-    avgAtomicMass: "293",
-    discoveredBy: "LLNL (USA) & JINR (Russia)",
-    namedBy: "Lawrence Livermore National Laboratory",
-    stse: "International Science Collaboration.",
-    uses: "Research only.",
-    hazards: "Highly radioactive.",
-    valenceElectrons: 6,
-    commonIons: "Lv²⁺ (Predicted)",
-    oxidationStates: ["+2", "+4"],
-    electronConfig: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴",
-    electronegativity: null,
-    ionization: "N/A",
-    density: "~12.9 g/cm³ (predicted)",
-    melt: "364–507°C (predicted)",
-    boil: "762–862°C (predicted)",
-    isotopes: [{ name: "Lv-293", neutron: "177n", percent: "Radioactive" }],
-  },
-  Ts: {
-    discovery: "2010",
-    avgAtomicMass: "294",
-    discoveredBy: "JINR (Russia), ORNL/Vanderbilt (USA)",
-    namedBy: "State of Tennessee (Oak Ridge Lab)",
-    stse: "Synthesis required Berkelium target.",
-    uses: "Research only.",
-    hazards: "Highly radioactive.",
-    valenceElectrons: 7,
-    commonIons: "Ts⁻ (Predicted)",
-    oxidationStates: ["-1", "+1", "+3", "+5"],
-    electronConfig: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵",
-    electronegativity: null,
-    ionization: "N/A",
-    density: "~7.17 g/cm³ (predicted)",
-    melt: "350–550°C (predicted)",
-    boil: "610°C (predicted)",
-    isotopes: [{ name: "Ts-294", neutron: "177n", percent: "Radioactive" }],
-  },
-  Og: {
-    discovery: "2002",
-    avgAtomicMass: "294",
-    discoveredBy: "JINR (Russia) & LLNL (USA)",
-    namedBy: "Yuri Oganessian",
-    stse: "Relativistic Effects (Predicted to be solid, not gas).",
-    uses: "Research only.",
-    hazards: "Radioactive.",
-    valenceElectrons: 8,
-    commonIons: "Unknown",
-    oxidationStates: ["0", "+2", "+4"],
-    electronConfig: "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶",
-    electronegativity: null,
-    ionization: "N/A",
-    density: "~4.9–5.1 g/cm³ (predicted)",
-    melt: ">50°C (predicted)",
-    boil: "80°C (predicted)",
-    isotopes: [{ name: "Og-294", neutron: "176n", percent: "Radioactive" }],
-  },
+  "1": {
+    "id": 1,
+    "symbol": "H",
+    "name": "Hydrogen",
+    "level1_basic": {
+      "type": "Reactive nonmetal",
+      "group": 1,
+      "period": "1",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "1",
+      "commonIons": "H⁺ (Hydrogen), H⁻ (Hydride)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "1.008",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 1,
+      "electronsNeutral": 1,
+      "naturalIsotopes": [
+        {
+          "name": "H-1",
+          "neutron": "0n",
+          "percent": "Stable"
+        },
+        {
+          "name": "H-2",
+          "neutron": "1n",
+          "percent": "Stable"
+        },
+        {
+          "name": "H-3",
+          "neutron": "2n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "1s¹",
+        "oxidationStates": { "common": ["+1","-1"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 2.2,
+        "firstIonization": "1312 kJ/mol",
+        "density": "0.0899 g/L",
+        "meltingPoint": "-259.1°C",
+        "boilingPoint": "-252.8°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1766",
+        "discoveredBy": "Henry Cavendish",
+        "namedBy": "Antoine Lavoisier"
+      },
+      "stseContext": [
+        "Energy transition (Fuel Cells)",
+        "Hydrogen as energy carrier",
+        "Heavy Water (D₂O) in CANDU reactors"
+      ],
+      "commonUses": [
+        "Ammonia Production",
+        "Hydrogenation"
+      ],
+      "hazards": [
+        "Highly flammable",
+        "Explosion risk"
+      ]
+    }
+  },
+  "2": {
+    "id": 2,
+    "symbol": "He",
+    "name": "Helium",
+    "level1_basic": {
+      "type": "Noble Gas",
+      "group": 18,
+      "period": "1",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "2",
+      "commonIons": "None (does not form simple ions)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "4.0026",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 2,
+      "electronsNeutral": 2,
+      "naturalIsotopes": [
+        {
+          "name": "He-3",
+          "neutron": "1n",
+          "percent": "Stable"
+        },
+        {
+          "name": "He-4",
+          "neutron": "2n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "1s²",
+        "oxidationStates": { "common": ["0"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "2372 kJ/mol",
+        "density": "0.1786 g/L",
+        "meltingPoint": "— (Pressurized only)",
+        "boilingPoint": "-268.9°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1895 (Isolated)",
+        "discoveredBy": "William Ramsay, Per Teodor Cleve",
+        "namedBy": "Lockyer & Frankland"
+      },
+      "stseContext": [
+        "Cryogenics (MRI supermagnets)",
+        "Non-renewable resource conservation"
+      ],
+      "commonUses": [
+        "MRI cooling",
+        "Lifting gas (balloons)",
+        "Shielding gas (welding)"
+      ],
+      "hazards": [
+        "Asphyxiant in confined spaces"
+      ]
+    }
+  },
+  "3": {
+    "id": 3,
+    "symbol": "Li",
+    "name": "Lithium",
+    "level1_basic": {
+      "type": "Alkali Metal",
+      "group": 1,
+      "period": "2",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "1",
+      "commonIons": "Li⁺ (Lithium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "6.94",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 3,
+      "electronsNeutral": 3,
+      "naturalIsotopes": [
+        {
+          "name": "Li-6",
+          "neutron": "3n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Li-7",
+          "neutron": "4n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[He] 2s¹",
+        "oxidationStates": { "common": ["+1"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 0.98,
+        "firstIonization": "520 kJ/mol",
+        "density": "0.534 g/cm³",
+        "meltingPoint": "180.5°C",
+        "boilingPoint": "1342°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1817",
+        "discoveredBy": "Johan August Arfwedson",
+        "namedBy": "Jöns Jakob Berzelius"
+      },
+      "stseContext": [
+        "Battery technology (EV revolution)",
+        "Mental health (Mood stabilizers)"
+      ],
+      "commonUses": [
+        "Li-ion batteries",
+        "Ceramics",
+        "Lubricants"
+      ],
+      "hazards": [
+        "Reacts vigorously with water",
+        "Corrosive"
+      ]
+    }
+  },
+  "4": {
+    "id": 4,
+    "symbol": "Be",
+    "name": "Beryllium",
+    "level1_basic": {
+      "type": "Alkaline Earth Metal",
+      "group": 2,
+      "period": "2",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "2",
+      "commonIons": "Be²⁺ (Beryllium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "9.0122",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 4,
+      "electronsNeutral": 4,
+      "naturalIsotopes": [
+        {
+          "name": "Be-9",
+          "neutron": "5n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[He] 2s²",
+        "oxidationStates": { "common": ["+2"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 1.57,
+        "firstIonization": "900 kJ/mol",
+        "density": "1.85 g/cm³",
+        "meltingPoint": "1287°C",
+        "boilingPoint": "2469°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1798",
+        "discoveredBy": "Louis-Nicolas Vauquelin",
+        "namedBy": "Friedrich Wöhler"
+      },
+      "stseContext": [
+        "Aerospace engineering (James Webb Telescope mirrors)",
+        "Nuclear physics (Neutron reflector)"
+      ],
+      "commonUses": [
+        "X-ray windows",
+        "Non-sparking tools (alloys)"
+      ],
+      "hazards": [
+        "Highly toxic (Berylliosis)",
+        "Carcinogenic"
+      ]
+    }
+  },
+  "5": {
+    "id": 5,
+    "symbol": "B",
+    "name": "Boron",
+    "level1_basic": {
+      "type": "Metalloid",
+      "group": 13,
+      "period": "2",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "3",
+      "commonIons": "B³⁺ (Boron (rarely ionic))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "10.81",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 5,
+      "electronsNeutral": 5,
+      "naturalIsotopes": [
+        {
+          "name": "B-10",
+          "neutron": "5n",
+          "percent": "Stable"
+        },
+        {
+          "name": "B-11",
+          "neutron": "6n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[He] 2s² 2p¹",
+        "oxidationStates": { "common": ["+3"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 2.04,
+        "firstIonization": "801 kJ/mol",
+        "density": "2.34 g/cm³",
+        "meltingPoint": "2076°C",
+        "boilingPoint": "3927°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1808",
+        "discoveredBy": "Gay-Lussac & Thénard (and Davy)",
+        "namedBy": "Derived from \"Borax\""
+      },
+      "stseContext": [
+        "Agriculture (Essential plant nutrient)",
+        "Nuclear safety (Control rods)"
+      ],
+      "commonUses": [
+        "Pyrex glass (Borosilicate)",
+        "Fiberglass",
+        "Detergents"
+      ],
+      "hazards": [
+        "Low toxicity as element",
+        "some compounds toxic"
+      ]
+    }
+  },
+  "6": {
+    "id": 6,
+    "symbol": "C",
+    "name": "Carbon",
+    "level1_basic": {
+      "type": "Reactive nonmetal",
+      "group": 14,
+      "period": "2",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "4",
+      "commonIons": "C⁴⁻ (Carbide (in ionic carbides))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "12.011",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 6,
+      "electronsNeutral": 6,
+      "naturalIsotopes": [
+        {
+          "name": "C-12",
+          "neutron": "6n",
+          "percent": "Stable"
+        },
+        {
+          "name": "C-13",
+          "neutron": "7n",
+          "percent": "Stable"
+        },
+        {
+          "name": "C-14",
+          "neutron": "8n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[He] 2s² 2p²",
+        "oxidationStates": { "common": ["-4","+4"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 2.55,
+        "firstIonization": "1086 kJ/mol",
+        "density": "2.26 g/cm³ (Graphite)",
+        "meltingPoint": "Sublimes (~3642°C)",
+        "boilingPoint": "Sublimes"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "Prehistoric",
+        "discoveredBy": "Ancient Civilizations",
+        "namedBy": "Antoine Lavoisier"
+      },
+      "stseContext": [
+        "Climate Change (Carbon Cycle)",
+        "Organic Chemistry (Basis of Life)",
+        "Radiocarbon dating"
+      ],
+      "commonUses": [
+        "Steel manufacturing",
+        "Filters",
+        "Gemstones",
+        "Fuels"
+      ],
+      "hazards": [
+        "CO/CO₂ from combustion",
+        "dust inhalation"
+      ]
+    }
+  },
+  "7": {
+    "id": 7,
+    "symbol": "N",
+    "name": "Nitrogen",
+    "level1_basic": {
+      "type": "Reactive nonmetal",
+      "group": 15,
+      "period": "2",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "5",
+      "commonIons": "N³⁻ (Nitride)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "14.007",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 7,
+      "electronsNeutral": 7,
+      "naturalIsotopes": [
+        {
+          "name": "N-14",
+          "neutron": "7n",
+          "percent": "Stable"
+        },
+        {
+          "name": "N-15",
+          "neutron": "8n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[He] 2s² 2p³",
+        "oxidationStates": { "common": ["-3","+3","+5"], "possible": ["+1","+2","+4"] }
+      },
+      "physical": {
+        "electronegativity": 3.04,
+        "firstIonization": "1402 kJ/mol",
+        "density": "1.25 g/L",
+        "meltingPoint": "-210.0°C",
+        "boilingPoint": "-195.8°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1772",
+        "discoveredBy": "Daniel Rutherford",
+        "namedBy": "Jean-Antoine Chaptal"
+      },
+      "stseContext": [
+        "Agriculture (Haber-Bosch Process/Fertilizers)",
+        "Cryogenics (Liquid N₂)"
+      ],
+      "commonUses": [
+        "Fertilizers",
+        "Explosives",
+        "Food packaging (inert atmosphere)"
+      ],
+      "hazards": [
+        "Asphyxiant (displaces oxygen)"
+      ]
+    }
+  },
+  "8": {
+    "id": 8,
+    "symbol": "O",
+    "name": "Oxygen",
+    "level1_basic": {
+      "type": "Reactive nonmetal",
+      "group": 16,
+      "period": "2",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "6",
+      "commonIons": "O²⁻ (Oxide)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "15.999",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 8,
+      "electronsNeutral": 8,
+      "naturalIsotopes": [
+        {
+          "name": "O-16",
+          "neutron": "8n",
+          "percent": "Stable"
+        },
+        {
+          "name": "O-17",
+          "neutron": "9n",
+          "percent": "Stable"
+        },
+        {
+          "name": "O-18",
+          "neutron": "10n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[He] 2s² 2p⁴",
+        "oxidationStates": { "common": ["-2"], "possible": ["-1","0","+1","+2"] }
+      },
+      "physical": {
+        "electronegativity": 3.44,
+        "firstIonization": "1314 kJ/mol",
+        "density": "1.43 g/L",
+        "meltingPoint": "-218.8°C",
+        "boilingPoint": "-183.0°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1774",
+        "discoveredBy": "Joseph Priestley / Carl Wilhelm Scheele",
+        "namedBy": "Antoine Lavoisier"
+      },
+      "stseContext": [
+        "Biological respiration",
+        "Combustion engines",
+        "Ozone layer protection"
+      ],
+      "commonUses": [
+        "Steel making",
+        "Medical life support",
+        "Water treatment"
+      ],
+      "hazards": [
+        "Oxidizer (accelerates fire)"
+      ]
+    }
+  },
+  "9": {
+    "id": 9,
+    "symbol": "F",
+    "name": "Fluorine",
+    "level1_basic": {
+      "type": "Halogen",
+      "group": 17,
+      "period": "2",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "7",
+      "commonIons": "F⁻ (Fluoride)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "19.00",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 9,
+      "electronsNeutral": 9,
+      "naturalIsotopes": [
+        {
+          "name": "F-19",
+          "neutron": "10n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[He] 2s² 2p⁵",
+        "oxidationStates": { "common": ["-1"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 3.98,
+        "firstIonization": "1681 kJ/mol",
+        "density": "1.70 g/L",
+        "meltingPoint": "-219.6°C",
+        "boilingPoint": "-188.1°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1886",
+        "discoveredBy": "Henri Moissan",
+        "namedBy": "Humphry Davy (suggested)"
+      },
+      "stseContext": [
+        "Dental health (Water fluoridation)",
+        "Nuclear fuel (UF₆ enrichment)"
+      ],
+      "commonUses": [
+        "Teflon (PTFE)",
+        "Toothpaste",
+        "Refrigerants"
+      ],
+      "hazards": [
+        "Highly toxic",
+        "Corrosive",
+        "Reacts with almost everything"
+      ]
+    }
+  },
+  "10": {
+    "id": 10,
+    "symbol": "Ne",
+    "name": "Neon",
+    "level1_basic": {
+      "type": "Noble Gas",
+      "group": 18,
+      "period": "2",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "8",
+      "commonIons": "None (does not form simple ions)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "20.180",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 10,
+      "electronsNeutral": 10,
+      "naturalIsotopes": [
+        {
+          "name": "Ne-20",
+          "neutron": "10n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ne-21",
+          "neutron": "11n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ne-22",
+          "neutron": "12n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[He] 2s² 2p⁶",
+        "oxidationStates": { "common": ["0"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "2080 kJ/mol",
+        "density": "0.90 g/L",
+        "meltingPoint": "-248.6°C",
+        "boilingPoint": "-246.0°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1898",
+        "discoveredBy": "William Ramsay & Morris Travers",
+        "namedBy": "Ramsay (from Greek neos)"
+      },
+      "stseContext": [
+        "Lighting technology",
+        "Lasers"
+      ],
+      "commonUses": [
+        "Neon signs",
+        "High-voltage indicators",
+        "Cryogenics"
+      ],
+      "hazards": [
+        "Asphyxiant"
+      ]
+    }
+  },
+  "11": {
+    "id": 11,
+    "symbol": "Na",
+    "name": "Sodium",
+    "level1_basic": {
+      "type": "Alkali Metal",
+      "group": 1,
+      "period": "3",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "1",
+      "commonIons": "Na⁺ (Sodium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "22.990",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 11,
+      "electronsNeutral": 11,
+      "naturalIsotopes": [
+        {
+          "name": "Na-23",
+          "neutron": "12n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ne] 3s¹",
+        "oxidationStates": { "common": ["+1"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 0.93,
+        "firstIonization": "496 kJ/mol",
+        "density": "0.968 g/cm³",
+        "meltingPoint": "97.8°C",
+        "boilingPoint": "883°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1807",
+        "discoveredBy": "Humphry Davy",
+        "namedBy": "Humphry Davy"
+      },
+      "stseContext": [
+        "Human biology (Nerve impulses)",
+        "Nuclear reactors (Coolant in fast breeders)"
+      ],
+      "commonUses": [
+        "Table salt (NaCl)",
+        "Street lights",
+        "Soap making"
+      ],
+      "hazards": [
+        "Reacts violently with water"
+      ]
+    }
+  },
+  "12": {
+    "id": 12,
+    "symbol": "Mg",
+    "name": "Magnesium",
+    "level1_basic": {
+      "type": "Alkaline Earth Metal",
+      "group": 2,
+      "period": "3",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "2",
+      "commonIons": "Mg²⁺ (Magnesium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "24.305",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 12,
+      "electronsNeutral": 12,
+      "naturalIsotopes": [
+        {
+          "name": "Mg-24",
+          "neutron": "12n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Mg-25",
+          "neutron": "13n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Mg-26",
+          "neutron": "14n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ne] 3s²",
+        "oxidationStates": { "common": ["+2"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 1.31,
+        "firstIonization": "738 kJ/mol",
+        "density": "1.74 g/cm³",
+        "meltingPoint": "650°C",
+        "boilingPoint": "1090°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1755 (Identified); 1808 (Isolated)",
+        "discoveredBy": "Joseph Black (Id.); Humphry Davy (Iso.)",
+        "namedBy": "Derived from Magnesia district"
+      },
+      "stseContext": [
+        "Biological photosynthesis (Chlorophyll center)",
+        "Lightweight alloys"
+      ],
+      "commonUses": [
+        "Aerospace alloys",
+        "Flares/Fireworks",
+        "Antacids"
+      ],
+      "hazards": [
+        "Flammable (metal fire difficult to extinguish)"
+      ]
+    }
+  },
+  "13": {
+    "id": 13,
+    "symbol": "Al",
+    "name": "Aluminum",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 13,
+      "period": "3",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "3",
+      "commonIons": "Al³⁺ (Aluminum)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "26.982",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 13,
+      "electronsNeutral": 13,
+      "naturalIsotopes": [
+        {
+          "name": "Al-27",
+          "neutron": "14n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ne] 3s² 3p¹",
+        "oxidationStates": { "common": ["+3"], "possible": ["+1"] }
+      },
+      "physical": {
+        "electronegativity": 1.61,
+        "firstIonization": "578 kJ/mol",
+        "density": "2.70 g/cm³",
+        "meltingPoint": "660.3°C",
+        "boilingPoint": "2470°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1825",
+        "discoveredBy": "Hans Christian Ørsted",
+        "namedBy": "Humphry Davy"
+      },
+      "stseContext": [
+        "Recycling (Infinite recyclability)",
+        "Transportation efficiency (Lightweighting)"
+      ],
+      "commonUses": [
+        "Aircraft structures",
+        "Cans/Foil",
+        "Power lines"
+      ],
+      "hazards": [
+        "Dust is flammable/explosive"
+      ]
+    }
+  },
+  "14": {
+    "id": 14,
+    "symbol": "Si",
+    "name": "Silicon",
+    "level1_basic": {
+      "type": "Metalloid",
+      "group": 14,
+      "period": "3",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "4",
+      "commonIons": "Si⁴⁻ (Silicide (mostly covalent))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "28.085",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 14,
+      "electronsNeutral": 14,
+      "naturalIsotopes": [
+        {
+          "name": "Si-28",
+          "neutron": "14n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Si-29",
+          "neutron": "15n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Si-30",
+          "neutron": "16n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ne] 3s² 3p²",
+        "oxidationStates": { "common": ["-4","+4"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.9,
+        "firstIonization": "787 kJ/mol",
+        "density": "2.33 g/cm³",
+        "meltingPoint": "1414°C",
+        "boilingPoint": "3265°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1824",
+        "discoveredBy": "Jöns Jakob Berzelius",
+        "namedBy": "Thomas Thomson"
+      },
+      "stseContext": [
+        "The Digital Age (Semiconductors/Microchips)",
+        "Solar energy (Photovoltaics)"
+      ],
+      "commonUses": [
+        "Electronics",
+        "Glass/Concrete (as Silicates)",
+        "Silicones"
+      ],
+      "hazards": [
+        "Silicosis (chronic dust inhalation)"
+      ]
+    }
+  },
+  "15": {
+    "id": 15,
+    "symbol": "P",
+    "name": "Phosphorus",
+    "level1_basic": {
+      "type": "Reactive nonmetal",
+      "group": 15,
+      "period": "3",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "5",
+      "commonIons": "P³⁻ (Phosphide)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "30.974",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 15,
+      "electronsNeutral": 15,
+      "naturalIsotopes": [
+        {
+          "name": "P-31",
+          "neutron": "16n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ne] 3s² 3p³",
+        "oxidationStates": { "common": ["-3","+3","+5"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 2.19,
+        "firstIonization": "1012 kJ/mol",
+        "density": "1.82 g/cm³ (White P)",
+        "meltingPoint": "44.1°C (White P)",
+        "boilingPoint": "280.5°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1669",
+        "discoveredBy": "Hennig Brand",
+        "namedBy": "Derived from Greek Light-bearing"
+      },
+      "stseContext": [
+        "Agriculture (Essential fertilizer)",
+        "Biology (DNA backbone/ATP)",
+        "Eutrophication"
+      ],
+      "commonUses": [
+        "Fertilizers",
+        "Matchboxes (Red P)",
+        "Steel production"
+      ],
+      "hazards": [
+        "White P is highly toxic and pyrophoric (ignites in air)"
+      ]
+    }
+  },
+  "16": {
+    "id": 16,
+    "symbol": "S",
+    "name": "Sulfur",
+    "level1_basic": {
+      "type": "Reactive nonmetal",
+      "group": 16,
+      "period": "3",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "6",
+      "commonIons": "S²⁻ (Sulfide)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "32.06",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 16,
+      "electronsNeutral": 16,
+      "naturalIsotopes": [
+        {
+          "name": "S-32",
+          "neutron": "16n",
+          "percent": "Stable"
+        },
+        {
+          "name": "S-33",
+          "neutron": "17n",
+          "percent": "Stable"
+        },
+        {
+          "name": "S-34",
+          "neutron": "18n",
+          "percent": "Stable"
+        },
+        {
+          "name": "S-36",
+          "neutron": "20n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ne] 3s² 3p⁴",
+        "oxidationStates": { "common": ["-2","+4","+6"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 2.58,
+        "firstIonization": "1000 kJ/mol",
+        "density": "2.07 g/cm³ (Alpha)",
+        "meltingPoint": "115.2°C",
+        "boilingPoint": "444.6°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "Prehistoric",
+        "discoveredBy": "Ancient Civilizations",
+        "namedBy": "Antoine Lavoisier (established as element)"
+      },
+      "stseContext": [
+        "Industrial Chemistry (Sulfuric acid production)",
+        "Environmental Science (Acid Rain/SO₂)"
+      ],
+      "commonUses": [
+        "Fertilizers",
+        "Gunpowder",
+        "Vulcanization of rubber"
+      ],
+      "hazards": [
+        "SO₂ gas is toxic and corrosive"
+      ]
+    }
+  },
+  "17": {
+    "id": 17,
+    "symbol": "Cl",
+    "name": "Chlorine",
+    "level1_basic": {
+      "type": "Halogen",
+      "group": 17,
+      "period": "3",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "7",
+      "commonIons": "Cl⁻ (Chloride)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "35.45",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 17,
+      "electronsNeutral": 17,
+      "naturalIsotopes": [
+        {
+          "name": "Cl-35",
+          "neutron": "18n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cl-37",
+          "neutron": "20n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ne] 3s² 3p⁵",
+        "oxidationStates": { "common": ["-1","+1","+5","+7"], "possible": ["+3"] }
+      },
+      "physical": {
+        "electronegativity": 3.16,
+        "firstIonization": "1251 kJ/mol",
+        "density": "3.21 g/L",
+        "meltingPoint": "-101.5°C",
+        "boilingPoint": "-34.0°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1774",
+        "discoveredBy": "Carl Wilhelm Scheele",
+        "namedBy": "Humphry Davy (from Greek chloros)"
+      },
+      "stseContext": [
+        "Public Health (Water chlorination/Disinfection)",
+        "Chemical Warfare (WWI Choking gas)"
+      ],
+      "commonUses": [
+        "PVC (Plastics)",
+        "Bleach",
+        "Water purification"
+      ],
+      "hazards": [
+        "Highly toxic gas",
+        "Pulmonary irritant"
+      ]
+    }
+  },
+  "18": {
+    "id": 18,
+    "symbol": "Ar",
+    "name": "Argon",
+    "level1_basic": {
+      "type": "Noble Gas",
+      "group": 18,
+      "period": "3",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "8",
+      "commonIons": "None (does not form simple ions)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "39.948",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 18,
+      "electronsNeutral": 18,
+      "naturalIsotopes": [
+        {
+          "name": "Ar-36",
+          "neutron": "18n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ar-38",
+          "neutron": "20n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ar-40",
+          "neutron": "22n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ne] 3s² 3p⁶",
+        "oxidationStates": { "common": ["0"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "1521 kJ/mol",
+        "density": "1.78 g/L",
+        "meltingPoint": "-189.4°C",
+        "boilingPoint": "-185.8°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1894",
+        "discoveredBy": "Lord Rayleigh & William Ramsay",
+        "namedBy": "From Greek argos (lazy/inactive)"
+      },
+      "stseContext": [
+        "Preservation (Museum documents stored in Ar)",
+        "Atmospheric science"
+      ],
+      "commonUses": [
+        "Welding (Shielding gas)",
+        "Incandescent light bulbs",
+        "Double-pane windows"
+      ],
+      "hazards": [
+        "Asphyxiant in confined spaces"
+      ]
+    }
+  },
+  "19": {
+    "id": 19,
+    "symbol": "K",
+    "name": "Potassium",
+    "level1_basic": {
+      "type": "Alkali Metal",
+      "group": 1,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "1",
+      "commonIons": "K⁺ (Potassium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "39.098",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 19,
+      "electronsNeutral": 19,
+      "naturalIsotopes": [
+        {
+          "name": "K-39",
+          "neutron": "20n",
+          "percent": "Stable"
+        },
+        {
+          "name": "K-40",
+          "neutron": "21n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "K-41",
+          "neutron": "22n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 4s¹",
+        "oxidationStates": { "common": ["+1"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 0.82,
+        "firstIonization": "419 kJ/mol",
+        "density": "0.862 g/cm³",
+        "meltingPoint": "63.5°C",
+        "boilingPoint": "759°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1807",
+        "discoveredBy": "Humphry Davy",
+        "namedBy": "Humphry Davy (from 'Potash')"
+      },
+      "stseContext": [
+        "Agriculture (NPK Fertilizers)",
+        "Geology (K-Ar dating)",
+        "Biology (Nerve transmission)"
+      ],
+      "commonUses": [
+        "Fertilizers",
+        "Soaps",
+        "Gunpowder (KNO₃)"
+      ],
+      "hazards": [
+        "Reacts violently with water"
+      ]
+    }
+  },
+  "20": {
+    "id": 20,
+    "symbol": "Ca",
+    "name": "Calcium",
+    "level1_basic": {
+      "type": "Alkaline Earth Metal",
+      "group": 2,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "2",
+      "commonIons": "Ca²⁺ (Calcium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "40.078",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 20,
+      "electronsNeutral": 20,
+      "naturalIsotopes": [
+        {
+          "name": "Ca-40",
+          "neutron": "20n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ca-42",
+          "neutron": "22n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ca-43",
+          "neutron": "23n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ca-44",
+          "neutron": "24n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ca-46",
+          "neutron": "26n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ca-48",
+          "neutron": "28n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 4s²",
+        "oxidationStates": { "common": ["+2"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 1,
+        "firstIonization": "590 kJ/mol",
+        "density": "1.55 g/cm³",
+        "meltingPoint": "842°C",
+        "boilingPoint": "1484°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1808",
+        "discoveredBy": "Humphry Davy",
+        "namedBy": "From Latin calx (lime)"
+      },
+      "stseContext": [
+        "Construction (Concrete/Cement chemistry)",
+        "Human Anatomy (Bones/Teeth structure)"
+      ],
+      "commonUses": [
+        "Cement",
+        "Steelmaking (Desulfurization)",
+        "Dietary supplements"
+      ],
+      "hazards": [
+        "Reacts with water (slowly compared to Na/K)"
+      ]
+    }
+  },
+  "21": {
+    "id": 21,
+    "symbol": "Sc",
+    "name": "Scandium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 3,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Sc³⁺ (Scandium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "44.956",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 21,
+      "electronsNeutral": 21,
+      "naturalIsotopes": [
+        {
+          "name": "Sc-45",
+          "neutron": "24n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d¹ 4s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2","+1"] }
+      },
+      "physical": {
+        "electronegativity": 1.36,
+        "firstIonization": "633 kJ/mol",
+        "density": "2.99 g/cm³",
+        "meltingPoint": "1541°C",
+        "boilingPoint": "2836°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1879",
+        "discoveredBy": "Lars Fredrik Nilson",
+        "namedBy": "From Latin Scandia (Scandinavia)"
+      },
+      "stseContext": [
+        "Prediction validation (Mendeleev predicted it as 'Eka-boron')"
+      ],
+      "commonUses": [
+        "Aerospace alloys (Aluminum-Scandium for MiG fighters)",
+        "Stadium lighting"
+      ],
+      "hazards": [
+        "Elemental dust is flammable"
+      ]
+    }
+  },
+  "22": {
+    "id": 22,
+    "symbol": "Ti",
+    "name": "Titanium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 4,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Ti³⁺ (Titanium(III)), Ti⁴⁺ (Titanium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "47.867",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 22,
+      "electronsNeutral": 22,
+      "naturalIsotopes": [
+        {
+          "name": "Ti-46",
+          "neutron": "24n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ti-47",
+          "neutron": "25n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ti-48",
+          "neutron": "26n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ti-49",
+          "neutron": "27n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ti-50",
+          "neutron": "28n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d² 4s²",
+        "oxidationStates": { "common": ["+4"], "possible": ["+3","+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.54,
+        "firstIonization": "659 kJ/mol",
+        "density": "4.51 g/cm³",
+        "meltingPoint": "1668°C",
+        "boilingPoint": "3287°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1791",
+        "discoveredBy": "William Gregor",
+        "namedBy": "Martin Heinrich Klaproth (Titans of mythology)"
+      },
+      "stseContext": [
+        "Medical Engineering (Biocompatible implants)",
+        "Aerospace (High strength-to-weight ratio)"
+      ],
+      "commonUses": [
+        "Joint replacements",
+        "Aircraft engines",
+        "White pigment (TiO₂)"
+      ],
+      "hazards": [
+        "Nontoxic (biologically inert)"
+      ]
+    }
+  },
+  "23": {
+    "id": 23,
+    "symbol": "V",
+    "name": "Vanadium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 5,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "V²⁺ (Vanadium(II)), V³⁺ (Vanadium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "50.942",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 23,
+      "electronsNeutral": 23,
+      "naturalIsotopes": [
+        {
+          "name": "V-50",
+          "neutron": "27n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "V-51",
+          "neutron": "28n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d³ 4s²",
+        "oxidationStates": { "common": ["+5","+4","+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.63,
+        "firstIonization": "651 kJ/mol",
+        "density": "6.11 g/cm³",
+        "meltingPoint": "1910°C",
+        "boilingPoint": "3407°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1801",
+        "discoveredBy": "Andrés Manuel del Río",
+        "namedBy": "Nils Gabriel Sefström (Vanadis, Norse goddess)"
+      },
+      "stseContext": [
+        "Materials Science (High-speed steel tools)"
+      ],
+      "commonUses": [
+        "Ferrovanadium alloys (Tools, Axles)",
+        "Sulfuric acid catalyst (V₂O₅)"
+      ],
+      "hazards": [
+        "Compounds (especially V₂O₅) are toxic"
+      ]
+    }
+  },
+  "24": {
+    "id": 24,
+    "symbol": "Cr",
+    "name": "Chromium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 6,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Cr²⁺ (Chromium(II)), Cr³⁺ (Chromium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "51.996",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 24,
+      "electronsNeutral": 24,
+      "naturalIsotopes": [
+        {
+          "name": "Cr-50",
+          "neutron": "26n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cr-52",
+          "neutron": "28n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cr-53",
+          "neutron": "29n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cr-54",
+          "neutron": "30n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d⁵ 4s¹ [Exception]",
+        "oxidationStates": { "common": ["+3","+6"], "possible": ["+2","+4","+5"] }
+      },
+      "physical": {
+        "electronegativity": 1.66,
+        "firstIonization": "653 kJ/mol",
+        "density": "7.19 g/cm³",
+        "meltingPoint": "1907°C",
+        "boilingPoint": "2671°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1797",
+        "discoveredBy": "Louis-Nicolas Vauquelin",
+        "namedBy": "From Greek chroma (color)"
+      },
+      "stseContext": [
+        "Corrosion protection (Stainless steel passivation)",
+        "Environmental Toxicology (Hexavalent chromium)"
+      ],
+      "commonUses": [
+        "Stainless steel (minimum 10.5%)",
+        "Chrome plating",
+        "Pigments"
+      ],
+      "hazards": [
+        "Cr(VI) is carcinogenic",
+        "Cr(III) is essential trace element"
+      ]
+    }
+  },
+  "25": {
+    "id": 25,
+    "symbol": "Mn",
+    "name": "Manganese",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 7,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Mn²⁺ (Manganese(II)), Mn³⁺ (Manganese(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "54.938",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 25,
+      "electronsNeutral": 25,
+      "naturalIsotopes": [
+        {
+          "name": "Mn-55",
+          "neutron": "30n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d⁵ 4s²",
+        "oxidationStates": { "common": ["+2","+4","+7"], "possible": ["+1","+3","+5","+6"] }
+      },
+      "physical": {
+        "electronegativity": 1.55,
+        "firstIonization": "717 kJ/mol",
+        "density": "7.21 g/cm³",
+        "meltingPoint": "1246°C",
+        "boilingPoint": "2061°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1774",
+        "discoveredBy": "Johan Gottlieb Gahn",
+        "namedBy": "Derived from Magnesia"
+      },
+      "stseContext": [
+        "Metallurgy (Essential for steel strength)",
+        "Batteries (Alkaline cells)"
+      ],
+      "commonUses": [
+        "Steel alloys",
+        "Aluminum beverage cans",
+        "Dry cell batteries (MnO₂)"
+      ],
+      "hazards": [
+        "Manganism (neurotoxicity) from chronic dust inhalation"
+      ]
+    }
+  },
+  "26": {
+    "id": 26,
+    "symbol": "Fe",
+    "name": "Iron",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 8,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Fe²⁺ (Iron(II)), Fe³⁺ (Iron(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "55.845",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 26,
+      "electronsNeutral": 26,
+      "naturalIsotopes": [
+        {
+          "name": "Fe-54",
+          "neutron": "28n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Fe-56",
+          "neutron": "30n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Fe-57",
+          "neutron": "31n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Fe-58",
+          "neutron": "32n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d⁶ 4s²",
+        "oxidationStates": { "common": ["+2","+3"], "possible": ["+6"] }
+      },
+      "physical": {
+        "electronegativity": 1.83,
+        "firstIonization": "763 kJ/mol",
+        "density": "7.87 g/cm³",
+        "meltingPoint": "1538°C",
+        "boilingPoint": "2862°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "Prehistoric (~4000 BCE)",
+        "discoveredBy": "Ancient Civilizations (Iron Age)",
+        "namedBy": "From Anglo-Saxon iren (Symbol Fe from Latin ferrum)"
+      },
+      "stseContext": [
+        "Civilization development (Steel infrastructure)",
+        "Biology (Hemoglobin/Oxygen transport)"
+      ],
+      "commonUses": [
+        "Construction (Steel)",
+        "Vehicles",
+        "Machinery"
+      ],
+      "hazards": [
+        "Low toxicity",
+        "acute overdose toxic"
+      ]
+    }
+  },
+  "27": {
+    "id": 27,
+    "symbol": "Co",
+    "name": "Cobalt",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 9,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Co²⁺ (Cobalt(II)), Co³⁺ (Cobalt(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "58.933",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 27,
+      "electronsNeutral": 27,
+      "naturalIsotopes": [
+        {
+          "name": "Co-59",
+          "neutron": "32n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d⁷ 4s²",
+        "oxidationStates": { "common": ["+2","+3"], "possible": ["+1","+4"] }
+      },
+      "physical": {
+        "electronegativity": 1.88,
+        "firstIonization": "760 kJ/mol",
+        "density": "8.90 g/cm³",
+        "meltingPoint": "1495°C",
+        "boilingPoint": "2927°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1735",
+        "discoveredBy": "Georg Brandt",
+        "namedBy": "From German Kobold (goblin/spirit)"
+      },
+      "stseContext": [
+        "Renewable Energy (EV Batteries)",
+        "Medical (Radiation therapy Co-60)",
+        "Biology (Vitamin B12)"
+      ],
+      "commonUses": [
+        "Lithium-ion battery cathodes",
+        "Superalloys (Turbines)",
+        "Blue pigments"
+      ],
+      "hazards": [
+        "Toxic",
+        "Skin sensitizer"
+      ]
+    }
+  },
+  "28": {
+    "id": 28,
+    "symbol": "Ni",
+    "name": "Nickel",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 10,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Ni²⁺ (Nickel(II)), Ni³⁺ (Nickel(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "58.693",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 28,
+      "electronsNeutral": 28,
+      "naturalIsotopes": [
+        {
+          "name": "Ni-58",
+          "neutron": "30n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ni-60",
+          "neutron": "32n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ni-61",
+          "neutron": "33n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ni-62",
+          "neutron": "34n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ni-64",
+          "neutron": "36n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d⁸ 4s²",
+        "oxidationStates": { "common": ["+2"], "possible": ["+1","+3"] }
+      },
+      "physical": {
+        "electronegativity": 1.91,
+        "firstIonization": "737 kJ/mol",
+        "density": "8.90 g/cm³",
+        "meltingPoint": "1455°C",
+        "boilingPoint": "2730°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1751",
+        "discoveredBy": "Axel Fredrik Cronstedt",
+        "namedBy": "From Kupfernickel (Devil's copper)"
+      },
+      "stseContext": [
+        "Currency (Coins)",
+        "Alloys (Stainless steel)",
+        "Catalysis (Hydrogenation)"
+      ],
+      "commonUses": [
+        "Stainless steel",
+        "Batteries",
+        "Plating",
+        "Coins"
+      ],
+      "hazards": [
+        "Common allergen (contact dermatitis)"
+      ]
+    }
+  },
+  "29": {
+    "id": 29,
+    "symbol": "Cu",
+    "name": "Copper",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 11,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Cu⁺ (Copper(I)), Cu²⁺ (Copper(II))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "63.546",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 29,
+      "electronsNeutral": 29,
+      "naturalIsotopes": [
+        {
+          "name": "Cu-63",
+          "neutron": "34n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cu-65",
+          "neutron": "36n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d¹⁰ 4s¹ [Exception]",
+        "oxidationStates": { "common": ["+1","+2"], "possible": ["+3"] }
+      },
+      "physical": {
+        "electronegativity": 1.9,
+        "firstIonization": "746 kJ/mol",
+        "density": "8.96 g/cm³",
+        "meltingPoint": "1085°C",
+        "boilingPoint": "2562°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "Prehistoric (~9000 BCE)",
+        "discoveredBy": "Middle Eastern Civilizations",
+        "namedBy": "From Latin Cyprium (Metal of Cyprus)"
+      },
+      "stseContext": [
+        "Electrification (Global grid)",
+        "Antimicrobial properties (Hospital surfaces)"
+      ],
+      "commonUses": [
+        "Wiring",
+        "Plumbing",
+        "Alloys (Bronze/Brass)"
+      ],
+      "hazards": [
+        "Toxic to invertebrates/aquatic life",
+        "essential for humans"
+      ]
+    }
+  },
+  "30": {
+    "id": 30,
+    "symbol": "Zn",
+    "name": "Zinc",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 12,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "2 (d-subshell is full)",
+      "commonIons": "Zn²⁺ (Zinc)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "65.38",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 30,
+      "electronsNeutral": 30,
+      "naturalIsotopes": [
+        {
+          "name": "Zn-64",
+          "neutron": "34n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Zn-66",
+          "neutron": "36n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Zn-67",
+          "neutron": "37n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Zn-68",
+          "neutron": "38n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Zn-70",
+          "neutron": "40n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d¹⁰ 4s²",
+        "oxidationStates": { "common": ["+2"], "possible": ["+1"] }
+      },
+      "physical": {
+        "electronegativity": 1.65,
+        "firstIonization": "906 kJ/mol",
+        "density": "7.14 g/cm³",
+        "meltingPoint": "419.5°C",
+        "boilingPoint": "907°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "~1000 CE (India); 1746 (Europe isolation)",
+        "discoveredBy": "Indian metallurgists; Andreas Sigismund Marggraf",
+        "namedBy": "Paracelsus (from German Zinke)"
+      },
+      "stseContext": [
+        "Corrosion protection (Sacrificial anode)",
+        "Biochemistry (Enzyme cofactor)"
+      ],
+      "commonUses": [
+        "Galvanizing steel",
+        "Die-casting",
+        "Brass alloy"
+      ],
+      "hazards": [
+        "Metal fume fever (from welding)"
+      ]
+    }
+  },
+  "31": {
+    "id": 31,
+    "symbol": "Ga",
+    "name": "Gallium",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 13,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "3",
+      "commonIons": "Ga³⁺ (Gallium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "69.723",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 31,
+      "electronsNeutral": 31,
+      "naturalIsotopes": [
+        {
+          "name": "Ga-69",
+          "neutron": "38n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ga-71",
+          "neutron": "40n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d¹⁰ 4s² 4p¹",
+        "oxidationStates": { "common": ["+3"], "possible": ["+1","+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.81,
+        "firstIonization": "579 kJ/mol",
+        "density": "5.91 g/cm³",
+        "meltingPoint": "29.8°C [Melts in hand]",
+        "boilingPoint": "2400°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1875",
+        "discoveredBy": "Paul-Émile Lecoq de Boisbaudran",
+        "namedBy": "Lecoq de Boisbaudran (Gallia/France)"
+      },
+      "stseContext": [
+        "Semiconductor physics (LEDs/Lasers)",
+        "Mendeleev's 'Eka-aluminum'"
+      ],
+      "commonUses": [
+        "Blue/Violet LEDs (GaN)",
+        "Integrated circuits",
+        "High-temp thermometers"
+      ],
+      "hazards": [
+        "Corrosive to aluminum (liquid metal embrittlement)"
+      ]
+    }
+  },
+  "32": {
+    "id": 32,
+    "symbol": "Ge",
+    "name": "Germanium",
+    "level1_basic": {
+      "type": "Metalloid",
+      "group": 14,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "4",
+      "commonIons": "Ge⁴⁺ (Germanium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "72.630",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 32,
+      "electronsNeutral": 32,
+      "naturalIsotopes": [
+        {
+          "name": "Ge-70",
+          "neutron": "38n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ge-72",
+          "neutron": "40n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ge-73",
+          "neutron": "41n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ge-74",
+          "neutron": "42n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d¹⁰ 4s² 4p²",
+        "oxidationStates": { "common": ["+4","+2"], "possible": ["-4"] }
+      },
+      "physical": {
+        "electronegativity": 2.01,
+        "firstIonization": "762 kJ/mol",
+        "density": "5.32 g/cm³",
+        "meltingPoint": "938°C",
+        "boilingPoint": "2833°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1886",
+        "discoveredBy": "Clemens Winkler",
+        "namedBy": "Winkler (Germania/Germany)"
+      },
+      "stseContext": [
+        "Electronics history (First transistors were Ge)",
+        "Fiber optics"
+      ],
+      "commonUses": [
+        "Fiber optics",
+        "Infrared optics",
+        "Polymerization catalysts"
+      ],
+      "hazards": [
+        "Some organic compounds toxic"
+      ]
+    }
+  },
+  "33": {
+    "id": 33,
+    "symbol": "As",
+    "name": "Arsenic",
+    "level1_basic": {
+      "type": "Metalloid",
+      "group": 15,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "5",
+      "commonIons": "As³⁻ (Arsenide), As³⁺ (Arsenic(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "74.922",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 33,
+      "electronsNeutral": 33,
+      "naturalIsotopes": [
+        {
+          "name": "As-75",
+          "neutron": "42n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d¹⁰ 4s² 4p³",
+        "oxidationStates": { "common": ["-3","+3","+5"], "possible": ["+1"] }
+      },
+      "physical": {
+        "electronegativity": 2.18,
+        "firstIonization": "947 kJ/mol",
+        "density": "5.73 g/cm³",
+        "meltingPoint": "Sublimes (817°C at high pressure)",
+        "boilingPoint": "Sublimes (614°C)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "~1250 (Isolated)",
+        "discoveredBy": "Albertus Magnus (attributed)",
+        "namedBy": "From Persian zarnikh (yellow orpiment)"
+      },
+      "stseContext": [
+        "Toxicology (Historical poison)",
+        "Semiconductor doping (n-type)"
+      ],
+      "commonUses": [
+        "Semiconductors (GaAs)",
+        "Wood preservatives (historical)",
+        "Alloys"
+      ],
+      "hazards": [
+        "Highly toxic",
+        "Carcinogenic"
+      ]
+    }
+  },
+  "34": {
+    "id": 34,
+    "symbol": "Se",
+    "name": "Selenium",
+    "level1_basic": {
+      "type": "Reactive nonmetal",
+      "group": 16,
+      "period": "4",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "6",
+      "commonIons": "Se²⁻ (Selenide)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "78.971",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 34,
+      "electronsNeutral": 34,
+      "naturalIsotopes": [
+        {
+          "name": "Se-74",
+          "neutron": "40n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Se-76",
+          "neutron": "42n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Se-77",
+          "neutron": "43n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Se-78",
+          "neutron": "44n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Se-80",
+          "neutron": "46n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Se-82",
+          "neutron": "48n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d¹⁰ 4s² 4p⁴",
+        "oxidationStates": { "common": ["-2","+4","+6"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 2.55,
+        "firstIonization": "941 kJ/mol",
+        "density": "4.81 g/cm³",
+        "meltingPoint": "221°C",
+        "boilingPoint": "685°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1817",
+        "discoveredBy": "Jöns Jakob Berzelius",
+        "namedBy": "From Greek selene (Moon)"
+      },
+      "stseContext": [
+        "Xerox process (Photoconductivity)",
+        "Biological trace element"
+      ],
+      "commonUses": [
+        "Photocopying",
+        "Glass decolorizing",
+        "Solar cells"
+      ],
+      "hazards": [
+        "Toxic in large amounts",
+        "essential in trace amounts"
+      ]
+    }
+  },
+  "35": {
+    "id": 35,
+    "symbol": "Br",
+    "name": "Bromine",
+    "level1_basic": {
+      "type": "Halogen",
+      "group": 17,
+      "period": "4",
+      "phaseAtSTP": "Liquid",
+      "valenceElectrons": "7",
+      "commonIons": "Br⁻ (Bromide)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "79.904",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 35,
+      "electronsNeutral": 35,
+      "naturalIsotopes": [
+        {
+          "name": "Br-79",
+          "neutron": "44n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Br-81",
+          "neutron": "46n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d¹⁰ 4s² 4p⁵",
+        "oxidationStates": { "common": ["-1","+1","+5","+7"], "possible": ["+3"] }
+      },
+      "physical": {
+        "electronegativity": 2.96,
+        "firstIonization": "1140 kJ/mol",
+        "density": "3.10 g/cm³ (Liquid)",
+        "meltingPoint": "-7.2°C",
+        "boilingPoint": "58.8°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1826",
+        "discoveredBy": "Antoine Jérôme Balard",
+        "namedBy": "From Greek bromos (stench)"
+      },
+      "stseContext": [
+        "Flame retardants",
+        "Ozone depletion"
+      ],
+      "commonUses": [
+        "Flame retardants",
+        "Drilling fluids",
+        "Photographic film (AgBr)"
+      ],
+      "hazards": [
+        "Corrosive liquid",
+        "vapor is highly toxic"
+      ]
+    }
+  },
+  "36": {
+    "id": 36,
+    "symbol": "Kr",
+    "name": "Krypton",
+    "level1_basic": {
+      "type": "Noble Gas",
+      "group": 18,
+      "period": "4",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "8",
+      "commonIons": "None (does not form simple ions)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "83.798",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 36,
+      "electronsNeutral": 36,
+      "naturalIsotopes": [
+        {
+          "name": "Kr-78",
+          "neutron": "42n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Kr-80",
+          "neutron": "44n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Kr-82",
+          "neutron": "46n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Kr-83",
+          "neutron": "47n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Kr-84",
+          "neutron": "48n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Kr-86",
+          "neutron": "50n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Ar] 3d¹⁰ 4s² 4p⁶",
+        "oxidationStates": { "common": ["0"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 3,
+        "firstIonization": "1351 kJ/mol",
+        "density": "3.75 g/L",
+        "meltingPoint": "-157.4°C",
+        "boilingPoint": "-153.2°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1898",
+        "discoveredBy": "William Ramsay & Morris Travers",
+        "namedBy": "From Greek kryptos (hidden)"
+      },
+      "stseContext": [
+        "Measurement standards (Meter was defined by Kr-86 light 1960-1983)"
+      ],
+      "commonUses": [
+        "High-speed photography flashes",
+        "Fluorescent bulbs",
+        "Double-pane windows"
+      ],
+      "hazards": [
+        "Asphyxiant",
+        "Radioactive ⁸⁵Kr is a fission product"
+      ]
+    }
+  },
+  "37": {
+    "id": 37,
+    "symbol": "Rb",
+    "name": "Rubidium",
+    "level1_basic": {
+      "type": "Alkali Metal",
+      "group": 1,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "1",
+      "commonIons": "Rb⁺ (Rubidium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "85.468",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 37,
+      "electronsNeutral": 37,
+      "naturalIsotopes": [
+        {
+          "name": "Rb-85",
+          "neutron": "48n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Rb-87",
+          "neutron": "50n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 5s¹",
+        "oxidationStates": { "common": ["+1"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 0.82,
+        "firstIonization": "403 kJ/mol",
+        "density": "1.53 g/cm³",
+        "meltingPoint": "39.3°C",
+        "boilingPoint": "688°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1861",
+        "discoveredBy": "Robert Bunsen & Gustav Kirchhoff",
+        "namedBy": "From Latin rubidius (deep red, from spectrum)"
+      },
+      "stseContext": [
+        "Geochronology (Dating of rocks/minerals)",
+        "Atomic clocks"
+      ],
+      "commonUses": [
+        "Vacuum tube getters",
+        "Photocells",
+        "Atomic clocks"
+      ],
+      "hazards": [
+        "Reacts violently with water (ignites spontaneously)"
+      ]
+    }
+  },
+  "38": {
+    "id": 38,
+    "symbol": "Sr",
+    "name": "Strontium",
+    "level1_basic": {
+      "type": "Alkaline Earth Metal",
+      "group": 2,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "2",
+      "commonIons": "Sr²⁺ (Strontium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "87.62",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 38,
+      "electronsNeutral": 38,
+      "naturalIsotopes": [
+        {
+          "name": "Sr-84",
+          "neutron": "46n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sr-86",
+          "neutron": "48n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sr-87",
+          "neutron": "49n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sr-88",
+          "neutron": "50n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 5s²",
+        "oxidationStates": { "common": ["+2"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 0.95,
+        "firstIonization": "550 kJ/mol",
+        "density": "2.64 g/cm³",
+        "meltingPoint": "777°C",
+        "boilingPoint": "1382°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1790 (identified); 1808 (isolated)",
+        "discoveredBy": "Adair Crawford (Id.); Humphry Davy (Iso.)",
+        "namedBy": "From Strontian, Scotland"
+      },
+      "stseContext": [
+        "Nuclear fallout tracking (Sr-90 mimics Calcium in bones)",
+        "Fireworks"
+      ],
+      "commonUses": [
+        "Red fireworks/flares",
+        "Glow-in-the-dark paints (SrAl₂O₄)"
+      ],
+      "hazards": [
+        "Sr-90 is a dangerous radiotoxin",
+        "elemental Sr reacts with water"
+      ]
+    }
+  },
+  "39": {
+    "id": 39,
+    "symbol": "Y",
+    "name": "Yttrium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 3,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Y³⁺ (Yttrium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "88.906",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 39,
+      "electronsNeutral": 39,
+      "naturalIsotopes": [
+        {
+          "name": "Y-89",
+          "neutron": "50n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹ 5s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2","+1"] }
+      },
+      "physical": {
+        "electronegativity": 1.22,
+        "firstIonization": "600 kJ/mol",
+        "density": "4.47 g/cm³",
+        "meltingPoint": "1526°C",
+        "boilingPoint": "2930°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1794",
+        "discoveredBy": "Johan Gadolin",
+        "namedBy": "From Ytterby, Sweden"
+      },
+      "stseContext": [
+        "Superconductors (YBCO)",
+        "LEDs"
+      ],
+      "commonUses": [
+        "Red phosphors (CRTs/LEDs)",
+        "Laser crystals (Nd:YAG)",
+        "Superconductors"
+      ],
+      "hazards": [
+        "Compounds can be toxic",
+        "dust is flammable"
+      ]
+    }
+  },
+  "40": {
+    "id": 40,
+    "symbol": "Zr",
+    "name": "Zirconium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 4,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Zr⁴⁺ (Zirconium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "91.224",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 40,
+      "electronsNeutral": 40,
+      "naturalIsotopes": [
+        {
+          "name": "Zr-90",
+          "neutron": "50n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Zr-91",
+          "neutron": "51n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Zr-92",
+          "neutron": "52n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Zr-94",
+          "neutron": "54n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d² 5s²",
+        "oxidationStates": { "common": ["+4"], "possible": ["+3","+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.33,
+        "firstIonization": "640 kJ/mol",
+        "density": "6.52 g/cm³",
+        "meltingPoint": "1855°C",
+        "boilingPoint": "4409°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1789",
+        "discoveredBy": "Martin Heinrich Klaproth",
+        "namedBy": "From Persian zargun (gold-colored)"
+      },
+      "stseContext": [
+        "Nuclear energy (Fuel rod cladding due to low neutron absorption)",
+        "Gemstones"
+      ],
+      "commonUses": [
+        "Nuclear fuel cladding",
+        "Chemical piping",
+        "Fake diamonds (CZ)"
+      ],
+      "hazards": [
+        "Powder is highly flammable/explosive",
+        "biologically inert"
+      ]
+    }
+  },
+  "41": {
+    "id": 41,
+    "symbol": "Nb",
+    "name": "Niobium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 5,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Nb³⁺ (Niobium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "92.906",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 41,
+      "electronsNeutral": 41,
+      "naturalIsotopes": [
+        {
+          "name": "Nb-93",
+          "neutron": "52n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d⁴ 5s¹ [Exception]",
+        "oxidationStates": { "common": ["+5"], "possible": ["+4","+3","+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.6,
+        "firstIonization": "652 kJ/mol",
+        "density": "8.57 g/cm³",
+        "meltingPoint": "2477°C",
+        "boilingPoint": "4744°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1801",
+        "discoveredBy": "Charles Hatchett",
+        "namedBy": "Niobe (daughter of Tantalus)"
+      },
+      "stseContext": [
+        "MRI Technology (Superconducting magnets)",
+        "Steel production"
+      ],
+      "commonUses": [
+        "Superconducting magnets (MRI)",
+        "Pipelines",
+        "Hypoallergenic jewelry"
+      ],
+      "hazards": [
+        "Dust causes eye/skin irritation"
+      ]
+    }
+  },
+  "42": {
+    "id": 42,
+    "symbol": "Mo",
+    "name": "Molybdenum",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 6,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Mo²⁺ (Molybdenum(II)), Mo³⁺ (Molybdenum(III)), Mo⁴⁺ (Molybdenum(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "95.95",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 42,
+      "electronsNeutral": 42,
+      "naturalIsotopes": [
+        {
+          "name": "Mo-92",
+          "neutron": "50n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Mo-94",
+          "neutron": "52n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Mo-95",
+          "neutron": "53n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Mo-96",
+          "neutron": "54n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Mo-97",
+          "neutron": "55n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Mo-98",
+          "neutron": "56n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Mo-100",
+          "neutron": "58n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d⁵ 5s¹ [Exception]",
+        "oxidationStates": { "common": ["+6"], "possible": ["+4","+5","+3","+2"] }
+      },
+      "physical": {
+        "electronegativity": 2.16,
+        "firstIonization": "684 kJ/mol",
+        "density": "10.28 g/cm³",
+        "meltingPoint": "2623°C",
+        "boilingPoint": "4639°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1778",
+        "discoveredBy": "Carl Wilhelm Scheele",
+        "namedBy": "From Greek molybdos (lead-like)"
+      },
+      "stseContext": [
+        "Enzymatic function (Essential for nitrogen fixation in plants)"
+      ],
+      "commonUses": [
+        "High-strength steel alloys",
+        "Lubricants (MoS₂)",
+        "Nuclear imaging (Mo-99 precursor)"
+      ],
+      "hazards": [
+        "Toxic in high doses",
+        "essential trace element"
+      ]
+    }
+  },
+  "43": {
+    "id": 43,
+    "symbol": "Tc",
+    "name": "Technetium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 7,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Tc⁴⁺ (Technetium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "[98] (Radioactive)",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 43,
+      "electronsNeutral": 43,
+      "naturalIsotopes": [
+        {
+          "name": "Tc-99",
+          "neutron": "56n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d⁵ 5s²",
+        "oxidationStates": { "common": ["+7"], "possible": ["+4","+6","+5"] }
+      },
+      "physical": {
+        "electronegativity": 1.9,
+        "firstIonization": "702 kJ/mol",
+        "density": "11.50 g/cm³",
+        "meltingPoint": "2157°C",
+        "boilingPoint": "4265°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1937",
+        "discoveredBy": "Carlo Perrier & Emilio Segrè",
+        "namedBy": "From Greek technetos (artificial)"
+      },
+      "stseContext": [
+        "Nuclear Medicine (Tc-99m is the world's most used medical radiotracer)"
+      ],
+      "commonUses": [
+        "Medical imaging (Bone scans, heart scans)",
+        "Research"
+      ],
+      "hazards": [
+        "Radioactive (radiotoxicity depends on isotope)"
+      ]
+    }
+  },
+  "44": {
+    "id": 44,
+    "symbol": "Ru",
+    "name": "Ruthenium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 8,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Ru³⁺ (Ruthenium(III)), Ru⁴⁺ (Ruthenium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "101.07",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 44,
+      "electronsNeutral": 44,
+      "naturalIsotopes": [
+        {
+          "name": "Ru-96",
+          "neutron": "52n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ru-98",
+          "neutron": "54n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ru-99",
+          "neutron": "55n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ru-100",
+          "neutron": "56n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ru-101",
+          "neutron": "57n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ru-102",
+          "neutron": "58n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ru-104",
+          "neutron": "60n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d⁷ 5s¹ [Exception]",
+        "oxidationStates": { "common": ["+3","+4"], "possible": ["+2","+6","+7","+8"] }
+      },
+      "physical": {
+        "electronegativity": 2.2,
+        "firstIonization": "710 kJ/mol",
+        "density": "12.45 g/cm³",
+        "meltingPoint": "2334°C",
+        "boilingPoint": "4150°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1844",
+        "discoveredBy": "Karl Ernst Claus",
+        "namedBy": "From Ruthenia (Latin for Russia)"
+      },
+      "stseContext": [
+        "Green Chemistry (Catalysts)",
+        "Electronics (Chip resistors)"
+      ],
+      "commonUses": [
+        "Electrical contacts",
+        "Hard disk drives",
+        "Solar energy"
+      ],
+      "hazards": [
+        "RuO₄ is highly toxic and volatile"
+      ]
+    }
+  },
+  "45": {
+    "id": 45,
+    "symbol": "Rh",
+    "name": "Rhodium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 9,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Rh³⁺ (Rhodium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "102.91",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 45,
+      "electronsNeutral": 45,
+      "naturalIsotopes": [
+        {
+          "name": "Rh-103",
+          "neutron": "58n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d⁸ 5s¹ [Exception]",
+        "oxidationStates": { "common": ["+3"], "possible": ["+1","+2","+4","+5"] }
+      },
+      "physical": {
+        "electronegativity": 2.28,
+        "firstIonization": "720 kJ/mol",
+        "density": "12.41 g/cm³",
+        "meltingPoint": "1964°C",
+        "boilingPoint": "3695°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1803",
+        "discoveredBy": "William Hyde Wollaston",
+        "namedBy": "From Greek rhodon (rose, due to salt color)"
+      },
+      "stseContext": [
+        "Automotive Industry (Catalytic converters for NOx reduction)"
+      ],
+      "commonUses": [
+        "Catalytic converters (80% of use)",
+        "Jewelry plating (white gold finish)"
+      ],
+      "hazards": [
+        "Compounds are toxic/carcinogenic",
+        "metal is inert"
+      ]
+    }
+  },
+  "46": {
+    "id": 46,
+    "symbol": "Pd",
+    "name": "Palladium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 10,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer d only here)",
+      "commonIons": "Pd²⁺ (Palladium(II)), Pd⁴⁺ (Palladium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "106.42",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 46,
+      "electronsNeutral": 46,
+      "naturalIsotopes": [
+        {
+          "name": "Pd-102",
+          "neutron": "56n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pd-104",
+          "neutron": "58n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pd-105",
+          "neutron": "59n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pd-106",
+          "neutron": "60n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pd-108",
+          "neutron": "62n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pd-110",
+          "neutron": "64n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹⁰ [Exception - empty s-orbital]",
+        "oxidationStates": { "common": ["+2"], "possible": ["0","+1","+3","+4"] }
+      },
+      "physical": {
+        "electronegativity": 2.2,
+        "firstIonization": "804 kJ/mol",
+        "density": "12.02 g/cm³",
+        "meltingPoint": "1555°C",
+        "boilingPoint": "2963°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1803",
+        "discoveredBy": "William Hyde Wollaston",
+        "namedBy": "From asteroid Pallas"
+      },
+      "stseContext": [
+        "Hydrogen Economy (Can absorb 900x volume of H₂)",
+        "Catalytic converters"
+      ],
+      "commonUses": [
+        "Catalytic converters",
+        "Dentistry",
+        "Fuel cells",
+        "Hydrogen purification"
+      ],
+      "hazards": [
+        "Low toxicity",
+        "but can cause allergic reactions"
+      ]
+    }
+  },
+  "47": {
+    "id": 47,
+    "symbol": "Ag",
+    "name": "Silver",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 11,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Ag⁺ (Silver)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "107.87",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 47,
+      "electronsNeutral": 47,
+      "naturalIsotopes": [
+        {
+          "name": "Ag-107",
+          "neutron": "60n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ag-109",
+          "neutron": "62n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹⁰ 5s¹ [Exception]",
+        "oxidationStates": { "common": ["+1"], "possible": ["+2","+3"] }
+      },
+      "physical": {
+        "electronegativity": 1.93,
+        "firstIonization": "731 kJ/mol",
+        "density": "10.49 g/cm³",
+        "meltingPoint": "962°C",
+        "boilingPoint": "2162°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "Prehistoric (~3000 BCE)",
+        "discoveredBy": "Ancient Civilizations",
+        "namedBy": "Anglo-Saxon seolfor (Symbol Ag from Latin argentum)"
+      },
+      "stseContext": [
+        "Medicine (Antibacterial properties)",
+        "Photography (Traditional film chemistry)"
+      ],
+      "commonUses": [
+        "Jewelry",
+        "Electronics (Best conductor)",
+        "Mirrors",
+        "Solar panels"
+      ],
+      "hazards": [
+        "Argyria (skin turns blue from chronic exposure)",
+        "toxic to aquatic life"
+      ]
+    }
+  },
+  "48": {
+    "id": 48,
+    "symbol": "Cd",
+    "name": "Cadmium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 12,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "2 (d-subshell is full)",
+      "commonIons": "Cd²⁺ (Cadmium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "112.41",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 48,
+      "electronsNeutral": 48,
+      "naturalIsotopes": [
+        {
+          "name": "Cd-110",
+          "neutron": "62n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cd-111",
+          "neutron": "63n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cd-112",
+          "neutron": "64n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cd-113",
+          "neutron": "65n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cd-114",
+          "neutron": "66n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Cd-116",
+          "neutron": "68n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹⁰ 5s²",
+        "oxidationStates": { "common": ["+2"], "possible": ["+1"] }
+      },
+      "physical": {
+        "electronegativity": 1.69,
+        "firstIonization": "868 kJ/mol",
+        "density": "8.65 g/cm³",
+        "meltingPoint": "321°C",
+        "boilingPoint": "767°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1817",
+        "discoveredBy": "Friedrich Stromeyer",
+        "namedBy": "From Latin cadmia (calamine)"
+      },
+      "stseContext": [
+        "Environmental Pollution (Ni-Cd battery disposal)",
+        "Pigments"
+      ],
+      "commonUses": [
+        "Ni-Cd Batteries (being phased out)",
+        "Solar cells (CdTe)",
+        "Pigments"
+      ],
+      "hazards": [
+        "Highly toxic",
+        "Carcinogen",
+        "Accumulates in kidneys"
+      ]
+    }
+  },
+  "49": {
+    "id": 49,
+    "symbol": "In",
+    "name": "Indium",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 13,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "3",
+      "commonIons": "In³⁺ (Indium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "114.82",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 49,
+      "electronsNeutral": 49,
+      "naturalIsotopes": [
+        {
+          "name": "In-113",
+          "neutron": "64n",
+          "percent": "Stable"
+        },
+        {
+          "name": "In-115",
+          "neutron": "66n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹⁰ 5s² 5p¹",
+        "oxidationStates": { "common": ["+3"], "possible": ["+1","+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.78,
+        "firstIonization": "558 kJ/mol",
+        "density": "7.31 g/cm³",
+        "meltingPoint": "156.6°C",
+        "boilingPoint": "2072°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1863",
+        "discoveredBy": "Ferdinand Reich & H.T. Richter",
+        "namedBy": "From Indigo spectrum line"
+      },
+      "stseContext": [
+        "Touchscreen Technology (Indium Tin Oxide films)"
+      ],
+      "commonUses": [
+        "LCD/OLED screens (ITO)",
+        "Solders",
+        "Semiconductors"
+      ],
+      "hazards": [
+        "Compounds are toxic",
+        "damage lungs/kidneys"
+      ]
+    }
+  },
+  "50": {
+    "id": 50,
+    "symbol": "Sn",
+    "name": "Tin",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 14,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "4",
+      "commonIons": "Sn²⁺ (Tin(II)), Sn⁴⁺ (Tin(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "118.71",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 50,
+      "electronsNeutral": 50,
+      "naturalIsotopes": [
+        {
+          "name": "Sn-112",
+          "neutron": "62n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sn-114",
+          "neutron": "64n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sn-115",
+          "neutron": "65n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sn-116",
+          "neutron": "66n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sn-117",
+          "neutron": "67n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sn-118",
+          "neutron": "68n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sn-119",
+          "neutron": "69n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sn-120",
+          "neutron": "70n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sn-122",
+          "neutron": "72n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sn-124",
+          "neutron": "74n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹⁰ 5s² 5p²",
+        "oxidationStates": { "common": ["+2","+4"], "possible": ["-4"] }
+      },
+      "physical": {
+        "electronegativity": 1.96,
+        "firstIonization": "709 kJ/mol",
+        "density": "7.31 g/cm³ (White Sn)",
+        "meltingPoint": "232°C",
+        "boilingPoint": "2602°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "Prehistoric (~3000 BCE)",
+        "discoveredBy": "Ancient Civilizations (Bronze Age)",
+        "namedBy": "Anglo-Saxon tin (Symbol Sn from Latin stannum)"
+      },
+      "stseContext": [
+        "Food Safety (Tin cans)",
+        "Metallurgy (Bronze/Solder)"
+      ],
+      "commonUses": [
+        "Solder (electronics)",
+        "Plating (steel cans)",
+        "Bronze alloys"
+      ],
+      "hazards": [
+        "Organic tin compounds are toxic",
+        "metal is non-toxic"
+      ]
+    }
+  },
+  "51": {
+    "id": 51,
+    "symbol": "Sb",
+    "name": "Antimony",
+    "level1_basic": {
+      "type": "Metalloid",
+      "group": 15,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "5",
+      "commonIons": "Sb³⁻ (Antimonide), Sb³⁺ (Antimony(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "121.76",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 51,
+      "electronsNeutral": 51,
+      "naturalIsotopes": [
+        {
+          "name": "Sb-121",
+          "neutron": "70n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sb-123",
+          "neutron": "72n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹⁰ 5s² 5p³",
+        "oxidationStates": { "common": ["-3","+3","+5"], "possible": ["+1"] }
+      },
+      "physical": {
+        "electronegativity": 2.05,
+        "firstIonization": "834 kJ/mol",
+        "density": "6.70 g/cm³",
+        "meltingPoint": "631°C",
+        "boilingPoint": "1587°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "~3000 BCE",
+        "discoveredBy": "Ancient Civilizations",
+        "namedBy": "Symbol Sb from Latin stibium (eyeliner)"
+      },
+      "stseContext": [
+        "Fire Safety (Flame retardants)",
+        "Lead-acid battery chemistry"
+      ],
+      "commonUses": [
+        "Flame retardants (Sb₂O₃)",
+        "Lead-acid battery hardening",
+        "Microelectronics"
+      ],
+      "hazards": [
+        "Toxic (similar to Arsenic)",
+        "causes poisoning"
+      ]
+    }
+  },
+  "52": {
+    "id": 52,
+    "symbol": "Te",
+    "name": "Tellurium",
+    "level1_basic": {
+      "type": "Metalloid",
+      "group": 16,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "6",
+      "commonIons": "Te²⁻ (Telluride)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "127.60",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 52,
+      "electronsNeutral": 52,
+      "naturalIsotopes": [
+        {
+          "name": "Te-125",
+          "neutron": "73n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Te-126",
+          "neutron": "74n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Te-128",
+          "neutron": "76n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Te-130",
+          "neutron": "78n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹⁰ 5s² 5p⁴",
+        "oxidationStates": { "common": ["-2","+4","+6"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 2.1,
+        "firstIonization": "869 kJ/mol",
+        "density": "6.24 g/cm³",
+        "meltingPoint": "450°C",
+        "boilingPoint": "988°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1782",
+        "discoveredBy": "Franz-Joseph Müller von Reichenstein",
+        "namedBy": "From Latin tellus (Earth)"
+      },
+      "stseContext": [
+        "Renewable Energy (CdTe Solar Panels)",
+        "Rewritable optical discs"
+      ],
+      "commonUses": [
+        "Solar panels",
+        "Alloys (improve machinability)",
+        "Thermoelectric devices"
+      ],
+      "hazards": [
+        "Toxic",
+        "ingestion causes garlic-like breath"
+      ]
+    }
+  },
+  "53": {
+    "id": 53,
+    "symbol": "I",
+    "name": "Iodine",
+    "level1_basic": {
+      "type": "Halogen",
+      "group": 17,
+      "period": "5",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "7",
+      "commonIons": "I⁻ (Iodide)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "126.90",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 53,
+      "electronsNeutral": 53,
+      "naturalIsotopes": [
+        {
+          "name": "I-127",
+          "neutron": "74n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹⁰ 5s² 5p⁵",
+        "oxidationStates": { "common": ["-1","+1","+5","+7"], "possible": ["+3"] }
+      },
+      "physical": {
+        "electronegativity": 2.66,
+        "firstIonization": "1008 kJ/mol",
+        "density": "4.93 g/cm³",
+        "meltingPoint": "113.7°C",
+        "boilingPoint": "184.3°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1811",
+        "discoveredBy": "Bernard Courtois",
+        "namedBy": "From Greek iodes (violet)"
+      },
+      "stseContext": [
+        "Public Health (Iodized salt prevents goiter)",
+        "Nuclear Safety (I-131 protection)"
+      ],
+      "commonUses": [
+        "Disinfectant (Betadine)",
+        "Contrast media (X-ray)",
+        "Thyroid nutrient"
+      ],
+      "hazards": [
+        "Vapors irritate eyes/lungs",
+        "stains skin"
+      ]
+    }
+  },
+  "54": {
+    "id": 54,
+    "symbol": "Xe",
+    "name": "Xenon",
+    "level1_basic": {
+      "type": "Noble Gas",
+      "group": 18,
+      "period": "5",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "8",
+      "commonIons": "None (does not form simple ions)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "131.29",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 54,
+      "electronsNeutral": 54,
+      "naturalIsotopes": [
+        {
+          "name": "Xe-124",
+          "neutron": "70n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Xe-126",
+          "neutron": "72n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Xe-128",
+          "neutron": "74n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Xe-129",
+          "neutron": "75n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Xe-130",
+          "neutron": "76n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Xe-131",
+          "neutron": "77n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Xe-132",
+          "neutron": "78n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Xe-134",
+          "neutron": "80n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Xe-136",
+          "neutron": "82n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Kr] 4d¹⁰ 5s² 5p⁶",
+        "oxidationStates": { "common": ["0"], "possible": ["+2","+4","+6","+8"] }
+      },
+      "physical": {
+        "electronegativity": 2.6,
+        "firstIonization": "1170 kJ/mol",
+        "density": "5.90 g/L",
+        "meltingPoint": "-111.8°C",
+        "boilingPoint": "-108.1°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1898",
+        "discoveredBy": "William Ramsay & Morris Travers",
+        "namedBy": "From Greek xenos (stranger)"
+      },
+      "stseContext": [
+        "Space Propulsion (Ion thrusters)",
+        "Medical Anesthesia"
+      ],
+      "commonUses": [
+        "Ion propulsion engines (satellites)",
+        "High-intensity strobe lights",
+        "General anesthetic"
+      ],
+      "hazards": [
+        "Asphyxiant",
+        "compounds (e.g., oxides) can be explosive"
+      ]
+    }
+  },
+  "55": {
+    "id": 55,
+    "symbol": "Cs",
+    "name": "Cesium",
+    "level1_basic": {
+      "type": "Alkali Metal",
+      "group": 1,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "1",
+      "commonIons": "Cs⁺ (Cesium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "132.91",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 55,
+      "electronsNeutral": 55,
+      "naturalIsotopes": [
+        {
+          "name": "Cs-133",
+          "neutron": "78n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 6s¹",
+        "oxidationStates": { "common": ["+1"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 0.79,
+        "firstIonization": "376 kJ/mol",
+        "density": "1.93 g/cm³",
+        "meltingPoint": "28.5°C [Melts near room temp]",
+        "boilingPoint": "671°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1860",
+        "discoveredBy": "Robert Bunsen & Gustav Kirchhoff",
+        "namedBy": "From Latin caesius (sky blue spectrum line)"
+      },
+      "stseContext": [
+        "Global Timekeeping (Definition of the Second based on Cs-133)"
+      ],
+      "commonUses": [
+        "Atomic clocks (GPS standard)",
+        "Drilling fluids (Cesium formate)",
+        "Photoelectric cells"
+      ],
+      "hazards": [
+        "Reacts explosively with cold water"
+      ]
+    }
+  },
+  "56": {
+    "id": 56,
+    "symbol": "Ba",
+    "name": "Barium",
+    "level1_basic": {
+      "type": "Alkaline Earth Metal",
+      "group": 2,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "2",
+      "commonIons": "Ba²⁺ (Barium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "137.33",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 56,
+      "electronsNeutral": 56,
+      "naturalIsotopes": [
+        {
+          "name": "Ba-134",
+          "neutron": "78n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ba-135",
+          "neutron": "79n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ba-136",
+          "neutron": "80n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ba-137",
+          "neutron": "81n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ba-138",
+          "neutron": "82n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 6s²",
+        "oxidationStates": { "common": ["+2"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 0.89,
+        "firstIonization": "503 kJ/mol",
+        "density": "3.62 g/cm³",
+        "meltingPoint": "727°C",
+        "boilingPoint": "1897°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1808",
+        "discoveredBy": "Humphry Davy",
+        "namedBy": "From Greek barys (heavy)"
+      },
+      "stseContext": [
+        "Medical Imaging (Barium swallow X-rays)",
+        "Oil Well Drilling"
+      ],
+      "commonUses": [
+        "Drilling muds (Barite)",
+        "Fireworks (Green color)",
+        "Medical contrast agent"
+      ],
+      "hazards": [
+        "Soluble compounds are toxic",
+        "BaSO₄ is safe (insoluble)"
+      ]
+    }
+  },
+  "57": {
+    "id": 57,
+    "symbol": "La",
+    "name": "Lanthanum",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 3,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "La³⁺ (Lanthanum)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "138.91",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 57,
+      "electronsNeutral": 57,
+      "naturalIsotopes": [
+        {
+          "name": "La-138",
+          "neutron": "81n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "La-139",
+          "neutron": "82n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 5d¹ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.1,
+        "firstIonization": "538 kJ/mol",
+        "density": "6.15 g/cm³",
+        "meltingPoint": "920°C",
+        "boilingPoint": "3464°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1839",
+        "discoveredBy": "Carl Gustaf Mosander",
+        "namedBy": "From Greek lanthanein (to lie hidden)"
+      },
+      "stseContext": [
+        "Hybrid Vehicles (NiMH batteries)"
+      ],
+      "commonUses": [
+        "Camera lenses (High refractive index glass)",
+        "Hybrid car batteries",
+        "Lighter flints"
+      ],
+      "hazards": [
+        "Low toxicity",
+        "dust is flammable"
+      ]
+    }
+  },
+  "58": {
+    "id": 58,
+    "symbol": "Ce",
+    "name": "Cerium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 4,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Ce³⁺ (Cerium(III)), Ce⁴⁺ (Cerium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "140.12",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 58,
+      "electronsNeutral": 58,
+      "naturalIsotopes": [
+        {
+          "name": "Ce-136",
+          "neutron": "78n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ce-138",
+          "neutron": "80n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ce-140",
+          "neutron": "82n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ce-142",
+          "neutron": "84n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹ 5d¹ 6s²",
+        "oxidationStates": { "common": ["+3","+4"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.12,
+        "firstIonization": "534 kJ/mol",
+        "density": "6.77 g/cm³",
+        "meltingPoint": "795°C",
+        "boilingPoint": "3443°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1803",
+        "discoveredBy": "Martin Heinrich Klaproth, Jöns Jakob Berzelius",
+        "namedBy": "From asteroid Ceres"
+      },
+      "stseContext": [
+        "Emissions Control (Diesel additives)",
+        "Self-cleaning ovens"
+      ],
+      "commonUses": [
+        "Catalytic converters",
+        "Mischmetal (lighter flints)",
+        "Glass polishing"
+      ],
+      "hazards": [
+        "Pyrophoric (sparks when struck)",
+        "low toxicity"
+      ]
+    }
+  },
+  "59": {
+    "id": 59,
+    "symbol": "Pr",
+    "name": "Praseodymium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 5,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Pr³⁺ (Praseodymium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "140.91",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 59,
+      "electronsNeutral": 59,
+      "naturalIsotopes": [
+        {
+          "name": "Pr-141",
+          "neutron": "82n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f³ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+4","+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.13,
+        "firstIonization": "527 kJ/mol",
+        "density": "6.77 g/cm³",
+        "meltingPoint": "935°C",
+        "boilingPoint": "3520°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1885",
+        "discoveredBy": "Carl Auer von Welsbach",
+        "namedBy": "From Greek prasios didymos (green twin)"
+      },
+      "stseContext": [
+        "Renewable Energy (Magnets in wind turbines)"
+      ],
+      "commonUses": [
+        "High-strength magnets (alloyed with Nd)",
+        "Didymium glass (welder's goggles)",
+        "Yellow pigments"
+      ],
+      "hazards": [
+        "Low toxicity",
+        "dust is flammable"
+      ]
+    }
+  },
+  "60": {
+    "id": 60,
+    "symbol": "Nd",
+    "name": "Neodymium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 6,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Nd³⁺ (Neodymium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "144.24",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 60,
+      "electronsNeutral": 60,
+      "naturalIsotopes": [
+        {
+          "name": "Nd-142",
+          "neutron": "82n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Nd-143",
+          "neutron": "83n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Nd-144",
+          "neutron": "84n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Nd-145",
+          "neutron": "85n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Nd-146",
+          "neutron": "86n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Nd-148",
+          "neutron": "88n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f⁴ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.14,
+        "firstIonization": "533 kJ/mol",
+        "density": "7.01 g/cm³",
+        "meltingPoint": "1024°C",
+        "boilingPoint": "3074°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1885",
+        "discoveredBy": "Carl Auer von Welsbach",
+        "namedBy": "From Greek neos didymos (new twin)"
+      },
+      "stseContext": [
+        "Green Technology (Essential for EV motors and Wind Turbines)"
+      ],
+      "commonUses": [
+        "Strongest permanent magnets (NdFeB)",
+        "Lasers (Nd:YAG)",
+        "Glass coloring (purple)"
+      ],
+      "hazards": [
+        "Dust is flammable",
+        "magnets can cause pinching injuries"
+      ]
+    }
+  },
+  "61": {
+    "id": 61,
+    "symbol": "Pm",
+    "name": "Promethium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 7,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Pm³⁺ (Promethium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "[145] (Radioactive)",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 61,
+      "electronsNeutral": 61,
+      "naturalIsotopes": [
+        {
+          "name": "Pm-145",
+          "neutron": "84n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f⁵ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.13,
+        "firstIonization": "540 kJ/mol",
+        "density": "7.26 g/cm³",
+        "meltingPoint": "1042°C",
+        "boilingPoint": "3000°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1945",
+        "discoveredBy": "Marinsky, Glendenin, Coryell",
+        "namedBy": "From Prometheus (Greek titan who stole fire)"
+      },
+      "stseContext": [
+        "Nuclear Batteries (Betavoltaics)"
+      ],
+      "commonUses": [
+        "Nuclear batteries for guided missiles/pacemakers",
+        "Luminous paint"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "62": {
+    "id": 62,
+    "symbol": "Sm",
+    "name": "Samarium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 8,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Sm²⁺ (Samarium(II)), Sm³⁺ (Samarium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "150.36",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 62,
+      "electronsNeutral": 62,
+      "naturalIsotopes": [
+        {
+          "name": "Sm-144",
+          "neutron": "82n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sm-147",
+          "neutron": "85n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Sm-149",
+          "neutron": "87n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sm-150",
+          "neutron": "88n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sm-152",
+          "neutron": "90n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Sm-154",
+          "neutron": "92n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f⁶ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.17,
+        "firstIonization": "545 kJ/mol",
+        "density": "7.52 g/cm³",
+        "meltingPoint": "1072°C",
+        "boilingPoint": "1794°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1879",
+        "discoveredBy": "Lecoq de Boisbaudran",
+        "namedBy": "From Mineral Samarskite"
+      },
+      "stseContext": [
+        "Magnet Technology (SmCo magnets)"
+      ],
+      "commonUses": [
+        "Samarium-Cobalt magnets (high temp stability)",
+        "Cancer treatment (Sm-153)"
+      ],
+      "hazards": [
+        "Low toxicity"
+      ]
+    }
+  },
+  "63": {
+    "id": 63,
+    "symbol": "Eu",
+    "name": "Europium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 9,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Eu²⁺ (Europium(II)), Eu³⁺ (Europium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "151.96",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 63,
+      "electronsNeutral": 63,
+      "naturalIsotopes": [
+        {
+          "name": "Eu-151",
+          "neutron": "88n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Eu-153",
+          "neutron": "90n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f⁷ 6s²",
+        "oxidationStates": { "common": ["+2","+3"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 1.2,
+        "firstIonization": "547 kJ/mol",
+        "density": "5.24 g/cm³",
+        "meltingPoint": "822°C",
+        "boilingPoint": "1529°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1901",
+        "discoveredBy": "Eugène-Anatole Demarçay",
+        "namedBy": "From Europe"
+      },
+      "stseContext": [
+        "Anti-counterfeiting (Glowing dyes in Euro banknotes)"
+      ],
+      "commonUses": [
+        "Red phosphors in TV screens/LEDs",
+        "Fluorescent probes"
+      ],
+      "hazards": [
+        "Reacts vividly with water",
+        "non-toxic"
+      ]
+    }
+  },
+  "64": {
+    "id": 64,
+    "symbol": "Gd",
+    "name": "Gadolinium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 10,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d + f)",
+      "commonIons": "Gd³⁺ (Gadolinium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "157.25",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 64,
+      "electronsNeutral": 64,
+      "naturalIsotopes": [
+        {
+          "name": "Gd-154",
+          "neutron": "90n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Gd-155",
+          "neutron": "91n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Gd-156",
+          "neutron": "92n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Gd-157",
+          "neutron": "93n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Gd-158",
+          "neutron": "94n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Gd-160",
+          "neutron": "96n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f⁷ 5d¹ 6s² [Stable half-shell]",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.2,
+        "firstIonization": "593 kJ/mol",
+        "density": "7.90 g/cm³",
+        "meltingPoint": "1313°C",
+        "boilingPoint": "3273°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1880",
+        "discoveredBy": "Jean Charles Galissard de Marignac",
+        "namedBy": "From Mineral Gadolinite (after Johan Gadolin)"
+      },
+      "stseContext": [
+        "Medical Imaging (MRI Contrast Agents)"
+      ],
+      "commonUses": [
+        "MRI Contrast agents (Magnevist)",
+        "Neutron shielding",
+        "Magnetic refrigeration"
+      ],
+      "hazards": [
+        "Free ion is toxic",
+        "chelated form used medically"
+      ]
+    }
+  },
+  "65": {
+    "id": 65,
+    "symbol": "Tb",
+    "name": "Terbium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 11,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Tb³⁺ (Terbium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "158.93",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 65,
+      "electronsNeutral": 65,
+      "naturalIsotopes": [
+        {
+          "name": "Tb-159",
+          "neutron": "94n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f⁹ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+4","+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.1,
+        "firstIonization": "566 kJ/mol",
+        "density": "8.23 g/cm³",
+        "meltingPoint": "1356°C",
+        "boilingPoint": "3230°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1843",
+        "discoveredBy": "Carl Gustaf Mosander",
+        "namedBy": "From Ytterby, Sweden"
+      },
+      "stseContext": [
+        "Green Energy (Low-energy lighting phosphors)"
+      ],
+      "commonUses": [
+        "Green phosphors (fluorescent lamps)",
+        "Terfenol-D (magnetostrictive alloy)"
+      ],
+      "hazards": [
+        "Low toxicity"
+      ]
+    }
+  },
+  "66": {
+    "id": 66,
+    "symbol": "Dy",
+    "name": "Dysprosium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 12,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Dy³⁺ (Dysprosium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "162.50",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 66,
+      "electronsNeutral": 66,
+      "naturalIsotopes": [
+        {
+          "name": "Dy-156",
+          "neutron": "90n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Dy-158",
+          "neutron": "92n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Dy-160",
+          "neutron": "94n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Dy-161",
+          "neutron": "95n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Dy-162",
+          "neutron": "96n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Dy-163",
+          "neutron": "97n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Dy-164",
+          "neutron": "98n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁰ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.22,
+        "firstIonization": "573 kJ/mol",
+        "density": "8.54 g/cm³",
+        "meltingPoint": "1412°C",
+        "boilingPoint": "2567°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1886",
+        "discoveredBy": "Lecoq de Boisbaudran",
+        "namedBy": "From Greek dysprositos (hard to get)"
+      },
+      "stseContext": [
+        "Electric Vehicles (Magnet additives)"
+      ],
+      "commonUses": [
+        "Neodymium magnet additive (increases heat resistance)",
+        "Control rods"
+      ],
+      "hazards": [
+        "Low toxicity",
+        "dust is flammable"
+      ]
+    }
+  },
+  "67": {
+    "id": 67,
+    "symbol": "Ho",
+    "name": "Holmium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 13,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Ho³⁺ (Holmium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "164.93",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 67,
+      "electronsNeutral": 67,
+      "naturalIsotopes": [
+        {
+          "name": "Ho-165",
+          "neutron": "98n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹¹ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.23,
+        "firstIonization": "581 kJ/mol",
+        "density": "8.80 g/cm³",
+        "meltingPoint": "1474°C",
+        "boilingPoint": "2700°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1878",
+        "discoveredBy": "Jacques-Louis Soret",
+        "namedBy": "From Holmia (Latin for Stockholm)"
+      },
+      "stseContext": [
+        "Medical Surgery (Ho:YAG Lasers)"
+      ],
+      "commonUses": [
+        "Surgical lasers (kidney stones)",
+        "Strongest magnetic fields (magnetic flux concentrator)"
+      ],
+      "hazards": [
+        "Low toxicity"
+      ]
+    }
+  },
+  "68": {
+    "id": 68,
+    "symbol": "Er",
+    "name": "Erbium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 14,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Er³⁺ (Erbium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "167.26",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 68,
+      "electronsNeutral": 68,
+      "naturalIsotopes": [
+        {
+          "name": "Er-162",
+          "neutron": "94n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Er-164",
+          "neutron": "96n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Er-166",
+          "neutron": "98n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Er-167",
+          "neutron": "99n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Er-168",
+          "neutron": "100n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Er-170",
+          "neutron": "102n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹² 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.24,
+        "firstIonization": "589 kJ/mol",
+        "density": "9.07 g/cm³",
+        "meltingPoint": "1529°C",
+        "boilingPoint": "2868°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1843",
+        "discoveredBy": "Carl Gustaf Mosander",
+        "namedBy": "From Ytterby, Sweden"
+      },
+      "stseContext": [
+        "Telecommunications (Fiber optic signal amplifiers)"
+      ],
+      "commonUses": [
+        "EDFA (Erbium-Doped Fiber Amplifiers)",
+        "Dermatology lasers",
+        "Pink glass coloring"
+      ],
+      "hazards": [
+        "Low toxicity"
+      ]
+    }
+  },
+  "69": {
+    "id": 69,
+    "symbol": "Tm",
+    "name": "Thulium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 15,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Tm³⁺ (Thulium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "168.93",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 69,
+      "electronsNeutral": 69,
+      "naturalIsotopes": [
+        {
+          "name": "Tm-169",
+          "neutron": "100n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹³ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.25,
+        "firstIonization": "597 kJ/mol",
+        "density": "9.32 g/cm³",
+        "meltingPoint": "1545°C",
+        "boilingPoint": "1950°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1879",
+        "discoveredBy": "Per Teodor Cleve",
+        "namedBy": "From Thule (mythical North)"
+      },
+      "stseContext": [
+        "Portable X-rays (Tm-170 source)"
+      ],
+      "commonUses": [
+        "Portable X-ray machines",
+        "Lasers",
+        "Euro banknotes"
+      ],
+      "hazards": [
+        "Low toxicity"
+      ]
+    }
+  },
+  "70": {
+    "id": 70,
+    "symbol": "Yb",
+    "name": "Ytterbium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 16,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Yb²⁺ (Ytterbium(II)), Yb³⁺ (Ytterbium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "173.05",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 70,
+      "electronsNeutral": 70,
+      "naturalIsotopes": [
+        {
+          "name": "Yb-168",
+          "neutron": "98n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Yb-170",
+          "neutron": "100n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Yb-171",
+          "neutron": "101n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Yb-172",
+          "neutron": "102n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Yb-173",
+          "neutron": "103n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Yb-174",
+          "neutron": "104n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Yb-176",
+          "neutron": "106n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 6s²",
+        "oxidationStates": { "common": ["+2","+3"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 1.1,
+        "firstIonization": "603 kJ/mol",
+        "density": "6.90 g/cm³",
+        "meltingPoint": "824°C",
+        "boilingPoint": "1196°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1878",
+        "discoveredBy": "Jean Charles Galissard de Marignac",
+        "namedBy": "From Ytterby, Sweden"
+      },
+      "stseContext": [
+        "Atomic Clocks (World's most stable clocks)"
+      ],
+      "commonUses": [
+        "Fiber lasers",
+        "Stress gauges",
+        "Atomic clocks"
+      ],
+      "hazards": [
+        "Eye/skin irritant"
+      ]
+    }
+  },
+  "71": {
+    "id": 71,
+    "symbol": "Lu",
+    "name": "Lutetium",
+    "level1_basic": {
+      "type": "Lanthanide",
+      "group": 17,
+      "period": "9",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Lu³⁺ (Lutetium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "174.97",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 71,
+      "electronsNeutral": 71,
+      "naturalIsotopes": [
+        {
+          "name": "Lu-175",
+          "neutron": "104n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Lu-176",
+          "neutron": "105n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d¹ 6s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.27,
+        "firstIonization": "524 kJ/mol",
+        "density": "9.84 g/cm³",
+        "meltingPoint": "1663°C",
+        "boilingPoint": "3402°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1907",
+        "discoveredBy": "Georges Urbain",
+        "namedBy": "From Lutetia (Paris)"
+      },
+      "stseContext": [
+        "Cancer Therapy (Lu-177 radiotherapy)",
+        "Petroleum cracking"
+      ],
+      "commonUses": [
+        "PET scan detectors (LSO crystals)",
+        "Cancer treatment",
+        "Catalysts"
+      ],
+      "hazards": [
+        "Low toxicity"
+      ]
+    }
+  },
+  "72": {
+    "id": 72,
+    "symbol": "Hf",
+    "name": "Hafnium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 4,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Hf⁴⁺ (Hafnium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "178.49",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 72,
+      "electronsNeutral": 72,
+      "naturalIsotopes": [
+        {
+          "name": "Hf-176",
+          "neutron": "104n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hf-177",
+          "neutron": "105n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hf-178",
+          "neutron": "106n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hf-179",
+          "neutron": "107n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hf-180",
+          "neutron": "108n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d² 6s²",
+        "oxidationStates": { "common": ["+4"], "possible": ["+3","+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.3,
+        "firstIonization": "659 kJ/mol",
+        "density": "13.31 g/cm³",
+        "meltingPoint": "2233°C",
+        "boilingPoint": "4603°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1923",
+        "discoveredBy": "Dirk Coster & George de Hevesy",
+        "namedBy": "From Hafnia (Copenhagen)"
+      },
+      "stseContext": [
+        "Nuclear Reactors (Control rods)",
+        "Microprocessors"
+      ],
+      "commonUses": [
+        "Nuclear control rods (absorbs neutrons)",
+        "Plasma cutting tips",
+        "Intel chips (high-k dielectric)"
+      ],
+      "hazards": [
+        "Fine dust is pyrophoric"
+      ]
+    }
+  },
+  "73": {
+    "id": 73,
+    "symbol": "Ta",
+    "name": "Tantalum",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 5,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "None"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "180.95",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 73,
+      "electronsNeutral": 73,
+      "naturalIsotopes": [
+        {
+          "name": "Ta-180",
+          "neutron": "107n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ta-181",
+          "neutron": "108n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d³ 6s²",
+        "oxidationStates": { "common": ["+5"], "possible": ["+4","+3"] }
+      },
+      "physical": {
+        "electronegativity": 1.5,
+        "firstIonization": "761 kJ/mol",
+        "density": "16.69 g/cm³",
+        "meltingPoint": "3017°C",
+        "boilingPoint": "5458°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1802",
+        "discoveredBy": "Anders Gustaf Ekeberg",
+        "namedBy": "From Tantalus (Greek mythology)"
+      },
+      "stseContext": [
+        "Electronics Supply Chain (\"Conflict mineral\")"
+      ],
+      "commonUses": [
+        "Capacitors in smartphones/laptops",
+        "Surgical implants (inert)"
+      ],
+      "hazards": [
+        "Low toxicity",
+        "biocompatible"
+      ]
+    }
+  },
+  "74": {
+    "id": 74,
+    "symbol": "W",
+    "name": "Tungsten",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 6,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "W⁴⁺ (Tungsten(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "183.84",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 74,
+      "electronsNeutral": 74,
+      "naturalIsotopes": [
+        {
+          "name": "W-182",
+          "neutron": "108n",
+          "percent": "Stable"
+        },
+        {
+          "name": "W-183",
+          "neutron": "109n",
+          "percent": "Stable"
+        },
+        {
+          "name": "W-184",
+          "neutron": "110n",
+          "percent": "Stable"
+        },
+        {
+          "name": "W-186",
+          "neutron": "112n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d⁴ 6s²",
+        "oxidationStates": { "common": ["+6"], "possible": ["+5","+4","+3","+2"] }
+      },
+      "physical": {
+        "electronegativity": 2.36,
+        "firstIonization": "770 kJ/mol",
+        "density": "19.25 g/cm³",
+        "meltingPoint": "3422°C [Highest of all metals]",
+        "boilingPoint": "5930°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1783",
+        "discoveredBy": "Juan José & Fausto Elhuyar",
+        "namedBy": "Swedish tung sten (heavy stone); Symbol W from Wolfram"
+      },
+      "stseContext": [
+        "Lighting (Incandescent filaments)",
+        "Military (Kinetic bombardment)"
+      ],
+      "commonUses": [
+        "Light bulb filaments",
+        "TIG welding",
+        "Armor-piercing ammunition"
+      ],
+      "hazards": [
+        "Dust irritates lungs",
+        "largely non-toxic"
+      ]
+    }
+  },
+  "75": {
+    "id": 75,
+    "symbol": "Re",
+    "name": "Rhenium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 7,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Re⁴⁺ (Rhenium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "186.21",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 75,
+      "electronsNeutral": 75,
+      "naturalIsotopes": [
+        {
+          "name": "Re-185",
+          "neutron": "110n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Re-187",
+          "neutron": "112n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d⁵ 6s²",
+        "oxidationStates": { "common": ["+7"], "possible": ["+6","+5","+4","+3","+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.9,
+        "firstIonization": "760 kJ/mol",
+        "density": "21.02 g/cm³",
+        "meltingPoint": "3186°C",
+        "boilingPoint": "5596°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1925",
+        "discoveredBy": "Walter Noddack, Ida Tacke, Otto Berg",
+        "namedBy": "From Rhenus (Rhine River)"
+      },
+      "stseContext": [
+        "Aerospace (Jet engine superalloys)"
+      ],
+      "commonUses": [
+        "Jet engine turbine blades",
+        "Thermocouples",
+        "Catalysts"
+      ],
+      "hazards": [
+        "Low toxicity"
+      ]
+    }
+  },
+  "76": {
+    "id": 76,
+    "symbol": "Os",
+    "name": "Osmium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 8,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Os⁴⁺ (Osmium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "190.23",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 76,
+      "electronsNeutral": 76,
+      "naturalIsotopes": [
+        {
+          "name": "Os-186",
+          "neutron": "110n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Os-187",
+          "neutron": "111n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Os-188",
+          "neutron": "112n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Os-189",
+          "neutron": "113n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Os-190",
+          "neutron": "114n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Os-192",
+          "neutron": "116n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d⁶ 6s²",
+        "oxidationStates": { "common": ["+4","+8"], "possible": ["+2","+3","+6","+7"] }
+      },
+      "physical": {
+        "electronegativity": 2.2,
+        "firstIonization": "840 kJ/mol",
+        "density": "22.59 g/cm³ [Densest element]",
+        "meltingPoint": "3033°C",
+        "boilingPoint": "5012°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1803",
+        "discoveredBy": "Smithson Tennant",
+        "namedBy": "From Greek osme (smell)"
+      },
+      "stseContext": [
+        "Density limits (Densest naturally occurring substance)"
+      ],
+      "commonUses": [
+        "Fountain pen tips",
+        "Electrical contacts",
+        "Fingerprint detection"
+      ],
+      "hazards": [
+        "OsO₄ is extremely toxic and volatile (causes blindness)"
+      ]
+    }
+  },
+  "77": {
+    "id": 77,
+    "symbol": "Ir",
+    "name": "Iridium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 9,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Ir³⁺ (Iridium(III)), Ir⁴⁺ (Iridium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "192.22",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 77,
+      "electronsNeutral": 77,
+      "naturalIsotopes": [
+        {
+          "name": "Ir-191",
+          "neutron": "114n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Ir-193",
+          "neutron": "116n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d⁷ 6s²",
+        "oxidationStates": { "common": ["+3","+4"], "possible": ["+1","+2","+5","+6"] }
+      },
+      "physical": {
+        "electronegativity": 2.2,
+        "firstIonization": "880 kJ/mol",
+        "density": "22.56 g/cm³ [2nd densest]",
+        "meltingPoint": "2446°C",
+        "boilingPoint": "4428°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1803",
+        "discoveredBy": "Smithson Tennant",
+        "namedBy": "From Greek iris (rainbow, due to salt colors)"
+      },
+      "stseContext": [
+        "Geology (K-Pg boundary layer evidence for Dinosaur extinction)"
+      ],
+      "commonUses": [
+        "Spark plugs",
+        "Crucibles",
+        "Standard Metre Bar (Pt-Ir alloy)"
+      ],
+      "hazards": [
+        "Low toxicity",
+        "dust is flammable"
+      ]
+    }
+  },
+  "78": {
+    "id": 78,
+    "symbol": "Pt",
+    "name": "Platinum",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 10,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Pt²⁺ (Platinum(II)), Pt⁴⁺ (Platinum(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "195.08",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 78,
+      "electronsNeutral": 78,
+      "naturalIsotopes": [
+        {
+          "name": "Pt-190",
+          "neutron": "112n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Pt-192",
+          "neutron": "114n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pt-194",
+          "neutron": "116n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pt-195",
+          "neutron": "117n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pt-196",
+          "neutron": "118n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pt-198",
+          "neutron": "120n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d⁹ 6s¹ [Exception]",
+        "oxidationStates": { "common": ["+2","+4"], "possible": ["0","+1","+3","+6"] }
+      },
+      "physical": {
+        "electronegativity": 2.28,
+        "firstIonization": "870 kJ/mol",
+        "density": "21.45 g/cm³",
+        "meltingPoint": "1768°C",
+        "boilingPoint": "3825°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1735",
+        "discoveredBy": "Antonio de Ulloa",
+        "namedBy": "From Spanish platina (little silver)"
+      },
+      "stseContext": [
+        "Green Technology (Hydrogen Fuel Cells)",
+        "Medicine (Chemotherapy)"
+      ],
+      "commonUses": [
+        "Catalytic converters",
+        "Jewelry",
+        "Pacemaker electrodes",
+        "Cisplatin (cancer drug)"
+      ],
+      "hazards": [
+        "Metallic Pt is inert",
+        "salts can cause asthma"
+      ]
+    }
+  },
+  "79": {
+    "id": 79,
+    "symbol": "Au",
+    "name": "Gold",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 11,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Au⁺ (Gold(I)), Au³⁺ (Gold(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "196.97",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 79,
+      "electronsNeutral": 79,
+      "naturalIsotopes": [
+        {
+          "name": "Au-197",
+          "neutron": "118n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d¹⁰ 6s¹ [Exception]",
+        "oxidationStates": { "common": ["+1","+3"], "possible": ["+2","+5"] }
+      },
+      "physical": {
+        "electronegativity": 2.54,
+        "firstIonization": "890 kJ/mol",
+        "density": "19.30 g/cm³",
+        "meltingPoint": "1064°C",
+        "boilingPoint": "2970°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "Prehistoric (~6000 BCE)",
+        "discoveredBy": "Ancient Civilizations",
+        "namedBy": "Anglo-Saxon gold (Symbol Au from Latin aurum)"
+      },
+      "stseContext": [
+        "Economics (Gold Standard)",
+        "Electronics (Corrosion-free contacts)"
+      ],
+      "commonUses": [
+        "Currency/Jewelry",
+        "Electronics plating",
+        "Radiation shielding"
+      ],
+      "hazards": [
+        "Non-toxic (edible in leaf form)"
+      ]
+    }
+  },
+  "80": {
+    "id": 80,
+    "symbol": "Hg",
+    "name": "Mercury",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 12,
+      "period": "6",
+      "phaseAtSTP": "Liquid",
+      "valenceElectrons": "2",
+      "commonIons": "Hg₂²⁺ (Mercury(I)), Hg²⁺ (Mercury(II))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "200.59",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 80,
+      "electronsNeutral": 80,
+      "naturalIsotopes": [
+        {
+          "name": "Hg-196",
+          "neutron": "116n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hg-198",
+          "neutron": "118n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hg-199",
+          "neutron": "119n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hg-200",
+          "neutron": "120n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hg-201",
+          "neutron": "121n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hg-202",
+          "neutron": "122n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Hg-204",
+          "neutron": "124n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d¹⁰ 6s²",
+        "oxidationStates": { "common": ["+1","+2"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 2,
+        "firstIonization": "1007 kJ/mol",
+        "density": "13.53 g/cm³",
+        "meltingPoint": "-38.8°C",
+        "boilingPoint": "356.7°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "~1500 BCE",
+        "discoveredBy": "Ancient Egyptians/Chinese",
+        "namedBy": "From Planet Mercury (Symbol Hg from hydrargyrum)"
+      },
+      "stseContext": [
+        "Environmental Toxicology (Minamata disease)",
+        "Bioaccumulation in fish"
+      ],
+      "commonUses": [
+        "Thermometers (historical)",
+        "Dental amalgam",
+        "Fluorescent bulbs"
+      ],
+      "hazards": [
+        "Highly toxic neurotoxin (vapor and compounds)"
+      ]
+    }
+  },
+  "81": {
+    "id": 81,
+    "symbol": "Tl",
+    "name": "Thallium",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 13,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "3 (acts like 1)",
+      "commonIons": "Tl⁺ (Thallium(I)), Tl³⁺ (Thallium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "204.38",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 81,
+      "electronsNeutral": 81,
+      "naturalIsotopes": [
+        {
+          "name": "Tl-203",
+          "neutron": "122n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Tl-205",
+          "neutron": "124n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹",
+        "oxidationStates": { "common": ["+1","+3"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 1.62,
+        "firstIonization": "589 kJ/mol",
+        "density": "11.85 g/cm³",
+        "meltingPoint": "304°C",
+        "boilingPoint": "1473°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1861",
+        "discoveredBy": "William Crookes",
+        "namedBy": "From Greek thallos (green twig)"
+      },
+      "stseContext": [
+        "Forensic Science (\"The Poisoner's Poison\")"
+      ],
+      "commonUses": [
+        "Rat poison (banned)",
+        "Electronics",
+        "Cardiac stress tests (Tl-201)"
+      ],
+      "hazards": [
+        "Extremely toxic",
+        "accumulates in body"
+      ]
+    }
+  },
+  "82": {
+    "id": 82,
+    "symbol": "Pb",
+    "name": "Lead",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 14,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "4",
+      "commonIons": "Pb²⁺ (Lead(II)), Pb⁴⁺ (Lead(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "207.2",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 82,
+      "electronsNeutral": 82,
+      "naturalIsotopes": [
+        {
+          "name": "Pb-204",
+          "neutron": "122n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pb-206",
+          "neutron": "124n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pb-207",
+          "neutron": "125n",
+          "percent": "Stable"
+        },
+        {
+          "name": "Pb-208",
+          "neutron": "126n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²",
+        "oxidationStates": { "common": ["+2","+4"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 2.33,
+        "firstIonization": "716 kJ/mol",
+        "density": "11.34 g/cm³",
+        "meltingPoint": "327.5°C",
+        "boilingPoint": "1749°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "~7000 BCE",
+        "discoveredBy": "Ancient Civilizations",
+        "namedBy": "Anglo-Saxon lead (Symbol Pb from Latin plumbum)"
+      },
+      "stseContext": [
+        "Public Health (Flint Water Crisis)",
+        "Environmental banning (Leaded gasoline)"
+      ],
+      "commonUses": [
+        "Car batteries (Pb-acid)",
+        "Radiation shielding",
+        "Bullets"
+      ],
+      "hazards": [
+        "Potent neurotoxin",
+        "affects IQ in children"
+      ]
+    }
+  },
+  "83": {
+    "id": 83,
+    "symbol": "Bi",
+    "name": "Bismuth",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 15,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "5",
+      "commonIons": "Bi³⁺ (Bismuth(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "208.98",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 83,
+      "electronsNeutral": 83,
+      "naturalIsotopes": [
+        {
+          "name": "Bi-209",
+          "neutron": "126n",
+          "percent": "Stable"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³",
+        "oxidationStates": { "common": ["+3","+5"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 2.02,
+        "firstIonization": "703 kJ/mol",
+        "density": "9.78 g/cm³",
+        "meltingPoint": "271.4°C",
+        "boilingPoint": "1564°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "~1000 CE",
+        "discoveredBy": "Alchemists (confused with Pb/Sn)",
+        "namedBy": "German Wismut (white mass)"
+      },
+      "stseContext": [
+        "Green Chemistry (Non-toxic lead replacement)"
+      ],
+      "commonUses": [
+        "Pepto-Bismol (Stomach relief)",
+        "Lead-free shot/solder",
+        "Fire sprinklers"
+      ],
+      "hazards": [
+        "Low toxicity (unusual for heavy metals)"
+      ]
+    }
+  },
+  "84": {
+    "id": 84,
+    "symbol": "Po",
+    "name": "Polonium",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 16,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "6",
+      "commonIons": "Po²⁺ (Polonium(II)), Po⁴⁺ (Polonium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "[209] (Radioactive)",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 84,
+      "electronsNeutral": 84,
+      "naturalIsotopes": [
+        {
+          "name": "Po-209",
+          "neutron": "125n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Po-210",
+          "neutron": "126n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴",
+        "oxidationStates": { "common": ["-2","+4"], "possible": ["+2","+6"] }
+      },
+      "physical": {
+        "electronegativity": 2,
+        "firstIonization": "812 kJ/mol",
+        "density": "9.20 g/cm³",
+        "meltingPoint": "254°C",
+        "boilingPoint": "962°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1898",
+        "discoveredBy": "Marie & Pierre Curie",
+        "namedBy": "From Poland (Marie's homeland)"
+      },
+      "stseContext": [
+        "Nuclear Assassination (Litvinenko poisoning)",
+        "Static elimination"
+      ],
+      "commonUses": [
+        "Anti-static brushes",
+        "Heat source in satellites (rare)"
+      ],
+      "hazards": [
+        "Extremely radiotoxic (alpha emitter)",
+        "fatal in micrograms"
+      ]
+    }
+  },
+  "85": {
+    "id": 85,
+    "symbol": "At",
+    "name": "Astatine",
+    "level1_basic": {
+      "type": "Halogen",
+      "group": 17,
+      "period": "6",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "7",
+      "commonIons": "At⁻ (Astatide)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "[210] (Radioactive)",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 85,
+      "electronsNeutral": 85,
+      "naturalIsotopes": [
+        {
+          "name": "At-210",
+          "neutron": "125n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "At-211",
+          "neutron": "126n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵",
+        "oxidationStates": { "common": ["-1"], "possible": ["+1","+3","+5","+7"] }
+      },
+      "physical": {
+        "electronegativity": 2.2,
+        "firstIonization": "899 kJ/mol (est)",
+        "density": "~6.35 g/cm³",
+        "meltingPoint": "302°C (est)",
+        "boilingPoint": "337°C (est)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1940",
+        "discoveredBy": "Dale R. Corson, Kenneth Ross MacKenzie, Emilio Segrè",
+        "namedBy": "From Greek astatos (unstable)"
+      },
+      "stseContext": [
+        "Targeted Alpha Therapy (Cancer treatment research)"
+      ],
+      "commonUses": [
+        "Medical research only (rarest natural element)"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "86": {
+    "id": 86,
+    "symbol": "Rn",
+    "name": "Radon",
+    "level1_basic": {
+      "type": "Noble Gas",
+      "group": 18,
+      "period": "6",
+      "phaseAtSTP": "Gas",
+      "valenceElectrons": "8",
+      "commonIons": "None (does not form simple ions)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "[222] (Radioactive)",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 86,
+      "electronsNeutral": 86,
+      "naturalIsotopes": [
+        {
+          "name": "Rn-211",
+          "neutron": "125n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Rn-220",
+          "neutron": "134n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Rn-222",
+          "neutron": "136n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶",
+        "oxidationStates": { "common": ["0"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "1037 kJ/mol",
+        "density": "9.73 g/L",
+        "meltingPoint": "-71°C",
+        "boilingPoint": "-61.7°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1900",
+        "discoveredBy": "Friedrich Ernst Dorn",
+        "namedBy": "Derived from Radium"
+      },
+      "stseContext": [
+        "Indoor Air Quality (Lung cancer risk in basements)"
+      ],
+      "commonUses": [
+        "Radiation therapy (historical)",
+        "Earthquake prediction research"
+      ],
+      "hazards": [
+        "Radioactive gas",
+        "carcinogen via inhalation"
+      ]
+    }
+  },
+  "87": {
+    "id": 87,
+    "symbol": "Fr",
+    "name": "Francium",
+    "level1_basic": {
+      "type": "Alkali Metal",
+      "group": 1,
+      "period": "7",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "1",
+      "commonIons": "Fr⁺ (Francium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "[223] (Radioactive)",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 87,
+      "electronsNeutral": 87,
+      "naturalIsotopes": [
+        {
+          "name": "Fr-223",
+          "neutron": "136n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 7s¹",
+        "oxidationStates": { "common": ["+1"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 0.79,
+        "firstIonization": "380 kJ/mol",
+        "density": "~2.48 g/cm³ (predicted)",
+        "meltingPoint": "~27°C (predicted)",
+        "boilingPoint": "~677°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1939",
+        "discoveredBy": "Marguerite Perey",
+        "namedBy": "From France"
+      },
+      "stseContext": [
+        "Fundamental Physics (Parity violation studies)"
+      ],
+      "commonUses": [
+        "Research only (due to extreme scarcity and radioactivity)"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "88": {
+    "id": 88,
+    "symbol": "Ra",
+    "name": "Radium",
+    "level1_basic": {
+      "type": "Alkaline Earth Metal",
+      "group": 2,
+      "period": "7",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "2",
+      "commonIons": "Ra²⁺ (Radium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "[226] (Radioactive)",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 88,
+      "electronsNeutral": 88,
+      "naturalIsotopes": [
+        {
+          "name": "Ra-223",
+          "neutron": "135n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Ra-224",
+          "neutron": "136n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Ra-226",
+          "neutron": "138n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Ra-228",
+          "neutron": "140n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 7s²",
+        "oxidationStates": { "common": ["+2"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 0.9,
+        "firstIonization": "509 kJ/mol",
+        "density": "5.50 g/cm³",
+        "meltingPoint": "700°C",
+        "boilingPoint": "1737°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1898",
+        "discoveredBy": "Marie & Pierre Curie",
+        "namedBy": "Latin radius (ray)"
+      },
+      "stseContext": [
+        "Labor Rights (\"Radium Girls\" poisoning cases)",
+        "History of Oncology"
+      ],
+      "commonUses": [
+        "Historical glow-in-the-dark paint (banned)",
+        "Cancer treatment (Ra-223)"
+      ],
+      "hazards": [
+        "Highly radiotoxic bone seeker (mimics Calcium)"
+      ]
+    }
+  },
+  "89": {
+    "id": 89,
+    "symbol": "Ac",
+    "name": "Actinium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 3,
+      "period": "7",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Ac³⁺ (Actinium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "[227] (Radioactive)",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 89,
+      "electronsNeutral": 89,
+      "naturalIsotopes": [
+        {
+          "name": "Ac-227",
+          "neutron": "138n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 6d¹ 7s²",
+        "oxidationStates": { "common": ["+3"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 1.1,
+        "firstIonization": "499 kJ/mol",
+        "density": "10.07 g/cm³",
+        "meltingPoint": "1050°C",
+        "boilingPoint": "3198°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1899",
+        "discoveredBy": "André-Louis Debierne",
+        "namedBy": "Greek aktis (ray)"
+      },
+      "stseContext": [
+        "Targeted Alpha Therapy (TAT) for cancer"
+      ],
+      "commonUses": [
+        "Neutron source",
+        "Immunotherapy (Ac-225)"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "90": {
+    "id": 90,
+    "symbol": "Th",
+    "name": "Thorium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 4,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d + f)",
+      "commonIons": "Th⁴⁺ (Thorium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "232.04",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 90,
+      "electronsNeutral": 90,
+      "naturalIsotopes": [
+        {
+          "name": "Th-232",
+          "neutron": "142n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 6d² 7s²",
+        "oxidationStates": { "common": ["+4"], "possible": ["+3"] }
+      },
+      "physical": {
+        "electronegativity": 1.3,
+        "firstIonization": "587 kJ/mol",
+        "density": "11.72 g/cm³",
+        "meltingPoint": "1750°C",
+        "boilingPoint": "4788°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1829",
+        "discoveredBy": "Jöns Jakob Berzelius",
+        "namedBy": "Thor (Norse god of thunder)"
+      },
+      "stseContext": [
+        "Future Energy (Thorium molten salt reactors)"
+      ],
+      "commonUses": [
+        "Gas lantern mantles",
+        "TIG welding electrodes",
+        "Nuclear fuel potential"
+      ],
+      "hazards": [
+        "Low radioactivity",
+        "heavy metal toxicity"
+      ]
+    }
+  },
+  "91": {
+    "id": 91,
+    "symbol": "Pa",
+    "name": "Protactinium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 5,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d + f)",
+      "commonIons": "Pa⁴⁺ (Protactinium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "231.04",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 91,
+      "electronsNeutral": 91,
+      "naturalIsotopes": [
+        {
+          "name": "Pa-231",
+          "neutron": "140n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f² 6d¹ 7s²",
+        "oxidationStates": { "common": ["+5"], "possible": ["+4","+3"] }
+      },
+      "physical": {
+        "electronegativity": 1.5,
+        "firstIonization": "568 kJ/mol",
+        "density": "15.37 g/cm³",
+        "meltingPoint": "1568°C",
+        "boilingPoint": "4027°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1913",
+        "discoveredBy": "Fajans & Göhring",
+        "namedBy": "Greek protos (first) + actinium"
+      },
+      "stseContext": [
+        "Radiometric dating (Protactinium-Thorium dating)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Highly toxic and radioactive"
+      ]
+    }
+  },
+  "92": {
+    "id": 92,
+    "symbol": "U",
+    "name": "Uranium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 6,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d + f)",
+      "commonIons": "U³⁺ (Uranium(III)), U⁴⁺ (Uranium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "238.03",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 92,
+      "electronsNeutral": 92,
+      "naturalIsotopes": [
+        {
+          "name": "U-235",
+          "neutron": "143n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "U-238",
+          "neutron": "146n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f³ 6d¹ 7s²",
+        "oxidationStates": { "common": ["+6","+4"], "possible": ["+5","+3"] }
+      },
+      "physical": {
+        "electronegativity": 1.38,
+        "firstIonization": "598 kJ/mol",
+        "density": "19.10 g/cm³",
+        "meltingPoint": "1132°C",
+        "boilingPoint": "4131°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1789",
+        "discoveredBy": "Martin Heinrich Klaproth",
+        "namedBy": "Planet Uranus"
+      },
+      "stseContext": [
+        "Nuclear Age (Fission power, Atomic weapons)",
+        "Geothermal heat (Earth's core)"
+      ],
+      "commonUses": [
+        "Nuclear fuel",
+        "Armor plating (Depleted U)",
+        "Yellow glass (historical)"
+      ],
+      "hazards": [
+        "Radiotoxic and chemotoxic (kidney damage)"
+      ]
+    }
+  },
+  "93": {
+    "id": 93,
+    "symbol": "Np",
+    "name": "Neptunium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 7,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d + f)",
+      "commonIons": "Np³⁺ (Neptunium(III)), Np⁴⁺ (Neptunium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "237",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 93,
+      "electronsNeutral": 93,
+      "naturalIsotopes": [
+        {
+          "name": "Np-237",
+          "neutron": "144n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f⁴ 6d¹ 7s²",
+        "oxidationStates": { "common": ["+5"], "possible": ["+3","+4","+6","+7"] }
+      },
+      "physical": {
+        "electronegativity": 1.36,
+        "firstIonization": "605 kJ/mol",
+        "density": "20.25 g/cm³",
+        "meltingPoint": "644°C",
+        "boilingPoint": "3902°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1940",
+        "discoveredBy": "McMillan & Abelson",
+        "namedBy": "Planet Neptune"
+      },
+      "stseContext": [
+        "First transuranic element"
+      ],
+      "commonUses": [
+        "Precursor to Pu-238 production; Neutron detectors"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "94": {
+    "id": 94,
+    "symbol": "Pu",
+    "name": "Plutonium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 8,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Pu³⁺ (Plutonium(III)), Pu⁴⁺ (Plutonium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "244",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 94,
+      "electronsNeutral": 94,
+      "naturalIsotopes": [
+        {
+          "name": "Pu-239",
+          "neutron": "145n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Pu-244",
+          "neutron": "150n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f⁶ 7s²",
+        "oxidationStates": { "common": ["+4"], "possible": ["+3","+5","+6","+7"] }
+      },
+      "physical": {
+        "electronegativity": 1.28,
+        "firstIonization": "585 kJ/mol",
+        "density": "19.82 g/cm³",
+        "meltingPoint": "640°C",
+        "boilingPoint": "3228°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1940",
+        "discoveredBy": "Seaborg, McMillan, Kennedy, Wahl",
+        "namedBy": "Planet Pluto"
+      },
+      "stseContext": [
+        "Global Security (Nuclear non-proliferation)",
+        "Space Exploration (RTG batteries)"
+      ],
+      "commonUses": [
+        "Nuclear weapons",
+        "RTG power for spacecraft (Voyager/Mars rovers)"
+      ],
+      "hazards": [
+        "Extremely radiotoxic",
+        "criticality hazard"
+      ]
+    }
+  },
+  "95": {
+    "id": 95,
+    "symbol": "Am",
+    "name": "Americium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 9,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Am³⁺ (Americium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "243",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 95,
+      "electronsNeutral": 95,
+      "naturalIsotopes": [
+        {
+          "name": "Am-241",
+          "neutron": "146n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Am-243",
+          "neutron": "148n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f⁷ 7s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2","+4","+5","+6"] }
+      },
+      "physical": {
+        "electronegativity": 1.13,
+        "firstIonization": "578 kJ/mol",
+        "density": "12.00 g/cm³",
+        "meltingPoint": "1176°C",
+        "boilingPoint": "2607°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1944",
+        "discoveredBy": "Glenn T. Seaborg et al.",
+        "namedBy": "The Americas"
+      },
+      "stseContext": [
+        "Domestic Safety (Ionization smoke detectors)"
+      ],
+      "commonUses": [
+        "Smoke detectors (Am-241)",
+        "Neutron sources"
+      ],
+      "hazards": [
+        "Radioactive (accumulates in bones)"
+      ]
+    }
+  },
+  "96": {
+    "id": 96,
+    "symbol": "Cm",
+    "name": "Curium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 10,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + d + f)",
+      "commonIons": "Cm³⁺ (Curium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "247",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 96,
+      "electronsNeutral": 96,
+      "naturalIsotopes": [
+        {
+          "name": "Cm-244",
+          "neutron": "148n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Cm-247",
+          "neutron": "151n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f⁷ 6d¹ 7s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2","+4"] }
+      },
+      "physical": {
+        "electronegativity": 1.28,
+        "firstIonization": "581 kJ/mol",
+        "density": "13.51 g/cm³",
+        "meltingPoint": "1340°C",
+        "boilingPoint": "3110°C"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1944",
+        "discoveredBy": "Seaborg, James, Ghiorso",
+        "namedBy": "Marie & Pierre Curie"
+      },
+      "stseContext": [
+        "Space Exploration (Alpha particle X-ray Spectrometers)"
+      ],
+      "commonUses": [
+        "Alpha source in Mars Rovers (APXS)"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "97": {
+    "id": 97,
+    "symbol": "Bk",
+    "name": "Berkelium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 11,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Bk³⁺ (Berkelium(III)), Bk⁴⁺ (Berkelium(IV))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "247",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 97,
+      "electronsNeutral": 97,
+      "naturalIsotopes": [
+        {
+          "name": "Bk-247",
+          "neutron": "150n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f⁹ 7s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2","+4"] }
+      },
+      "physical": {
+        "electronegativity": 1.3,
+        "firstIonization": "601 kJ/mol",
+        "density": "14.78 g/cm³",
+        "meltingPoint": "986°C",
+        "boilingPoint": "2627°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1949",
+        "discoveredBy": "Thompson, Ghiorso, Seaborg",
+        "namedBy": "Berkeley, California"
+      },
+      "stseContext": [
+        "Heavy Element Synthesis (Target material)"
+      ],
+      "commonUses": [
+        "Synthesizing Tennessine (Element 117)"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "98": {
+    "id": 98,
+    "symbol": "Cf",
+    "name": "Californium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 12,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Cf³⁺ (Californium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "251",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 98,
+      "electronsNeutral": 98,
+      "naturalIsotopes": [
+        {
+          "name": "Cf-251",
+          "neutron": "153n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Cf-252",
+          "neutron": "154n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁰ 7s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2","+4"] }
+      },
+      "physical": {
+        "electronegativity": 1.3,
+        "firstIonization": "608 kJ/mol",
+        "density": "15.10 g/cm³",
+        "meltingPoint": "900°C",
+        "boilingPoint": "1470°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1950",
+        "discoveredBy": "Thompson, Street, Ghiorso, Seaborg",
+        "namedBy": "State of California"
+      },
+      "stseContext": [
+        "Industrial Sensing (Neutron moisture gauges)"
+      ],
+      "commonUses": [
+        "Neutron startup source for reactors",
+        "Gold/Oil prospecting"
+      ],
+      "hazards": [
+        "Intense neutron emitter"
+      ]
+    }
+  },
+  "99": {
+    "id": 99,
+    "symbol": "Es",
+    "name": "Einsteinium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 13,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Es³⁺ (Einsteinium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "252",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 99,
+      "electronsNeutral": 99,
+      "naturalIsotopes": [
+        {
+          "name": "Es-252",
+          "neutron": "153n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Es-253",
+          "neutron": "154n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹¹ 7s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.3,
+        "firstIonization": "619 kJ/mol",
+        "density": "8.84 g/cm³",
+        "meltingPoint": "860°C",
+        "boilingPoint": "996°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1952",
+        "discoveredBy": "Albert Ghiorso et al.",
+        "namedBy": "Albert Einstein"
+      },
+      "stseContext": [
+        "Cold War Science (Discovered in \"Ivy Mike\" H-bomb debris)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "100": {
+    "id": 100,
+    "symbol": "Fm",
+    "name": "Fermium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 14,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Fm³⁺ (Fermium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "257",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 100,
+      "electronsNeutral": 100,
+      "naturalIsotopes": [
+        {
+          "name": "Fm-257",
+          "neutron": "157n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹² 7s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.3,
+        "firstIonization": "627 kJ/mol",
+        "density": "Unknown",
+        "meltingPoint": "1527°C",
+        "boilingPoint": "Unknown"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1952",
+        "discoveredBy": "Albert Ghiorso et al.",
+        "namedBy": "Enrico Fermi"
+      },
+      "stseContext": [
+        "Limit of neutron capture (Heaviest element formable by bombardment)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "101": {
+    "id": 101,
+    "symbol": "Md",
+    "name": "Mendelevium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 15,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "Md²⁺ (Mendelevium(II)), Md³⁺ (Mendelevium(III))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "258",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 101,
+      "electronsNeutral": 101,
+      "naturalIsotopes": [
+        {
+          "name": "Md-258",
+          "neutron": "157n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹³ 7s²",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": 1.3,
+        "firstIonization": "635 kJ/mol",
+        "density": "Unknown",
+        "meltingPoint": "827°C",
+        "boilingPoint": "Unknown"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1955",
+        "discoveredBy": "Ghiorso, Harvey, Choppin, Thompson, Seaborg",
+        "namedBy": "Dmitri Mendeleev"
+      },
+      "stseContext": [
+        "\"Atom-at-a-time\" synthesis (First element made this way)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "102": {
+    "id": 102,
+    "symbol": "No",
+    "name": "Nobelium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 16,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "Variable (outer s + f)",
+      "commonIons": "No²⁺ (Nobelium(II))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "259",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 102,
+      "electronsNeutral": 102,
+      "naturalIsotopes": [
+        {
+          "name": "No-259",
+          "neutron": "157n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 7s²",
+        "oxidationStates": { "common": ["+2"], "possible": ["+3"] }
+      },
+      "physical": {
+        "electronegativity": 1.3,
+        "firstIonization": "642 kJ/mol",
+        "density": "Unknown",
+        "meltingPoint": "827°C",
+        "boilingPoint": "Unknown"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1966",
+        "discoveredBy": "JINR (Russia)",
+        "namedBy": "Alfred Nobel"
+      },
+      "stseContext": [
+        "Naming controversy (Disputed between USA, Sweden, USSR)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "103": {
+    "id": 103,
+    "symbol": "Lr",
+    "name": "Lawrencium",
+    "level1_basic": {
+      "type": "Actinide",
+      "group": 17,
+      "period": "10",
+      "phaseAtSTP": "Solid",
+      "valenceElectrons": "3",
+      "commonIons": "Lr³⁺ (Lawrencium)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "266",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 103,
+      "electronsNeutral": 103,
+      "naturalIsotopes": [
+        {
+          "name": "Lr-262",
+          "neutron": "159n",
+          "percent": "Radioactive"
+        },
+        {
+          "name": "Lr-266",
+          "neutron": "163n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 7s² 7p¹ (Predicted)",
+        "oxidationStates": { "common": ["+3"], "possible": [] }
+      },
+      "physical": {
+        "electronegativity": 1.3,
+        "firstIonization": "443 kJ/mol",
+        "density": "Unknown",
+        "meltingPoint": "1627°C",
+        "boilingPoint": "Unknown"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1961",
+        "discoveredBy": "Ghiorso et al.",
+        "namedBy": "Ernest Lawrence"
+      },
+      "stseContext": [
+        "Periodicity Debate (Placement in d-block vs f-block)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "104": {
+    "id": 104,
+    "symbol": "Rf",
+    "name": "Rutherfordium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 4,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Rf⁴⁺ (Rutherfordium(IV) (Predicted))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "267",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 104,
+      "electronsNeutral": 104,
+      "naturalIsotopes": [
+        {
+          "name": "Rf-267",
+          "neutron": "163n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d² 7s²",
+        "oxidationStates": { "common": ["+4"], "possible": ["+3","+2"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "580 kJ/mol (predicted)",
+        "density": "23.2 g/cm³ (predicted)",
+        "meltingPoint": "2100°C (predicted)",
+        "boilingPoint": "5500°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1964",
+        "discoveredBy": "Dubna (USSR) / Berkeley (USA)",
+        "namedBy": "Ernest Rutherford"
+      },
+      "stseContext": [
+        "Cold War Science (Transfermium Wars)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "105": {
+    "id": 105,
+    "symbol": "Db",
+    "name": "Dubnium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 5,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "None"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "268",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 105,
+      "electronsNeutral": 105,
+      "naturalIsotopes": [
+        {
+          "name": "Db-268",
+          "neutron": "163n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d³ 7s²",
+        "oxidationStates": { "common": ["+5"], "possible": ["+4","+3"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "665 kJ/mol (predicted)",
+        "density": "29.3 g/cm³ (predicted)",
+        "meltingPoint": "N/A",
+        "boilingPoint": "N/A"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1968",
+        "discoveredBy": "Dubna (USSR) / Berkeley (USA)",
+        "namedBy": "Dubna, Russia"
+      },
+      "stseContext": [
+        "International cooperation (IUPAC naming resolution)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "106": {
+    "id": 106,
+    "symbol": "Sg",
+    "name": "Seaborgium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 6,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "None"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "269",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 106,
+      "electronsNeutral": 106,
+      "naturalIsotopes": [
+        {
+          "name": "Sg-271",
+          "neutron": "165n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d⁴ 7s²",
+        "oxidationStates": { "common": ["+6"], "possible": ["+5","+4"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "757 kJ/mol (predicted)",
+        "density": "35.0 g/cm³ (predicted)",
+        "meltingPoint": "N/A",
+        "boilingPoint": "N/A"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1974",
+        "discoveredBy": "Lawrence Berkeley Lab",
+        "namedBy": "Glenn T. Seaborg"
+      },
+      "stseContext": [
+        "Naming Controversy (First element named after a living person)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "107": {
+    "id": 107,
+    "symbol": "Bh",
+    "name": "Bohrium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 7,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "None"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "270",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 107,
+      "electronsNeutral": 107,
+      "naturalIsotopes": [
+        {
+          "name": "Bh-272",
+          "neutron": "165n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d⁵ 7s²",
+        "oxidationStates": { "common": ["+7"], "possible": ["+5","+4","+3"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "740 kJ/mol (predicted)",
+        "density": "37.1 g/cm³ (predicted)",
+        "meltingPoint": "N/A",
+        "boilingPoint": "N/A"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1981",
+        "discoveredBy": "GSI Helmholtz Centre (Germany)",
+        "namedBy": "Niels Bohr"
+      },
+      "stseContext": [
+        "Heavy Ion Research"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "108": {
+    "id": 108,
+    "symbol": "Hs",
+    "name": "Hassium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 8,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "None"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "277",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 108,
+      "electronsNeutral": 108,
+      "naturalIsotopes": [
+        {
+          "name": "Hs-277",
+          "neutron": "169n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d⁶ 7s²",
+        "oxidationStates": { "common": ["+8"], "possible": ["+6","+4","+2"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "730 kJ/mol (predicted)",
+        "density": "41.0 g/cm³ (predicted)",
+        "meltingPoint": "N/A",
+        "boilingPoint": "N/A"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1984",
+        "discoveredBy": "GSI Helmholtz Centre (Germany)",
+        "namedBy": "State of Hesse (Hassia)"
+      },
+      "stseContext": [
+        "Superheavy Chemistry (Proven to form volatile tetroxide HsO₄)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "109": {
+    "id": 109,
+    "symbol": "Mt",
+    "name": "Meitnerium",
+    "level1_basic": {
+      "type": "Unknown",
+      "group": 9,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Unknown (Predicted properties)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "278",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 109,
+      "electronsNeutral": 109,
+      "naturalIsotopes": [
+        {
+          "name": "Mt-278",
+          "neutron": "169n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d⁷ 7s² (Predicted)",
+        "oxidationStates": { "common": ["+3"], "possible": ["+2","+4","+6"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "800 kJ/mol (predicted)",
+        "density": "37.4 g/cm³ (predicted)",
+        "meltingPoint": "N/A",
+        "boilingPoint": "N/A"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1982",
+        "discoveredBy": "GSI Helmholtz Centre (Germany)",
+        "namedBy": "Lise Meitner"
+      },
+      "stseContext": [
+        "Women in Science (Meitner discovered fission but was overlooked for Nobel)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "110": {
+    "id": 110,
+    "symbol": "Ds",
+    "name": "Darmstadtium",
+    "level1_basic": {
+      "type": "Unknown",
+      "group": 10,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Unknown (Predicted properties)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "281",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 110,
+      "electronsNeutral": 110,
+      "naturalIsotopes": [
+        {
+          "name": "Ds-281",
+          "neutron": "171n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d⁹ 7s¹ (Predicted)",
+        "oxidationStates": { "common": ["+2"], "possible": ["+4"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "N/A",
+        "density": "34.8 g/cm³ (predicted)",
+        "meltingPoint": "N/A",
+        "boilingPoint": "N/A"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1994",
+        "discoveredBy": "GSI Helmholtz Centre (Germany)",
+        "namedBy": "Darmstadt, Germany"
+      },
+      "stseContext": [
+        "Ion Beam Technology"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "111": {
+    "id": 111,
+    "symbol": "Rg",
+    "name": "Roentgenium",
+    "level1_basic": {
+      "type": "Unknown",
+      "group": 11,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "Variable (outer s + d)",
+      "commonIons": "Unknown (Predicted properties)"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "282",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 111,
+      "electronsNeutral": 111,
+      "naturalIsotopes": [
+        {
+          "name": "Rg-282",
+          "neutron": "171n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d¹⁰ 7s¹ (Predicted)",
+        "oxidationStates": { "common": ["+1"], "possible": ["+3"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "N/A",
+        "density": "28.7 g/cm³ (predicted)",
+        "meltingPoint": "N/A",
+        "boilingPoint": "N/A"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1994",
+        "discoveredBy": "GSI Helmholtz Centre (Germany)",
+        "namedBy": "Wilhelm Röntgen"
+      },
+      "stseContext": [
+        "History of X-rays"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "112": {
+    "id": 112,
+    "symbol": "Cn",
+    "name": "Copernicium",
+    "level1_basic": {
+      "type": "Transition Metal",
+      "group": 12,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "2",
+      "commonIons": "Cn²⁺ (Copernicium(II) (Predicted))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "285",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 112,
+      "electronsNeutral": 112,
+      "naturalIsotopes": [
+        {
+          "name": "Cn-285",
+          "neutron": "173n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d¹⁰ 7s²",
+        "oxidationStates": { "common": ["+2"], "possible": ["+1","+4"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "N/A",
+        "density": "Unknown",
+        "meltingPoint": "~10°C (predicted)",
+        "boilingPoint": "~67°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1996",
+        "discoveredBy": "GSI Helmholtz Centre (Germany)",
+        "namedBy": "Nicolaus Copernicus"
+      },
+      "stseContext": [
+        "Relativistic Chemistry (Acts more like a noble gas than a metal)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "113": {
+    "id": 113,
+    "symbol": "Nh",
+    "name": "Nihonium",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 13,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "3",
+      "commonIons": "Nh⁺ (Nihonium(I) (Predicted))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "286",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 113,
+      "electronsNeutral": 113,
+      "naturalIsotopes": [
+        {
+          "name": "Nh-286",
+          "neutron": "173n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹",
+        "oxidationStates": { "common": ["+1"], "possible": ["+3"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "N/A",
+        "density": "~16 g/cm³ (predicted)",
+        "meltingPoint": "~430°C (predicted)",
+        "boilingPoint": "~1130°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "2003",
+        "discoveredBy": "RIKEN (Japan)",
+        "namedBy": "From Nihon (Japan)"
+      },
+      "stseContext": [
+        "First element discovered in Asia"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "114": {
+    "id": 114,
+    "symbol": "Fl",
+    "name": "Flerovium",
+    "level1_basic": {
+      "type": "Post-transition Metal",
+      "group": 14,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "4",
+      "commonIons": "Fl²⁺ (Flerovium(II) (Predicted))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "289",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 114,
+      "electronsNeutral": 114,
+      "naturalIsotopes": [
+        {
+          "name": "Fl-289",
+          "neutron": "175n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²",
+        "oxidationStates": { "common": ["+2"], "possible": ["+4"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "N/A",
+        "density": "~14 g/cm³ (predicted)",
+        "meltingPoint": "~-73°C (predicted)",
+        "boilingPoint": "~107°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "1998",
+        "discoveredBy": "JINR (Russia)",
+        "namedBy": "Flerov Laboratory"
+      },
+      "stseContext": [
+        "\"Island of Stability\" research"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  },
+  "115": {
+    "id": 115,
+    "symbol": "Mc",
+    "name": "Moscovium",
+    "level1_basic": {
+      "type": "Unknown",
+      "group": 15,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "5",
+      "commonIons": "Mc⁺ (Moscovium(I) (Predicted)), Mc³⁺ (Moscovium(III) (Predicted))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "290",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 115,
+      "electronsNeutral": 115,
+      "naturalIsotopes": [
+        {
+          "name": "Mc-290",
+          "neutron": "175n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³",
+        "oxidationStates": { "common": ["+1"], "possible": ["+3","+5"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "N/A",
+        "density": "~13.5 g/cm³ (predicted)",
+        "meltingPoint": "~400°C (predicted)",
+        "boilingPoint": "~1100°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "2003",
+        "discoveredBy": "JINR (Russia) & Vanderbilt/LLNL (USA)",
+        "namedBy": "Moscow Region"
+      },
+      "stseContext": [
+        "Extreme matter synthesis"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "116": {
+    "id": 116,
+    "symbol": "Lv",
+    "name": "Livermorium",
+    "level1_basic": {
+      "type": "Unknown",
+      "group": 16,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "6",
+      "commonIons": "Lv²⁺ (Livermorium(II) (Predicted))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "293",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 116,
+      "electronsNeutral": 116,
+      "naturalIsotopes": [
+        {
+          "name": "Lv-293",
+          "neutron": "177n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴",
+        "oxidationStates": { "common": ["+2"], "possible": ["+4","+6"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "N/A",
+        "density": "~12.9 g/cm³ (predicted)",
+        "meltingPoint": "364–507°C (predicted)",
+        "boilingPoint": "762–862°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "2000",
+        "discoveredBy": "LLNL (USA) & JINR (Russia)",
+        "namedBy": "Lawrence Livermore National Laboratory"
+      },
+      "stseContext": [
+        "International Science Collaboration"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "117": {
+    "id": 117,
+    "symbol": "Ts",
+    "name": "Tennessine",
+    "level1_basic": {
+      "type": "Unknown",
+      "group": 17,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "7",
+      "commonIons": "Ts⁻ (Tennesside (Predicted))"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "294",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 117,
+      "electronsNeutral": 117,
+      "naturalIsotopes": [
+        {
+          "name": "Ts-294",
+          "neutron": "177n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵",
+        "oxidationStates": { "common": ["-1"], "possible": ["+1","+3","+5","+7"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "N/A",
+        "density": "~7.17 g/cm³ (predicted)",
+        "meltingPoint": "350–550°C (predicted)",
+        "boilingPoint": "610°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "2010",
+        "discoveredBy": "JINR (Russia), ORNL/Vanderbilt (USA)",
+        "namedBy": "State of Tennessee (Oak Ridge Lab)"
+      },
+      "stseContext": [
+        "Synthesis required Berkelium target"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Highly radioactive"
+      ]
+    }
+  },
+  "118": {
+    "id": 118,
+    "symbol": "Og",
+    "name": "Oganesson",
+    "level1_basic": {
+      "type": "Unknown",
+      "group": 18,
+      "period": "7",
+      "phaseAtSTP": "Unknown",
+      "valenceElectrons": "8",
+      "commonIons": "Unknown"
+    },
+    "level2_atomic": {
+      "mass": {
+        "highSchool": "294",
+        "universityConventional": null,
+        "universityInterval": null
+      },
+      "protons": 118,
+      "electronsNeutral": 118,
+      "naturalIsotopes": [
+        {
+          "name": "Og-294",
+          "neutron": "176n",
+          "percent": "Radioactive"
+        }
+      ]
+    },
+    "level3_properties": {
+      "electronic": {
+        "configuration": "[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶",
+        "oxidationStates": { "common": ["0"], "possible": ["+2"] }
+      },
+      "physical": {
+        "electronegativity": null,
+        "firstIonization": "N/A",
+        "density": "~4.9–5.1 g/cm³ (predicted)",
+        "meltingPoint": ">50°C (predicted)",
+        "boilingPoint": "80°C (predicted)"
+      }
+    },
+    "level4_history_stse": {
+      "history": {
+        "discoveryYear": "2002",
+        "discoveredBy": "JINR (Russia) & LLNL (USA)",
+        "namedBy": "Yuri Oganessian"
+      },
+      "stseContext": [
+        "Relativistic Effects (Predicted to be solid, not gas)"
+      ],
+      "commonUses": [
+        "Research only"
+      ],
+      "hazards": [
+        "Radioactive"
+      ]
+    }
+  }
 };
 
 export const elements = [
   {
-    number: 1,
-    symbol: "H",
-    name: "Hydrogen",
-    row: 1,
-    column: 1,
-    category: "Non-metal",
-  },
-  {
-    number: 2,
-    symbol: "He",
-    name: "Helium",
-    row: 1,
-    column: 18,
-    category: "Noble Gas",
-  },
-  {
-    number: 3,
-    symbol: "Li",
-    name: "Lithium",
-    row: 2,
-    column: 1,
-    category: "Alkali Metal",
-  },
-  {
-    number: 4,
-    symbol: "Be",
-    name: "Beryllium",
-    row: 2,
-    column: 2,
-    category: "Alkaline Earth Metal",
-  },
-  {
-    number: 5,
-    symbol: "B",
-    name: "Boron",
-    row: 2,
-    column: 13,
-    category: "Metalloid",
-  },
-  {
-    number: 6,
-    symbol: "C",
-    name: "Carbon",
-    row: 2,
-    column: 14,
-    category: "Non-metal",
-  },
-  {
-    number: 7,
-    symbol: "N",
-    name: "Nitrogen",
-    row: 2,
-    column: 15,
-    category: "Non-metal",
-  },
-  {
-    number: 8,
-    symbol: "O",
-    name: "Oxygen",
-    row: 2,
-    column: 16,
-    category: "Non-metal",
-  },
-  {
-    number: 9,
-    symbol: "F",
-    name: "Fluorine",
-    row: 2,
-    column: 17,
-    category: "Halogen",
-  },
-  {
-    number: 10,
-    symbol: "Ne",
-    name: "Neon",
-    row: 2,
-    column: 18,
-    category: "Noble Gas",
-  },
-  {
-    number: 11,
-    symbol: "Na",
-    name: "Sodium",
-    row: 3,
-    column: 1,
-    category: "Alkali Metal",
-  },
-  {
-    number: 12,
-    symbol: "Mg",
-    name: "Magnesium",
-    row: 3,
-    column: 2,
-    category: "Alkaline Earth Metal",
-  },
-  {
-    number: 13,
-    symbol: "Al",
-    name: "Aluminum",
-    row: 3,
-    column: 13,
-    category: "Post-transition Metal",
+    "number": 1,
+    "symbol": "H",
+    "name": "Hydrogen",
+    "row": 1,
+    "column": 1,
+    "category": "Reactive nonmetal"
+  },
+  {
+    "number": 2,
+    "symbol": "He",
+    "name": "Helium",
+    "row": 1,
+    "column": 18,
+    "category": "Noble Gas"
+  },
+  {
+    "number": 3,
+    "symbol": "Li",
+    "name": "Lithium",
+    "row": 2,
+    "column": 1,
+    "category": "Alkali Metal"
+  },
+  {
+    "number": 4,
+    "symbol": "Be",
+    "name": "Beryllium",
+    "row": 2,
+    "column": 2,
+    "category": "Alkaline Earth Metal"
+  },
+  {
+    "number": 5,
+    "symbol": "B",
+    "name": "Boron",
+    "row": 2,
+    "column": 13,
+    "category": "Metalloid"
+  },
+  {
+    "number": 6,
+    "symbol": "C",
+    "name": "Carbon",
+    "row": 2,
+    "column": 14,
+    "category": "Reactive nonmetal"
+  },
+  {
+    "number": 7,
+    "symbol": "N",
+    "name": "Nitrogen",
+    "row": 2,
+    "column": 15,
+    "category": "Reactive nonmetal"
+  },
+  {
+    "number": 8,
+    "symbol": "O",
+    "name": "Oxygen",
+    "row": 2,
+    "column": 16,
+    "category": "Reactive nonmetal"
+  },
+  {
+    "number": 9,
+    "symbol": "F",
+    "name": "Fluorine",
+    "row": 2,
+    "column": 17,
+    "category": "Halogen"
+  },
+  {
+    "number": 10,
+    "symbol": "Ne",
+    "name": "Neon",
+    "row": 2,
+    "column": 18,
+    "category": "Noble Gas"
+  },
+  {
+    "number": 11,
+    "symbol": "Na",
+    "name": "Sodium",
+    "row": 3,
+    "column": 1,
+    "category": "Alkali Metal"
+  },
+  {
+    "number": 12,
+    "symbol": "Mg",
+    "name": "Magnesium",
+    "row": 3,
+    "column": 2,
+    "category": "Alkaline Earth Metal"
+  },
+  {
+    "number": 13,
+    "symbol": "Al",
+    "name": "Aluminum",
+    "row": 3,
+    "column": 13,
+    "category": "Post-transition Metal"
   },
   {
-    number: 14,
-    symbol: "Si",
-    name: "Silicon",
-    row: 3,
-    column: 14,
-    category: "Metalloid",
+    "number": 14,
+    "symbol": "Si",
+    "name": "Silicon",
+    "row": 3,
+    "column": 14,
+    "category": "Metalloid"
   },
   {
-    number: 15,
-    symbol: "P",
-    name: "Phosphorus",
-    row: 3,
-    column: 15,
-    category: "Non-metal",
+    "number": 15,
+    "symbol": "P",
+    "name": "Phosphorus",
+    "row": 3,
+    "column": 15,
+    "category": "Reactive nonmetal"
   },
   {
-    number: 16,
-    symbol: "S",
-    name: "Sulfur",
-    row: 3,
-    column: 16,
-    category: "Non-metal",
+    "number": 16,
+    "symbol": "S",
+    "name": "Sulfur",
+    "row": 3,
+    "column": 16,
+    "category": "Reactive nonmetal"
   },
   {
-    number: 17,
-    symbol: "Cl",
-    name: "Chlorine",
-    row: 3,
-    column: 17,
-    category: "Halogen",
+    "number": 17,
+    "symbol": "Cl",
+    "name": "Chlorine",
+    "row": 3,
+    "column": 17,
+    "category": "Halogen"
   },
   {
-    number: 18,
-    symbol: "Ar",
-    name: "Argon",
-    row: 3,
-    column: 18,
-    category: "Noble Gas",
+    "number": 18,
+    "symbol": "Ar",
+    "name": "Argon",
+    "row": 3,
+    "column": 18,
+    "category": "Noble Gas"
   },
   {
-    number: 19,
-    symbol: "K",
-    name: "Potassium",
-    row: 4,
-    column: 1,
-    category: "Alkali Metal",
+    "number": 19,
+    "symbol": "K",
+    "name": "Potassium",
+    "row": 4,
+    "column": 1,
+    "category": "Alkali Metal"
   },
   {
-    number: 20,
-    symbol: "Ca",
-    name: "Calcium",
-    row: 4,
-    column: 2,
-    category: "Alkaline Earth Metal",
+    "number": 20,
+    "symbol": "Ca",
+    "name": "Calcium",
+    "row": 4,
+    "column": 2,
+    "category": "Alkaline Earth Metal"
   },
   {
-    number: 21,
-    symbol: "Sc",
-    name: "Scandium",
-    row: 4,
-    column: 3,
-    category: "Transition Metal",
+    "number": 21,
+    "symbol": "Sc",
+    "name": "Scandium",
+    "row": 4,
+    "column": 3,
+    "category": "Transition Metal"
   },
   {
-    number: 22,
-    symbol: "Ti",
-    name: "Titanium",
-    row: 4,
-    column: 4,
-    category: "Transition Metal",
+    "number": 22,
+    "symbol": "Ti",
+    "name": "Titanium",
+    "row": 4,
+    "column": 4,
+    "category": "Transition Metal"
   },
   {
-    number: 23,
-    symbol: "V",
-    name: "Vanadium",
-    row: 4,
-    column: 5,
-    category: "Transition Metal",
+    "number": 23,
+    "symbol": "V",
+    "name": "Vanadium",
+    "row": 4,
+    "column": 5,
+    "category": "Transition Metal"
   },
   {
-    number: 24,
-    symbol: "Cr",
-    name: "Chromium",
-    row: 4,
-    column: 6,
-    category: "Transition Metal",
+    "number": 24,
+    "symbol": "Cr",
+    "name": "Chromium",
+    "row": 4,
+    "column": 6,
+    "category": "Transition Metal"
   },
   {
-    number: 25,
-    symbol: "Mn",
-    name: "Manganese",
-    row: 4,
-    column: 7,
-    category: "Transition Metal",
+    "number": 25,
+    "symbol": "Mn",
+    "name": "Manganese",
+    "row": 4,
+    "column": 7,
+    "category": "Transition Metal"
   },
   {
-    number: 26,
-    symbol: "Fe",
-    name: "Iron",
-    row: 4,
-    column: 8,
-    category: "Transition Metal",
+    "number": 26,
+    "symbol": "Fe",
+    "name": "Iron",
+    "row": 4,
+    "column": 8,
+    "category": "Transition Metal"
   },
   {
-    number: 27,
-    symbol: "Co",
-    name: "Cobalt",
-    row: 4,
-    column: 9,
-    category: "Transition Metal",
+    "number": 27,
+    "symbol": "Co",
+    "name": "Cobalt",
+    "row": 4,
+    "column": 9,
+    "category": "Transition Metal"
   },
   {
-    number: 28,
-    symbol: "Ni",
-    name: "Nickel",
-    row: 4,
-    column: 10,
-    category: "Transition Metal",
+    "number": 28,
+    "symbol": "Ni",
+    "name": "Nickel",
+    "row": 4,
+    "column": 10,
+    "category": "Transition Metal"
   },
   {
-    number: 29,
-    symbol: "Cu",
-    name: "Copper",
-    row: 4,
-    column: 11,
-    category: "Transition Metal",
+    "number": 29,
+    "symbol": "Cu",
+    "name": "Copper",
+    "row": 4,
+    "column": 11,
+    "category": "Transition Metal"
   },
   {
-    number: 30,
-    symbol: "Zn",
-    name: "Zinc",
-    row: 4,
-    column: 12,
-    category: "Transition Metal",
+    "number": 30,
+    "symbol": "Zn",
+    "name": "Zinc",
+    "row": 4,
+    "column": 12,
+    "category": "Transition Metal"
   },
   {
-    number: 31,
-    symbol: "Ga",
-    name: "Gallium",
-    row: 4,
-    column: 13,
-    category: "Post-transition Metal",
+    "number": 31,
+    "symbol": "Ga",
+    "name": "Gallium",
+    "row": 4,
+    "column": 13,
+    "category": "Post-transition Metal"
   },
   {
-    number: 32,
-    symbol: "Ge",
-    name: "Germanium",
-    row: 4,
-    column: 14,
-    category: "Metalloid",
+    "number": 32,
+    "symbol": "Ge",
+    "name": "Germanium",
+    "row": 4,
+    "column": 14,
+    "category": "Metalloid"
   },
   {
-    number: 33,
-    symbol: "As",
-    name: "Arsenic",
-    row: 4,
-    column: 15,
-    category: "Metalloid",
+    "number": 33,
+    "symbol": "As",
+    "name": "Arsenic",
+    "row": 4,
+    "column": 15,
+    "category": "Metalloid"
   },
   {
-    number: 34,
-    symbol: "Se",
-    name: "Selenium",
-    row: 4,
-    column: 16,
-    category: "Non-metal",
+    "number": 34,
+    "symbol": "Se",
+    "name": "Selenium",
+    "row": 4,
+    "column": 16,
+    "category": "Reactive nonmetal"
   },
   {
-    number: 35,
-    symbol: "Br",
-    name: "Bromine",
-    row: 4,
-    column: 17,
-    category: "Halogen",
+    "number": 35,
+    "symbol": "Br",
+    "name": "Bromine",
+    "row": 4,
+    "column": 17,
+    "category": "Halogen"
   },
   {
-    number: 36,
-    symbol: "Kr",
-    name: "Krypton",
-    row: 4,
-    column: 18,
-    category: "Noble Gas",
+    "number": 36,
+    "symbol": "Kr",
+    "name": "Krypton",
+    "row": 4,
+    "column": 18,
+    "category": "Noble Gas"
   },
   {
-    number: 37,
-    symbol: "Rb",
-    name: "Rubidium",
-    row: 5,
-    column: 1,
-    category: "Alkali Metal",
+    "number": 37,
+    "symbol": "Rb",
+    "name": "Rubidium",
+    "row": 5,
+    "column": 1,
+    "category": "Alkali Metal"
   },
   {
-    number: 38,
-    symbol: "Sr",
-    name: "Strontium",
-    row: 5,
-    column: 2,
-    category: "Alkaline Earth Metal",
+    "number": 38,
+    "symbol": "Sr",
+    "name": "Strontium",
+    "row": 5,
+    "column": 2,
+    "category": "Alkaline Earth Metal"
   },
   {
-    number: 39,
-    symbol: "Y",
-    name: "Yttrium",
-    row: 5,
-    column: 3,
-    category: "Transition Metal",
+    "number": 39,
+    "symbol": "Y",
+    "name": "Yttrium",
+    "row": 5,
+    "column": 3,
+    "category": "Transition Metal"
   },
   {
-    number: 40,
-    symbol: "Zr",
-    name: "Zirconium",
-    row: 5,
-    column: 4,
-    category: "Transition Metal",
+    "number": 40,
+    "symbol": "Zr",
+    "name": "Zirconium",
+    "row": 5,
+    "column": 4,
+    "category": "Transition Metal"
   },
   {
-    number: 41,
-    symbol: "Nb",
-    name: "Niobium",
-    row: 5,
-    column: 5,
-    category: "Transition Metal",
+    "number": 41,
+    "symbol": "Nb",
+    "name": "Niobium",
+    "row": 5,
+    "column": 5,
+    "category": "Transition Metal"
   },
   {
-    number: 42,
-    symbol: "Mo",
-    name: "Molybdenum",
-    row: 5,
-    column: 6,
-    category: "Transition Metal",
+    "number": 42,
+    "symbol": "Mo",
+    "name": "Molybdenum",
+    "row": 5,
+    "column": 6,
+    "category": "Transition Metal"
   },
   {
-    number: 43,
-    symbol: "Tc",
-    name: "Technetium",
-    row: 5,
-    column: 7,
-    category: "Transition Metal",
+    "number": 43,
+    "symbol": "Tc",
+    "name": "Technetium",
+    "row": 5,
+    "column": 7,
+    "category": "Transition Metal"
   },
   {
-    number: 44,
-    symbol: "Ru",
-    name: "Ruthenium",
-    row: 5,
-    column: 8,
-    category: "Transition Metal",
+    "number": 44,
+    "symbol": "Ru",
+    "name": "Ruthenium",
+    "row": 5,
+    "column": 8,
+    "category": "Transition Metal"
   },
   {
-    number: 45,
-    symbol: "Rh",
-    name: "Rhodium",
-    row: 5,
-    column: 9,
-    category: "Transition Metal",
+    "number": 45,
+    "symbol": "Rh",
+    "name": "Rhodium",
+    "row": 5,
+    "column": 9,
+    "category": "Transition Metal"
   },
   {
-    number: 46,
-    symbol: "Pd",
-    name: "Palladium",
-    row: 5,
-    column: 10,
-    category: "Transition Metal",
+    "number": 46,
+    "symbol": "Pd",
+    "name": "Palladium",
+    "row": 5,
+    "column": 10,
+    "category": "Transition Metal"
   },
   {
-    number: 47,
-    symbol: "Ag",
-    name: "Silver",
-    row: 5,
-    column: 11,
-    category: "Transition Metal",
+    "number": 47,
+    "symbol": "Ag",
+    "name": "Silver",
+    "row": 5,
+    "column": 11,
+    "category": "Transition Metal"
   },
   {
-    number: 48,
-    symbol: "Cd",
-    name: "Cadmium",
-    row: 5,
-    column: 12,
-    category: "Transition Metal",
+    "number": 48,
+    "symbol": "Cd",
+    "name": "Cadmium",
+    "row": 5,
+    "column": 12,
+    "category": "Transition Metal"
   },
   {
-    number: 49,
-    symbol: "In",
-    name: "Indium",
-    row: 5,
-    column: 13,
-    category: "Post-transition Metal",
+    "number": 49,
+    "symbol": "In",
+    "name": "Indium",
+    "row": 5,
+    "column": 13,
+    "category": "Post-transition Metal"
   },
   {
-    number: 50,
-    symbol: "Sn",
-    name: "Tin",
-    row: 5,
-    column: 14,
-    category: "Post-transition Metal",
+    "number": 50,
+    "symbol": "Sn",
+    "name": "Tin",
+    "row": 5,
+    "column": 14,
+    "category": "Post-transition Metal"
   },
   {
-    number: 51,
-    symbol: "Sb",
-    name: "Antimony",
-    row: 5,
-    column: 15,
-    category: "Metalloid",
+    "number": 51,
+    "symbol": "Sb",
+    "name": "Antimony",
+    "row": 5,
+    "column": 15,
+    "category": "Metalloid"
   },
   {
-    number: 52,
-    symbol: "Te",
-    name: "Tellurium",
-    row: 5,
-    column: 16,
-    category: "Metalloid",
+    "number": 52,
+    "symbol": "Te",
+    "name": "Tellurium",
+    "row": 5,
+    "column": 16,
+    "category": "Metalloid"
   },
   {
-    number: 53,
-    symbol: "I",
-    name: "Iodine",
-    row: 5,
-    column: 17,
-    category: "Halogen",
+    "number": 53,
+    "symbol": "I",
+    "name": "Iodine",
+    "row": 5,
+    "column": 17,
+    "category": "Halogen"
   },
   {
-    number: 54,
-    symbol: "Xe",
-    name: "Xenon",
-    row: 5,
-    column: 18,
-    category: "Noble Gas",
+    "number": 54,
+    "symbol": "Xe",
+    "name": "Xenon",
+    "row": 5,
+    "column": 18,
+    "category": "Noble Gas"
   },
   {
-    number: 55,
-    symbol: "Cs",
-    name: "Cesium",
-    row: 6,
-    column: 1,
-    category: "Alkali Metal",
+    "number": 55,
+    "symbol": "Cs",
+    "name": "Cesium",
+    "row": 6,
+    "column": 1,
+    "category": "Alkali Metal"
   },
   {
-    number: 56,
-    symbol: "Ba",
-    name: "Barium",
-    row: 6,
-    column: 2,
-    category: "Alkaline Earth Metal",
+    "number": 56,
+    "symbol": "Ba",
+    "name": "Barium",
+    "row": 6,
+    "column": 2,
+    "category": "Alkaline Earth Metal"
   },
   {
-    number: 57,
-    symbol: "La",
-    name: "Lanthanum",
-    row: 6,
-    column: 3,
-    category: "Lanthanide",
-    series: "lanthanide",
+    "number": "57-71",
+    "symbol": "La-Lu",
+    "name": "Lanthanides",
+    "row": 6,
+    "column": 3,
+    "category": "Lanthanide",
+    "series": "lanthanide"
   },
   {
-    number: 72,
-    symbol: "Hf",
-    name: "Hafnium",
-    row: 6,
-    column: 4,
-    category: "Transition Metal",
+    "number": 72,
+    "symbol": "Hf",
+    "name": "Hafnium",
+    "row": 6,
+    "column": 4,
+    "category": "Transition Metal"
   },
   {
-    number: 73,
-    symbol: "Ta",
-    name: "Tantalum",
-    row: 6,
-    column: 5,
-    category: "Transition Metal",
+    "number": 73,
+    "symbol": "Ta",
+    "name": "Tantalum",
+    "row": 6,
+    "column": 5,
+    "category": "Transition Metal"
   },
   {
-    number: 74,
-    symbol: "W",
-    name: "Tungsten",
-    row: 6,
-    column: 6,
-    category: "Transition Metal",
+    "number": 74,
+    "symbol": "W",
+    "name": "Tungsten",
+    "row": 6,
+    "column": 6,
+    "category": "Transition Metal"
   },
   {
-    number: 75,
-    symbol: "Re",
-    name: "Rhenium",
-    row: 6,
-    column: 7,
-    category: "Transition Metal",
+    "number": 75,
+    "symbol": "Re",
+    "name": "Rhenium",
+    "row": 6,
+    "column": 7,
+    "category": "Transition Metal"
   },
   {
-    number: 76,
-    symbol: "Os",
-    name: "Osmium",
-    row: 6,
-    column: 8,
-    category: "Transition Metal",
+    "number": 76,
+    "symbol": "Os",
+    "name": "Osmium",
+    "row": 6,
+    "column": 8,
+    "category": "Transition Metal"
   },
   {
-    number: 77,
-    symbol: "Ir",
-    name: "Iridium",
-    row: 6,
-    column: 9,
-    category: "Transition Metal",
+    "number": 77,
+    "symbol": "Ir",
+    "name": "Iridium",
+    "row": 6,
+    "column": 9,
+    "category": "Transition Metal"
   },
   {
-    number: 78,
-    symbol: "Pt",
-    name: "Platinum",
-    row: 6,
-    column: 10,
-    category: "Transition Metal",
+    "number": 78,
+    "symbol": "Pt",
+    "name": "Platinum",
+    "row": 6,
+    "column": 10,
+    "category": "Transition Metal"
   },
   {
-    number: 79,
-    symbol: "Au",
-    name: "Gold",
-    row: 6,
-    column: 11,
-    category: "Transition Metal",
+    "number": 79,
+    "symbol": "Au",
+    "name": "Gold",
+    "row": 6,
+    "column": 11,
+    "category": "Transition Metal"
   },
   {
-    number: 80,
-    symbol: "Hg",
-    name: "Mercury",
-    row: 6,
-    column: 12,
-    category: "Transition Metal",
+    "number": 80,
+    "symbol": "Hg",
+    "name": "Mercury",
+    "row": 6,
+    "column": 12,
+    "category": "Transition Metal"
   },
   {
-    number: 81,
-    symbol: "Tl",
-    name: "Thallium",
-    row: 6,
-    column: 13,
-    category: "Post-transition Metal",
+    "number": 81,
+    "symbol": "Tl",
+    "name": "Thallium",
+    "row": 6,
+    "column": 13,
+    "category": "Post-transition Metal"
   },
   {
-    number: 82,
-    symbol: "Pb",
-    name: "Lead",
-    row: 6,
-    column: 14,
-    category: "Post-transition Metal",
+    "number": 82,
+    "symbol": "Pb",
+    "name": "Lead",
+    "row": 6,
+    "column": 14,
+    "category": "Post-transition Metal"
   },
   {
-    number: 83,
-    symbol: "Bi",
-    name: "Bismuth",
-    row: 6,
-    column: 15,
-    category: "Post-transition Metal",
+    "number": 83,
+    "symbol": "Bi",
+    "name": "Bismuth",
+    "row": 6,
+    "column": 15,
+    "category": "Post-transition Metal"
   },
   {
-    number: 84,
-    symbol: "Po",
-    name: "Polonium",
-    row: 6,
-    column: 16,
-    category: "Post-transition Metal",
+    "number": 84,
+    "symbol": "Po",
+    "name": "Polonium",
+    "row": 6,
+    "column": 16,
+    "category": "Post-transition Metal"
   },
   {
-    number: 85,
-    symbol: "At",
-    name: "Astatine",
-    row: 6,
-    column: 17,
-    category: "Halogen",
+    "number": 85,
+    "symbol": "At",
+    "name": "Astatine",
+    "row": 6,
+    "column": 17,
+    "category": "Halogen"
   },
   {
-    number: 86,
-    symbol: "Rn",
-    name: "Radon",
-    row: 6,
-    column: 18,
-    category: "Noble Gas",
+    "number": 86,
+    "symbol": "Rn",
+    "name": "Radon",
+    "row": 6,
+    "column": 18,
+    "category": "Noble Gas"
   },
   {
-    number: 87,
-    symbol: "Fr",
-    name: "Francium",
-    row: 7,
-    column: 1,
-    category: "Alkali Metal",
+    "number": 87,
+    "symbol": "Fr",
+    "name": "Francium",
+    "row": 7,
+    "column": 1,
+    "category": "Alkali Metal"
   },
   {
-    number: 88,
-    symbol: "Ra",
-    name: "Radium",
-    row: 7,
-    column: 2,
-    category: "Alkaline Earth Metal",
+    "number": 88,
+    "symbol": "Ra",
+    "name": "Radium",
+    "row": 7,
+    "column": 2,
+    "category": "Alkaline Earth Metal"
   },
   {
-    number: 89,
-    symbol: "Ac",
-    name: "Actinium",
-    row: 7,
-    column: 3,
-    category: "Actinide",
-    series: "actinide",
+    "number": "89-103",
+    "symbol": "Ac-Lr",
+    "name": "Actinides",
+    "row": 7,
+    "column": 3,
+    "category": "Actinide",
+    "series": "actinide"
   },
-  {
-    number: 104,
-    symbol: "Rf",
-    name: "Rutherfordium",
-    row: 7,
-    column: 4,
-    category: "Transition Metal",
+  {
+    "number": 104,
+    "symbol": "Rf",
+    "name": "Rutherfordium",
+    "row": 7,
+    "column": 4,
+    "category": "Transition Metal"
   },
-  {
-    number: 105,
-    symbol: "Db",
-    name: "Dubnium",
-    row: 7,
-    column: 5,
-    category: "Transition Metal",
+  {
+    "number": 105,
+    "symbol": "Db",
+    "name": "Dubnium",
+    "row": 7,
+    "column": 5,
+    "category": "Transition Metal"
   },
-  {
-    number: 106,
-    symbol: "Sg",
-    name: "Seaborgium",
-    row: 7,
-    column: 6,
-    category: "Transition Metal",
+  {
+    "number": 106,
+    "symbol": "Sg",
+    "name": "Seaborgium",
+    "row": 7,
+    "column": 6,
+    "category": "Transition Metal"
   },
-  {
-    number: 107,
-    symbol: "Bh",
-    name: "Bohrium",
-    row: 7,
-    column: 7,
-    category: "Transition Metal",
+  {
+    "number": 107,
+    "symbol": "Bh",
+    "name": "Bohrium",
+    "row": 7,
+    "column": 7,
+    "category": "Transition Metal"
   },
-  {
-    number: 108,
-    symbol: "Hs",
-    name: "Hassium",
-    row: 7,
-    column: 8,
-    category: "Transition Metal",
+  {
+    "number": 108,
+    "symbol": "Hs",
+    "name": "Hassium",
+    "row": 7,
+    "column": 8,
+    "category": "Transition Metal"
   },
-  {
-    number: 109,
-    symbol: "Mt",
-    name: "Meitnerium",
-    row: 7,
-    column: 9,
-    category: "Transition Metal",
-  },
-  {
-    number: 110,
-    symbol: "Ds",
-    name: "Darmstadtium",
-    row: 7,
-    column: 10,
-    category: "Transition Metal",
-  },
-  {
-    number: 111,
-    symbol: "Rg",
-    name: "Roentgenium",
-    row: 7,
-    column: 11,
-    category: "Transition Metal",
-  },
-  {
-    number: 112,
-    symbol: "Cn",
-    name: "Copernicium",
-    row: 7,
-    column: 12,
-    category: "Transition Metal",
-  },
-  {
-    number: 113,
-    symbol: "Nh",
-    name: "Nihonium",
-    row: 7,
-    column: 13,
-    category: "Post-transition Metal",
-  },
-  {
-    number: 114,
-    symbol: "Fl",
-    name: "Flerovium",
-    row: 7,
-    column: 14,
-    category: "Post-transition Metal",
-  },
-  {
-    number: 115,
-    symbol: "Mc",
-    name: "Moscovium",
-    row: 7,
-    column: 15,
-    category: "Post-transition Metal",
-  },
-  {
-    number: 116,
-    symbol: "Lv",
-    name: "Livermorium",
-    row: 7,
-    column: 16,
-    category: "Post-transition Metal",
-  },
-  {
-    number: 117,
-    symbol: "Ts",
-    name: "Tennessine",
-    row: 7,
-    column: 17,
-    category: "Halogen",
-  },
-  {
-    number: 118,
-    symbol: "Og",
-    name: "Oganesson",
-    row: 7,
-    column: 18,
-    category: "Noble Gas",
-  },
-  {
-    number: 58,
-    symbol: "Ce",
-    name: "Cerium",
-    row: 9,
-    column: 4,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 59,
-    symbol: "Pr",
-    name: "Praseodymium",
-    row: 9,
-    column: 5,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 60,
-    symbol: "Nd",
-    name: "Neodymium",
-    row: 9,
-    column: 6,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 61,
-    symbol: "Pm",
-    name: "Promethium",
-    row: 9,
-    column: 7,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 62,
-    symbol: "Sm",
-    name: "Samarium",
-    row: 9,
-    column: 8,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 63,
-    symbol: "Eu",
-    name: "Europium",
-    row: 9,
-    column: 9,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 64,
-    symbol: "Gd",
-    name: "Gadolinium",
-    row: 9,
-    column: 10,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 65,
-    symbol: "Tb",
-    name: "Terbium",
-    row: 9,
-    column: 11,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 66,
-    symbol: "Dy",
-    name: "Dysprosium",
-    row: 9,
-    column: 12,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 67,
-    symbol: "Ho",
-    name: "Holmium",
-    row: 9,
-    column: 13,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 68,
-    symbol: "Er",
-    name: "Erbium",
-    row: 9,
-    column: 14,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 69,
-    symbol: "Tm",
-    name: "Thulium",
-    row: 9,
-    column: 15,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 70,
-    symbol: "Yb",
-    name: "Ytterbium",
-    row: 9,
-    column: 16,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 71,
-    symbol: "Lu",
-    name: "Lutetium",
-    row: 9,
-    column: 17,
-    category: "Lanthanide",
-    series: "lanthanide",
-  },
-  {
-    number: 90,
-    symbol: "Th",
-    name: "Thorium",
-    row: 10,
-    column: 4,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 91,
-    symbol: "Pa",
-    name: "Protactinium",
-    row: 10,
-    column: 5,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 92,
-    symbol: "U",
-    name: "Uranium",
-    row: 10,
-    column: 6,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 93,
-    symbol: "Np",
-    name: "Neptunium",
-    row: 10,
-    column: 7,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 94,
-    symbol: "Pu",
-    name: "Plutonium",
-    row: 10,
-    column: 8,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 95,
-    symbol: "Am",
-    name: "Americium",
-    row: 10,
-    column: 9,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 96,
-    symbol: "Cm",
-    name: "Curium",
-    row: 10,
-    column: 10,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 97,
-    symbol: "Bk",
-    name: "Berkelium",
-    row: 10,
-    column: 11,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 98,
-    symbol: "Cf",
-    name: "Californium",
-    row: 10,
-    column: 12,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 99,
-    symbol: "Es",
-    name: "Einsteinium",
-    row: 10,
-    column: 13,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 100,
-    symbol: "Fm",
-    name: "Fermium",
-    row: 10,
-    column: 14,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 101,
-    symbol: "Md",
-    name: "Mendelevium",
-    row: 10,
-    column: 15,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 102,
-    symbol: "No",
-    name: "Nobelium",
-    row: 10,
-    column: 16,
-    category: "Actinide",
-    series: "actinide",
-  },
-  {
-    number: 103,
-    symbol: "Lr",
-    name: "Lawrencium",
-    row: 10,
-    column: 17,
-    category: "Actinide",
-    series: "actinide",
-  },
+  {
+    "number": 109,
+    "symbol": "Mt",
+    "name": "Meitnerium",
+    "row": 7,
+    "column": 9,
+    "category": "Unknown"
+  },
+  {
+    "number": 110,
+    "symbol": "Ds",
+    "name": "Darmstadtium",
+    "row": 7,
+    "column": 10,
+    "category": "Unknown"
+  },
+  {
+    "number": 111,
+    "symbol": "Rg",
+    "name": "Roentgenium",
+    "row": 7,
+    "column": 11,
+    "category": "Unknown"
+  },
+  {
+    "number": 112,
+    "symbol": "Cn",
+    "name": "Copernicium",
+    "row": 7,
+    "column": 12,
+    "category": "Transition Metal"
+  },
+  {
+    "number": 113,
+    "symbol": "Nh",
+    "name": "Nihonium",
+    "row": 7,
+    "column": 13,
+    "category": "Post-transition Metal"
+  },
+  {
+    "number": 114,
+    "symbol": "Fl",
+    "name": "Flerovium",
+    "row": 7,
+    "column": 14,
+    "category": "Post-transition Metal"
+  },
+  {
+    "number": 115,
+    "symbol": "Mc",
+    "name": "Moscovium",
+    "row": 7,
+    "column": 15,
+    "category": "Unknown"
+  },
+  {
+    "number": 116,
+    "symbol": "Lv",
+    "name": "Livermorium",
+    "row": 7,
+    "column": 16,
+    "category": "Unknown"
+  },
+  {
+    "number": 117,
+    "symbol": "Ts",
+    "name": "Tennessine",
+    "row": 7,
+    "column": 17,
+    "category": "Unknown"
+  },
+  {
+    "number": 118,
+    "symbol": "Og",
+    "name": "Oganesson",
+    "row": 7,
+    "column": 18,
+    "category": "Unknown"
+  },
+  {
+    "number": 57,
+    "symbol": "La",
+    "name": "Lanthanum",
+    "row": 9,
+    "column": 3,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 58,
+    "symbol": "Ce",
+    "name": "Cerium",
+    "row": 9,
+    "column": 4,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 59,
+    "symbol": "Pr",
+    "name": "Praseodymium",
+    "row": 9,
+    "column": 5,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 60,
+    "symbol": "Nd",
+    "name": "Neodymium",
+    "row": 9,
+    "column": 6,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 61,
+    "symbol": "Pm",
+    "name": "Promethium",
+    "row": 9,
+    "column": 7,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 62,
+    "symbol": "Sm",
+    "name": "Samarium",
+    "row": 9,
+    "column": 8,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 63,
+    "symbol": "Eu",
+    "name": "Europium",
+    "row": 9,
+    "column": 9,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 64,
+    "symbol": "Gd",
+    "name": "Gadolinium",
+    "row": 9,
+    "column": 10,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 65,
+    "symbol": "Tb",
+    "name": "Terbium",
+    "row": 9,
+    "column": 11,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 66,
+    "symbol": "Dy",
+    "name": "Dysprosium",
+    "row": 9,
+    "column": 12,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 67,
+    "symbol": "Ho",
+    "name": "Holmium",
+    "row": 9,
+    "column": 13,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 68,
+    "symbol": "Er",
+    "name": "Erbium",
+    "row": 9,
+    "column": 14,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 69,
+    "symbol": "Tm",
+    "name": "Thulium",
+    "row": 9,
+    "column": 15,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 70,
+    "symbol": "Yb",
+    "name": "Ytterbium",
+    "row": 9,
+    "column": 16,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 71,
+    "symbol": "Lu",
+    "name": "Lutetium",
+    "row": 9,
+    "column": 17,
+    "category": "Lanthanide",
+    "series": "lanthanide"
+  },
+  {
+    "number": 89,
+    "symbol": "Ac",
+    "name": "Actinium",
+    "row": 10,
+    "column": 3,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 90,
+    "symbol": "Th",
+    "name": "Thorium",
+    "row": 10,
+    "column": 4,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 91,
+    "symbol": "Pa",
+    "name": "Protactinium",
+    "row": 10,
+    "column": 5,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 92,
+    "symbol": "U",
+    "name": "Uranium",
+    "row": 10,
+    "column": 6,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 93,
+    "symbol": "Np",
+    "name": "Neptunium",
+    "row": 10,
+    "column": 7,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 94,
+    "symbol": "Pu",
+    "name": "Plutonium",
+    "row": 10,
+    "column": 8,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 95,
+    "symbol": "Am",
+    "name": "Americium",
+    "row": 10,
+    "column": 9,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 96,
+    "symbol": "Cm",
+    "name": "Curium",
+    "row": 10,
+    "column": 10,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 97,
+    "symbol": "Bk",
+    "name": "Berkelium",
+    "row": 10,
+    "column": 11,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 98,
+    "symbol": "Cf",
+    "name": "Californium",
+    "row": 10,
+    "column": 12,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 99,
+    "symbol": "Es",
+    "name": "Einsteinium",
+    "row": 10,
+    "column": 13,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 100,
+    "symbol": "Fm",
+    "name": "Fermium",
+    "row": 10,
+    "column": 14,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 101,
+    "symbol": "Md",
+    "name": "Mendelevium",
+    "row": 10,
+    "column": 15,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 102,
+    "symbol": "No",
+    "name": "Nobelium",
+    "row": 10,
+    "column": 16,
+    "category": "Actinide",
+    "series": "actinide"
+  },
+  {
+    "number": 103,
+    "symbol": "Lr",
+    "name": "Lawrencium",
+    "row": 10,
+    "column": 17,
+    "category": "Actinide",
+    "series": "actinide"
+  }
 ];

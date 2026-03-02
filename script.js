@@ -4,153 +4,628 @@ import {
   calculateMolarMassModal,
   calculateEmpiricalModal,
   formatFormulaHTML,
+  atomicMasses,
 } from "./js/modules/chemistryTools.js";
 import {
   buildPeriodicTable,
   initModalUI,
-} from "./js/modules/uiController.js";
-import { initIonsTable } from "./js/modules/ionsController.js";
+  reRenderCurrentAtomModal
+} from "./js/modules/uiController.js?v=17";
+import { initIonsTable } from "./js/modules/ionsController.js?v=17";
+import { initPageController } from "./js/modules/pageController.js?v=17";
+import { createToolsModalController } from "./js/modules/toolsModalController.js?v=17";
+import { changelogData } from "./js/data/changelogData.js?v=17";
 
 // ========================================
 // Welcome Modal - Intro Page
 // ========================================
-(function initWelcomeModal() {
-  document.addEventListener("DOMContentLoaded", () => {
-    const modal = document.getElementById("welcome-modal");
-    const closeBtn = document.getElementById("welcome-close-btn");
-    const aboutBtn = document.getElementById("floating-about-btn");
-    const startBtn = document.getElementById("welcome-start-btn");
-    if (!modal) return;
-
-    // Check if user has visited before
-    const hasVisited = localStorage.getItem("zperiod_welcomed");
-    if (!hasVisited) {
-      modal.classList.add("active");
-      document.body.classList.add("welcome-active");
-      document.body.classList.add("hide-nav");
+// ========================================
+// Global Dragging State (used to prevent accidental panel close)
+// ========================================
+window._zperiodIsDragging = false;
+(function initGlobalDragTracking() {
+  let pointerDown = false;
+  let startX = 0, startY = 0;
+  const DRAG_THRESHOLD = 5;
+  document.addEventListener('pointerdown', (e) => {
+    pointerDown = true;
+    startX = e.clientX;
+    startY = e.clientY;
+  }, true);
+  document.addEventListener('pointermove', (e) => {
+    if (!pointerDown) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+      window._zperiodIsDragging = true;
     }
+  }, true);
+  document.addEventListener('pointerup', () => {
+    pointerDown = false;
+    // Delay clearing drag state so click handlers see it
+    setTimeout(() => { window._zperiodIsDragging = false; }, 80);
+  }, true);
+  document.addEventListener('pointercancel', () => {
+    pointerDown = false;
+    setTimeout(() => { window._zperiodIsDragging = false; }, 80);
+  }, true);
+  window.addEventListener('blur', () => {
+    pointerDown = false;
+    // Don't close panels on blur
+  });
+})();
 
-    function showWelcome() {
-      modal.classList.add("active");
-      document.body.classList.add("welcome-active");
-      document.body.classList.add("hide-nav");
-    }
+// ========================================
+// Global Animation Speed State
+// ========================================
+window._zperiodAnimPaused = localStorage.getItem('zperiod_anim_paused') === 'true';
+window._zperiodAnimSpeed = parseFloat(localStorage.getItem('zperiod_anim_speed')) || 0.6;
 
-    function closeWelcome() {
-      modal.classList.remove("active");
-      document.body.classList.remove("welcome-active");
-      document.body.classList.remove("hide-nav");
-      localStorage.setItem("zperiod_welcomed", "true");
-      // Dispose hero WebGL renderer to free context
-      if (window._heroCleanup) window._heroCleanup();
-    }
+function initWelcomeModal() {
+  const modal = document.getElementById("welcome-modal");
+  const closeBtn = document.getElementById("welcome-close-btn");
+  const startBtn = document.getElementById("welcome-start-btn");
+  if (!modal) return;
 
-    if (closeBtn) closeBtn.addEventListener("click", closeWelcome);
-    if (startBtn) startBtn.addEventListener("click", closeWelcome);
-    if (aboutBtn) aboutBtn.addEventListener("click", showWelcome);
+  // Check if user has visited before
+  const hasVisited = localStorage.getItem("zperiod_welcomed");
+  if (!hasVisited) {
+    modal.classList.add("active");
+    document.body.classList.add("welcome-active");
+    document.body.classList.add("hide-nav");
+  }
 
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeWelcome();
-    });
+  window._showWelcome = function showWelcome() {
+    modal.classList.add("active");
+    document.body.classList.add("welcome-active");
+    document.body.classList.add("hide-nav");
+  };
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modal.classList.contains("active")) {
-        closeWelcome();
-      }
-    });
+  function closeWelcome() {
+    modal.classList.remove("active");
+    document.body.classList.remove("welcome-active");
+    document.body.classList.remove("hide-nav");
+    localStorage.setItem("zperiod_welcomed", "true");
+    // Dispose hero WebGL renderer to free context
+    if (window._heroCleanup) window._heroCleanup();
+  }
+
+  if (closeBtn) closeBtn.addEventListener("click", closeWelcome);
+  if (startBtn) startBtn.addEventListener("click", closeWelcome);
+
+  modal.addEventListener("click", (e) => {
+    if (window._zperiodIsDragging) return;
+    if (e.target === modal) closeWelcome();
   });
 
-  // Email copy function
-  window.copyEmail = function (text, btn) {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        const copyIcon = btn.querySelector(".icon-copy");
-        const checkIcon = btn.querySelector(".icon-check");
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("active")) {
+      closeWelcome();
+    }
+  });
+}
 
-        if (copyIcon) copyIcon.style.display = "none";
-        if (checkIcon) checkIcon.style.display = "block";
+// Email copy function
+window.copyEmail = function (text, btn) {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      const copyIcon = btn.querySelector(".icon-copy");
+      const checkIcon = btn.querySelector(".icon-check");
 
-        btn.style.transform = "scale(0.98)";
-        setTimeout(() => (btn.style.transform = "scale(1)"), 100);
+      if (copyIcon) copyIcon.style.display = "none";
+      if (checkIcon) checkIcon.style.display = "block";
 
-        setTimeout(() => {
-          if (copyIcon) copyIcon.style.display = "block";
-          if (checkIcon) checkIcon.style.display = "none";
-        }, 2000);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
-      });
-  };
-})();
+      btn.style.transform = "scale(0.98)";
+      setTimeout(() => (btn.style.transform = "scale(1)"), 100);
+
+      setTimeout(() => {
+        if (copyIcon) copyIcon.style.display = "block";
+        if (checkIcon) checkIcon.style.display = "none";
+      }, 2000);
+    })
+    .catch((err) => {
+      console.error("Failed to copy: ", err);
+    });
+};
 
 // ========================================
 // Suggestion Input - UI Interaction
 // ========================================
-(function initSuggestionBox() {
-  document.addEventListener("DOMContentLoaded", () => {
-    const input = document.getElementById("suggestion-input");
-    const sendBtn = document.getElementById("suggestion-send-btn");
-    const box = document.getElementById("suggestion-box");
-    if (!input || !sendBtn || !box) return;
+function initSuggestionBox() {
+  const input = document.getElementById("suggestion-input");
+  const sendBtn = document.getElementById("suggestion-send-btn");
+  const box = document.getElementById("suggestion-box");
+  if (!input || !sendBtn || !box) return;
 
-    const BASE_WIDTH = 140;
-    const PADDING_EXTRA = 60; // padding for send button + breathing room
-    const sendIconHTML = sendBtn.innerHTML; // save original send icon
+  const BASE_WIDTH = 140;
+  const PADDING_EXTRA = 60; // padding for send button + breathing room
+  const sendIconHTML = sendBtn.innerHTML; // save original send icon
 
-    const checkIconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+  const checkIconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
 
-    // Measure text width helper
-    function measureText(text) {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      ctx.font = "500 13.6px Inter, sans-serif";
-      return ctx.measureText(text).width;
+  // Measure text width helper
+  function measureText(text) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.font = "500 13.6px Inter, sans-serif";
+    return ctx.measureText(text).width;
+  }
+
+  // Calculate max available width (from box to near center pill)
+  function getMaxWidth() {
+    const nav = document.getElementById("global-nav");
+    const pill = document.querySelector(".global-nav-pill");
+    if (!nav || !pill || !box) return 600;
+    const pillRect = pill.getBoundingClientRect();
+    const boxRight = nav.getBoundingClientRect().right - 60; // GitHub icon space
+    const available = boxRight - pillRect.right - 30; // 30px gap from pill
+    return Math.max(BASE_WIDTH, Math.min(available, 800));
+  }
+
+  // Update box width based on text content
+  function updateWidth() {
+    const hasText = input.value.trim().length > 0;
+    sendBtn.classList.toggle("visible", hasText);
+
+    const textWidth = measureText(input.value);
+    const neededWidth = textWidth + PADDING_EXTRA;
+    const maxW = getMaxWidth();
+    const targetWidth = Math.max(BASE_WIDTH, Math.min(neededWidth, maxW));
+
+    box.style.width = targetWidth + "px";
+  }
+
+  input.addEventListener("input", updateWidth);
+
+  // Collapse on blur if empty
+  input.addEventListener("blur", () => {
+    setTimeout(() => {
+      if (!input.value.trim()) {
+        box.style.width = BASE_WIDTH + "px";
+        sendBtn.classList.remove("visible");
+      }
+    }, 200);
+  });
+
+  // Send button click
+  sendBtn.addEventListener("click", () => {
+    const text = input.value.trim();
+    if (!text) return;
+
+    // Send to Discord webhook
+    fetch(
+      "https://discord.com/api/webhooks/1470782870527414455/0c9YPJ-nWeAQ3FDyO7xou9TivkdrPWGmtISAS4MRyY9RKldhtsqekHfbPuhuYIMyVduU",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: `📬 **New Suggestion from Zperiod**\n> ${text}\n\n_Sent at ${new Date().toLocaleString()}_`,
+        }),
+      },
+    ).catch(() => { }); // silent fail
+
+    // Clear input and collapse
+    input.value = "";
+    box.style.width = BASE_WIDTH + "px";
+    sendBtn.classList.remove("visible");
+
+    // Show green checkmark on button
+    sendBtn.innerHTML = checkIconHTML;
+    sendBtn.classList.add("sent");
+
+    setTimeout(() => {
+      sendBtn.innerHTML = sendIconHTML;
+      sendBtn.classList.remove("sent");
+    }, 800);
+  });
+
+  // Enter key to send
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && input.value.trim()) {
+      sendBtn.click();
     }
+  });
+}
 
-    // Calculate max available width (from box to near center pill)
-    function getMaxWidth() {
-      const nav = document.getElementById("global-nav");
-      const pill = document.querySelector(".global-nav-pill");
-      if (!nav || !pill || !box) return 600;
-      const pillRect = pill.getBoundingClientRect();
-      const boxRight = nav.getBoundingClientRect().right - 60; // GitHub icon space
-      const available = boxRight - pillRect.right - 30; // 30px gap from pill
-      return Math.max(BASE_WIDTH, Math.min(available, 800));
+// ========================================
+// Periodic Table Auto-Scale on Short Viewport
+// ========================================
+function initPeriodicTableScale() {
+  const table = document.getElementById("periodic-table");
+  const container = document.getElementById("main-container");
+  if (!table || !container) return;
+
+  const LOGICAL_WIDTH = 1240;
+  const MAX_GAP = 96;
+  const MIN_GAP = 24;
+  let isScaling = false;
+
+  function computeTvmin(tableW) {
+    // Scale tvmin with table width to keep text proportional in cells
+    const effectiveH = Math.max(window.innerHeight, 500);
+    return Math.min(tableW, effectiveH) / 100;
+  }
+
+  function measureHeight(gap) {
+    table.style.setProperty("--series-gap", `${gap}px`);
+    table.style.transition = "none";
+    table.style.transform = "none";
+    void table.offsetHeight;
+    return table.getBoundingClientRect().height;
+  }
+
+  function applyLayout(gap, scale, marginTop) {
+    table.style.setProperty("--series-gap", `${gap}px`);
+    table.style.transformOrigin = "top center";
+    table.style.transform = scale < 0.999 ? `scale(${scale})` : "none";
+    table.style.marginTop = `${marginTop}px`;
+
+    const legend = document.getElementById("table-legend");
+    if (legend) {
+      legend.style.transform = "translateY(10px)";
+      legend.style.transformOrigin = "top center";
     }
+  }
 
-    // Update box width based on text content
-    function updateWidth() {
-      const hasText = input.value.trim().length > 0;
-      sendBtn.classList.toggle("visible", hasText);
+  function scaleTable() {
+    if (isScaling) return;
+    if (getComputedStyle(container).display === "none") return;
+    if (table.children.length === 0) return;
 
-      const textWidth = measureText(input.value);
-      const neededWidth = textWidth + PADDING_EXTRA;
-      const maxW = getMaxWidth();
-      const targetWidth = Math.max(BASE_WIDTH, Math.min(neededWidth, maxW));
+    isScaling = true;
+    try {
+      // 1. Measure Environment
+      const containerStyle = getComputedStyle(container);
+      const padT = parseFloat(containerStyle.paddingTop) || 0;
+      const padB = parseFloat(containerStyle.paddingBottom) || 0;
+      const availH = Math.max(window.innerHeight - padT - padB, 100);
 
-      box.style.width = targetWidth + "px";
-    }
+      const MIN_READABLE_SCALE = 0.65;
+      const SCROLL_THRESHOLD = 1150; // Below this, always scroll
 
-    input.addEventListener("input", updateWidth);
+      // 2. Smart width decision: try fitting at current window width first
+      let tableWidth;
+      let useScrollMode = false;
 
-    // Collapse on blur if empty
-    input.addEventListener("blur", () => {
-      setTimeout(() => {
-        if (!input.value.trim()) {
-          box.style.width = BASE_WIDTH + "px";
-          sendBtn.classList.remove("visible");
+      if (window.innerWidth < SCROLL_THRESHOLD) {
+        // Very narrow window: always use scroll mode
+        useScrollMode = true;
+      } else {
+        // Try fitting at current window width
+        const tryWidth = window.innerWidth - 40;
+        const tryTvmin = computeTvmin(tryWidth);
+        table.style.setProperty("--tvmin", `${tryTvmin}px`);
+        table.style.width = `${tryWidth}px`;
+        const tryH = measureHeight(MIN_GAP);
+        const tryScale = availH / tryH;
+
+        if (tryScale >= MIN_READABLE_SCALE) {
+          // Table fits at this width with acceptable scaling
+          tableWidth = tryWidth;
+          // Set container min-width to window width (no scroll)
+          container.style.minWidth = `${window.innerWidth}px`;
+        } else {
+          // Scale too small — table would be unreadable. Use scroll mode.
+          useScrollMode = true;
         }
-      }, 200);
+      }
+
+      if (useScrollMode) {
+        // Scroll mode: use fullscreen-equivalent width
+        const fullscreenRef = Math.max(screen.availWidth, 1280);
+        tableWidth = Math.max(fullscreenRef - 40, LOGICAL_WIDTH);
+        container.style.minWidth = `${tableWidth + 40}px`;
+      }
+
+      // 3. Apply width and tvmin
+      const tvmin = computeTvmin(tableWidth);
+      table.style.setProperty("--tvmin", `${tvmin}px`);
+      table.style.width = `${tableWidth}px`;
+
+      // 4. Measure base height with MIN gap
+      const hMin = measureHeight(MIN_GAP);
+
+      // 5. Adaptive Gap: expand gap to fill available height, maximizing the table
+      let currentGap;
+      let height;
+      let scale = 1;
+
+      if (hMin > availH) {
+        // Even with min gap, too tall → need to scale
+        currentGap = MIN_GAP;
+        height = hMin;
+        scale = Math.max(availH / height, 0.1);
+      } else {
+        // Table fits. Expand gap to fill remaining space.
+        const extraSpace = availH - hMin;
+        currentGap = Math.min(MAX_GAP, MIN_GAP + extraSpace);
+        height = measureHeight(currentGap);
+        // Fine-tune: if somehow still doesn't fit, clamp
+        if (height > availH) {
+          currentGap = MIN_GAP;
+          height = hMin;
+        }
+      }
+
+      // 6. Vertical Centering
+      const scaledHeight = height * scale;
+      let marginTop = 0;
+      if (scaledHeight < availH) {
+        marginTop = (availH - scaledHeight) / 2;
+      }
+
+      // 7. Fix scroll mode margins: match container to visual width
+      if (useScrollMode && scale < 0.999) {
+        const visualWidth = Math.ceil(tableWidth * scale);
+        container.style.minWidth = `${visualWidth + 40}px`;
+      }
+
+      // 8. Legend layout: switch between 4-col and 2-col based on VISUAL width
+      const legend = document.getElementById("table-legend");
+      if (legend) {
+        // Legend spans grid-column 3/13 = 10 out of 18 columns
+        // Use visual width (accounting for scale) to decide layout
+        const legendVisualWidth = (10 / 18) * tableWidth * scale;
+        // 4 columns need ~560px visual minimum (4 × 140px)
+        if (legendVisualWidth < 560) {
+          legend.classList.add("legend-compact");
+        } else {
+          legend.classList.remove("legend-compact");
+        }
+      }
+
+      applyLayout(currentGap, scale, marginTop);
+
+    } catch (e) {
+      console.error("Scale Error:", e);
+    } finally {
+      isScaling = false;
+    }
+  }
+
+  window._scalePeriodicTable = scaleTable;
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => requestAnimationFrame(scaleTable), 50);
+  });
+  window.addEventListener("load", scaleTable);
+  // Also run immediately
+  requestAnimationFrame(scaleTable);
+}
+
+function getChemToolContent(toolType) {
+  switch (toolType) {
+    case "balancer":
+      return generateBalancerToolContent();
+    case "molar-mass":
+      return generateMolarMassToolContent();
+    case "empirical":
+      return generateEmpiricalToolContent();
+    case "solubility":
+      return generateSolubilityToolContent();
+    default:
+      return "";
+  }
+}
+
+function initNavResponsive() {
+  const nav = document.getElementById("global-nav");
+  if (!nav) return;
+
+  const SAFETY_GAP = 32;
+
+  function checkNavCollision() {
+    nav.classList.remove("nav-hide-brand");
+    void nav.offsetWidth;
+
+    const navInnerWidth = nav.clientWidth - 40;
+    const logo = nav.querySelector(".nav-logo-link");
+    const brand = nav.querySelector(".nav-brand");
+    const pill = nav.querySelector(".global-nav-pill");
+
+    const logoW = logo ? logo.offsetWidth : 0;
+    const brandW = brand ? brand.offsetWidth : 0;
+    const pillW = pill ? pill.offsetWidth : 0;
+    const navGap = 12;
+    const brandGap = brand && brandW > 0 ? 10 : 0;
+
+    const totalNeeded = logoW + brandGap + brandW + navGap + pillW + SAFETY_GAP * 2;
+
+    if (totalNeeded > navInnerWidth) {
+      nav.classList.add("nav-hide-brand");
+    }
+  }
+
+  let navResizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(navResizeTimer);
+    navResizeTimer = setTimeout(checkNavCollision, 60);
+  });
+  window.addEventListener("load", checkNavCollision);
+  requestAnimationFrame(checkNavCollision);
+}
+
+// Global Data Version State
+window.zperiodVersion = 'old';
+
+function bootstrapApp() {
+  initWelcomeModal();
+
+  // Version Dropdown Logic
+  const dropdown = document.getElementById("version-dropdown");
+  const toggle = document.getElementById("version-dropdown-toggle");
+  const option = document.getElementById("version-dropdown-option");
+  const currentLabel = toggle?.querySelector(".version-current-label");
+
+  if (toggle && dropdown) {
+    // Toggle dropdown open/close
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle("open");
     });
 
-    // Send button click
-    sendBtn.addEventListener("click", () => {
-      const text = input.value.trim();
-      if (!text) return;
+    // Close dropdown on outside click
+    document.addEventListener("click", () => {
+      dropdown.classList.remove("open");
+    });
 
-      // Send to Discord webhook
+    // Switch version — Advanced is disabled (not ready)
+    // Create tooltip element
+    const tooltip = document.createElement('div');
+    tooltip.className = 'advanced-tooltip';
+    // Only "Coming soon"
+    tooltip.innerText = 'Coming soon';
+    
+    // Opaque Styles
+    Object.assign(tooltip.style, {
+        position: 'fixed',
+        background: '#1a1a1a', // Dark opaque background
+        color: '#fff', // White text
+        padding: '6px 12px', // Compact padding
+        borderRadius: '20px', // Pill shape
+        fontSize: '12px',
+        fontWeight: '500',
+        lineHeight: '1',
+        pointerEvents: 'none',
+        zIndex: '9999',
+        display: 'none',
+        whiteSpace: 'nowrap', 
+        transform: 'translateY(-50%)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)', // Softer shadow
+        fontFamily: '"Inter", sans-serif',
+        textAlign: 'center',
+        border: 'none' // Remove border since it's opaque
+    });
+    document.body.appendChild(tooltip);
+
+    // Hover logic
+    if (option) {
+        option.addEventListener('mouseenter', () => {
+             const rect = option.getBoundingClientRect();
+             // Position to the right of the dropdown menu
+             tooltip.style.top = (rect.top + rect.height / 2) + 'px';
+             tooltip.style.left = (rect.right + 12) + 'px'; // 12px gap
+             tooltip.style.display = 'block';
+             
+             // Add a subtle fade-in animation
+             tooltip.animate([
+               { opacity: 0, transform: 'translateY(-50%) translateX(-5px)' },
+               { opacity: 1, transform: 'translateY(-50%) translateX(0)' }
+             ], { duration: 200, easing: 'ease-out' });
+        });
+        option.addEventListener('mouseleave', () => {
+             tooltip.style.display = 'none';
+        });
+
+        // Keep click disabled
+        option.addEventListener("click", (e) => {
+             e.stopPropagation();
+        });
+    }
+  }
+  initPeriodicTableScale();
+  initNavResponsive();
+
+  const tableContainer = document.getElementById("periodic-table");
+  if (tableContainer) buildPeriodicTable(tableContainer);
+  initModalUI();
+
+  const toolsModalController = createToolsModalController({
+    getToolContent: getChemToolContent,
+    attachToolEventListeners,
+  });
+  toolsModalController.init();
+
+  const pageCtrl = initPageController({
+    onTablePageShown: () => {
+      if (window._scalePeriodicTable) window._scalePeriodicTable();
+    },
+    onToolsPageShown: () => {
+      setTimeout(() => toolsModalController.initChemToolCards(), 100);
+    },
+  });
+
+  // Floating about button opens Welcome / Help
+  const aboutBtn = document.getElementById("floating-about-btn");
+  if (aboutBtn) {
+    aboutBtn.addEventListener("click", () => {
+      if (window._showWelcome) window._showWelcome();
+    });
+  }
+
+  try {
+    initIonsTable();
+  } catch (e) {
+    console.error("Ions table init error:", e);
+  }
+
+  requestAnimationFrame(() => {
+    if (window._scalePeriodicTable) window._scalePeriodicTable();
+  });
+
+  initHeroAtom();
+  initSettingsPage();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", bootstrapApp, { once: true });
+} else {
+  bootstrapApp();
+}
+
+// ========================================
+// Settings Page Initialization
+// ========================================
+function initSettingsPage() {
+  // --- Changelog (data from external file) ---
+  const changelogList = document.getElementById("settings-changelog-list");
+  if (changelogList) {
+    changelogList.innerHTML = changelogData.map(entry => `
+      <div class="changelog-entry">
+        <div class="changelog-header">
+          <span class="changelog-version">v${entry.version}</span>
+          <span class="changelog-date">${entry.date}</span>
+        </div>
+        <ul class="changelog-items">
+          ${entry.changes.map(c => `<li>${c}</li>`).join("")}
+        </ul>
+      </div>
+    `).join("");
+  }
+
+  // --- Suggestion (Discord webhook) ---
+  const suggInput = document.getElementById("settings-suggestion-input");
+  const suggSend = document.getElementById("settings-suggestion-send");
+  const suggStatus = document.getElementById("suggest-status");
+  const chipContainer = document.getElementById("suggest-chips");
+
+  // Prompt chips — click to pre-fill input
+  if (chipContainer && suggInput) {
+    let activeChip = null;
+    chipContainer.addEventListener("click", (e) => {
+      const chip = e.target.closest(".sv-chip");
+      if (!chip) return;
+      // Toggle active
+      if (activeChip) activeChip.classList.remove("active");
+      if (activeChip === chip) { activeChip = null; suggInput.value = ""; suggInput.placeholder = "Type your suggestion..."; return; }
+      activeChip = chip;
+      chip.classList.add("active");
+      const prefill = chip.dataset.text || "";
+      suggInput.value = prefill;
+      suggInput.placeholder = prefill ? "Continue typing..." : "Type your suggestion...";
+      suggInput.focus();
+    });
+  }
+
+  if (suggInput && suggSend) {
+    const sendIconHTML = suggSend.innerHTML;
+    const checkIconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+
+    function sendSuggestion() {
+      const text = suggInput.value.trim();
+      if (!text) return;
       fetch(
         "https://discord.com/api/webhooks/1470782870527414455/0c9YPJ-nWeAQ3FDyO7xou9TivkdrPWGmtISAS4MRyY9RKldhtsqekHfbPuhuYIMyVduU",
         {
@@ -160,360 +635,89 @@ import { initIonsTable } from "./js/modules/ionsController.js";
             content: `📬 **New Suggestion from Zperiod**\n> ${text}\n\n_Sent at ${new Date().toLocaleString()}_`,
           }),
         },
-      ).catch(() => { }); // silent fail
-
-      // Clear input and collapse
-      input.value = "";
-      box.style.width = BASE_WIDTH + "px";
-      sendBtn.classList.remove("visible");
-
-      // Show green checkmark on button
-      sendBtn.innerHTML = checkIconHTML;
-      sendBtn.classList.add("sent");
-
+      ).catch(() => {});
+      suggInput.value = "";
+      suggSend.innerHTML = checkIconHTML;
+      suggSend.classList.add("sent");
+      if (suggStatus) { suggStatus.textContent = "Sent! Thanks for your feedback."; suggStatus.className = "sv-suggest-status success"; }
+      // Clear active chip
+      if (chipContainer) { const ac = chipContainer.querySelector(".sv-chip.active"); if (ac) ac.classList.remove("active"); }
       setTimeout(() => {
-        sendBtn.innerHTML = sendIconHTML;
-        sendBtn.classList.remove("sent");
-      }, 800);
-    });
-
-    // Enter key to send
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && input.value.trim()) {
-        sendBtn.click();
-      }
-    });
-  });
-})();
-
-// ========================================
-// Periodic Table Auto-Scale on Short Viewport
-// ========================================
-(function initPeriodicTableScale() {
-  document.addEventListener("DOMContentLoaded", () => {
-    const table = document.getElementById("periodic-table");
-    const container = document.getElementById("main-container");
-    if (!table || !container) return;
-
-    // Concurrency lock to prevent recursive or overlapping scale calculations
-    let isScaling = false;
-
-    function scaleTable() {
-      if (isScaling) return; // Locked
-      if (container.style.display === "none") return; // Hidden page
-      if (table.children.length === 0) return; // Table not built yet
-
-      isScaling = true;
-
-      try {
-        // 1. Disable animation/transition temporarily to prevent layout glitches and slow measurements
-        table.style.transition = "none";
-
-        // 2. Reset styles to measure the natural unscaled boundaries
-        table.style.transform = "none";
-        table.style.height = "auto";
-        table.style.margin = "0";
-        table.style.maxHeight = "none"; // Temporarily lift CSS clipping limits
-
-        // Force synchronous layout constraint evaluation
-        void table.offsetHeight;
-
-        // 3. Measure table's natural content size safely
-        const tableRect = table.getBoundingClientRect();
-        const contentH = Math.max(tableRect.height, 1); // Prevent division by 0
-        const contentW = Math.max(tableRect.width, 1);  // Prevent division by 0
-
-        // 3.5 Dynamic gap limit: 1.5x of the size of an element block
-        const sampleElement = table.querySelector(".element");
-        let maxGapAllowance = 0;
-        if (sampleElement) {
-          const elementSize = sampleElement.getBoundingClientRect().height;
-          maxGapAllowance = elementSize * 1.5;
-        }
-
-        // 4. Measure actual safe available space in the container (excluding padding/Navbar)
-        const containerStyle = getComputedStyle(container);
-        const padTop = parseFloat(containerStyle.paddingTop) || 0;
-        const padBot = parseFloat(containerStyle.paddingBottom) || 0;
-        const padLeft = parseFloat(containerStyle.paddingLeft) || 0;
-        const padRight = parseFloat(containerStyle.paddingRight) || 0;
-
-        const availableH = container.clientHeight - padTop - padBot;
-        const availableW = container.clientWidth - padLeft - padRight;
-
-        // 5. Calculate the true base layout height.
-        // If we are shrinking, we don't just use "auto", because that would crush the gap prematurely!
-        const baseLayoutH = Math.max(contentH, Math.min(availableH, contentH + maxGapAllowance));
-
-        // This demands absolute, unconditional vertical maximization to the container bounds!
-        // We eliminate ANY width checks or fixed 1.0 caps. It simply grows or shrinks to perfectly fit top-to-bottom.
-        let scale = availableH / baseLayoutH;
-
-        // 7. Calculate and inject an absolute pseudo-vmin to freeze CSS squashing
-        // By pretending the window mathematically never physically dropped beneath an 860x860 Desktop Viewport,
-        // we guarantee `clamp(11px)` typography limits, `15%` roundings, and grid gaps generate a mathematically
-        // perfect 1:1 "Desktop Style" Master Layout before resolving the visual zoom `scale`.
-        const effectiveVw = Math.max(window.innerWidth, contentW);
-        const effectiveVh = Math.max(window.innerHeight, 860); // Hard floor to intercept narrow heights squashing padded pills
-        const mockVmin = Math.min(effectiveVw, effectiveVh) / 100;
-        table.style.setProperty("--tvmin", `${mockVmin}px`);
-
-        let isHorizontallyOverflowing = (contentW * scale > availableW);
-        let isVerticallyOverflowing = (baseLayoutH * scale > availableH);
-
-        // 8. Apply strictly calculated parameters universally across ANY magnitude
-        table.style.height = `${baseLayoutH}px`;
-        table.style.maxHeight = "none";
-        table.style.transform = `scale(${scale})`; // Apply visual scale
-
-        // CRITICAL: `transform: scale` only shrinks the visual aspect, NOT the layout box!
-        // These margins trick the browser into collapsing (or expanding) the bounding box to perfectly envelop the visual layer mapping 1:1 on coordinate 0,0
-        const marginV = -((baseLayoutH * (1 - scale)) / 2);
-        const marginH = -((contentW * (1 - scale)) / 2);
-
-        // When displaying scaled blocks that significantly overflow (especially magnitude > 1), we MUST abandon flexbox alignment.
-        // CSS Flexbox physically clips the overflowing top/left bounds relative to viewport sizing.
-        // A standard block layout elegantly natively anchors origin to 0,0 and provides perfect scroll bounds.
-        if (scale !== 1 || isHorizontallyOverflowing || isVerticallyOverflowing) {
-          container.style.display = "block";
-          // Vertical negative margins compensate transform scale on layout box.
-          // Horizontal: use auto to center, plus negative compensation for scale shrinkage via padding trick.
-          if (isHorizontallyOverflowing) {
-            table.style.margin = `${marginV}px ${marginH}px`;
-          } else {
-            table.style.margin = `${marginV}px auto`;
-          }
-          container.style.overflowX = isHorizontallyOverflowing ? "auto" : "hidden";
-          container.style.overflowY = isVerticallyOverflowing ? "auto" : "hidden";
-        } else {
-          // Natural 1:1 fitting bounds
-          table.style.margin = "0 auto";
-          container.style.display = "flex";
-          container.style.justifyContent = "center";
-          container.style.alignItems = "center";
-          container.style.overflowX = "hidden";
-          container.style.overflowY = "hidden";
-        }
-
-        // 9. Dynamically reflow legend columns based on effective visual width
-        const legend = document.getElementById("table-legend");
-        if (legend) {
-          const legendVisualW = legend.offsetWidth * scale;
-          let cols;
-          if (legendVisualW >= 600) cols = 5;
-          else if (legendVisualW >= 480) cols = 4;
-          else if (legendVisualW >= 340) cols = 3;
-          else cols = 2;
-          legend.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
-        }
-
-        // 10. Flush DOM operations and re-enable CSS transitions gracefully
-        void table.offsetHeight;
-        table.style.transition = "";
-
-      } catch (e) {
-        console.error("Zperiod Auto-Scale Exception:", e);
-      } finally {
-        isScaling = false; // Release lock
-      }
+        suggSend.innerHTML = sendIconHTML;
+        suggSend.classList.remove("sent");
+        if (suggStatus) { suggStatus.textContent = ""; suggStatus.className = "sv-suggest-status"; }
+        suggInput.placeholder = "Type your suggestion...";
+      }, 2500);
     }
 
-    // Expose scaling initialization globally for external asynchronous triggers
-    window._scalePeriodicTable = scaleTable;
-
-    // Debounce resize listener to prevent computationally expensive layout trashing
-    let resizeTimer;
-    window.addEventListener("resize", () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => requestAnimationFrame(scaleTable), 50);
-    });
-
-    // Final layout verification step upon system readiness
-    window.addEventListener("load", () => {
-      requestAnimationFrame(scaleTable);
-    });
-  });
-})();
-
-document.addEventListener("DOMContentLoaded", () => {
-  const tableContainer = document.getElementById("periodic-table");
-  if (tableContainer) buildPeriodicTable(tableContainer);
-  initModalUI();
-
-  // Scale table now that elements are built
-  requestAnimationFrame(() => {
-    if (window._scalePeriodicTable) window._scalePeriodicTable();
-  });
-
-  // Page navigation
-  const mainContainer = document.getElementById("main-container");
-  const blankPage1 = document.getElementById("blank-page-1");
-  const blankPage2 = document.getElementById("blank-page-2");
-  const ionsPage = document.getElementById("ions-page");
-  let currentPage = "table";
-
-  const pages = {
-    table: { show: () => { if (mainContainer) mainContainer.style.display = "flex"; } },
-    ions: { show: () => { if (ionsPage) ionsPage.style.display = "flex"; } },
-    blank1: { show: () => { if (blankPage1) blankPage1.classList.add("active"); } },
-    blank2: { show: () => { if (blankPage2) blankPage2.classList.add("active"); } },
-  };
-
-  function showPage(page) {
-    if (currentPage === page) return;
-    // Hide all
-    if (mainContainer) mainContainer.style.display = "none";
-    if (blankPage1) blankPage1.classList.remove("active");
-    if (blankPage2) blankPage2.classList.remove("active");
-    if (ionsPage) ionsPage.style.display = "none";
-    // Show target
-    pages[page].show();
-    currentPage = page;
-    // Re-scale table when switching back to it
-    if (page === "table" && window._scalePeriodicTable) {
-      requestAnimationFrame(() => window._scalePeriodicTable());
-    }
-  }
-
-  // Convenience aliases used by monkey-patched wrappers below
-  let showTablePage = () => showPage("table");
-  let showIonsPage = () => showPage("ions");
-  let showBlankPage1 = () => showPage("blank1");
-  let showBlankPage2 = () => showPage("blank2");
-
-  // Bind all page-switch buttons (3 copies per page: main, tools, blank headers)
-  const btnMap = {
-    table: ["btn-table", "btn-table-page1", "btn-table-page2"],
-    blank1: ["btn-tools", "btn-tools-page1", "btn-tools-page2"],
-    blank2: ["btn-blank-page", "btn-blank-page1", "btn-blank-page2"],
-  };
-  Object.entries(btnMap).forEach(([page, ids]) => {
-    ids.forEach((id) => {
-      const btn = document.getElementById(id);
-      if (btn) btn.addEventListener("click", () => showPage(page));
-    });
-  });
-
-  const originalShowBlankPage1 = showBlankPage1;
-  showBlankPage1 = function () {
-    originalShowBlankPage1();
-    setTimeout(initChemToolCards, 100);
-  };
-
-  // =========================================
-  // Global Navigation Pill Handlers
-  // =========================================
-  const globalNavBtns = document.querySelectorAll(".nav-pill-btn");
-
-  function updateGlobalNavActive(activePage) {
-    globalNavBtns.forEach((btn) => {
-      btn.classList.remove("active");
-      if (btn.dataset.page === activePage) {
-        btn.classList.add("active");
-      }
+    suggSend.addEventListener("click", sendSuggestion);
+    suggInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && suggInput.value.trim()) sendSuggestion();
     });
   }
 
-  const navPageMap = { table: "table", ions: "ions", tools: "blank1", worksheet: "blank2" };
-  globalNavBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const page = btn.dataset.page;
-      const target = navPageMap[page];
-      if (target) {
-        showPage(target);
-        updateGlobalNavActive(page);
-      }
-    });
-  });
-
-  // Initialize Ions Table
-  try { initIonsTable(); } catch (e) { console.error("Ions table init error:", e); }
-
-});
-
-// Initialize on page load
-document.addEventListener("DOMContentLoaded", () => {
-  // Set up modal close handlers
-  const featureModal = document.getElementById("feature-modal");
-  const featureModalClose = document.getElementById("feature-modal-close");
-
-  if (featureModalClose) {
-    featureModalClose.addEventListener("click", () => {
-      if (featureModal) {
-        featureModal.classList.remove("active");
-        document.body.classList.remove("hide-nav");
-      }
+  // --- Help / Open Welcome ---
+  const openWelcomeBtn = document.getElementById("settings-open-welcome");
+  if (openWelcomeBtn) {
+    openWelcomeBtn.addEventListener("click", () => {
+      if (window._showWelcome) window._showWelcome();
     });
   }
 
-  if (featureModal) {
-    featureModal.addEventListener("click", (e) => {
-      if (e.target === featureModal) {
-        featureModal.classList.remove("active");
-        document.body.classList.remove("hide-nav");
-      }
+  // --- Animation Controls ---
+  const playToggle = document.getElementById("anim-play-toggle");
+  const speedSlider = document.getElementById("anim-speed-slider");
+  const speedLabel = document.getElementById("speed-value-label");
+
+  // Initialize UI from saved state
+  if (speedSlider) {
+    speedSlider.value = window._zperiodAnimSpeed;
+    if (speedLabel) speedLabel.textContent = window._zperiodAnimSpeed.toFixed(1) + "×";
+  }
+  if (playToggle) {
+    updatePlayToggleIcon(playToggle, window._zperiodAnimPaused);
+  }
+
+  // Apply initial paused state to CSS animations
+  applyAnimationPauseState(window._zperiodAnimPaused);
+
+  if (playToggle) {
+    playToggle.addEventListener("click", () => {
+      window._zperiodAnimPaused = !window._zperiodAnimPaused;
+      localStorage.setItem("zperiod_anim_paused", window._zperiodAnimPaused);
+      updatePlayToggleIcon(playToggle, window._zperiodAnimPaused);
+      applyAnimationPauseState(window._zperiodAnimPaused);
     });
   }
 
-  // Initialize chemistry tool cards
-  initChemToolCards();
-});
-
-// ============================================
-// Chemistry Tool Cards (Page Blank-1)
-// ============================================
-
-let chemToolCardsInitialized = false;
-
-function initChemToolCards() {
-  // Prevent multiple initializations
-  if (chemToolCardsInitialized) return;
-
-  const toolCards = document.querySelectorAll(".chem-tool-card");
-
-  if (toolCards.length === 0) return;
-
-  toolCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      const toolType = card.getAttribute("data-tool");
-      openChemToolModal(toolType);
+  if (speedSlider) {
+    speedSlider.addEventListener("input", () => {
+      const val = parseFloat(speedSlider.value);
+      window._zperiodAnimSpeed = val;
+      localStorage.setItem("zperiod_anim_speed", val);
+      if (speedLabel) speedLabel.textContent = val.toFixed(1) + "×";
     });
-  });
-
-  chemToolCardsInitialized = true;
+  }
 }
 
-function openChemToolModal(toolType) {
-  const featureModal = document.getElementById("feature-modal");
-  const featureModalBody = document.getElementById("feature-modal-body");
-
-  if (!featureModal || !featureModalBody) return;
-
-  let content = "";
-
-  switch (toolType) {
-    case "balancer":
-      content = generateBalancerToolContent();
-      break;
-    case "molar-mass":
-      content = generateMolarMassToolContent();
-      break;
-    case "empirical":
-      content = generateEmpiricalToolContent();
-      break;
-    case "solubility":
-      content = generateSolubilityToolContent();
-      break;
+function updatePlayToggleIcon(btn, isPaused) {
+  const pauseIcon = btn.querySelector(".icon-pause");
+  const playIcon = btn.querySelector(".icon-play");
+  if (isPaused) {
+    if (pauseIcon) pauseIcon.style.display = "none";
+    if (playIcon) playIcon.style.display = "block";
+  } else {
+    if (pauseIcon) pauseIcon.style.display = "block";
+    if (playIcon) playIcon.style.display = "none";
   }
+}
 
-  featureModalBody.innerHTML = content;
-  featureModal.classList.add("active");
-  document.body.classList.add("hide-nav");
-
-  // Attach event listeners after content is rendered
-  requestAnimationFrame(() => {
-    attachToolEventListeners(toolType);
-  });
+function applyAnimationPauseState(paused) {
+  // Toggle CSS animations
+  document.documentElement.style.setProperty(
+    "--ion-anim-play-state",
+    paused ? "paused" : "running"
+  );
 }
 
 
@@ -2456,6 +2660,13 @@ function attachBalancerListeners() {
         if (isBalanced && allElements.size > 0) {
           feedback.classList.add("balanced");
           feedback.innerHTML = `<span class="status-icon">✓</span>${"Perfectly Balanced!"}`;
+
+          // Auto-run AutoBalance after 1.5 seconds to show the final equation
+          setTimeout(() => {
+            if (typeof autoBalance === 'function') {
+              autoBalance();
+            }
+          }, 1500);
         } else if (imbalancedElement) {
           feedback.classList.add("unbalanced");
           const leftC = leftAtoms[imbalancedElement] || 0;
@@ -2605,14 +2816,16 @@ function attachMolarMassListeners() {
     const isExact = exactToggle ? exactToggle.checked : false;
     if (!formula) {
       updateRealtimeScale(null);
-      return;
+      return null;
     }
     try {
       const result = calculateMolarMassModal(formula, isExact);
       updateRealtimeScale(result);
+      return null;
     } catch (e) {
       console.error("Molar mass calculation error:", e);
       updateRealtimeScale(null);
+      return e.message;
     }
   };
 
@@ -2657,12 +2870,22 @@ function attachMolarMassListeners() {
         }
       }
 
+      let calcError = null;
+      // Only run calculation if no syntax errors
+      if (!parsed.hasError && parsed.cleanFormula) {
+        calcError = runCalculation(parsed.cleanFormula);
+      } else {
+        updateRealtimeScale(null);
+      }
+
       // Show/hide suggestion content (box stays visible)
       if (suggestionBox && suggestionText) {
         if (parsed.hasError) {
-          suggestionText.innerHTML = `<span style="color: #ef4444;">${"Invalid: lowercase letters are not valid element symbols"}</span>`;
-          suggestionBox.classList.add("has-message");
-          suggestionBox.classList.add("has-error");
+          suggestionText.innerHTML = `<span style="color: #ef4444;">${"Invalid element or formula format"}</span>`;
+          suggestionBox.classList.add("has-message", "has-error");
+        } else if (calcError) {
+          suggestionText.innerHTML = `<span style="color: #ef4444;">${calcError}</span>`;
+          suggestionBox.classList.add("has-message", "has-error");
         } else if (parsed.suspicious) {
           suggestionText.innerHTML =
             "Did you mean " +
@@ -2673,16 +2896,8 @@ function attachMolarMassListeners() {
           suggestionText.textContent = val.trim()
             ? "Looks good"
             : "Enter a formula above";
-          suggestionBox.classList.remove("has-message");
-          suggestionBox.classList.remove("has-error");
+          suggestionBox.classList.remove("has-message", "has-error");
         }
-      }
-
-      // Only run calculation if no errors
-      if (!parsed.hasError && parsed.cleanFormula) {
-        runCalculation(parsed.cleanFormula);
-      } else {
-        updateRealtimeScale(null);
       }
     });
     input.addEventListener("keypress", (e) => {
@@ -3340,8 +3555,8 @@ function generateSolubilityToolContent() {
                 font-weight: 600;
                 color: #1a1a1a;
                 font-size: clamp(0.9rem, 2.4vh, 1.15rem);
-                display: inline-flex;
-                align-items: baseline;
+                display: inline;
+                white-space: nowrap;
             }
 
             /* Ion formula with aligned sub/superscripts */
@@ -3537,9 +3752,7 @@ function attachSolubilityListeners() {
       } else {
         resultCard.className = "sol-result-card active unknown";
         titleEl.textContent = "Unknown / Complex";
-        subtitleEl.textContent = t(
-          "Logic limited to common inorganic salts.",
-        );
+        subtitleEl.textContent = "Logic limited to common inorganic salts.";
       }
 
       resultCard.innerHTML = "";
@@ -3642,7 +3855,8 @@ function smartParseFormula(input) {
     .trim()
     .replace(/\s+/g, "")
     .replace(/[\*\+\。\·]+/g, ".")
-    .replace(/\.+/g, ".");
+    .replace(/\.+/g, ".")
+    .replace(/[^A-Za-z0-9().\[\]]/g, "");
 
   let suspicious = null;
 
@@ -3668,7 +3882,12 @@ function smartParseFormula(input) {
         element += processed[i];
         i++;
       }
-      tokens.push({ type: "element", value: element, valid: true });
+      if (atomicMasses && !atomicMasses[element]) {
+        hasError = true;
+        tokens.push({ type: "error", value: element, valid: false });
+      } else {
+        tokens.push({ type: "element", value: element, valid: true });
+      }
     } else if (/[a-z]/.test(char)) {
       hasError = true;
       tokens.push({ type: "error", value: char, valid: false });
@@ -3735,7 +3954,7 @@ function smartParseFormula(input) {
       cleanFormula += val;
       prevWasLetter = true;
     } else if (token.type === "error") {
-      displayHtml += `<span style="color: #ef4444; text-decoration: underline wavy;">${val}</span>`;
+      displayHtml += `<span style="color: #ef4444; text-decoration: underline wavy;" title="Invalid element">${val}</span>`;
       prevWasLetter = false;
     }
   }
@@ -3824,7 +4043,7 @@ function printReceipt(result) {
 }
 
 // ========== Hero 3D Atom for About Page ==========
-(function initHeroAtom() {
+function initHeroAtom() {
   const heroContainer = document.getElementById("hero-atom-container");
   if (!heroContainer) return;
 
@@ -4039,6 +4258,8 @@ function printReceipt(result) {
   function animateHero() {
     heroAnimationId = requestAnimationFrame(animateHero);
 
+    const isPaused = window._zperiodAnimPaused || false;
+    const speedMul = (typeof window._zperiodAnimSpeed === 'number') ? window._zperiodAnimSpeed : 0.6;
     const time = Date.now() * 0.001;
 
     // Pop animation
@@ -4058,26 +4279,26 @@ function printReceipt(result) {
     }
 
     // Slow auto-rotation
-    heroAtomGroup.rotation.y += 0.002;
+    if (!isPaused) heroAtomGroup.rotation.y += 0.002 * speedMul;
 
     // Wobble group animation
     const wobbleGroup = heroAtomGroup.getObjectByName("wobbleGroup");
-    if (wobbleGroup) {
-      wobbleGroup.rotation.y += 0.002;
-      wobbleGroup.rotation.z = Math.sin(time * 0.5) * 0.2;
-      wobbleGroup.rotation.x = Math.cos(time * 0.3) * 0.1;
+    if (wobbleGroup && !isPaused) {
+      wobbleGroup.rotation.y += 0.002 * speedMul;
+      wobbleGroup.rotation.z = Math.sin(time * 0.5 * speedMul) * 0.2;
+      wobbleGroup.rotation.x = Math.cos(time * 0.3 * speedMul) * 0.1;
     }
 
     // Nucleus rotation
     const nucleusGroup = heroAtomGroup.getObjectByName("nucleusGroup");
-    if (nucleusGroup) {
-      nucleusGroup.rotation.y -= 0.005;
-      nucleusGroup.rotation.x = Math.sin(time * 0.2) * 0.1;
+    if (nucleusGroup && !isPaused) {
+      nucleusGroup.rotation.y -= 0.005 * speedMul;
+      nucleusGroup.rotation.x = Math.sin(time * 0.2 * speedMul) * 0.1;
     }
 
     // Animate electrons with trails
     heroElectrons.forEach((el) => {
-      el.userData.angle += el.userData.speed;
+      if (!isPaused) el.userData.angle += el.userData.speed * speedMul;
       const r = el.userData.radius;
       el.position.x = r * Math.cos(el.userData.angle);
       el.position.z = r * Math.sin(el.userData.angle);
@@ -4113,10 +4334,5 @@ function printReceipt(result) {
     heroElectrons = [];
   };
 
-  // Initialize when DOM ready
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initHero3D);
-  } else {
-    initHero3D();
-  }
-})();
+  initHero3D();
+}

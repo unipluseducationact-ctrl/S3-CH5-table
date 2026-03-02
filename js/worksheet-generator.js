@@ -625,26 +625,20 @@ function exportToPDF() {
     const title = tr('Zperiod — Balancing Chemical Equations Worksheet', 'Zperiod — 化学方程式配平练习');
     const keyTitle = tr('Answer Key (Teacher Use Only)', '答案页（仅供教师使用）');
 
-    // 1. Generate Worksheet Content
+    // Generate Worksheet & Answer Key Content
     let worksheetHtml = '';
-    currentWorksheet.questions.forEach((q, index) => {
-        const eqHtml = formatEquationForPDF(q, false);
-        worksheetHtml += `
-            <div class="question-row">
-                <div class="q-num">${index + 1}.</div>
-                <div class="q-eq">${eqHtml}</div>
-            </div>`;
-    });
-    // Link footer removed from here
-
-    // 2. Generate Answer Key Content
     let answerKeyHtml = '';
     currentWorksheet.questions.forEach((q, index) => {
-        const eqHtml = formatEquationForPDF(q, true);
+        const num = index + 1;
+        worksheetHtml += `
+            <div class="question-row">
+                <div class="q-num">${num}.</div>
+                <div class="q-eq">${formatEquationForPDF(q, false)}</div>
+            </div>`;
         answerKeyHtml += `
             <div class="question-row answer-row">
-                <div class="q-num">${index + 1}.</div>
-                <div class="q-eq">${eqHtml}</div>
+                <div class="q-num">${num}.</div>
+                <div class="q-eq">${formatEquationForPDF(q, true)}</div>
             </div>`;
     });
     // Link footer removed from here

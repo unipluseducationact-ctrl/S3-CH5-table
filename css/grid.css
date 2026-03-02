@@ -3,22 +3,22 @@
    ========================================= */
 
 .periodic-table {
+  --series-gap: 96px;
+  /* Initial large gap */
   display: grid;
   grid-template-columns: repeat(18, 1fr);
-  grid-template-rows: repeat(7, auto) minmax(0, 1fr) repeat(2, auto);
+  grid-template-rows: repeat(7, auto) var(--series-gap) repeat(2, auto);
   gap: calc(var(--tvmin, 1vmin) * 0.8);
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-  width: 100%;
-  height: 100%;
-  max-height: calc(100vh - 110px);
-  transform-origin: center center;
-  min-width: 860px;
+  transition: opacity 0.3s ease;
+  transform-origin: top center;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  width: 1240px;
+  /* Fixed logical width for scaling */
 }
+
+
 
 .element {
   background-color: var(--element-bg);
@@ -52,19 +52,21 @@
   grid-column: 3 / 13;
   grid-row: 1 / 4;
   display: grid;
-  /* Auto-reflow: 5×2 → 4×3 → 3×4 as container shrinks */
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 5px;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 8px;
+  row-gap: 6px;
   padding: 0;
   pointer-events: none;
   z-index: 150;
-  margin: 0 auto;
-  width: 90%;
-  max-width: 800px;
-  align-items: stretch;
-  justify-items: stretch;
+  justify-content: center;
   align-self: center;
   justify-self: center;
+  align-content: center;
+}
+
+/* Compact mode: 2 columns × 5 rows — toggled by JS */
+#table-legend.legend-compact {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .legend-item {
@@ -72,13 +74,13 @@
   align-items: center;
   justify-content: flex-start;
   gap: 6px;
-  font-size: clamp(11.5px, 1.2vw, 14px);
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-secondary);
   background: rgba(255, 255, 255, 0.75);
   border: none;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-  padding: 3px 8px;
+  padding: 0 10px;
   border-radius: 12px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -88,15 +90,28 @@
     transform 0.25s cubic-bezier(0.23, 1, 0.32, 1),
     background 0.25s ease;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   position: relative;
   z-index: 200;
-  width: 100%;
-  height: 100%;
-  min-width: 0;
   box-sizing: border-box;
+  height: 22px;
 }
+
+/* Wide layout: last 2 items each span 2 columns */
+.legend-item.legend-wide-left {
+  grid-column: 1 / span 2;
+}
+
+.legend-item.legend-wide-right {
+  grid-column: 3 / span 2;
+}
+
+/* Compact layout: all items equal, no spanning */
+#table-legend.legend-compact .legend-item.legend-wide-left,
+#table-legend.legend-compact .legend-item.legend-wide-right {
+  grid-column: auto;
+}
+
+
 
 .legend-item:hover {
   transform: translateY(-2px);
@@ -166,6 +181,11 @@
   background-color: #d1e7dd;
 }
 
+.legend-swatch.reactive-nonmetal {
+  background-color: #e2f0d9;
+}
+
+.legend-swatch.reactive-non-metal,
 .legend-swatch.non-metal {
   background-color: #e2f0d9;
 }
@@ -212,8 +232,9 @@
   color: #2e5d4b;
 }
 
-.element.non-metal,
 .element.reactive-nonmetal,
+.element.reactive-non-metal,
+.element.non-metal,
 .element.polyatomic-nonmetal,
 .element.diatomic-nonmetal {
   background-color: #e2f0d9;
@@ -242,7 +263,8 @@
 
 .element.unknown,
 .element.undefined {
-  background-color: #f2f2f2;
+  background-color: #e0e0e0;
+  color: #666;
 }
 
 .element:hover {

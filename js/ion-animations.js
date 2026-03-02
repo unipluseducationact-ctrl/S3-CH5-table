@@ -320,14 +320,14 @@ const IonAnimations = {
             configA: { color: 'ppt-white' }
         },
         'mg_2plus': {
-            slotA: 'bone',
-            slotB: 'flame',
-            configB: { color: 'flame-white' }
+            slotA: 'precipitate',
+            slotB: 'plant',
+            configA: { color: 'ppt-white' }
         },
         'ca_2plus': {
-            slotA: 'bone',
-            slotB: 'precipitate',
-            configB: { color: 'ppt-white' }
+            slotA: 'flame',
+            slotB: 'bone',
+            configA: { color: 'flame-orange' }
         },
         'ba_2plus': {
             slotA: 'flame',
@@ -335,18 +335,24 @@ const IonAnimations = {
             configA: { color: 'flame-green' }
         },
         'zn_2plus': {
-            slotA: 'shield',
-            slotB: 'dissolve'
+            slotA: 'precipitate',
+            slotB: 'shield',
+            configA: { color: 'ppt-white' }
+        },
+        'cu_plus': {
+            slotA: 'water',
+            slotB: 'lightning'
         },
         'cu_2plus': {
             slotA: 'orb',
-            slotB: 'electron',
-            configA: { color: 'orb-blue' }
+            slotB: 'flame',
+            configA: { color: 'orb-blue' },
+            configB: { color: 'flame-green' }
         },
         'fe_2plus': {
-            slotA: 'orb',
-            slotB: 'dna',
-            configA: { color: 'orb-green' }
+            slotA: 'dna',
+            slotB: 'precipitate',
+            configB: { color: 'ppt-green' }
         },
         'fe_3plus': {
             slotA: 'orb',
@@ -356,13 +362,13 @@ const IonAnimations = {
         },
         'al_3plus': {
             slotA: 'shield',
-            slotB: 'crystal'
+            slotB: 'precipitate',
+            configB: { color: 'ppt-white' }
         },
         'pb_2plus': {
-            slotA: 'pulse',
-            slotB: 'precipitate',
-            configA: { color: 'pulse-red' },
-            configB: { color: 'ppt-yellow' }
+            slotA: 'precipitate',
+            slotB: 'battery',
+            configA: { color: 'ppt-yellow' }
         },
         'nh4_plus': {
             slotA: 'gas',
@@ -382,25 +388,24 @@ const IonAnimations = {
             configA: { start: '90%', end: '90%', label: 'Basic' }
         },
         'cl_minus': {
-            slotA: 'dissolve',
-            slotB: 'bleach'
+            slotA: 'precipitate',
+            slotB: 'bleach',
+            configA: { color: 'ppt-white' }
         },
         'br_minus': {
-            slotA: 'orb',
-            slotB: 'precipitate',
-            configA: { color: 'orb-orange' },
-            configB: { color: 'ppt-cream' }
+            slotA: 'precipitate',
+            slotB: 'shield',
+            configA: { color: 'ppt-cream' }
         },
         'i_minus': {
-            slotA: 'orb',
-            slotB: 'precipitate',
-            configA: { color: 'orb-purple' },
-            configB: { color: 'ppt-yellow' }
+            slotA: 'precipitate',
+            slotB: 'pill',
+            configA: { color: 'ppt-yellow' }
         },
         'f_minus': {
-            slotA: 'tooth',
-            slotB: 'pulse',
-            configB: { color: 'pulse-orange' }
+            slotA: 'precipitate',
+            slotB: 'tooth',
+            configA: { color: 'ppt-white' }
         },
         'n_3minus': {
             slotA: 'gas',
@@ -413,8 +418,9 @@ const IonAnimations = {
             configA: { color: 'pulse-red' }
         },
         'o_2minus': {
-            slotA: 'lightning',
+            slotA: 'ph',
             slotB: 'flame',
+            configA: { start: '90%', end: '90%', label: 'Basic' },
             configB: { color: 'flame-blue' }
         },
         's_2minus': {
@@ -431,13 +437,12 @@ const IonAnimations = {
         },
         'no2_minus': {
             slotA: 'pill',
-            slotB: 'gas',
-            configB: { color: 'gas-brown' }
+            slotB: 'electron'
         },
         'so4_2minus': {
-            slotA: 'battery',
-            slotB: 'precipitate',
-            configB: { color: 'ppt-white' }
+            slotA: 'precipitate',
+            slotB: 'battery',
+            configA: { color: 'ppt-white' }
         },
         'so3_2minus': {
             slotA: 'bleach',
@@ -450,12 +455,14 @@ const IonAnimations = {
             configB: { color: 'ppt-white' }
         },
         'hco3_minus': {
-            slotA: 'bubble',
-            slotB: 'pill'
+            slotA: 'ph',
+            slotB: 'bubble',
+            configA: { start: '50%', end: '50%', label: 'Buffer' }
         },
         'po4_3minus': {
-            slotA: 'dna',
-            slotB: 'bone'
+            slotA: 'precipitate',
+            slotB: 'dna',
+            configA: { color: 'ppt-yellow' }
         },
         'ch3coo_minus': {
             slotA: 'ph',
@@ -469,14 +476,15 @@ const IonAnimations = {
         },
         'cro4_2minus': {
             slotA: 'orb',
-            slotB: 'pulse',
+            slotB: 'ph',
             configA: { color: 'orb-yellow' },
-            configB: { color: 'pulse-orange' }
+            configB: { start: '50%', end: '50%', label: 'pH Shift' }
         },
         'cr2o7_2minus': {
-            slotA: 'orb',
-            slotB: 'lightning',
-            configA: { color: 'orb-orange' }
+            slotA: 'flame',
+            slotB: 'orb',
+            configA: { color: 'flame-orange' },
+            configB: { color: 'orb-green' }
         },
         'sio3_2minus': {
             slotA: 'crystal',
@@ -499,18 +507,16 @@ const IonAnimations = {
         },
         'c2o4_2minus': {
             slotA: 'plant',
-            slotB: 'precipitate',
-            configB: { color: 'ppt-white' }
+            slotB: 'crystal'
         },
         'hso4_minus': {
             slotA: 'ph',
-            slotB: 'battery',
+            slotB: 'dissolve',
             configA: { start: '20%', end: '20%', label: 'Acidic' }
         },
         'h2po4_minus': {
             slotA: 'plant',
-            slotB: 'ph',
-            configB: { start: '40%', end: '40%', label: 'Buffer' }
+            slotB: 'dissolve'
         },
         'hpo4_2minus': {
             slotA: 'bone',
@@ -527,7 +533,7 @@ const IonAnimations = {
         },
         'clo4_minus': {
             slotA: 'lightning',
-            slotB: 'dissolve'
+            slotB: 'crystal'
         },
         'bro3_minus': {
             slotA: 'pulse',

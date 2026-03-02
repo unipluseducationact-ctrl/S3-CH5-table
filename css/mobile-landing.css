@@ -1,10 +1,11 @@
 /* =========================================
    Mobile Landing Page — Zperiod Showcase
-   Only active on screens < 860px (mobile overlay)
+   Only active on touch devices with screens <= 1024px
    ========================================= */
 
-/* ---- Override overlay to scrollable landing ---- */
-@media (max-width: 859px) {
+/* ---- Mobile landing active state ---- */
+/* Only activate for REAL touch/mobile devices — desktop resize won't trigger */
+@media (pointer: coarse) and (max-width: 1024px) {
   .desktop-only-overlay {
     display: flex !important;
     flex-direction: column;
@@ -25,19 +26,21 @@
     display: none !important;
   }
 
-  .container,
-  .global-nav,
-  .floating-about-btn,
-  .copyright-notice {
+  .container, .global-nav, .floating-about-btn, .copyright-notice {
     display: none !important;
   }
 }
 
-/* ---- Hide on desktop ---- */
-@media (min-width: 860px) {
+/* Hide mobile landing on desktops or large screens */
+@media (pointer: fine), (min-width: 1025px) {
   .mobile-landing {
     display: none !important;
   }
+}
+
+/* JS fallback: body.is-desktop always hides mobile overlay */
+body.is-desktop .desktop-only-overlay {
+  display: none !important;
 }
 
 /* ============================
@@ -166,28 +169,43 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Scroll indicator */
+/* Scroll indicator — prominent pill */
 .ml-scroll-indicator {
   position: absolute;
-  bottom: 32px;
+  bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  color: #aeaeb2;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
   opacity: 0;
   animation: ml-fade-up 0.8s ease 1.4s forwards;
 }
 
-.ml-scroll-arrow {
+.ml-scroll-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 50px;
+  color: #6e6e73;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  animation: ml-pill-pulse 2.5s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+.ml-scroll-pill svg {
+  opacity: 0.5;
   animation: ml-bounce 2.2s ease-in-out infinite;
-  opacity: 0.6;
+}
+
+@keyframes ml-pill-pulse {
+  0%, 100% { transform: translateY(0); box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06); }
+  50% { transform: translateY(4px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
 }
 
 @keyframes ml-bounce {
@@ -239,7 +257,7 @@
 
 .ml-feature {
   background: white;
-  border-radius: 28px;
+  border-radius: 20px;
   padding: 28px 24px 24px;
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.03),
@@ -290,9 +308,9 @@
   font-weight: 450;
 }
 
-/* Image frame with tilt effect */
+/* Image frame */
 .ml-img-frame {
-  border-radius: 20px;
+  border-radius: 14px;
   overflow: hidden;
   box-shadow:
     0 4px 16px rgba(0, 0, 0, 0.08),
@@ -327,7 +345,7 @@
   text-align: center;
   padding: 18px 6px;
   background: white;
-  border-radius: 22px;
+  border-radius: 16px;
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.03),
     0 4px 16px rgba(0, 0, 0, 0.04);
@@ -362,7 +380,7 @@
 
 .ml-cta-card {
   background: white;
-  border-radius: 28px;
+  border-radius: 20px;
   padding: 44px 28px;
   text-align: center;
   box-shadow:

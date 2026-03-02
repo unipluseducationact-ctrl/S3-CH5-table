@@ -676,3 +676,11 @@
 /* =========================================
    Responsive Design (Shrinking Window)
    ========================================= */
+
+@media (max-height: 750px) {
+
+    .controls-header p,
+    .trust-text {
+        display: none;
+    }
+}

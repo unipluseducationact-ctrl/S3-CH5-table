@@ -3,6 +3,13 @@
    20 Unique Animation Types
    ============================================= */
 
+/* Global pause support */
+.ion-anim *,
+.ion-anim *::before,
+.ion-anim *::after {
+    animation-play-state: var(--ion-anim-play-state, running) !important;
+}
+
 /* Base Container */
 .ion-anim {
     width: 80px;

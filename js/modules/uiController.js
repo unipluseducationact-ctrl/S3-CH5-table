@@ -4,6 +4,7 @@
 // =============================================================================
 
 import { finallyData, elements } from "../data/elementsData.js";
+import { elementsData_v2 } from "../data/elementsData_v2.js";
 import {
   init3DScene,
   updateAtomStructure,
@@ -17,11 +18,19 @@ import {
 
 // ===== Legend & Category Highlighting =====
 let activeLegendCategory = null;
+function normalizeCategoryClass(catClass) {
+  const aliasMap = {
+    "reactive-non-metal": "reactive-nonmetal",
+    "non-metal": "reactive-nonmetal",
+  };
+  return aliasMap[catClass] || catClass;
+}
 function highlightCategory(container, catClass) {
+  const normalized = normalizeCategoryClass(catClass);
   container.classList.add("highlighting");
   const elements = container.querySelectorAll(".element");
   elements.forEach((el) => {
-    if (el.classList.contains(catClass)) {
+    if (el.classList.contains(catClass) || el.classList.contains(normalized)) {
       el.classList.add("highlighted");
     } else {
       el.classList.remove("highlighted");
@@ -37,20 +46,32 @@ function createLegend(container) {
   const legendContainer = document.createElement("div");
   legendContainer.id = "table-legend";
   const categories = [
+    // Row 1 (4 items)
     { name: "Alkali Metal", class: "alkali-metal" },
     { name: "Alkaline Earth", class: "alkaline-earth-metal" },
     { name: "Transition Metal", class: "transition-metal" },
-    { name: "Post-Transition", class: "post-transition-metal" },
     { name: "Metalloid", class: "metalloid" },
-    { name: "Non-metal", class: "non-metal" },
+    // Row 2 (4 items)
     { name: "Halogen", class: "halogen" },
     { name: "Noble Gas", class: "noble-gas" },
     { name: "Lanthanide", class: "lanthanide" },
     { name: "Actinide", class: "actinide" },
+    // Row 3 (2 wider items)
+    {
+      name: "Reactive nonmetal",
+      class: "reactive-nonmetal",
+      layoutClass: "legend-wide-left",
+    },
+    {
+      name: "Post-Transition",
+      class: "post-transition-metal",
+      layoutClass: "legend-wide-right",
+    },
   ];
   categories.forEach((cat) => {
     const item = document.createElement("div");
-    item.className = "legend-item";
+    item.classList.add("legend-item");
+    if (cat.layoutClass) item.classList.add(cat.layoutClass);
     item.setAttribute("data-category", cat.class);
     const swatch = document.createElement("div");
     swatch.className = `legend-swatch ${cat.class}`;
@@ -92,26 +113,29 @@ function createLegend(container) {
 export function buildPeriodicTable(tableContainer) {
   const grid = {};
   elements.forEach((element) => {
-    // Calculate Phase @ STP (25°C)
-    if (!element.phase) {
-      const data = finallyData[element.symbol] || {};
-      const parseT = (s) => {
-        const m = (s || "").match(/-?[\d.]+/);
-        return m ? parseFloat(m[0]) : null;
-      };
-      const m = parseT(data.melt);
-      const b = parseT(data.boil);
+    // Range blocks (La-Lu, Ac-Lr) skip phase calculation but still enter grid
+    if (typeof element.number !== "string") {
+      // Calculate Phase @ STP (25°C)
+      if (!element.phase) {
+        const data = finallyData[element.number] || {};
+        const parseT = (s) => {
+          const m = (s || "").match(/-?[\d.]+/);
+          return m ? parseFloat(m[0]) : null;
+        };
+        const m = parseT(data.level3_properties?.physical?.meltingPoint);
+        const b = parseT(data.level3_properties?.physical?.boilingPoint);
 
-      if (element.number >= 104) {
-        element.phase = "Unknown";
-      } else if (b !== null && 25 > b) {
-        element.phase = "Gas";
-      } else if (m !== null && 25 < m) {
-        element.phase = "Solid";
-      } else if (m !== null) {
-        element.phase = "Liquid";
-      } else {
-        element.phase = "Unknown";
+        if (element.number >= 104) {
+          element.phase = "Unknown";
+        } else if (b !== null && 25 > b) {
+          element.phase = "Gas";
+        } else if (m !== null && 25 < m) {
+          element.phase = "Solid";
+        } else if (m !== null) {
+          element.phase = "Liquid";
+        } else {
+          element.phase = "Unknown";
+        }
       }
     }
 
@@ -126,10 +150,10 @@ export function buildPeriodicTable(tableContainer) {
       if (element) {
         cell.classList.add("element");
         if (element.category) {
-          const catClass = element.category
+          const catClass = normalizeCategoryClass(element.category
             .toLowerCase()
             .replace(/ /g, "-")
-            .replace(/[^a-z0-9-]/g, "");
+            .replace(/[^a-z0-9-]/g, ""));
           cell.classList.add(catClass);
         }
         cell.innerHTML = `
@@ -137,7 +161,24 @@ export function buildPeriodicTable(tableContainer) {
                       <span class="symbol">${element.symbol}</span>
                       <span class="name">${element.name}</span>
                   `;
-        cell.addEventListener("click", () => showModal(element));
+        // Range blocks (La-Lu, Ac-Lr): toggle category highlight instead of modal
+        if (element.symbol === "La-Lu" || element.symbol === "Ac-Lr") {
+          cell.classList.add("range-block");
+          cell.addEventListener("click", () => {
+            const catClass = element.symbol === "La-Lu" ? "lanthanide" : "actinide";
+            if (activeLegendCategory === catClass) {
+              activeLegendCategory = null;
+              tableContainer.querySelectorAll(".legend-item.active").forEach((el) => el.classList.remove("active"));
+              clearHighlights(tableContainer);
+            } else {
+              tableContainer.querySelectorAll(".legend-item.active").forEach((el) => el.classList.remove("active"));
+              activeLegendCategory = catClass;
+              highlightCategory(tableContainer, catClass);
+            }
+          });
+        } else {
+          cell.addEventListener("click", () => showModal(element));
+        }
       } else {
         cell.classList.add("empty");
       }
@@ -148,19 +189,19 @@ export function buildPeriodicTable(tableContainer) {
   }
   createLegend(tableContainer);
   const lanthanides = elements
-    .filter((e) => e.series === "lanthanide")
+    .filter((e) => e.series === "lanthanide" && typeof e.number === "number")
     .sort((a, b) => a.number - b.number);
   const actinides = elements
-    .filter((e) => e.series === "actinide")
+    .filter((e) => e.series === "actinide" && typeof e.number === "number")
     .sort((a, b) => a.number - b.number);
   lanthanides.forEach((element, index) => {
     const cell = document.createElement("div");
     cell.classList.add("element", "lanthanide");
     if (element.category) {
-      const catClass = element.category
+      const catClass = normalizeCategoryClass(element.category
         .toLowerCase()
         .replace(/ /g, "-")
-        .replace(/[^a-z0-9-]/g, "");
+        .replace(/[^a-z0-9-]/g, ""));
       cell.classList.add(catClass);
     }
     cell.innerHTML = `
@@ -177,10 +218,10 @@ export function buildPeriodicTable(tableContainer) {
     const cell = document.createElement("div");
     cell.classList.add("element", "actinide");
     if (element.category) {
-      const catClass = element.category
+      const catClass = normalizeCategoryClass(element.category
         .toLowerCase()
         .replace(/ /g, "-")
-        .replace(/[^a-z0-9-]/g, "");
+        .replace(/[^a-z0-9-]/g, ""));
       cell.classList.add(catClass);
     }
     cell.innerHTML = `
@@ -212,15 +253,47 @@ let modal, modalClose, modalSymbol, modalName, modalNumber, modalCategory,
   eduNames, eduIsotopes, eduCardsContainer;
 
 // ===== Pure Helpers =====
+export function reRenderCurrentAtomModal() {
+  if (window.currentAtomElement) {
+    let currentLevelIndex = null;
+    const activeDot = document.querySelector(".slider-dots .dot.active");
+    if (activeDot && activeDot.parentElement) {
+      const dots = Array.from(activeDot.parentElement.querySelectorAll(".dot"));
+      const idx = dots.indexOf(activeDot);
+      if (idx >= 0) currentLevelIndex = idx;
+    }
+    if (currentLevelIndex === null) {
+      const activeLevelBtn = document.querySelector(".level-btn.active[data-level]");
+      if (activeLevelBtn) {
+        const parsed = Number(activeLevelBtn.dataset.level) - 1;
+        if (!Number.isNaN(parsed) && parsed >= 0) currentLevelIndex = parsed;
+      }
+    }
+    if (currentLevelIndex === null) {
+      const visibleLevel = Array.from(document.querySelectorAll(".level-content")).find(
+        (content) => getComputedStyle(content).display !== "none",
+      );
+      if (visibleLevel && visibleLevel.id?.startsWith("level-")) {
+        const parsed = Number(visibleLevel.id.replace("level-", "")) - 1;
+        if (!Number.isNaN(parsed) && parsed >= 0) currentLevelIndex = parsed;
+      }
+    }
+    if (currentLevelIndex !== null) {
+      window._pendingLevelIndex = currentLevelIndex;
+    }
+    showModal(window.currentAtomElement);
+  }
+}
+
 function getElementCategory(element) {
-  if (element.number === 1) return "Non-metal";
+  if (element.number === 1) return "Reactive nonmetal";
   const c = element.column;
   const metalloids = [5, 14, 32, 33, 51, 52, 85];
   if (metalloids.includes(element.number)) return "Metalloid";
-  if (c === 18) return "Non-metal (Noble Gas)";
-  if (c === 17) return "Non-metal (Halogen)";
+  if (c === 18) return "Reactive nonmetal (Noble Gas)";
+  if (c === 17) return "Reactive nonmetal (Halogen)";
   const otherNonmetals = [6, 7, 8, 15, 16, 34];
-  if (otherNonmetals.includes(element.number)) return "Non-metal";
+  if (otherNonmetals.includes(element.number)) return "Reactive nonmetal";
   return "Metal";
 }
 function calculateShells(element) {
@@ -254,7 +327,8 @@ function calculateShells(element) {
 
 // ===== Simplified View Population =====
 function populateSimplifiedView(element) {
-  const finallyElementData = finallyData[element.symbol] || {};
+  const finallyElementData = finallyData[element.number] || {};
+  const v2Data = elementsData_v2[element.number];
   const eduData = element.educational || {};
   const numberToSuperscript = (num) => {
     const map = {
@@ -336,11 +410,7 @@ function populateSimplifiedView(element) {
     }
     return ie;
   };
-  const formatSTSE = (content, symbol) => {
-    if (symbol === "H")
-      return `Energy transition (Fuel Cells)<br>Hydrogen as energy carrier<br><span style="opacity: 0.8; font-weight: 500; font-size: 0.85rem;">Heavy Water (D₂O) • CANDU</span>`;
-    if (symbol === "He")
-      return `Cryogenics (MRI supermagnets)<br>Non-renewable resource conservation.`;
+  const formatSTSE = (content) => {
     const sentences = content.split(/[;。]\s*/).filter((s) => s.trim());
     return sentences
       .map((s, i) => s.trim() + (i < sentences.length - 1 ? "<br>" : ""))
@@ -350,9 +420,17 @@ function populateSimplifiedView(element) {
     ".green-rectangle .card-info-container",
   );
   if (greenCard) {
+    let typeDisplay = element.category || "Unknown";
+    let phaseDisplay = element.phase || "Unknown";
+    
+    if (window.zperiodVersion === 'new' && v2Data) {
+      typeDisplay = v2Data.level1_basic.type || typeDisplay;
+      phaseDisplay = v2Data.level1_basic.phaseAtSTP || phaseDisplay;
+    }
+    
     setText(
       ".green-rectangle .info-row:nth-child(1) .info-value",
-      element.category || "Unknown",
+      typeDisplay,
     );
     let displayRow = element.row;
     let displayCol = element.column;
@@ -370,38 +448,30 @@ function populateSimplifiedView(element) {
     );
     setText(
       ".green-rectangle .info-row:nth-child(3) .info-value",
-      element.phase || "Unknown",
+      phaseDisplay,
     );
     const valenceRow = greenCard.querySelector(
       ".info-row:nth-child(4) .info-value",
     );
     if (valenceRow) {
-      if (finallyElementData.valenceElectrons !== undefined) {
-        const valence = finallyElementData.valenceElectrons;
-        const valenceStr =
-          typeof valence === "string" ? valence : valence.toString();
-        valenceRow.textContent = valenceStr;
-        valenceRow.classList.toggle(
-          "long-text",
-          typeof valence === "string" &&
-          (valence.includes("Variable") ||
-            valence.includes("(") ||
-            valence.length > 5),
-        );
+      let valenceStr = "";
+      if (window.zperiodVersion === 'new' && v2Data) {
+        valenceStr = v2Data.level1_basic.valenceElectrons || "—";
+      } else if (finallyElementData.level1_basic?.valenceElectrons !== undefined && finallyElementData.level1_basic?.valenceElectrons !== null) {
+        const valence = finallyElementData.level1_basic.valenceElectrons;
+        valenceStr = typeof valence === "string" ? valence : valence.toString();
       } else {
-        let valence =
-          element.number === 1
-            ? 1
-            : element.number === 2
-              ? 2
-              : element.column <= 2
-                ? element.column
-                : element.column <= 12
-                  ? element.column
-                  : element.column <= 18
-                    ? element.column - 10
-                    : 0;
-        valenceRow.textContent = valence.toString();
+        valenceStr = "—";
+      }
+      valenceRow.textContent = valenceStr;
+      // Use nowrap for very long valence strings like "Variable (outer s + d + f)"
+      const isExtraLong = typeof valenceStr === "string" && valenceStr.includes("outer s + d + f");
+      const isLong = typeof valenceStr === "string" && (valenceStr.includes("Variable") || valenceStr.includes("(") || valenceStr.length > 5);
+      valenceRow.classList.remove("long-text", "long-text-nowrap");
+      if (isExtraLong) {
+        valenceRow.classList.add("long-text-nowrap");
+      } else if (isLong) {
+        valenceRow.classList.add("long-text");
       }
     }
     const ionsSection = greenCard.querySelector(".ions-section");
@@ -409,38 +479,65 @@ function populateSimplifiedView(element) {
       ionsSection
         .querySelectorAll(".ion-item")
         .forEach((item) => item.remove());
-      const commonIonsText = finallyElementData.commonIons || "";
+      let commonIonsText = finallyElementData.level1_basic?.commonIons || "";
+      if (window.zperiodVersion === 'new' && v2Data) {
+        commonIonsText = v2Data.level1_basic.commonIons || "";
+      }
+      
       const hasNoIons =
         !commonIonsText ||
-        /none|n\/a|inert/i.test(commonIonsText) ||
+        /none|n\/a|inert|unknown|does not form/i.test(commonIonsText) ||
         !commonIonsText.trim();
+      const unicodeToHtml = (text) => {
+        const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+        const supMap = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁺': '+', '⁻': '-' };
+        let result = '', i = 0;
+        while (i < text.length) {
+          if (subMap[text[i]] !== undefined) {
+            let sub = '';
+            while (i < text.length && subMap[text[i]] !== undefined) { sub += subMap[text[i]]; i++; }
+            result += `<sub>${sub}</sub>`;
+          } else if (supMap[text[i]] !== undefined) {
+            let sup = '';
+            while (i < text.length && supMap[text[i]] !== undefined) { sup += supMap[text[i]]; i++; }
+            result += `<sup>${sup}</sup>`;
+          } else {
+            result += text[i]; i++;
+          }
+        }
+        return result;
+      };
       const createIonItem = (symbol, name) => {
         const item = document.createElement("div");
         item.className = "ion-item";
-        item.innerHTML = `<span class="ion-symbol">${symbol}</span><span class="ion-arrow">→</span><span class="ion-name">${name}</span>`;
+        item.innerHTML = `<span class="ion-symbol">${unicodeToHtml(symbol)}</span><span class="ion-arrow">→</span><span class="ion-name">${name}</span>`;
         return item;
       };
       if (hasNoIons) {
         ionsSection.appendChild(
           createIonItem(element.symbol, "No common ions"),
         );
-      } else if (eduData.stockNames?.length > 0) {
-        eduData.stockNames.forEach((ion) => {
-          ionsSection.appendChild(
-            createIonItem(
-              `${element.symbol}<sup>${ion.charge}</sup>`,
-              ion.name,
-            ),
-          );
-        });
       } else if (commonIonsText) {
         const parseIon = (ionText) => {
-          const match = ionText.match(
-            /([A-Za-z]+[⁺⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+)\s*(?:\(([^)]+)\))?/,
+          // Match ion symbol (letters + superscript chars, plus optional subscript like Hg₂²⁺)
+          const symMatch = ionText.match(
+            /([A-Za-z]+[₀₁₂₃₄₅₆₇₈₉]*[⁺⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+)/,
           );
-          return match
-            ? { symbol: match[1], name: match[2] || `${element.name} ion` }
-            : { symbol: element.symbol, name: ionText };
+          if (!symMatch) return { symbol: element.symbol, name: ionText };
+          const symbol = symMatch[1];
+          // Find the outermost parentheses content after the symbol
+          const afterSymbol = ionText.substring(ionText.indexOf(symbol) + symbol.length).trim();
+          if (afterSymbol.startsWith('(')) {
+            // Find matching closing paren (handle nesting)
+            let depth = 0, end = -1;
+            for (let i = 0; i < afterSymbol.length; i++) {
+              if (afterSymbol[i] === '(') depth++;
+              else if (afterSymbol[i] === ')') { depth--; if (depth === 0) { end = i; break; } }
+            }
+            const name = end > 0 ? afterSymbol.substring(1, end) : afterSymbol.substring(1);
+            return { symbol, name };
+          }
+          return { symbol, name: `${element.name} ion` };
         };
         if (commonIonsText.includes(",")) {
           commonIonsText
@@ -454,19 +551,6 @@ function populateSimplifiedView(element) {
           const { symbol, name } = parseIon(commonIonsText);
           ionsSection.appendChild(createIonItem(symbol, name));
         }
-      } else {
-        const charge =
-          element.column === 1 && element.number !== 1
-            ? "+"
-            : element.column === 2
-              ? "2+"
-              : "";
-        ionsSection.appendChild(
-          createIonItem(
-            charge ? `${element.symbol}<sup>${charge}</sup>` : element.symbol,
-            charge ? `${element.name} ion` : "No common ions",
-          ),
-        );
       }
     }
   }
@@ -474,9 +558,10 @@ function populateSimplifiedView(element) {
     ".yellow-rectangle .card-info-container",
   );
   if (yellowCard) {
-    const avgMass =
-      finallyElementData.avgAtomicMass ||
-      (element.weight ? element.weight.toFixed(4) : "N/A");
+    let avgMass = finallyElementData.level2_atomic?.mass?.highSchool || "—";
+    if (window.zperiodVersion === 'new' && v2Data && v2Data.level2_atomic.mass.standard) {
+      avgMass = v2Data.level2_atomic.mass.standard;
+    }
     setText(".yellow-rectangle .info-row:nth-child(1) .info-value", avgMass);
     setText(
       ".yellow-rectangle .info-row:nth-child(2) .info-value",
@@ -491,12 +576,14 @@ function populateSimplifiedView(element) {
       isotopesSection
         .querySelectorAll(".ion-item")
         .forEach((item) => item.remove());
-      const isotopesToDisplay =
-        finallyElementData.isotopes?.length > 0
-          ? finallyElementData.isotopes
-          : eduData.isotopesOverride?.length > 0
-            ? eduData.isotopesOverride
-            : [];
+      let isotopesToDisplay =
+        finallyElementData.level2_atomic?.naturalIsotopes?.length > 0
+          ? finallyElementData.level2_atomic.naturalIsotopes
+          : [];
+      
+      if (window.zperiodVersion === 'new' && v2Data) {
+        isotopesToDisplay = v2Data.level2_atomic.naturalIsotopes || [];
+      }
       isotopesToDisplay.forEach((iso) => {
         const parseMassNumber = () => {
           if (iso.name?.includes("-")) return iso.name.split("-")[1];
@@ -551,8 +638,10 @@ function populateSimplifiedView(element) {
   if (blueCard) {
     const configHero = blueCard.querySelector(".config-hero");
     if (configHero) {
-      const config =
-        finallyElementData.electronConfig || element.electronConfig || "N/A";
+      let config = finallyElementData.level3_properties?.electronic?.configuration || "—";
+      if (window.zperiodVersion === 'new' && v2Data && v2Data.level3_properties.electronic.configuration) {
+        config = v2Data.level3_properties.electronic.configuration;
+      }
       const supMap = {
         "¹": "<sup>1</sup>",
         "²": "<sup>2</sup>",
@@ -573,81 +662,79 @@ function populateSimplifiedView(element) {
     const oxidationContainer = blueCard.querySelector(".oxidation-container");
     if (oxidationContainer) {
       oxidationContainer.innerHTML = "";
-      const states = finallyElementData.oxidationStates || [];
-      if (states.length > 0) {
-        const mainPill = document.createElement("div");
-        mainPill.className = "ox-pill";
-        mainPill.innerHTML = `<label>Common</label>${states[0]}`;
-        oxidationContainer.appendChild(mainPill);
-        states.slice(1).forEach((state) => {
+      let statesObj = finallyElementData.level3_properties?.electronic?.oxidationStates || { common: [], possible: [] };
+      if (window.zperiodVersion === 'new' && v2Data) {
+        const v2Ox = v2Data.level3_properties?.electronic?.oxidationStates;
+        if (v2Ox && ((v2Ox.common && v2Ox.common.length > 0) || (v2Ox.possible && v2Ox.possible.length > 0))) {
+          statesObj = v2Ox;
+        }
+      }
+      // Support legacy flat array format
+      if (Array.isArray(statesObj)) {
+        statesObj = { common: statesObj.slice(0, 1), possible: statesObj.slice(1) };
+      }
+      const common = statesObj.common || [];
+      const possible = statesObj.possible || [];
+      const total = common.length + possible.length;
+      if (total > 0) {
+        common.forEach((state) => {
           const pill = document.createElement("div");
-          pill.className = "ox-pill faded";
-          pill.innerHTML = `<label>Poss.</label>${state}`;
+          pill.className = "ox-pill common";
+          pill.textContent = state;
+          oxidationContainer.appendChild(pill);
+        });
+        possible.forEach((state) => {
+          const pill = document.createElement("div");
+          pill.className = "ox-pill possible";
+          pill.textContent = state;
           oxidationContainer.appendChild(pill);
         });
         const pills = oxidationContainer.querySelectorAll(".ox-pill");
-        if (states.length > 6) {
+        if (total > 8) {
           oxidationContainer.style.gap = "3px";
           pills.forEach((p) => {
-            p.style.fontSize = "0.7rem";
+            p.style.fontSize = p.classList.contains("common") ? "0.65rem" : "0.6rem";
             p.style.padding = "2px 5px";
-            const label = p.querySelector("label");
-            if (label) {
-              label.style.fontSize = "0.5rem";
-              label.style.marginRight = "2px";
-            }
           });
-        } else if (states.length > 4) {
-          oxidationContainer.style.gap = "5px";
+        } else if (total > 5) {
+          oxidationContainer.style.gap = "4px";
           pills.forEach((p) => {
-            p.style.fontSize = "0.8rem";
+            p.style.fontSize = p.classList.contains("common") ? "0.75rem" : "0.68rem";
             p.style.padding = "3px 7px";
-            const label = p.querySelector("label");
-            if (label) label.style.fontSize = "0.55rem";
           });
         } else {
-          oxidationContainer.style.gap = "8px";
+          oxidationContainer.style.gap = "6px";
           pills.forEach((p) => {
             p.style.fontSize = "";
             p.style.padding = "";
-            const label = p.querySelector("label");
-            if (label) {
-              label.style.fontSize = "";
-              label.style.marginRight = "";
-            }
           });
         }
       }
     }
-    setText(
-      ".blue-rectangle .l3-stat-item:nth-child(1) .l3-stat-value",
-      formatElectronegativity(
-        finallyElementData.electronegativity ?? element.electronegativity,
-      ),
-    );
-    setText(
-      ".blue-rectangle .l3-stat-item:nth-child(2) .l3-stat-value",
-      formatIonization(finallyElementData.ionization || element.ionization),
-    );
-    const densityData = formatDensity(
-      finallyElementData.density || element.density,
-    );
-    setText(
-      ".blue-rectangle .l3-stat-item:nth-child(3) .l3-stat-value",
-      densityData.value,
-    );
-    const densityUnit = blueCard.querySelector(
-      ".l3-stat-item:nth-child(3) .l3-stat-unit",
-    );
+    let en = finallyElementData.level3_properties?.physical?.electronegativity ?? null;
+    let ie = finallyElementData.level3_properties?.physical?.firstIonization || "";
+    let den = finallyElementData.level3_properties?.physical?.density || "";
+    let melt = finallyElementData.level3_properties?.physical?.meltingPoint || "";
+    let boil = finallyElementData.level3_properties?.physical?.boilingPoint || "";
+
+    if (window.zperiodVersion === 'new' && v2Data) {
+      en = v2Data.level3_properties.physical.electronegativity ?? en;
+      ie = v2Data.level3_properties.physical.firstIonization || ie;
+      den = v2Data.level3_properties.physical.density || den;
+      melt = v2Data.level3_properties.physical.meltingPoint || melt;
+      boil = v2Data.level3_properties.physical.boilingPoint || boil;
+    }
+
+    setText(".blue-rectangle .l3-stat-item:nth-child(1) .l3-stat-value", formatElectronegativity(en));
+    setText(".blue-rectangle .l3-stat-item:nth-child(2) .l3-stat-value", formatIonization(ie));
+    
+    const densityData = formatDensity(den);
+    setText(".blue-rectangle .l3-stat-item:nth-child(3) .l3-stat-value", densityData.value);
+    const densityUnit = blueCard.querySelector(".l3-stat-item:nth-child(3) .l3-stat-unit");
     if (densityUnit) densityUnit.textContent = densityData.unit;
-    setText(
-      ".blue-rectangle .l3-stat-item:nth-child(4) .l3-stat-value",
-      formatTemp(finallyElementData.melt || element.melt),
-    );
-    setText(
-      ".blue-rectangle .l3-stat-item:nth-child(5) .l3-stat-value",
-      formatTemp(finallyElementData.boil || element.boil),
-    );
+    
+    setText(".blue-rectangle .l3-stat-item:nth-child(4) .l3-stat-value", formatTemp(melt));
+    setText(".blue-rectangle .l3-stat-item:nth-child(5) .l3-stat-value", formatTemp(boil));
   }
   const redCard = document.querySelector(
     ".red-rectangle .card-info-container",
@@ -699,20 +786,26 @@ function populateSimplifiedView(element) {
         overflow: "visible",
       });
     });
-    const year =
-      finallyElementData.discovery || element.discovery || "Unknown";
+    let year = finallyElementData.level4_history_stse?.history?.discoveryYear || "—";
+    if (window.zperiodVersion === 'new' && v2Data && v2Data.level4_history_stse.history.discoveryYear) {
+      year = v2Data.level4_history_stse.history.discoveryYear;
+    }
+
     setText(
       ".red-rectangle .info-row:nth-child(2) .info-value",
-      typeof year === "string" ? year.split(" ")[0] : year,
+      year,
     );
-    setText(
-      ".red-rectangle .info-row:nth-child(3) .info-value",
-      finallyElementData.discoveredBy || "Unknown",
-    );
-    setText(
-      ".red-rectangle .info-row:nth-child(4) .info-value",
-      finallyElementData.namedBy || "Unknown",
-    );
+    let discoveredBy = finallyElementData.level4_history_stse?.history?.discoveredBy || "—";
+    let namedBy = finallyElementData.level4_history_stse?.history?.namedBy || "—";
+    
+    if (window.zperiodVersion === 'new' && v2Data) {
+      discoveredBy = v2Data.level4_history_stse.history.discoveredBy || "—";
+      namedBy = v2Data.level4_history_stse.history.namedBy || "—";
+    }
+
+    setText(".red-rectangle .info-row:nth-child(3) .info-value", discoveredBy);
+    setText(".red-rectangle .info-row:nth-child(4) .info-value", namedBy);
+    
     const propGridSection = redCard.querySelector(".prop-grid-section");
     if (propGridSection) {
       setStyle(propGridSection, {
@@ -721,48 +814,62 @@ function populateSimplifiedView(element) {
         boxSizing: "border-box",
         minWidth: "0",
       });
-      const stseCell = propGridSection.querySelector(
-        ".prop-cell:nth-child(1)",
-      );
+      const stseCell = propGridSection.querySelector(".prop-cell:nth-child(1)");
       if (stseCell) {
         setStyle(stseCell, commonCellStyles);
         const stseContent = findContentDiv(stseCell, "stse");
-        if (stseContent && (finallyElementData.stse || eduData.stse)) {
+        
+        let stseVal = (finallyElementData.level4_history_stse?.stseContext || []).join("; ");
+        if (window.zperiodVersion === 'new' && v2Data) {
+          stseVal = v2Data.level4_history_stse.stseContext && v2Data.level4_history_stse.stseContext.length > 0 
+                    ? v2Data.level4_history_stse.stseContext.join(" • ") 
+                    : "";
+        }
+        
+        stseCell.style.display = "flex";
+        if (stseContent) {
           setStyle(stseContent, commonContentStyles);
-          stseContent.innerHTML = formatSTSE(
-            finallyElementData.stse || eduData.stse?.content || "",
-            element.symbol,
-          );
-        } else {
-          stseCell.style.display = "none";
+          if (stseVal) {
+            stseContent.innerHTML = formatSTSE(stseVal);
+          } else {
+            stseContent.textContent = "—";
+          }
         }
       }
-      const usesCell = propGridSection.querySelector(
-        ".prop-cell:nth-child(2)",
-      );
+      
+      const usesCell = propGridSection.querySelector(".prop-cell:nth-child(2)");
       if (usesCell) {
         setStyle(usesCell, commonCellStyles);
         const usesContent = findContentDiv(usesCell, "uses");
+        
+        let usesVal = (finallyElementData.level4_history_stse?.commonUses || []).join(", ") || "—";
+        if (window.zperiodVersion === 'new' && v2Data) {
+          usesVal = v2Data.level4_history_stse.commonUses && v2Data.level4_history_stse.commonUses.length > 0
+                    ? v2Data.level4_history_stse.commonUses.join(", ")
+                    : "—";
+        }
+        
         if (usesContent) {
           setStyle(usesContent, commonContentStyles);
-          usesContent.textContent =
-            finallyElementData.uses ||
-            element.uses ||
-            "Research and industrial applications";
+          usesContent.textContent = usesVal;
         }
       }
-      const hazardsCell = propGridSection.querySelector(
-        ".prop-cell:nth-child(3)",
-      );
+      
+      const hazardsCell = propGridSection.querySelector(".prop-cell:nth-child(3)");
       if (hazardsCell) {
         setStyle(hazardsCell, commonCellStyles);
         const hazardsContent = findContentDiv(hazardsCell, "hazards");
+        
+        let hazardsVal = (finallyElementData.level4_history_stse?.hazards || []).join(", ") || "—";
+        if (window.zperiodVersion === 'new' && v2Data) {
+          hazardsVal = v2Data.level4_history_stse.hazards && v2Data.level4_history_stse.hazards.length > 0
+                      ? v2Data.level4_history_stse.hazards.join(", ")
+                      : "—";
+        }
+        
         if (hazardsContent) {
           setStyle(hazardsContent, commonContentStyles);
-          hazardsContent.textContent =
-            finallyElementData.hazards ||
-            element.hazards ||
-            "Follow safety guidelines";
+          hazardsContent.textContent = hazardsVal;
         }
       }
     }
@@ -772,17 +879,16 @@ function populateSimplifiedView(element) {
 // ===== Show Modal (main element modal) =====
 export function showModal(element) {
   window.currentAtomElement = element;
-  const finallyElementData = finallyData[element.symbol] || {};
-  element.weight = element.weight || element.number * 2.5;
+  const finallyElementData = finallyData[element.number] || {};
   element.educational = element.educational || {};
-  element.phase = element.phase || "Unknown";
+  element.phase = element.phase || finallyElementData.level1_basic?.phaseAtSTP || "";
   element.electronConfig =
-    element.electronConfig || finallyElementData.electronConfig || "N/A";
+    finallyElementData.level3_properties?.electronic?.configuration || "";
   element.discovery =
-    element.discovery || finallyElementData.discovery || "Unknown";
+    finallyElementData.level4_history_stse?.history?.discoveryYear || "";
   element.etymology =
-    element.etymology || finallyElementData.namedBy || "N/A";
-  element.description = element.description || finallyElementData.stse || "";
+    finallyElementData.level4_history_stse?.history?.namedBy || "";
+  element.description = (finallyElementData.level4_history_stse?.stseContext || []).join("; ");
   initializeLevelSystem(element);
   const isSimplifiedView = element.number <= 118;
   const elementContent = document.querySelector(".element-content");
@@ -892,29 +998,24 @@ export function showModal(element) {
   if (modalWatermark) {
     modalWatermark.textContent = element.symbol;
   }
-  if (modalPhase) modalPhase.textContent = element.phase || "Unknown";
+  if (modalPhase) modalPhase.textContent = element.phase || "—";
   if (modalCategoryDisplay) {
-    modalCategoryDisplay.textContent = element.category || "Unknown";
+    modalCategoryDisplay.textContent = element.category || "—";
   }
   if (modalConfigLarge) {
-    modalConfigLarge.textContent = element.electronConfig || "N/A";
+    modalConfigLarge.textContent = element.electronConfig || "—";
   }
   if (modalDiscovery) modalDiscovery.textContent = element.discovery;
   if (modalEtymology) modalEtymology.textContent = element.etymology;
   if (modalDescription) modalDescription.textContent = element.description;
-  if (modalDensity) modalDensity.textContent = element.density || "-";
-  if (modalMelt) modalMelt.textContent = element.melt || "-";
-  if (modalBoil) modalBoil.textContent = element.boil || "-";
+  if (modalDensity) modalDensity.textContent = finallyElementData.level3_properties?.physical?.density || "—";
+  if (modalMelt) modalMelt.textContent = finallyElementData.level3_properties?.physical?.meltingPoint || "—";
+  if (modalBoil) modalBoil.textContent = finallyElementData.level3_properties?.physical?.boilingPoint || "—";
   if (modalNegativity)
-    modalNegativity.textContent = element.electronegativity || "-";
-  if (modalRadius) modalRadius.textContent = element.radius || "-";
+    modalNegativity.textContent = finallyElementData.level3_properties?.physical?.electronegativity ?? "—";
+  if (modalRadius) modalRadius.textContent = element.radius || "—";
   if (modalIonization) {
-    let ie = element.ionization || "-";
-    if (typeof ie === "string" && ie.includes("eV")) {
-      const ev = parseFloat(ie);
-      if (!isNaN(ev)) ie = `${(ev * 96.485).toFixed(1)} kJ/mol`;
-    }
-    modalIonization.textContent = ie;
+    modalIonization.textContent = finallyElementData.level3_properties?.physical?.firstIonization || "—";
   }
   const grp = element.column;
   if (eduNames && modalCharge) {
@@ -930,135 +1031,45 @@ export function showModal(element) {
     } else {
       modalCharge.style.display = "block";
       eduNames.style.display = "none";
-      const commonOxidationStates = {
-        H: ["+1", "-1"],
-        He: ["0"],
-        Li: ["+1"],
-        Be: ["+2"],
-        B: ["+3"],
-        C: ["+4", "-4", "+2"],
-        N: ["-3", "+5", "+3", "+4", "+2"],
-        O: ["-2"],
-        F: ["-1"],
-        Ne: ["0"],
-        Na: ["+1"],
-        Mg: ["+2"],
-        Al: ["+3"],
-        Si: ["+4", "-4"],
-        P: ["-3", "+5", "+3"],
-        S: ["-2", "+6", "+4"],
-        Cl: ["-1", "+1", "+3", "+5", "+7"],
-        Ar: ["0"],
-        K: ["+1"],
-        Ca: ["+2"],
-        Sc: ["+3"],
-        Ti: ["+4", "+3"],
-        V: ["+5", "+4", "+3", "+2"],
-        Cr: ["+3", "+6", "+2"],
-        Mn: ["+2", "+4", "+7"],
-        Fe: ["+3", "+2"],
-        Co: ["+2", "+3"],
-        Ni: ["+2"],
-        Cu: ["+2", "+1"],
-        Zn: ["+2"],
-        Ga: ["+3"],
-        Ge: ["+4", "+2"],
-        As: ["-3", "+5", "+3"],
-        Se: ["-2", "+4", "+6"],
-        Br: ["-1", "+1", "+5"],
-        Kr: ["0"],
-        Rb: ["+1"],
-        Sr: ["+2"],
-        Y: ["+3"],
-        Zr: ["+4"],
-        Nb: ["+5", "+3"],
-        Mo: ["+6", "+4"],
-        Tc: ["+7", "+4"],
-        Ru: ["+3", "+4"],
-        Rh: ["+3"],
-        Pd: ["+2", "+4"],
-        Ag: ["+1"],
-        Cd: ["+2"],
-        In: ["+3"],
-        Sn: ["+4", "+2"],
-        Sb: ["+3", "+5", "-3"],
-        Te: ["-2", "+4", "+6"],
-        I: ["-1", "+1", "+5", "+7"],
-        Xe: ["0", "+2", "+4", "+6"],
-        Cs: ["+1"],
-        Ba: ["+2"],
-        La: ["+3"],
-        Ce: ["+3", "+4"],
-        Pr: ["+3"],
-        Nd: ["+3"],
-        Pm: ["+3"],
-        Sm: ["+3", "+2"],
-        Eu: ["+3", "+2"],
-        Gd: ["+3"],
-        Tb: ["+3", "+4"],
-        Dy: ["+3"],
-        Ho: ["+3"],
-        Er: ["+3"],
-        Tm: ["+3", "+2"],
-        Yb: ["+3", "+2"],
-        Lu: ["+3"],
-        Hf: ["+4"],
-        Ta: ["+5"],
-        W: ["+6", "+4"],
-        Re: ["+7", "+4"],
-        Os: ["+4"],
-        Ir: ["+4", "+3"],
-        Pt: ["+2", "+4"],
-        Au: ["+3", "+1"],
-        Hg: ["+2", "+1"],
-        Tl: ["+1", "+3"],
-        Pb: ["+2", "+4"],
-        Bi: ["+3"],
-        Po: ["+2", "+4"],
-        At: ["-1", "+1"],
-        Rn: ["0"],
-        Fr: ["+1"],
-        Ra: ["+2"],
-        Ac: ["+3"],
-        Th: ["+4"],
-        Pa: ["+5", "+4"],
-        U: ["+6", "+4"],
-        Np: ["+5"],
-        Pu: ["+4"],
-        Am: ["+3"],
-      };
-      const states = commonOxidationStates[element.symbol];
-      if (states && states.length > 0) {
-        let html = `<span class="charge-main">${states[0]}</span>`;
-        if (states.length > 1) {
-          states.slice(1).forEach((s) => {
-            html += `<span class="charge-sub">${s}</span>`;
-          });
-        }
+      let statesObj = finallyElementData.level3_properties?.electronic?.oxidationStates || { common: [], possible: [] };
+      // Support legacy flat array format
+      if (Array.isArray(statesObj)) {
+        statesObj = { common: statesObj.slice(0, 1), possible: statesObj.slice(1) };
+      }
+      const common = statesObj.common || [];
+      const possible = statesObj.possible || [];
+      if (common.length > 0 || possible.length > 0) {
+        let html = common.map(s => `<span class="charge-main">${s}</span>`).join("");
+        html += possible.map(s => `<span class="charge-sub">${s}</span>`).join("");
         modalCharge.innerHTML = html;
       } else {
-        let charge = "?";
-        if (grp === 1) charge = "+1";
-        else if (grp === 2) charge = "+2";
-        else if (grp === 13) charge = "+3";
-        else if (grp === 14) charge = "±4";
-        else if (grp === 15) charge = "-3";
-        else if (grp === 16) charge = "-2";
-        else if (grp === 17) charge = "-1";
-        else if (grp === 18) charge = "0";
-        modalCharge.innerHTML = `<span class="charge-main">${charge}</span>`;
+        modalCharge.innerHTML = `<span class="charge-main">—</span>`;
       }
     }
   }
   const atomicNum = element.number;
-  const mass = Math.round(element.weight);
-  const neutrons =
-    eduData && eduData.neutronOverride
-      ? eduData.neutronOverride
-      : mass - atomicNum;
   if (modalP) modalP.textContent = atomicNum;
   if (modalE) modalE.textContent = atomicNum;
-  if (modalN) modalN.textContent = neutrons > 0 ? neutrons : 0;
+  if (modalN) {
+    const massNumbers = [
+      1, 4, 7, 9, 11, 12, 14, 16, 19, 20,
+      23, 24, 27, 28, 31, 32, 35, 40, 39, 40,
+      45, 48, 51, 52, 55, 56, 59, 59, 64, 65,
+      70, 73, 75, 79, 80, 84, 85, 88, 89, 91,
+      93, 96, 98, 101, 103, 106, 108, 112, 115, 119,
+      122, 128, 127, 131, 133, 137, 139, 140, 141, 144,
+      145, 150, 152, 157, 159, 163, 165, 167, 169, 173,
+      175, 178, 181, 184, 186, 190, 192, 195, 197, 201,
+      204, 207, 209, 209, 210, 222, 223, 226, 227, 232,
+      231, 238, 237, 244, 243, 247, 247, 251, 252, 257,
+      258, 259, 266, 267, 268, 269, 270, 277, 278, 281,
+      282, 285, 286, 289, 290, 293, 294, 294
+    ];
+    const massNumber = (atomicNum >= 1 && atomicNum <= 118)
+      ? massNumbers[atomicNum - 1]
+      : null;
+    modalN.textContent = massNumber !== null ? (massNumber - atomicNum) : "—";
+  }
 
   // Correct display for Lanthanides and Actinides
   let displayPeriod = element.row;
@@ -1071,8 +1082,8 @@ export function showModal(element) {
     displayGroup = 3;
   }
 
-  if (modalPeriod) modalPeriod.textContent = displayPeriod || "-";
-  if (modalGroup) modalGroup.textContent = displayGroup || "-";
+  if (modalPeriod) modalPeriod.textContent = displayPeriod || "—";
+  if (modalGroup) modalGroup.textContent = displayGroup || "—";
   const amphotericCard = document.getElementById("amphoteric-card");
   if (amphotericCard) {
     if (eduData && eduData.amphoteric) {
@@ -1253,36 +1264,13 @@ export function showModal(element) {
       eduCardsContainer.innerHTML = html;
     }
   }
-  let compounds = "N/A";
-  if (element.symbol === "H") compounds = "H₂O, CH₄, NH₃";
-  else if (element.symbol === "He") compounds = "None (Inert)";
-  else if (element.symbol === "Li") compounds = "LiOH, Li₂CO₃";
-  else if (element.symbol === "C") compounds = "CO₂, CH₄, C₆H₁₂O₆";
-  else if (element.symbol === "O") compounds = "H₂O, CO₂, SiO₂";
-  else if (element.symbol === "Na") compounds = "NaCl, NaOH, NaHCO₃";
-  else if (grp === 1) compounds = `MCl, M₂O`;
-  else if (grp === 17) compounds = `NaF, NaCl, NaBr`;
-  else compounds = element.symbol + "Cl₂, " + element.symbol + "O";
+  let compounds = "—";
   if (modalCompounds) modalCompounds.textContent = compounds;
   if (modalUses) {
-    if (element.uses) {
-      modalUses.textContent = element.uses;
-    } else if (element.symbol === "Pb") {
-      modalUses.textContent =
-        "Batteries, Radiation Shielding (X-Ray), Construction";
-    } else {
-      modalUses.textContent = "Used in research and industry.";
-    }
+    modalUses.textContent = (finallyElementData.level4_history_stse?.commonUses || []).join(", ") || "—";
   }
   if (modalHazards) {
-    if (element.hazards) {
-      modalHazards.textContent = element.hazards;
-    } else if (element.symbol === "Pb") {
-      modalHazards.textContent =
-        "Neurotoxin (Brain/Nerve damage), Bioaccumulation";
-    } else {
-      modalHazards.textContent = "Follow safety guidelines";
-    }
+    modalHazards.textContent = (finallyElementData.level4_history_stse?.hazards || []).join(", ") || "—";
   }
   if (modalShells) {
     modalShells.textContent = calculateShells(element);
@@ -1411,9 +1399,14 @@ function initializeLevelSystem(element) {
       btn.classList.add("active");
     });
   });
-  const startLevel = window.isLevelLocked
-    ? String(window.lockedLevelIndex + 1)
-    : "1";
+  const pendingLevelIndex = Number.isInteger(window._pendingLevelIndex)
+    ? Math.max(0, window._pendingLevelIndex)
+    : null;
+  const startLevel = pendingLevelIndex !== null
+    ? String(pendingLevelIndex + 1)
+    : window.isLevelLocked
+      ? String(window.lockedLevelIndex + 1)
+      : "1";
   switchToLevel(startLevel, element);
   levelBtns.forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.level === startLevel);
@@ -1441,6 +1434,7 @@ function populateLevelContent(level, element) {
   }
 }
 function populateLevel1(element, eduData) {
+  const finallyElementData = finallyData[element.number] || {};
   const level1Protons = document.getElementById("level1-protons");
   const level1Electrons = document.getElementById("level1-electrons");
   const level1Neutrons = document.getElementById("level1-neutrons");
@@ -1450,30 +1444,31 @@ function populateLevel1(element, eduData) {
   if (level1Protons) level1Protons.textContent = element.number;
   if (level1Electrons) level1Electrons.textContent = element.number;
   if (level1Neutrons) {
-    const neutrons =
-      eduData && eduData.neutronOverride
-        ? eduData.neutronOverride
-        : Math.round(element.weight) - element.number;
-    if (element.symbol === "Pb") {
-      level1Neutrons.textContent = `${neutrons} (in Pb-208)`;
-    } else {
-      level1Neutrons.textContent = neutrons;
-    }
+    const massNumbers = [
+      1, 4, 7, 9, 11, 12, 14, 16, 19, 20,
+      23, 24, 27, 28, 31, 32, 35, 40, 39, 40,
+      45, 48, 51, 52, 55, 56, 59, 59, 64, 65,
+      70, 73, 75, 79, 80, 84, 85, 88, 89, 91,
+      93, 96, 98, 101, 103, 106, 108, 112, 115, 119,
+      122, 128, 127, 131, 133, 137, 139, 140, 141, 144,
+      145, 150, 152, 157, 159, 163, 165, 167, 169, 173,
+      175, 178, 181, 184, 186, 190, 192, 195, 197, 201,
+      204, 207, 209, 209, 210, 222, 223, 226, 227, 232,
+      231, 238, 237, 244, 243, 247, 247, 251, 252, 257,
+      258, 259, 266, 267, 268, 269, 270, 277, 278, 281,
+      282, 285, 286, 289, 290, 293, 294, 294
+    ];
+    const massNumber = (element.number >= 1 && element.number <= 118)
+      ? massNumbers[element.number - 1]
+      : null;
+    level1Neutrons.textContent = massNumber !== null ? (massNumber - element.number) : "—";
   }
-  if (level1Mass) level1Mass.textContent = element.weight;
+  if (level1Mass) level1Mass.textContent = finallyElementData.level2_atomic?.mass?.highSchool || "—";
   if (level1Density) {
-    if (element.symbol === "Pb") {
-      level1Density.textContent = "11.34 g/cm³ (Heavy!)";
-    } else {
-      level1Density.textContent = element.density || "N/A";
-    }
+    level1Density.textContent = finallyElementData.level3_properties?.physical?.density || "—";
   }
   if (level1Melt) {
-    if (element.symbol === "Pb") {
-      level1Melt.textContent = "327.5 °C (Easily melted)";
-    } else {
-      level1Melt.textContent = element.melt || "N/A";
-    }
+    level1Melt.textContent = finallyElementData.level3_properties?.physical?.meltingPoint || "—";
   }
   const modalCategoryDisplay = document.getElementById(
     "modal-category-display",
@@ -1482,9 +1477,9 @@ function populateLevel1(element, eduData) {
   const modalGroup = document.getElementById("modal-group");
   const amphotericCard = document.getElementById("amphoteric-card");
   if (modalCategoryDisplay)
-    modalCategoryDisplay.textContent = element.category || "Unknown";
-  if (modalPhase) modalPhase.textContent = element.phase || "Unknown";
-  if (modalGroup) modalGroup.textContent = element.column || "-";
+    modalCategoryDisplay.textContent = element.category || "—";
+  if (modalPhase) modalPhase.textContent = element.phase || "—";
+  if (modalGroup) modalGroup.textContent = element.column || "—";
   if (amphotericCard) {
     if (eduData && eduData.amphoteric) {
       amphotericCard.style.display = "flex";
@@ -1512,7 +1507,13 @@ function initSwipeSlider() {
   if (!slider || slides.length < 2) return;
 
   const MAX_INDEX = Math.min(slides.length - 1, 3); // Hard limit: 4 pages max (index 0-3)
-  let currentIndex = window.isLevelLocked ? Math.min(window.lockedLevelIndex, MAX_INDEX) : 0;
+  const hasPendingLevel = Number.isInteger(window._pendingLevelIndex);
+  let currentIndex = hasPendingLevel
+    ? Math.min(Math.max(window._pendingLevelIndex, 0), MAX_INDEX)
+    : window.isLevelLocked
+      ? Math.min(window.lockedLevelIndex, MAX_INDEX)
+      : 0;
+  window._pendingLevelIndex = null;
   const gap = 20;
   let isDragging = false;
   let startX = 0;
@@ -1716,6 +1717,7 @@ export function initModalUI() {
   });
 
   modal.addEventListener("click", (e) => {
+    if (window._zperiodIsDragging) return;
     if (e.target === modal) {
       modal.classList.remove("active");
       document.body.classList.remove("hide-nav");
@@ -1732,6 +1734,8 @@ export function initModalUI() {
     tableContainerEl.addEventListener("click", (e) => {
       const cell = e.target.closest(".element");
       if (cell && !cell.classList.contains("empty")) {
+        // Range blocks (La-Lu, Ac-Lr) are handled by their own click listeners
+        if (cell.classList.contains("range-block")) return;
         const number = parseInt(cell.querySelector(".number").textContent);
         const element = elements.find((el) => el.number === number);
         if (element) {

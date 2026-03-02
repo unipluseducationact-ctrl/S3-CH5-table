@@ -851,7 +851,7 @@ function openIonModal(ion) {
     // Oxidation State
     const l3Ox = document.getElementById("ion-l3-oxidation");
     if (l3Ox) {
-      l3Ox.innerHTML = `<div class="ox-pill">${cd.level3.oxidation}</div>`;
+      l3Ox.innerHTML = `<div class="ox-pill common">${cd.level3.oxidation}</div>`;
     }
 
     // Level 4 (Red Card) - History & STSE - Match Element Layout
@@ -1017,12 +1017,16 @@ function openIonModal(ion) {
       if (l3Ion) l3Ion.textContent = elemData.ionization || "--";
 
       if (l3Oxidation && elemData.oxidationStates) {
-        l3Oxidation.innerHTML = elemData.oxidationStates
-          .map(
-            (ox, i) =>
-              `<div class="ox-pill ${i > 0 ? "faded" : ""}"><label>${i === 0 ? "Common" : "Poss."}</label>${ox}</div>`,
-          )
-          .join("");
+        let oxObj = elemData.oxidationStates;
+        // Support both new {common, possible} and legacy flat array format
+        if (Array.isArray(oxObj)) {
+          oxObj = { common: oxObj.slice(0, 1), possible: oxObj.slice(1) };
+        }
+        const common = oxObj.common || [];
+        const possible = oxObj.possible || [];
+        l3Oxidation.innerHTML = 
+          common.map(ox => `<div class="ox-pill common">${ox}</div>`).join("") +
+          possible.map(ox => `<div class="ox-pill possible">${ox}</div>`).join("");
       }
 
       // Level 4 (Red)
@@ -1058,7 +1062,7 @@ function openIonModal(ion) {
     const l3Oxidation = document.getElementById("ion-l3-oxidation");
     if (l3Oxidation)
       l3Oxidation.innerHTML =
-        '<div class="ox-pill faded"><label>Possible</label>--</div>';
+        '<div class="ox-pill possible">--</div>';
   }
 
   // Show modal
@@ -1108,6 +1112,7 @@ function openIonModal(ion) {
   }
 
   modal.onclick = (e) => {
+    if (window._zperiodIsDragging) return;
     if (e.target === modal) {
       modal.classList.remove("active");
       document.body.classList.remove("hide-nav");
