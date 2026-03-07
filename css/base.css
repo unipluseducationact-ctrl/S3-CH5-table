@@ -234,7 +234,7 @@ body {
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-              width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 0;
   pointer-events: none;
 }
@@ -452,13 +452,13 @@ body.hide-nav .copyright-notice {
   white-space: nowrap;
   font-family: inherit;
   letter-spacing: -0.01em;
-  box-shadow: 0 0.5px 1px rgba(0,0,0,0.04);
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.04);
 }
 
 .version-dropdown-toggle:hover {
   color: #1d1d1f;
   background: rgba(0, 0, 0, 0.07);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .version-dropdown-toggle:active {
@@ -547,13 +547,31 @@ body.hide-nav .copyright-notice {
 }
 
 @keyframes versionFadeOut {
-  0% { opacity: 1; transform: scale(1); filter: blur(0); }
-  100% { opacity: 0; transform: scale(0.98); filter: blur(4px); }
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.98);
+    filter: blur(4px);
+  }
 }
 
 @keyframes versionFadeIn {
-  0% { opacity: 0; transform: scale(0.98); filter: blur(4px); }
-  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  0% {
+    opacity: 0;
+    transform: scale(0.98);
+    filter: blur(4px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
 }
 
 body.hide-nav .version-dropdown {
@@ -979,7 +997,7 @@ body.hide-nav .version-dropdown {
 .sv-suggest-row {
   display: flex;
   gap: 8px;
-  align-items: center;
+  align-items: flex-end;
 }
 
 .sv-suggest-input {
@@ -993,7 +1011,12 @@ body.hide-nav .version-dropdown {
   font-weight: 500;
   color: var(--text-primary);
   outline: none;
-  transition: all 0.2s ease;
+  resize: none;
+  overflow-y: auto;
+  line-height: 1.5;
+  min-height: 42px;
+  max-height: 160px;
+  transition: all 0.2s ease, height 0.1s ease;
 }
 
 .sv-suggest-input:focus {
@@ -1144,10 +1167,23 @@ body.hide-nav .version-dropdown {
     overflow-y: auto;
     align-content: unset;
   }
-  .sv-sidebar { order: 2; }
-  .sv-main { order: 1; max-width: 100%; }
-  .sv-changelog { order: 3; }
-  .sv-changelog-list { max-height: 300px; }
+
+  .sv-sidebar {
+    order: 2;
+  }
+
+  .sv-main {
+    order: 1;
+    max-width: 100%;
+  }
+
+  .sv-changelog {
+    order: 3;
+  }
+
+  .sv-changelog-list {
+    max-height: 300px;
+  }
 }
 
 /* =========================================

@@ -759,8 +759,17 @@ function initSettingsPage() {
     }
 
     suggSend.addEventListener("click", sendSuggestion);
-    suggInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && suggInput.value.trim()) sendSuggestion();
+    // Auto-resize textarea as user types
+    suggInput.addEventListener("input", function () {
+      this.style.height = "auto";
+      this.style.height = Math.min(this.scrollHeight, 160) + "px";
+    });
+    // Adjust height when pre-filling from chips
+    chipContainer?.addEventListener("click", () => {
+      setTimeout(() => {
+        suggInput.style.height = "auto";
+        suggInput.style.height = Math.min(suggInput.scrollHeight, 160) + "px";
+      }, 10);
     });
   }
 

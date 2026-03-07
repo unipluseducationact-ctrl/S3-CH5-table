@@ -99,6 +99,11 @@ const EIT_PROPERTY_CONFIG = [
     unit: "g/cm³",
     digits: 2,
     source: "density",
+    units: [
+      { unit: "g/cm³", digits: 2, convert: (v) => v },
+      { unit: "kg/m³", digits: 0, convert: (v) => v * 1000 },
+      { unit: "lb/ft³", digits: 2, convert: (v) => v * 62.42796 },
+    ],
   },
   {
     key: "boilingPoint",
@@ -740,11 +745,10 @@ function ensureEITController(tableContainer) {
     eitUI.rangeMinInput.addEventListener("input", () => {
       const config = EIT_PROPERTY_MAP.get(eitState.property);
       if (!config || config.type !== "numeric") return;
-      const step = Number.parseFloat(eitUI.rangeMinInput.step) || 0;
       let minValue = Number.parseFloat(eitUI.rangeMinInput.value);
       let maxValue = Number.parseFloat(eitUI.rangeMaxInput.value);
-      if (minValue > maxValue - step) {
-        minValue = maxValue - step;
+      if (minValue > maxValue) {
+        minValue = maxValue;
         eitUI.rangeMinInput.value = String(minValue);
       }
       eitState.numericRanges.set(config.key, { min: minValue, max: maxValue });
@@ -758,11 +762,10 @@ function ensureEITController(tableContainer) {
     eitUI.rangeMaxInput.addEventListener("input", () => {
       const config = EIT_PROPERTY_MAP.get(eitState.property);
       if (!config || config.type !== "numeric") return;
-      const step = Number.parseFloat(eitUI.rangeMaxInput.step) || 0;
       let minValue = Number.parseFloat(eitUI.rangeMinInput.value);
       let maxValue = Number.parseFloat(eitUI.rangeMaxInput.value);
-      if (maxValue < minValue + step) {
-        maxValue = minValue + step;
+      if (maxValue < minValue) {
+        maxValue = minValue;
         eitUI.rangeMaxInput.value = String(maxValue);
       }
       eitState.numericRanges.set(config.key, { min: minValue, max: maxValue });
@@ -1140,9 +1143,27 @@ function calculateShells(element) {
 
 // ===== L3 Stat Item: Clickable Unit Conversion =====
 // Tracks the current unit index per metric key so cycling persists during a modal session
-const l3UnitState = { ie: 0, ea: 0, melt: 0, boil: 0 };
+const l3UnitState = { ie: 0, ea: 0, melt: 0, boil: 0, density: 0 };
 
 const L3_UNIT_CONFIGS = {
+  density: {
+    units: [
+      { unit: "g/cm³", digits: 2 },
+      { unit: "kg/m³", digits: 0 },
+      { unit: "lb/ft³", digits: 2 },
+    ],
+    parse(raw) {
+      if (!raw || raw === "N/A" || raw === "Unknown") return null;
+      const m = String(raw).match(/[\d.]+/);
+      return m ? parseFloat(m[0]) : null;
+    },
+    convert(baseVal, unitIdx) {
+      if (!Number.isFinite(baseVal)) return "N/A";
+      if (unitIdx === 1) return (baseVal * 1000).toString();
+      if (unitIdx === 2) return (baseVal * 62.42796).toFixed(2);
+      return baseVal.toFixed(2);
+    },
+  },
   ie: {
     units: [
       { unit: "kJ/mol", digits: 0 },
@@ -1967,17 +1988,77 @@ export function showModal(element) {
   if (modalDiscovery) modalDiscovery.textContent = element.discovery;
   if (modalEtymology) modalEtymology.textContent = element.etymology;
   if (modalDescription) modalDescription.textContent = element.description;
-  if (modalDensity) modalDensity.textContent = finallyElementData.level3_properties?.physical?.density || "—";
-  if (modalMelt) modalMelt.textContent = finallyElementData.level3_properties?.physical?.meltingPoint || "—";
-  if (modalBoil) modalBoil.textContent = finallyElementData.level3_properties?.physical?.boilingPoint || "—";
+  // Optional helper to set up clickable unit toggling for arbitrary text elements
+  function bindModalUnit(el, metricKey, rawVal) {
+    if (!el) return;
+    const cfg = L3_UNIT_CONFIGS[metricKey];
+    if (!cfg || !rawVal || rawVal === "—" || rawVal === "N/A") {
+      el.textContent = rawVal;
+      el.style.cursor = "default";
+      el.removeAttribute("title");
+      // Strip old listeners by cloning
+      const newEl = el.cloneNode(true);
+      el.parentNode.replaceChild(newEl, el);
+      // Update our reference
+      if (metricKey === "density") modalDensity = newEl;
+      if (metricKey === "melt") modalMelt = newEl;
+      if (metricKey === "boil") modalBoil = newEl;
+      if (metricKey === "ie") modalIonization = newEl;
+      if (metricKey === "ea") modalElectronAffinity = newEl;
+      return;
+    }
+
+    const baseVal = cfg.parse(rawVal);
+    if (!Number.isFinite(baseVal)) {
+      el.textContent = rawVal;
+      return;
+    }
+
+    // Determine current index from state
+    let unitIdx = l3UnitState[metricKey] || 0;
+
+    // Create new element to flush old listeners
+    const newEl = el.cloneNode(true);
+    newEl.style.cursor = "pointer";
+    newEl.title = "Click to change unit";
+
+    function render() {
+      const v = cfg.convert(baseVal, unitIdx);
+      const u = cfg.units[unitIdx].unit;
+      newEl.textContent = `${v} ${u}`;
+    }
+
+    render();
+
+    newEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      unitIdx = (unitIdx + 1) % cfg.units.length;
+      l3UnitState[metricKey] = unitIdx;
+      render();
+    });
+
+    el.parentNode.replaceChild(newEl, el);
+    // Update references so future calls work
+    if (metricKey === "density") modalDensity = newEl;
+    if (metricKey === "melt") modalMelt = newEl;
+    if (metricKey === "boil") modalBoil = newEl;
+    if (metricKey === "ie") modalIonization = newEl;
+    if (metricKey === "ea") modalElectronAffinity = newEl;
+  }
+
+  if (modalDensity) bindModalUnit(modalDensity, "density", finallyElementData.level3_properties?.physical?.density || "—");
+  if (modalMelt) bindModalUnit(modalMelt, "melt", finallyElementData.level3_properties?.physical?.meltingPoint || "—");
+  if (modalBoil) bindModalUnit(modalBoil, "boil", finallyElementData.level3_properties?.physical?.boilingPoint || "—");
+
   if (modalNegativity)
     modalNegativity.textContent = finallyElementData.level3_properties?.physical?.electronegativity ?? "—";
   if (modalRadius) modalRadius.textContent = element.radius || "—";
+
   if (modalIonization) {
-    modalIonization.textContent = finallyElementData.level3_properties?.physical?.firstIonization || "—";
+    bindModalUnit(modalIonization, "ie", finallyElementData.level3_properties?.physical?.firstIonization || "—");
   }
   if (modalElectronAffinity) {
-    modalElectronAffinity.textContent = finallyElementData.level3_properties?.physical?.electronAffinity || "—";
+    bindModalUnit(modalElectronAffinity, "ea", finallyElementData.level3_properties?.physical?.electronAffinity || "—");
   }
   const grp = element.column;
   if (eduNames && modalCharge) {
