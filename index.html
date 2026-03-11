@@ -908,6 +908,54 @@
                     </div>
                 </section>
 
+                <!-- Unit Preferences -->
+                <section class="sv-card sv-card-anim" id="sv-card-units">
+                    <div class="sv-card-icon-row">
+                        <div class="sv-icon-circle sv-icon-purple" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                <path d="M2 12h20"></path>
+                            </svg>
+                        </div>
+                        <h3>Global Units</h3>
+                    </div>
+                    <p class="sv-suggest-hint">Set your preferred default measurement units for the application.</p>
+                    
+                    <div class="sv-anim-controls" style="margin-top: 1rem; display: flex; flex-direction: column; gap: 14px;">
+                        <div class="sv-anim-row" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="sv-anim-label">Temperature</span>
+                            <div class="sv-pill-group" id="setting-unit-temp">
+                                <button class="sv-pill-btn active" data-unit="0">°C</button>
+                                <button class="sv-pill-btn" data-unit="1">°F</button>
+                                <button class="sv-pill-btn" data-unit="2">K</button>
+                            </div>
+                        </div>
+                        <div class="sv-anim-row" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="sv-anim-label">Density</span>
+                            <div class="sv-pill-group" id="setting-unit-density">
+                                <button class="sv-pill-btn active" data-unit="0">g/cm³</button>
+                                <button class="sv-pill-btn" data-unit="1">kg/m³</button>
+                                <button class="sv-pill-btn" data-unit="2">lb/ft³</button>
+                            </div>
+                        </div>
+                        <div class="sv-anim-row" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="sv-anim-label">1st Ionization</span>
+                            <div class="sv-pill-group" id="setting-unit-ie">
+                                <button class="sv-pill-btn active" data-unit="0">kJ/mol</button>
+                                <button class="sv-pill-btn" data-unit="1">eV</button>
+                            </div>
+                        </div>
+                        <div class="sv-anim-row" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="sv-anim-label">Electron Affinity</span>
+                            <div class="sv-pill-group" id="setting-unit-ea">
+                                <button class="sv-pill-btn active" data-unit="0">kJ/mol</button>
+                                <button class="sv-pill-btn" data-unit="1">eV</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Suggestion -->
                 <section class="sv-card sv-card-suggest">
                     <div class="sv-card-icon-row">
@@ -1130,7 +1178,8 @@
                                                         <span class="l3-stat-unit">Pauling</span>
                                                     </div>
                                                 </div>
-                                                <div class="l3-stat-item">
+                                                <div class="l3-stat-item l3-clickable" data-metric="density"
+                                                    title="Click to change unit">
                                                     <span class="l3-stat-label">Density</span>
                                                     <div>
                                                         <span class="l3-stat-value">0.0899</span>

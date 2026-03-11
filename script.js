@@ -11,7 +11,8 @@ import {
 import {
   buildPeriodicTable,
   initModalUI,
-  reRenderCurrentAtomModal
+  reRenderCurrentAtomModal,
+  initGlobalUnits
 } from "./js/modules/uiController.js";
 import { initPageController } from "./js/modules/pageController.js";
 import { createToolsModalController } from "./js/modules/toolsModalController.js";
@@ -687,6 +688,8 @@ if (document.readyState === "loading") {
 // Settings Page Initialization
 // ========================================
 function initSettingsPage() {
+  initGlobalUnits();
+
   // --- Changelog (data from external file) ---
   const changelogList = document.getElementById("settings-changelog-list");
   if (changelogList) {

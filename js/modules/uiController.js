@@ -207,26 +207,58 @@ function normalizeCategoryLabel(category) {
     .replace(/[^a-z0-9-]/g, ""));
 }
 
+/**
+ * Parse a raw metric string into an interval object.
+ * Returns { min, max, predicted, approximate, suffix } or null.
+ * For EIT slider/filter, use min/max for overlap checking.
+ * For color gradient, use midpoint (min+max)/2.
+ */
 function parseNumericMetric(rawValue, metricKey) {
   if (rawValue === null || rawValue === undefined) return null;
   if (typeof rawValue === "number") {
-    return Number.isFinite(rawValue) ? rawValue : null;
+    return Number.isFinite(rawValue)
+      ? { min: rawValue, max: rawValue, predicted: false, approximate: false, suffix: "" }
+      : null;
   }
   const text = String(rawValue).trim();
   if (!text) return null;
   if (text === "N/A" || text === "Unknown" || text === "—") return null;
+  // em-dash "—" means no data, but en-dash "–" is a range separator
   if (text.includes("—")) return null;
 
+  const predicted = /\(pred\)/i.test(text);
+  const approximate = /^~/.test(text) || /~/.test(text);
   const normalized = text.replace(/−/g, "-").replace(/,/g, "");
+
+  // Build suffix string for display
+  let suffix = "";
+  if (approximate) suffix += "~";
+  if (predicted) suffix += suffix ? " (pred)" : "(pred)";
+
+  // Try range pattern first: e.g. "364–507°C (pred)" or "350–550°C (pred)"
+  const rangeMatch = normalized.match(/(-?\d+(?:\.\d+)?)\s*[–\-]\s*(-?\d+(?:\.\d+)?)/);
+  if (rangeMatch) {
+    const lo = Number.parseFloat(rangeMatch[1]);
+    const hi = Number.parseFloat(rangeMatch[2]);
+    if (Number.isFinite(lo) && Number.isFinite(hi)) {
+      if (metricKey === "firstIonization" && /ev/i.test(normalized)) {
+        return { min: lo * 96.485, max: hi * 96.485, predicted, approximate, suffix };
+      }
+      return { min: Math.min(lo, hi), max: Math.max(lo, hi), predicted, approximate, suffix };
+    }
+  }
+
+  // Single value
   const match = normalized.match(/-?\d+(?:\.\d+)?/);
   if (!match) return null;
   const value = Number.parseFloat(match[0]);
   if (!Number.isFinite(value)) return null;
 
   if (metricKey === "firstIonization" && /ev/i.test(normalized)) {
-    return value * 96.485;
+    const converted = value * 96.485;
+    return { min: converted, max: converted, predicted, approximate, suffix };
   }
-  return value;
+  return { min: value, max: value, predicted, approximate, suffix };
 }
 
 function getMetricValue(elementNumber, metricKey) {
@@ -272,6 +304,31 @@ function formatEITValue(value, config, withUnit = false) {
   if (!withUnit) return valueText;
   const unit = getEffectiveUnit(config);
   return unit ? `${valueText} ${unit}` : valueText;
+}
+
+/** Get the midpoint value from an interval metric for gradient coloring */
+function getMetricMidpoint(metric) {
+  if (!metric) return null;
+  // Legacy: plain number (shouldn't happen after refactor but be safe)
+  if (typeof metric === "number") return Number.isFinite(metric) ? metric : null;
+  if (!Number.isFinite(metric.min) || !Number.isFinite(metric.max)) return null;
+  return (metric.min + metric.max) / 2;
+}
+
+/** Check if an interval metric overlaps with a selected range */
+function metricOverlapsRange(metric, selMin, selMax) {
+  if (!metric) return false;
+  if (typeof metric === "number") return Number.isFinite(metric) && metric >= selMin && metric <= selMax;
+  if (!Number.isFinite(metric.min) || !Number.isFinite(metric.max)) return false;
+  // Interval overlap: element.max >= selectedMin && element.min <= selectedMax
+  return metric.max >= selMin && metric.min <= selMax;
+}
+
+/** Check if an interval metric has valid data */
+function metricHasData(metric) {
+  if (!metric) return false;
+  if (typeof metric === "number") return Number.isFinite(metric);
+  return Number.isFinite(metric.min) && Number.isFinite(metric.max);
 }
 
 function getColorForRatio(ratio) {
@@ -480,14 +537,19 @@ function applyNumericEIT(config) {
 
   const rows = eitRegistry.map((entry) => ({
     entry,
-    value: entry.metrics[config.key],
+    metric: entry.metrics[config.key],  // interval object or null
   }));
-  const numericValues = rows
-    .map((row) => row.value)
-    .filter((value) => Number.isFinite(value))
-    .sort((a, b) => a - b);
 
-  if (!numericValues.length) {
+  // Collect all boundary values for computing global min/max
+  const allValues = [];
+  rows.forEach(({ metric }) => {
+    if (!metricHasData(metric)) return;
+    allValues.push(metric.min, metric.max);
+  });
+  allValues.sort((a, b) => a - b);
+  const numericCount = rows.filter(({ metric }) => metricHasData(metric)).length;
+
+  if (!allValues.length) {
     rows.forEach(({ entry }) => {
       entry.cell.classList.add("eit-no-data", "eit-dimmed");
     });
@@ -504,8 +566,8 @@ function applyNumericEIT(config) {
     return;
   }
 
-  const min = numericValues[0];
-  const max = numericValues[numericValues.length - 1];
+  const min = allValues[0];
+  const max = allValues[allValues.length - 1];
   const selected = getStoredNumericRange(config.key, min, max);
   eitState.numericRanges.set(config.key, selected);
   syncNumericSlider(config, { min, max }, selected);
@@ -516,14 +578,16 @@ function applyNumericEIT(config) {
   const isFilter = eitState.mode === "filter";
 
   // Single pass: compute and apply state for each cell using toggle
-  rows.forEach(({ entry, value }) => {
+  // Uses interval overlap: element.max >= selectedMin && element.min <= selectedMax
+  rows.forEach(({ entry, metric }) => {
     const cl = entry.cell.classList;
-    const hasData = Number.isFinite(value);
-    const inRange = hasData && value >= selected.min && value <= selected.max;
+    const hasData = metricHasData(metric);
+    const inRange = hasData && metricOverlapsRange(metric, selected.min, selected.max);
 
     if (hasData) {
-      const ratio = getNumericRatio(value, min, max);
-      // Only set color property (avoid redundant style writes)
+      // Use midpoint for gradient coloring
+      const midpoint = getMetricMidpoint(metric);
+      const ratio = getNumericRatio(midpoint, min, max);
       entry.cell.style.setProperty("--eit-cell-color", getColorForRatio(ratio));
     }
 
@@ -540,7 +604,7 @@ function applyNumericEIT(config) {
   updateEITLegend({
     visible: true,
     title: config.label,
-    note: `${inRangeCount}/${numericValues.length} in selected range`,
+    note: `${inRangeCount}/${numericCount} in selected range`,
     min: formatEITValue(selected.min, config, true),
     mid: "Selected",
     max: formatEITValue(selected.max, config, true),
@@ -718,13 +782,14 @@ function ensureEITController(tableContainer) {
     function updateCellRangeClasses(selMin, selMax, config) {
       const isFilter = eitState.mode === "filter";
       let inRangeCount = 0;
-      const numericCount = eitRegistry.reduce((n, e) => n + (Number.isFinite(e.metrics[config.key]) ? 1 : 0), 0);
+      const numericCount = eitRegistry.reduce((n, e) => n + (metricHasData(e.metrics[config.key]) ? 1 : 0), 0);
 
       for (let i = 0, len = eitRegistry.length; i < len; i++) {
         const entry = eitRegistry[i];
-        const value = entry.metrics[config.key];
-        if (!Number.isFinite(value)) continue;
-        const inRange = value >= selMin && value <= selMax;
+        const metric = entry.metrics[config.key];
+        if (!metricHasData(metric)) continue;
+        // Interval overlap check
+        const inRange = metricOverlapsRange(metric, selMin, selMax);
         if (inRange) inRangeCount++;
         const cl = entry.cell.classList;
         cl.toggle("eit-dimmed", isFilter && !inRange);
@@ -1222,12 +1287,35 @@ const L3_UNIT_CONFIGS = {
       { unit: "°F", digits: 1 },
       { unit: "K", digits: 1 },
     ],
+    /**
+     * Parse raw melt/boil string into { min, max, suffix }.
+     * Preserves range info and (pred)/~ annotations.
+     * Returns null for N/A values.
+     */
     parse(raw) {
       if (!raw || typeof raw !== "string") return null;
-      if (raw.includes("—") || raw.includes("Pressurized") || raw === "N/A" || raw.includes("Unknown") || raw.includes("Sublimes")) return null;
-      const s = raw.replace(/−/g, "-").replace(/,/g, "").replace(/°C/g, "").trim();
+      if (raw.includes("\u2014") || raw.includes("Pressurized") || raw === "N/A" || raw.includes("Unknown") || raw.includes("Sublimes")) return null;
+
+      const predicted = /\(pred\)/i.test(raw);
+      const approximate = /~/.test(raw);
+      let suffix = "";
+      if (approximate) suffix += "~";
+      if (predicted) suffix += suffix ? " (pred)" : "(pred)";
+
+      const s = raw.replace(/\u2212/g, "-").replace(/,/g, "").replace(/°C/g, "").trim();
+      // Try range: "364–507"
+      const rangeMatch = s.match(/(-?[\d.]+)\s*[\u2013\-]\s*(-?[\d.]+)/);
+      if (rangeMatch) {
+        const lo = parseFloat(rangeMatch[1]);
+        const hi = parseFloat(rangeMatch[2]);
+        if (Number.isFinite(lo) && Number.isFinite(hi)) {
+          return { min: Math.min(lo, hi), max: Math.max(lo, hi), suffix, isRange: true };
+        }
+      }
       const m = s.match(/-?[\d.]+/);
-      return m ? parseFloat(m[0]) : null;
+      if (!m) return null;
+      const v = parseFloat(m[0]);
+      return Number.isFinite(v) ? { min: v, max: v, suffix, isRange: false } : null;
     },
     convert(baseVal, unitIdx) {
       if (!Number.isFinite(baseVal)) return "N/A";
@@ -1235,12 +1323,31 @@ const L3_UNIT_CONFIGS = {
       if (unitIdx === 2) return (baseVal + 273.15).toFixed(1);
       return baseVal.toFixed(1);
     },
+    /** Format a parsed result (with range + suffix) for a given unit index */
+    formatParsed(parsed, unitIdx) {
+      if (!parsed || !Number.isFinite(parsed.min)) return "N/A";
+      const c = L3_UNIT_CONFIGS.melt.convert;
+      if (parsed.isRange) {
+        return `${c(parsed.min, unitIdx)}\u2013${c(parsed.max, unitIdx)}`;
+      }
+      const valText = c(parsed.min, unitIdx);
+      return parsed.suffix.startsWith("~") ? `~${valText}` : valText;
+    },
+    /** Get the suffix part to display after the unit, e.g. " (pred)" */
+    getSuffix(parsed) {
+      if (!parsed || !parsed.suffix) return "";
+      // Remove leading ~ (shown in value), keep (pred)
+      const s = parsed.suffix.replace(/^~\s*/, "").trim();
+      return s ? ` ${s}` : "";
+    },
   },
   boil: {
     // Same conversion logic as melt
     get units() { return L3_UNIT_CONFIGS.melt.units; },
     parse(raw) { return L3_UNIT_CONFIGS.melt.parse(raw); },
     convert(baseVal, unitIdx) { return L3_UNIT_CONFIGS.melt.convert(baseVal, unitIdx); },
+    formatParsed(parsed, unitIdx) { return L3_UNIT_CONFIGS.melt.formatParsed(parsed, unitIdx); },
+    getSuffix(parsed) { return L3_UNIT_CONFIGS.melt.getSuffix(parsed); },
   },
 };
 
@@ -1251,26 +1358,48 @@ function setupL3UnitConversion(blueCard, rawData) {
     const metric = item.dataset.metric;
     const cfg = L3_UNIT_CONFIGS[metric];
     if (!cfg) return;
-    const baseVal = cfg.parse(rawData[metric]);
-    // Store base value on the element for click handler
-    item._l3Base = baseVal;
+    const parsed = cfg.parse(rawData[metric]);
+    // Store parsed data for click handler
+    item._l3Parsed = parsed;
     item._l3Metric = metric;
+    // For non-temp metrics, also store legacy base value
+    item._l3Base = parsed && typeof parsed === "object" ? parsed.min : parsed;
     // Set cursor
     item.style.cursor = "pointer";
     // Remove old listener if any (use clone trick)
     const newItem = item.cloneNode(true);
-    newItem._l3Base = baseVal;
+    newItem._l3Parsed = parsed;
     newItem._l3Metric = metric;
+    newItem._l3Base = item._l3Base;
     newItem.style.cursor = "pointer";
     item.parentNode.replaceChild(newItem, item);
+
+    // Helper to update display for melt/boil (range + suffix aware)
+    function updateTempDisplay(el, parsedData, unitIdx, unitCfg) {
+      const valEl = el.querySelector(".l3-stat-value");
+      const unitEl = el.querySelector(".l3-stat-unit");
+      if (unitCfg.formatParsed) {
+        // Range/suffix aware path
+        if (valEl) valEl.textContent = unitCfg.formatParsed(parsedData, unitIdx);
+        if (unitEl) {
+          const suffixStr = unitCfg.getSuffix ? unitCfg.getSuffix(parsedData) : "";
+          unitEl.textContent = unitCfg.units[unitIdx].unit + suffixStr;
+        }
+      } else {
+        // Simple numeric path (ie, ea, density)
+        const baseVal = parsedData && typeof parsedData === "object" ? parsedData.min : parsedData;
+        if (valEl) valEl.textContent = unitCfg.convert(baseVal, unitIdx);
+        if (unitEl) unitEl.textContent = unitCfg.units[unitIdx].unit;
+      }
+    }
 
     // Apply current persisted unit state immediately
     const currentIdx = l3UnitState[metric] || 0;
     if (currentIdx > 0) {
-      const valEl = newItem.querySelector(".l3-stat-value");
-      const unitEl = newItem.querySelector(".l3-stat-unit");
-      if (valEl) valEl.textContent = cfg.convert(baseVal, currentIdx);
-      if (unitEl) unitEl.textContent = cfg.units[currentIdx].unit;
+      updateTempDisplay(newItem, parsed, currentIdx, cfg);
+    } else if (cfg.formatParsed && parsed) {
+      // Even at index 0, apply suffix for pred/range values
+      updateTempDisplay(newItem, parsed, 0, cfg);
     }
 
     newItem.addEventListener("click", (e) => {
@@ -1281,11 +1410,7 @@ function setupL3UnitConversion(blueCard, rawData) {
       // Cycle unit
       l3UnitState[m] = (l3UnitState[m] + 1) % c.units.length;
       const unitIdx = l3UnitState[m];
-      const val = newItem._l3Base;
-      const valEl = newItem.querySelector(".l3-stat-value");
-      const unitEl = newItem.querySelector(".l3-stat-unit");
-      if (valEl) valEl.textContent = c.convert(val, unitIdx);
-      if (unitEl) unitEl.textContent = c.units[unitIdx].unit;
+      updateTempDisplay(newItem, newItem._l3Parsed, unitIdx, c);
       // Micro-animation feedback
       newItem.style.transition = "transform 0.15s ease";
       newItem.style.transform = "scale(0.95)";
@@ -1352,7 +1477,11 @@ function populateSimplifiedView(element) {
       temp.includes("Unknown")
     )
       return "N/A";
-    return temp.replace(" °C", "").replace("°C", "").trim();
+    // Preserve range and annotations - strip only unit, keep ~, (pred), ranges
+    let result = temp.replace(/\s*°C\s*/g, "").trim();
+    // Remove trailing (pred) from value — it will be shown in the unit span via setupL3UnitConversion
+    result = result.replace(/\s*\(pred\)\s*$/i, "").trim();
+    return result;
   };
   const formatDensity = (density) => {
     if (!density || density === "N/A" || density === "Unknown")
@@ -1721,7 +1850,7 @@ function populateSimplifiedView(element) {
     setText(".blue-rectangle .l3-stat-item:nth-child(6) .l3-stat-value", formatTemp(boil));
 
     // ---- Clickable unit conversion on L3 stat items ----
-    setupL3UnitConversion(blueCard, { ie, ea, melt, boil });
+    setupL3UnitConversion(blueCard, { ie, ea, melt, boil, density: den });
   }
   const redCard = document.querySelector(
     ".red-rectangle .card-info-container",
@@ -2785,4 +2914,82 @@ export function initModalUI() {
       closeElementModal();
     }
   });
+}
+
+// Global Settings Initializer
+// Manages unit preferences from the Settings page
+export function initGlobalUnits() {
+    // Helper to setup a sv-pill style metric toggle
+    function setupUnitSetting(metricKey, elementId) {
+        const group = document.getElementById(elementId);
+        if (!group) return;
+        
+        const btns = Array.from(group.querySelectorAll(".sv-pill-btn"));
+        const activeIdx = l3UnitState[metricKey] || 0;
+        
+        // Add dynamic slider for beautiful animation
+        const slider = document.createElement("div");
+        slider.className = "sv-pill-slider";
+        group.appendChild(slider);
+        
+        function moveSliderTo(btn) {
+            const groupRect = group.getBoundingClientRect();
+            const btnRect = btn.getBoundingClientRect();
+            slider.style.width = btnRect.width + "px";
+            slider.style.transform = `translateX(${btnRect.left - groupRect.left}px)`;
+        }
+
+        // Init state
+        btns.forEach((btn, idx) => {
+            if (idx === activeIdx) {
+                btn.classList.add("active");
+                // Position initial slider without transition
+                slider.style.transition = "none";
+                requestAnimationFrame(() => {
+                    moveSliderTo(btn);
+                    requestAnimationFrame(() => {
+                        slider.style.transition = "";
+                    });
+                });
+            } else {
+                btn.classList.remove("active");
+            }
+            
+            btn.addEventListener("click", () => {
+                if (btn.classList.contains("active")) return;
+                
+                btns.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                moveSliderTo(btn);
+                
+                l3UnitState[metricKey] = idx;
+                
+                // For temperature, sync both melt and boil
+                if (metricKey === "melt") {
+                    l3UnitState.boil = idx;
+                } else if (metricKey === "boil") {
+                    l3UnitState.melt = idx;
+                }
+                
+                // If a modal/panel is currently open, it will use the new unit when next interacted with.
+            });
+        });
+        
+        // Handle resize layout shifts
+        window.addEventListener("resize", () => {
+            const activeBtn = group.querySelector(".sv-pill-btn.active");
+            if (activeBtn) {
+                slider.style.transition = "none";
+                moveSliderTo(activeBtn);
+                requestAnimationFrame(() => {
+                    slider.style.transition = "";
+                });
+            }
+        });
+    }
+
+    setupUnitSetting("melt", "setting-unit-temp");    
+    setupUnitSetting("density", "setting-unit-density");
+    setupUnitSetting("ie", "setting-unit-ie");
+    setupUnitSetting("ea", "setting-unit-ea");
 }

@@ -610,6 +610,132 @@
   }
 }
 
+/* ---- Short viewport: compact EIT to prevent overflow ---- */
+@media (max-height: 700px) {
+  .eit-controller {
+    gap: 3px;
+    padding: 0 2px;
+  }
+
+  .eit-property-trigger {
+    height: 26px;
+    font-size: 0.75rem;
+    padding: 0 10px;
+  }
+
+  .eit-slider-section {
+    gap: 6px;
+  }
+
+  .eit-dual-slider {
+    height: 22px;
+    min-width: 40px;
+  }
+
+  .eit-slider-track,
+  .eit-slider-fill {
+    top: 7px;
+    height: 6px;
+  }
+
+  .eit-range-input {
+    height: 22px;
+  }
+
+  .eit-range-input::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+    margin-top: -4px;
+  }
+
+  .eit-range-input::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+  }
+
+  .eit-mode-group {
+    height: 24px;
+    padding: 2px;
+  }
+
+  .eit-mode-btn {
+    font-size: 0.7rem;
+    padding: 0 8px;
+  }
+
+  .eit-reset-btn {
+    height: 24px;
+    font-size: 0.7rem;
+    padding: 0 8px;
+  }
+}
+
+@media (max-height: 500px) {
+  .eit-controller {
+    gap: 2px;
+    padding: 0 1px;
+  }
+
+  .eit-property-trigger {
+    height: 22px;
+    font-size: 0.68rem;
+    padding: 0 8px;
+  }
+
+  .eit-slider-section {
+    gap: 4px;
+  }
+
+  .eit-dual-slider {
+    height: 18px;
+    min-width: 30px;
+  }
+
+  .eit-slider-track,
+  .eit-slider-fill {
+    top: 5px;
+    height: 5px;
+  }
+
+  .eit-range-input {
+    height: 18px;
+  }
+
+  .eit-range-input::-webkit-slider-thumb {
+    width: 12px;
+    height: 12px;
+    margin-top: -4px;
+  }
+
+  .eit-range-input::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+  }
+
+  .eit-mode-group {
+    height: 20px;
+    padding: 2px;
+  }
+
+  .eit-mode-btn {
+    font-size: 0.65rem;
+    padding: 0 6px;
+  }
+
+  .eit-reset-btn {
+    height: 20px;
+    font-size: 0.65rem;
+    padding: 0 6px;
+  }
+
+  /* Hide slider value labels on very short screens */
+  #eit-selected-min,
+  #eit-selected-max {
+    font-size: 0.65rem;
+    padding: 2px 5px;
+  }
+}
+
 .element:hover {
   background-color: var(--element-hover);
   transform: translateY(-4px) scale(1.1);
