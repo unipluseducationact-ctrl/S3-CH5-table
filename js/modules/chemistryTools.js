@@ -748,7 +748,9 @@ export function balanceEquationModal(equation) {
                 try {
                   parseFormulaStrict(compact);
                   return compact;
-                } catch(e) {}
+                } catch (e) {
+                  // Ignore parse failures in heuristic check; we only need successful candidates.
+                }
               }
             }
             return null;

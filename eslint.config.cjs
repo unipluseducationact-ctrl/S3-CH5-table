@@ -8,6 +8,7 @@ module.exports = [
       "node_modules/**",
       ".continue/**",
       "public/**",
+      "js/vendor/**",
       "three.min.js",
       "generate_*.js",
       "patch_html.js",
