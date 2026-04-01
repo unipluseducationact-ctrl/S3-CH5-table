@@ -938,10 +938,10 @@ body.hide-nav .version-dropdown {
 
 .settings-viewport {
   width: 100%;
-  max-width: min(1360px, calc(100vw - 32px));
+  max-width: min(1440px, calc(100vw - 32px));
   height: 100%;
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(360px, 1.3fr) minmax(280px, 1fr);
+  grid-template-columns: minmax(320px, 1fr) minmax(360px, 1.3fr) minmax(280px, 1fr);
   grid-template-rows: auto;
   grid-template-areas: "sidebar main changelog";
   justify-content: center;
@@ -961,11 +961,27 @@ body.hide-nav .version-dropdown {
   grid-area: sidebar;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 16px;
   min-width: 0;
   align-self: stretch;
   overflow: visible;
+}
+
+.sv-card-anim {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 240px; /* Ensure it has enough height to fill the gap */
+}
+
+.sv-card-anim .sv-anim-controls {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 10px 0;
 }
 
 /* ── Center main area ── */
@@ -973,12 +989,29 @@ body.hide-nav .version-dropdown {
   grid-area: main;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: flex-start;
+  gap: 16px; /* Reduced from 20px */
   width: 100%;
   max-width: none;
   justify-self: stretch;
-  min-width: 0;
+}
+
+.sv-card-suggest {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sv-card-suggest .sv-suggest-row {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#settings-suggestion-input {
+  flex-grow: 1;
+  min-height: 120px;
+}
   overflow: visible;
 }
 

@@ -738,7 +738,45 @@ export function balanceEquationModal(equation) {
         const sameElements = rEls.size === pEls.size && [...rEls].every(el => pEls.has(el));
 
         if (sameElements) {
-          message = ct("balancer.noSolutionConserve", "The formulas are valid, but these compounds alone do not conserve atoms. Try adding a missing reactant or product.");
+          // HEURISTIC: Check if any formula was likely split by a space
+          const checkSplit = (sideStr) => {
+            const raw = String(sideStr || "").split("+").map(s => s.trim());
+            for (const r of raw) {
+              if (/\s/.test(r)) {
+                // Try removing spaces to see if it parses
+                const compact = r.replace(/\s+/g, "");
+                try {
+                  parseFormulaStrict(compact);
+                  return compact;
+                } catch(e) {}
+              }
+            }
+            return null;
+          };
+
+          const splitR = checkSplit(parts[0]);
+          const splitP = checkSplit(parts[1]);
+
+          if (splitR || splitP) {
+            const suggestion = splitR || splitP;
+            const titleKey = splitR ? "balancer.splitReactantFormulaTitle" : "balancer.splitProductFormulaTitle";
+            const titleFallback = splitR ? "Check the reactant formula" : "Check the product formula";
+            const title = `<strong>${ct(titleKey, titleFallback)}</strong>`;
+            
+            const desc = ct("balancer.splitFormulaDesc", `Did you mean <code>${suggestion}</code>?`, { suggestion });
+            message = `${title}<br>${desc}`;
+          } else {
+            // Further fallback check: if spaces exist but we can't confidently parse
+            const hasSpaceR = String(parts[0] || "").split("+").some(s => /\s/.test(s.trim()));
+            const hasSpaceP = String(parts[1] || "").split("+").some(s => /\s/.test(s.trim()));
+            if (hasSpaceR || hasSpaceP) {
+              const title = `<strong>${ct("balancer.splitFormulaTitleFallback", "Check the formula formatting")}</strong>`;
+              const desc = ct("balancer.splitFormulaDescFallback", "Remove spaces inside the formula.");
+              message = `${title}<br>${desc}`;
+            } else {
+              message = ct("balancer.noSolutionConserve", "The formulas are valid, but these compounds alone do not conserve atoms. Try adding a missing reactant or product.");
+            }
+          }
         } else {
           message = ct("balancer.noSolutionGeneral", "This equation cannot be balanced as entered. You may be missing a reactant or product.");
         }

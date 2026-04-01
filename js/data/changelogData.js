@@ -5,8 +5,12 @@
 export const changelogData = [
   {
     version: "2.0.0",
-    date: "2026-03-22",
+    date: "2026-04-01",
     changes: [
+      "Tutorials: Added step-by-step guided tours for every chemistry tool and every element detail page",
+      "New Tool: Added an interactive Virtual Lab for hands-on chemistry exploration",
+      "Tools Cleanup: Removed one redundant legacy tool to simplify the workspace",
+      "Reliability: Release-based force refresh ensures all users load the newest features and translations",
       "New: Element Information Toggle (EIT) adds full-table property visualization with Color and Filter modes",
       "Redesign: Chemistry Tools homepage rebuilt with cleaner cards, clearer hierarchy, and faster navigation",
       "Localization: Major multilingual expansion across UI, ions, worksheet, settings, and search",

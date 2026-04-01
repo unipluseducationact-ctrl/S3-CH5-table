@@ -21,6 +21,7 @@ import {
   registerCacheCleanup,
   t
 } from "./js/modules/langController.js";
+import { initOnboardingFlow } from "./js/modules/onboardingController.js";
 
 
 // ========================================
@@ -122,7 +123,18 @@ function initWelcomeModal() {
   const changelogDismissBtn = document.getElementById("changelog-dismiss-btn");
 
   // ===== Current version for changelog gating =====
-  const CURRENT_VERSION = "2.0.0";
+  const CURRENT_VERSION = "2.0.1";
+  
+  // Cache busting force reload (one-time for each release)
+  const lastForced = localStorage.getItem("zperiod_force_refresh");
+  if (lastForced !== CURRENT_VERSION) {
+    localStorage.setItem("zperiod_force_refresh", CURRENT_VERSION);
+    // Add version to URL and reload to bypass disk cache once
+    const url = new URL(window.location.href);
+    url.searchParams.set('v', CURRENT_VERSION);
+    window.location.replace(url.toString());
+    return;
+  }
 
   // ===== Welcome helpers =====
   function openWelcomeModal() {
@@ -490,6 +502,20 @@ window.zperiodVersion = 'old';
 
 function bootstrapApp() {
   initLangController();
+
+  // Release-gated onboarding: force-show the intro animation once per release.
+  const ONBOARDING_VERSION = "2.0.1";
+  const seenOnboardingVersion = localStorage.getItem("zperiod_onboarding_seen_version");
+  if (seenOnboardingVersion !== ONBOARDING_VERSION) {
+    localStorage.setItem("zperiod_onboarding_seen_version", ONBOARDING_VERSION);
+    localStorage.removeItem("zperiod_welcomed_v2");
+  }
+
+  if (!localStorage.getItem("zperiod_welcomed_v2")) {
+    initOnboardingFlow();
+    return;
+  }
+
   initWelcomeModal();
 
 

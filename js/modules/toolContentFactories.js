@@ -1097,803 +1097,588 @@ function generateMolarMassToolContent() {
 function generateVirtualLabToolContent() {
   return `
         <style>
-            .virtual-lab-shell {
-                --lab-border: rgba(255, 255, 255, 0.72);
-                --lab-shadow:
-                    0 6px 18px rgba(15, 23, 42, 0.05),
-                    0 18px 38px rgba(15, 23, 42, 0.06),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.92);
-                display: flex;
-                flex-direction: column;
-                flex: 1;
-                min-height: 0;
-                gap: 18px;
-            }
-
-            .virtual-lab-header {
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
-                gap: 18px;
-                padding: 0 4px;
-            }
-
-            .virtual-lab-copy {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .virtual-lab-title {
-                margin: 0;
-                font-size: 1.15rem;
-                font-weight: 800;
-                color: #1e293b;
-                letter-spacing: -0.02em;
-            }
-
-            .virtual-lab-subtitle {
-                margin: 0;
-                font-size: 0.95rem;
-                line-height: 1.55;
-                color: #64748b;
-                max-width: 640px;
-            }
-
-            .virtual-lab-badge {
-                align-self: flex-start;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                padding: 10px 14px;
-                border-radius: 999px;
-                background: rgba(255, 255, 255, 0.72);
-                border: 1px solid var(--lab-border);
-                box-shadow: var(--lab-shadow);
-                font-size: 0.78rem;
-                font-weight: 700;
-                color: #475569;
-                letter-spacing: 0.06em;
-                text-transform: uppercase;
-                white-space: nowrap;
-            }
-
-            .virtual-lab-layout {
-                display: grid;
-                grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.9fr);
-                gap: 22px;
-                flex: 1;
-                min-height: 0;
-            }
-
-            .virtual-lab-main,
-            .virtual-lab-side {
-                min-height: 0;
-            }
-
-            .virtual-lab-main {
-                display: flex;
-                flex-direction: column;
-                gap: 18px;
-            }
-
-            .virtual-lab-presets {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 12px;
-            }
-
-            .virtual-lab-card {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                padding: 16px;
-                border-radius: 18px;
-                background: rgba(255, 255, 255, 0.72);
-                border: 1px solid var(--lab-border);
-                box-shadow: var(--lab-shadow);
-                cursor: pointer;
-                transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-                text-align: left;
-            }
-
-            .virtual-lab-card:hover {
-                transform: translateY(-2px);
-                box-shadow:
-                    0 8px 20px rgba(15, 23, 42, 0.06),
-                    0 20px 40px rgba(15, 23, 42, 0.08),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.96);
-            }
-
-            .virtual-lab-card.active {
-                border-color: rgba(99, 102, 241, 0.28);
-                box-shadow:
-                    0 0 0 4px rgba(99, 102, 241, 0.08),
-                    0 10px 24px rgba(99, 102, 241, 0.12),
-                    0 22px 42px rgba(99, 102, 241, 0.08),
-                    inset 0 1px 0 rgba(255, 255, 255, 1);
-            }
-
-            .virtual-lab-card-icon {
-                width: 36px;
-                height: 36px;
-                border-radius: 12px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1rem;
-                background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(16, 185, 129, 0.18));
-                color: #334155;
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
-            }
-
-            .virtual-lab-card-title {
-                font-size: 0.96rem;
-                font-weight: 800;
-                color: #1e293b;
-                letter-spacing: -0.01em;
-            }
-
-            .virtual-lab-card-reaction {
-                font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-                font-size: 0.8rem;
-                color: #4f46e5;
-                font-weight: 700;
-            }
-
-            .virtual-lab-card-note {
-                font-size: 0.78rem;
-                line-height: 1.45;
-                color: #64748b;
-            }
-
-            .virtual-lab-stage-card,
-            .virtual-lab-side-card {
-                display: flex;
-                flex-direction: column;
-                min-height: 0;
-                background: rgba(255, 255, 255, 0.74);
-                backdrop-filter: blur(20px) saturate(175%);
-                -webkit-backdrop-filter: blur(20px) saturate(175%);
-                border-radius: 24px;
-                border: 1px solid var(--lab-border);
-                box-shadow:
-                    0 8px 22px rgba(15, 23, 42, 0.05),
-                    0 22px 46px rgba(15, 23, 42, 0.06),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.96);
-                overflow: hidden;
-            }
-
-            .virtual-lab-stage {
-                position: relative;
-                flex: 1;
-                min-height: 340px;
-                margin: 18px;
-                border-radius: 22px;
-                background:
-                    radial-gradient(circle at top left, rgba(186, 230, 253, 0.48), transparent 35%),
-                    radial-gradient(circle at top right, rgba(221, 214, 254, 0.4), transparent 40%),
-                    linear-gradient(180deg, rgba(241, 245, 249, 0.98) 0%, rgba(226, 232, 240, 0.9) 100%);
-                border: 1px solid rgba(255, 255, 255, 0.8);
-                box-shadow:
-                    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                    inset 0 -1px 0 rgba(148, 163, 184, 0.12);
-                overflow: hidden;
-            }
-
-            .virtual-lab-stage::after {
-                content: "";
+            .virtual-lab-goo-defs {
                 position: absolute;
-                left: 28px;
-                right: 28px;
-                bottom: 18px;
-                height: 18px;
-                border-radius: 999px;
-                background: radial-gradient(circle, rgba(148, 163, 184, 0.18) 0%, rgba(148, 163, 184, 0.05) 58%, transparent 78%);
+                width: 0;
+                height: 0;
                 pointer-events: none;
             }
 
+            .virtual-lab-shell {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                min-height: 520px;
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0; /* Remove redundant padding, modal already provides 40px */
+                background: transparent;
+                position: relative;
+                user-select: none;
+                -webkit-user-select: none;
+            }
+
+            .virtual-lab-stage {
+                width: 100%;
+                flex: 1;
+                display: flex;
+                align-items: stretch;
+                justify-content: center;
+                background: transparent;
+            }
+
             .virtual-lab-scene {
-                position: absolute;
-                inset: 0;
+                position: relative;
+                width: 100%;
+                height: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 28px;
-                padding: 28px;
+                background: linear-gradient(165deg, rgba(255, 255, 255, 0.05) 0%, rgba(0, 0, 0, 0.02) 100%);
+                border-radius: 20px;
+                box-sizing: border-box;
+                overflow: hidden;
+                /* Advanced Premium Bezel / Inset Effect */
+                border: 1px solid rgba(0, 0, 0, 0.06);
+                box-shadow: 
+                    inset 0 4px 10px rgba(0, 0, 0, 0.06),
+                    inset 0 2px 4px rgba(0, 0, 0, 0.04),
+                    inset 0 -1px 2px rgba(255, 255, 255, 0.6),
+                    0 1px 2px rgba(255, 255, 255, 1);
             }
 
-            .virtual-lab-beaker,
-            .virtual-lab-testtube {
+            .virtual-lab-particle-layer {
+                position: absolute;
+                inset: 0;
+                pointer-events: none;
+                z-index: 1;
+                filter: url(#virtual-lab-goo-filter);
+            }
+
+            .virtual-lab-wooden-stand {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 66px;
+                height: 14px;
+                box-sizing: border-box;
+                border-radius: 4px;
+                background: linear-gradient(180deg, #b07e54, #8b5a2b);
+                border: 2px solid #5c3a18;
+                border-top: 1px solid #d4a373;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.1);
+                z-index: 5;
+                transition: opacity 0.3s ease;
+                will-change: transform;
+            }
+
+            .virtual-lab-wooden-stand::before,
+            .virtual-lab-wooden-stand::after {
+                content: '';
+                position: absolute;
+                top: 100%;
+                width: 10px;
+                height: 16px;
+                background: linear-gradient(180deg, #8b5a2b, #5c3a18);
+                border: 2px solid #5c3a18;
+                border-top: none;
+                border-radius: 0 0 3px 3px;
+                box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                box-sizing: border-box;
+            }
+            .virtual-lab-wooden-stand::before {
+                left: 6px;
+            }
+            .virtual-lab-wooden-stand::after {
+                right: 6px;
+            }
+
+            .virtual-lab-metal-cube {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 46px;
+                height: 46px;
+                box-sizing: border-box;
+                border-radius: 8px;
+                background: #b0b5bc;
+                border: 1px solid #9da3ab;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+                cursor: grab;
+                touch-action: none;
+                user-select: none;
+                z-index: 10;
+                will-change: transform;
+            }
+
+            .virtual-lab-metal-cube:active {
+                cursor: grabbing;
+            }
+
+            .virtual-lab-beaker-wrap {
                 position: relative;
-                border: 2px solid rgba(255, 255, 255, 0.75);
-                background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.18));
-                box-shadow:
-                    0 12px 26px rgba(15, 23, 42, 0.08),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.75);
-                overflow: hidden;
+                width: 168px;
+                height: 236px;
+                --vlab-x: 0px;
+                --vlab-y: 0px;
+                --vlab-rot: 0deg;
+                transform: translate3d(var(--vlab-x), var(--vlab-y), 0) rotate(var(--vlab-rot));
+                transform-origin: 50% 50%;
+                cursor: grab;
+                touch-action: none;
+                user-select: none;
+                will-change: transform;
+                transition: transform 180ms ease;
+                z-index: 3;
+            }
+
+            .virtual-lab-beaker-wrap.dragging {
+                cursor: grabbing;
+                transition: none;
             }
 
             .virtual-lab-beaker {
-                width: 168px;
-                height: 210px;
-                border-radius: 22px 22px 26px 26px;
+                position: relative;
+                width: 100%;
+                height: 100%;
             }
 
-            .virtual-lab-testtube {
-                width: 108px;
-                height: 240px;
-                border-radius: 28px;
-                transform: rotate(-8deg);
-            }
-
-            .virtual-lab-liquid {
+            .virtual-lab-beaker-body {
                 position: absolute;
-                left: 12px;
-                right: 12px;
-                bottom: 12px;
-                border-radius: 18px 18px 22px 22px;
-                transition: height 0.45s ease, background 0.45s ease, opacity 0.45s ease;
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+                left: 18px;
+                right: 18px;
+                top: 20px;
+                bottom: 10px;
+                border-radius: 0 0 30px 30px;
+                border-left: 3px solid rgba(212, 220, 232, 0.95);
+                border-right: 3px solid rgba(212, 220, 232, 0.95);
+                border-bottom: 3px solid rgba(212, 220, 232, 0.95);
+                background: transparent;
             }
 
-            .virtual-lab-liquid.acid { height: 56%; background: linear-gradient(180deg, rgba(125, 211, 252, 0.95), rgba(56, 189, 248, 0.78)); }
-            .virtual-lab-liquid.base { height: 34%; background: linear-gradient(180deg, rgba(147, 197, 253, 0.9), rgba(59, 130, 246, 0.7)); }
-            .virtual-lab-liquid.neutral { height: 62%; background: linear-gradient(180deg, rgba(187, 247, 208, 0.94), rgba(74, 222, 128, 0.76)); }
-            .virtual-lab-liquid.clear { height: 62%; background: linear-gradient(180deg, rgba(224, 242, 254, 0.82), rgba(186, 230, 253, 0.58)); }
-            .virtual-lab-liquid.glow { height: 58%; background: linear-gradient(180deg, rgba(254, 249, 195, 0.92), rgba(250, 204, 21, 0.72)); }
-
-            .virtual-lab-metal-strip {
+            .virtual-lab-fluid-mask {
                 position: absolute;
-                left: 62px;
-                bottom: 52px;
-                width: 44px;
-                height: 100px;
-                border-radius: 12px;
-                background: linear-gradient(180deg, rgba(148, 163, 184, 1), rgba(100, 116, 139, 0.94));
-                box-shadow: 0 8px 20px rgba(71, 85, 105, 0.16);
-                transition: transform 0.5s ease, opacity 0.5s ease, height 0.5s ease;
+                left: 0;
+                right: 0;
+                top: -200px;
+                bottom: 0;
+                overflow: hidden;
+                border-radius: 0 0 27px 27px;
+                pointer-events: none;
             }
 
-            .virtual-lab-bubble,
-            .virtual-lab-precip-dot,
-            .virtual-lab-gas-dot {
-                position: absolute;
-                border-radius: 999px;
-                opacity: 0;
-                transform: translateY(12px);
-            }
-
-            .virtual-lab-bubble {
-                background: rgba(255, 255, 255, 0.8);
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 1);
-            }
-
-            .virtual-lab-precip-dot {
-                background: rgba(255, 255, 255, 0.96);
-                box-shadow: 0 2px 6px rgba(226, 232, 240, 0.8);
-            }
-
-            .virtual-lab-gas-dot {
-                background: rgba(255, 255, 255, 0.75);
-            }
-
-            .virtual-lab-gas-label,
-            .virtual-lab-tag {
-                position: absolute;
-                padding: 8px 12px;
-                border-radius: 999px;
-                background: rgba(255, 255, 255, 0.82);
-                border: 1px solid rgba(255, 255, 255, 0.88);
-                box-shadow:
-                    0 4px 10px rgba(15, 23, 42, 0.05),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.92);
-                font-size: 0.78rem;
-                font-weight: 700;
-                color: #0f766e;
-                opacity: 0;
-                transform: translateY(8px);
-                transition: opacity 0.35s ease, transform 0.35s ease;
-                white-space: nowrap;
-            }
-
-            .virtual-lab-gas-label { top: 22px; right: 22px; }
-            .virtual-lab-tag { left: 22px; top: 22px; color: #334155; }
-
-            .virtual-lab-ph-strip {
-                position: absolute;
-                right: 28px;
-                top: 56px;
-                width: 18px;
-                height: 120px;
-                border-radius: 999px;
-                background: linear-gradient(180deg, #ef4444 0%, #f59e0b 50%, #84cc16 100%);
-                box-shadow:
-                    0 6px 16px rgba(15, 23, 42, 0.08),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            }
-
-            .virtual-lab-ph-dot {
-                position: absolute;
-                left: 2px;
-                width: 14px;
-                height: 14px;
-                border-radius: 999px;
-                background: #f87171;
-                box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.62);
-                transition: top 0.45s ease, background 0.45s ease;
-            }
-
-            .virtual-lab-burner {
-                position: absolute;
-                bottom: 38px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 88px;
-                height: 18px;
-                border-radius: 999px;
-                background: linear-gradient(180deg, #64748b, #334155);
-                box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
-            }
-
-            .virtual-lab-flame {
-                position: absolute;
-                left: 50%;
-                bottom: 58px;
-                width: 58px;
-                height: 92px;
-                transform: translateX(-50%) scale(0.85);
-                transform-origin: bottom center;
-                background: radial-gradient(circle at 50% 75%, rgba(250, 204, 21, 0.98), rgba(249, 115, 22, 0.92) 58%, rgba(239, 68, 68, 0.72) 78%, transparent 82%);
-                clip-path: polygon(50% 0%, 69% 23%, 84% 52%, 68% 100%, 32% 100%, 16% 52%, 31% 23%);
-                filter: drop-shadow(0 8px 20px rgba(249, 115, 22, 0.25));
-                opacity: 0;
-                transition: opacity 0.35s ease, transform 0.35s ease;
-            }
-
-            .virtual-lab-heat-rings {
-                position: absolute;
-                left: 50%;
-                bottom: 138px;
-                width: 120px;
-                height: 120px;
-                transform: translateX(-50%);
-                opacity: 0;
-            }
-
-            .virtual-lab-heat-rings::before,
-            .virtual-lab-heat-rings::after {
-                content: "";
+            .virtual-lab-fluid-layer {
                 position: absolute;
                 inset: 0;
+                filter: url(#virtual-lab-goo-filter);
+                pointer-events: none;
+            }
+
+            .virtual-lab-particle {
+                position: absolute;
                 border-radius: 999px;
-                border: 2px dashed rgba(249, 115, 22, 0.34);
+                background: #4da6ff;
+                box-shadow: none;
+                will-change: transform;
             }
 
-            .virtual-lab-heat-rings::after {
-                inset: 18px;
-                border-style: solid;
-                border-color: rgba(250, 204, 21, 0.3);
-            }
-
-            .virtual-lab-sediment {
+            .virtual-lab-scale {
                 position: absolute;
-                left: 20px;
-                right: 20px;
-                bottom: 16px;
-                height: 0;
-                border-radius: 20px 20px 12px 12px;
-                background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(226, 232, 240, 0.92));
-                transition: height 0.45s ease;
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            }
-
-            .virtual-lab-residue {
-                position: absolute;
-                left: 14px;
                 right: 14px;
-                bottom: 16px;
-                height: 34px;
-                border-radius: 18px 18px 12px 12px;
-                background: linear-gradient(180deg, rgba(241, 245, 249, 0.92), rgba(203, 213, 225, 0.9));
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+                top: 28px;
+                bottom: 18px;
+                width: 14px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-end;
+                pointer-events: none;
+                opacity: 0.72;
             }
 
-            .virtual-lab-cloud {
-                position: absolute;
-                top: 38px;
-                right: 38px;
-                padding: 14px 18px;
-                border-radius: 20px;
-                background: rgba(255, 255, 255, 0.76);
-                border: 1px solid rgba(255, 255, 255, 0.86);
-                box-shadow:
-                    0 10px 24px rgba(15, 23, 42, 0.06),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.94);
-                font-size: 0.86rem;
-                font-weight: 700;
-                color: #1e293b;
-                opacity: 0;
-                transform: translateY(10px);
-                transition: opacity 0.35s ease, transform 0.35s ease;
+            .virtual-lab-scale span {
+                display: block;
+                height: 1.5px;
+                border-radius: 999px;
+                background: rgba(200, 210, 224, 0.92);
             }
 
-            .virtual-lab-scene.is-reacting .virtual-lab-bubble,
-            .virtual-lab-scene.is-reacting .virtual-lab-precip-dot,
-            .virtual-lab-scene.is-reacting .virtual-lab-gas-dot {
-                opacity: 1;
-                animation: virtualLabRise 1.8s ease-in infinite;
+            .virtual-lab-scale span:nth-child(5n + 1) {
+                width: 12px;
             }
 
-            .virtual-lab-scene.is-reacting .virtual-lab-gas-label,
-            .virtual-lab-scene.is-reacting .virtual-lab-tag,
-            .virtual-lab-scene.is-reacting .virtual-lab-cloud {
-                opacity: 1;
-                transform: translateY(0);
+            .virtual-lab-scale span:nth-child(5n + 2),
+            .virtual-lab-scale span:nth-child(5n + 5) {
+                width: 7px;
             }
 
-            .virtual-lab-scene.is-reacting .virtual-lab-metal-strip {
-                height: 80px;
-                transform: translateY(10px) scaleX(0.9);
-                opacity: 0.7;
+            .virtual-lab-scale span:nth-child(5n + 3),
+            .virtual-lab-scale span:nth-child(5n + 4) {
+                width: 9px;
             }
 
-            .virtual-lab-scene.is-reacting .virtual-lab-liquid.base {
-                height: 0;
-                opacity: 0;
-            }
-
-            .virtual-lab-scene.is-reacting .virtual-lab-liquid.neutral {
-                height: 62%;
-                opacity: 1;
-            }
-
-            .virtual-lab-scene.is-reacting .virtual-lab-ph-dot {
-                top: 14px;
-                background: #22c55e;
-            }
-
-            .virtual-lab-scene.is-reacting .virtual-lab-sediment {
-                height: 36px;
-            }
-
-            .virtual-lab-scene.is-reacting .virtual-lab-flame {
-                opacity: 1;
-                transform: translateX(-50%) scale(1);
-                animation: virtualLabFlicker 1.2s ease-in-out infinite;
-            }
-
-            .virtual-lab-scene.is-reacting .virtual-lab-heat-rings {
-                opacity: 1;
-                animation: virtualLabPulse 1.6s ease-in-out infinite;
-            }
-
-            .virtual-lab-scene.is-reacting .virtual-lab-cloud {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            @keyframes virtualLabRise {
-                0% { transform: translateY(12px) scale(0.9); }
-                100% { transform: translateY(-100px) scale(1.05); }
-            }
-
-            @keyframes virtualLabFlicker {
-                0%, 100% { transform: translateX(-50%) scale(1); }
-                50% { transform: translateX(-50%) scale(1.05) translateY(-2px); }
-            }
-
-            @keyframes virtualLabPulse {
-                0%, 100% { transform: translateX(-50%) scale(0.96); }
-                50% { transform: translateX(-50%) scale(1.03); }
+            @keyframes vlab-badge-in {
+                from { opacity: 0; transform: translateY(6px) translateX(-50%) scale(0.95); }
+                to { opacity: 1; transform: translateY(0) translateX(-50%) scale(1); }
             }
 
             .virtual-lab-controls {
+                position: absolute;
+                bottom: 8px; /* Slightly up from the very edge */
+                left: 0;
+                right: 0;
+                height: 48px;
                 display: flex;
+                justify-content: center;
                 align-items: center;
                 gap: 12px;
-                padding: 0 18px 18px;
+                z-index: 50;
+                pointer-events: none; /* Let clicks pass through to particles, but child buttons need it back */
+            }
+
+            .virtual-lab-controls .virtual-lab-btn {
+                pointer-events: auto;
             }
 
             .virtual-lab-btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                min-height: 52px;
-                padding: 0 22px;
-                border-radius: 16px;
-                border: none;
-                font-size: 0.98rem;
+                appearance: none;
+                border: 2px solid transparent;
+                padding: 10px 24px;
+                border-radius: 14px;
+                font-size: 0.9rem;
                 font-weight: 700;
                 cursor: pointer;
-                transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+                transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+                font-family: inherit;
+                letter-spacing: -0.01em;
             }
 
-            .virtual-lab-btn-primary {
-                background: rgba(30, 41, 59, 0.92);
-                color: #ffffff;
+            .virtual-lab-btn.primary {
+                background: rgba(30, 41, 59, 0.88);
+                color: white;
                 box-shadow:
-                    0 6px 16px rgba(15, 23, 42, 0.18),
-                    0 16px 30px rgba(15, 23, 42, 0.12),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+                    0 2px 8px rgba(0, 0, 0, 0.12),
+                    0 8px 24px rgba(0, 0, 0, 0.16),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
             }
 
-            .virtual-lab-btn-primary:hover {
+            .virtual-lab-btn.primary:hover {
                 transform: translateY(-1px);
-                background: rgba(30, 41, 59, 0.98);
+                background: rgba(30, 41, 59, 0.95);
+                box-shadow:
+                    0 4px 12px rgba(0, 0, 0, 0.15),
+                    0 12px 32px rgba(0, 0, 0, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.15);
             }
 
-            .virtual-lab-btn-secondary {
-                background: rgba(255, 255, 255, 0.8);
+            .virtual-lab-btn.primary:active {
+                transform: translateY(0);
+                box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+            }
+
+            .virtual-lab-btn.secondary {
+                background: rgba(255, 255, 255, 0.72);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
                 color: #475569;
-                border: 1px solid rgba(255, 255, 255, 0.9);
                 box-shadow:
-                    0 6px 14px rgba(15, 23, 42, 0.05),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+                    0 2px 8px rgba(0, 0, 0, 0.04),
+                    0 4px 16px rgba(0, 0, 0, 0.06),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
             }
 
-            .virtual-lab-btn-secondary:hover {
-                transform: translateY(-1px);
-                background: rgba(255, 255, 255, 0.96);
+            .virtual-lab-btn.secondary:hover {
+                background: rgba(255, 255, 255, 0.85);
+                color: #334155;
+                box-shadow:
+                    0 4px 12px rgba(0, 0, 0, 0.06),
+                    0 8px 24px rgba(0, 0, 0, 0.08),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.9);
             }
 
-            .virtual-lab-side {
+            .virtual-lab-element-picker {
+                position: absolute;
+                z-index: 100;
+                min-width: 160px;
+                max-height: 320px;
+                overflow-y: auto;
+                background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,248,250,0.95) 100%);
+                backdrop-filter: blur(20px) saturate(180%);
+                -webkit-backdrop-filter: blur(20px) saturate(180%);
+                border-radius: 14px;
+                border: 1px solid rgba(0,0,0,0.08);
+                box-shadow: 0 14px 38px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08);
+                padding: 6px;
+                display: none;
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .virtual-lab-element-picker.open {
                 display: flex;
+                animation: vlab-picker-in 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             }
 
-            .virtual-lab-side-card {
+            @keyframes vlab-picker-in {
+                from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+                to { opacity: 1; transform: translateY(0) scale(1); }
+            }
+
+            .virtual-lab-picker-group {
+                padding: 6px 10px 4px;
+                font-size: 10px;
+                font-weight: 700;
+                color: #86868b;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+            }
+
+            .virtual-lab-picker-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
                 width: 100%;
-                padding: 20px;
-                gap: 18px;
+                padding: 8px 10px;
+                border: none;
+                border-radius: 9px;
+                background: none;
+                text-align: left;
+                font-size: 13px;
+                font-weight: 550;
+                color: #2f3136;
+                cursor: pointer;
+                transition: background 0.15s ease;
+                font-family: inherit;
             }
 
-            .virtual-lab-side-top {
+            .virtual-lab-picker-item:hover {
+                background: rgba(0,0,0,0.055);
+            }
+
+            .virtual-lab-picker-item.active {
+                background: rgba(0,0,0,0.09);
+                font-weight: 650;
+            }
+
+            .virtual-lab-picker-sym {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 28px;
+                height: 28px;
+                border-radius: 7px;
+                font-size: 13px;
+                font-weight: 700;
+                flex-shrink: 0;
+                color: white;
+            }
+
+            .virtual-lab-element-picker::-webkit-scrollbar {
+                display: none;
+            }
+
+            .virtual-lab-thermometer {
+                position: absolute;
+                left: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                min-width: 48px;
                 display: flex;
                 flex-direction: column;
-                gap: 10px;
-            }
-
-            .virtual-lab-kicker {
-                font-size: 0.78rem;
-                font-weight: 800;
-                text-transform: uppercase;
-                letter-spacing: 0.08em;
-                color: #4f46e5;
-            }
-
-            .virtual-lab-side-title {
-                margin: 0;
-                font-size: 1.32rem;
-                font-weight: 800;
-                color: #1e293b;
-                letter-spacing: -0.02em;
-            }
-
-            .virtual-lab-side-reaction {
-                font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
-                font-size: 0.95rem;
-                font-weight: 700;
-                color: #0f172a;
-                background: rgba(248, 250, 252, 0.88);
-                border: 1px solid rgba(226, 232, 240, 0.8);
-                border-radius: 16px;
-                padding: 14px 16px;
-                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
-            }
-
-            .virtual-lab-meta {
-                display: grid;
-                gap: 12px;
-            }
-
-            .virtual-lab-meta-row {
-                display: grid;
-                grid-template-columns: 92px 1fr;
-                gap: 14px;
-                align-items: start;
-            }
-
-            .virtual-lab-meta-label {
-                font-size: 0.76rem;
-                font-weight: 800;
-                text-transform: uppercase;
-                letter-spacing: 0.08em;
-                color: #94a3b8;
-                padding-top: 3px;
-            }
-
-            .virtual-lab-meta-value {
-                font-size: 0.95rem;
-                line-height: 1.6;
-                color: #475569;
-                font-weight: 600;
-            }
-
-            .virtual-lab-status {
-                display: inline-flex;
                 align-items: center;
-                gap: 8px;
-                align-self: flex-start;
-                padding: 8px 12px;
-                border-radius: 999px;
-                background: rgba(255, 255, 255, 0.84);
-                border: 1px solid rgba(226, 232, 240, 0.8);
-                font-size: 0.78rem;
-                font-weight: 800;
-                letter-spacing: 0.06em;
-                text-transform: uppercase;
-                color: #64748b;
-            }
-
-            .virtual-lab-status::before {
-                content: "";
-                width: 8px;
-                height: 8px;
-                border-radius: 999px;
-                background: #f59e0b;
-                box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.16);
-            }
-
-            .virtual-lab-status.is-reacting {
-                color: #047857;
-            }
-
-            .virtual-lab-status.is-reacting::before {
-                background: #10b981;
-                box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.16);
-            }
-
-            .virtual-lab-coming {
-                margin-top: auto;
-                padding: 16px 18px;
-                border-radius: 18px;
-                background: linear-gradient(135deg, rgba(240, 249, 255, 0.76), rgba(238, 242, 255, 0.82));
-                border: 1px solid rgba(191, 219, 254, 0.7);
+                gap: 6px;
+                padding: 12px 10px;
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.72);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: none;
                 box-shadow:
-                    0 10px 24px rgba(15, 23, 42, 0.04),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+                    0 2px 8px rgba(0, 0, 0, 0.04),
+                    0 8px 24px rgba(0, 0, 0, 0.08),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+                pointer-events: none;
+                z-index: 15;
             }
-
-            .virtual-lab-coming-title {
-                margin: 0 0 10px;
-                font-size: 0.82rem;
-                font-weight: 800;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
-                color: #4f46e5;
-            }
-
-            .virtual-lab-coming-list {
-                display: grid;
-                gap: 8px;
-                margin: 0;
-                padding: 0;
-                list-style: none;
-            }
-
-            .virtual-lab-coming-list li {
-                font-size: 0.9rem;
-                font-weight: 600;
-                color: #475569;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .virtual-lab-coming-list li::before {
-                content: "";
-                width: 7px;
-                height: 7px;
+            .virtual-lab-thermo-track {
+                position: relative;
+                width: 8px;
+                height: 100px;
+                background: rgba(200, 210, 224, 0.4);
                 border-radius: 999px;
-                background: linear-gradient(135deg, #818cf8, #22c55e);
-                box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.12);
+                overflow: hidden;
+            }
+            .virtual-lab-thermo-fill {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 12%;
+                background: linear-gradient(180deg, #5cb3ff 0%, #2b7de9 100%);
+                border-radius: 999px;
+                transition: height 0.6s ease;
+            }
+            .virtual-lab-thermo-temp {
+                font-size: 11px;
+                font-weight: 700;
+                color: #555;
+                letter-spacing: -0.02em;
+                text-align: center;
+                line-height: 1;
+            }
+            .virtual-lab-thermo-label {
+                font-size: 8px;
+                font-weight: 600;
+                color: #86868b;
+                letter-spacing: 0.03em;
+                text-transform: uppercase;
+            }
+
+            /* ===== Reaction Bubbles ===== */
+            .virtual-lab-bubble {
+                position: absolute;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.55);
+                border: 1px solid rgba(255, 255, 255, 0.35);
+                pointer-events: none;
+                will-change: transform, opacity;
+                z-index: 9;
+            }
+
+            /* ===== Reaction Sparks ===== */
+            .virtual-lab-spark {
+                position: absolute;
+                border-radius: 999px;
+                pointer-events: none;
+                will-change: transform, opacity;
+                z-index: 11;
+            }
+            @keyframes vlab-spark-pop {
+                0% { transform: scale(0); opacity: 1; }
+                50% { transform: scale(1.2); opacity: 0.9; }
+                100% { transform: scale(0.3); opacity: 0; }
+            }
+
+            /* ===== Reaction Info Badge ===== */
+            .virtual-lab-reaction-info {
+                display: none;
+                position: absolute;
+                top: 24px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: max-content;
+                z-index: 20;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+                padding: 14px 22px;
+                border-radius: 14px;
+                background: rgba(236, 253, 245, 0.85);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border: 1px solid rgba(167, 243, 208, 0.6);
+                box-shadow:
+                    0 2px 8px rgba(0, 0, 0, 0.04),
+                    0 8px 24px rgba(0, 0, 0, 0.08),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+                font-size: 16px;
+                font-family: inherit;
+                font-weight: 600;
+                color: #047857;
+                letter-spacing: 0.01em;
+                animation: vlab-badge-in 0.3s ease;
+            }
+            .virtual-lab-reaction-info.active {
+                display: flex;
+            }
+            @keyframes vlab-badge-in {
+                from { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.96); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+            }
+            .virtual-lab-reaction-eq {
+                color: #047857;
+                font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+                font-weight: 700;
             }
 
             @media (max-width: 980px) {
-                .virtual-lab-layout {
-                    grid-template-columns: 1fr;
-                }
                 .virtual-lab-stage {
-                    min-height: 300px;
+                    min-height: 460px;
+                }
+
+                .virtual-lab-beaker-wrap {
+                    width: 150px;
+                    height: 210px;
                 }
             }
         </style>
 
         <div class="tool-padding-label">${t("tools.virtualLabName", "Virtual Lab")}</div>
+        <svg class="virtual-lab-goo-defs" aria-hidden="true" focusable="false">
+            <defs>
+                <filter id="virtual-lab-goo-filter">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="2.4" result="blur"></feGaussianBlur>
+                    <feColorMatrix in="blur" mode="matrix"
+                        values="1 0 0 0 0
+                                0 1 0 0 0
+                                0 0 1 0 0
+                                0 0 0 14 -6"
+                        result="goo"></feColorMatrix>
+                    <feBlend in="SourceGraphic" in2="goo"></feBlend>
+                </filter>
+            </defs>
+        </svg>
         <div class="virtual-lab-shell">
-            <div class="virtual-lab-header">
-                <div class="virtual-lab-copy">
-                    <h3 class="virtual-lab-title">${t("virtualLab.title", "Guided Mini Experiments")}</h3>
-                    <p class="virtual-lab-subtitle">${t("virtualLab.subtitle", "Run polished preset reactions, watch the visible changes, and read the key idea without getting dropped into a huge sandbox.")}</p>
-                </div>
-                <div class="virtual-lab-badge">${t("virtualLab.moreSoon", "More guided experiments coming soon")}</div>
-            </div>
-
-            <div class="virtual-lab-layout">
-                <div class="virtual-lab-main">
-                    <div class="virtual-lab-presets" id="virtual-lab-presets">
-                        <button class="virtual-lab-card active" data-experiment="acid-metal">
-                            <span class="virtual-lab-card-icon">H+</span>
-                            <span class="virtual-lab-card-title">${t("virtualLab.acidMetalTitle", "Acid + Metal")}</span>
-                            <span class="virtual-lab-card-reaction">Zn + 2HCl</span>
-                            <span class="virtual-lab-card-note">${t("virtualLab.acidMetalCard", "Watch hydrogen bubbles appear as zinc reacts with acid.")}</span>
-                        </button>
-                        <button class="virtual-lab-card" data-experiment="neutralization">
-                            <span class="virtual-lab-card-icon">pH</span>
-                            <span class="virtual-lab-card-title">${t("virtualLab.neutralizationTitle", "Neutralization")}</span>
-                            <span class="virtual-lab-card-reaction">HCl + NaOH</span>
-                            <span class="virtual-lab-card-note">${t("virtualLab.neutralizationCard", "Mix acid and base, then watch the indicator settle near neutral.")}</span>
-                        </button>
-                        <button class="virtual-lab-card" data-experiment="precipitation">
-                            <span class="virtual-lab-card-icon">↓</span>
-                            <span class="virtual-lab-card-title">${t("virtualLab.precipitationTitle", "Precipitation")}</span>
-                            <span class="virtual-lab-card-reaction">AgNO₃ + NaCl</span>
-                            <span class="virtual-lab-card-note">${t("virtualLab.precipitationCard", "Two clear liquids combine and a solid precipitate appears.")}</span>
-                        </button>
-                        <button class="virtual-lab-card" data-experiment="combustion">
-                            <span class="virtual-lab-card-icon">🔥</span>
-                            <span class="virtual-lab-card-title">${t("virtualLab.combustionTitle", "Combustion")}</span>
-                            <span class="virtual-lab-card-reaction">CH₄ + 2O₂</span>
-                            <span class="virtual-lab-card-note">${t("virtualLab.combustionCard", "Ignite methane and track the hot products released.")}</span>
-                        </button>
-                        <button class="virtual-lab-card" data-experiment="decomposition">
-                            <span class="virtual-lab-card-icon">Δ</span>
-                            <span class="virtual-lab-card-title">${t("virtualLab.decompositionTitle", "Thermal Decomposition")}</span>
-                            <span class="virtual-lab-card-reaction">CaCO₃ → CaO + CO₂</span>
-                            <span class="virtual-lab-card-note">${t("virtualLab.decompositionCard", "Heat a solid sample and watch gas release with residue left behind.")}</span>
-                        </button>
-                    </div>
-
-                    <div class="virtual-lab-stage-card">
-                        <div class="virtual-lab-stage">
-                            <div class="virtual-lab-scene" id="virtual-lab-scene"></div>
-                        </div>
-                        <div class="virtual-lab-controls">
-                            <button class="virtual-lab-btn virtual-lab-btn-primary" id="virtual-lab-action-btn">${t("virtualLab.actionMix", "Start Reaction")}</button>
-                            <button class="virtual-lab-btn virtual-lab-btn-secondary" id="virtual-lab-reset-btn">${t("common.reset", "Reset")}</button>
+            <div class="virtual-lab-stage">
+                <div class="virtual-lab-scene" id="virtual-lab-scene">
+                    <div class="virtual-lab-particle-layer" id="virtual-lab-particle-layer" aria-hidden="true"></div>
+                    <div class="virtual-lab-wooden-stand" id="virtual-lab-wooden-stand"></div>
+                    <div class="virtual-lab-metal-cube" id="virtual-lab-metal-cube"></div>
+                    <div class="virtual-lab-beaker-wrap" id="virtual-lab-beaker-wrap" aria-label="${t("virtualLab.beakerAria", "Beaker")}">
+                        <div class="virtual-lab-beaker">
+                            <div class="virtual-lab-beaker-body" id="virtual-lab-beaker-body">
+                                <div class="virtual-lab-fluid-mask" aria-hidden="true">
+                                    <div class="virtual-lab-fluid-layer" id="virtual-lab-fluid-layer"></div>
+                                </div>
+                                <div class="virtual-lab-scale" aria-hidden="true">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="virtual-lab-side">
-                    <div class="virtual-lab-side-card">
-                        <div class="virtual-lab-status" id="virtual-lab-status">${t("virtualLab.statusReady", "Ready")}</div>
-                        <div class="virtual-lab-side-top">
-                            <div class="virtual-lab-kicker">${t("tools.virtualLabName", "Virtual Lab")}</div>
-                            <h3 class="virtual-lab-side-title" id="virtual-lab-title"></h3>
-                            <div class="virtual-lab-side-reaction" id="virtual-lab-reaction"></div>
+                    <div class="virtual-lab-thermometer" id="virtual-lab-thermometer">
+                        <div class="virtual-lab-thermo-track">
+                            <div class="virtual-lab-thermo-fill" id="virtual-lab-thermo-fill"></div>
                         </div>
-
-                        <div class="virtual-lab-meta">
-                            <div class="virtual-lab-meta-row">
-                                <div class="virtual-lab-meta-label">${t("virtualLab.typeLabel", "Type")}</div>
-                                <div class="virtual-lab-meta-value" id="virtual-lab-type"></div>
-                            </div>
-                            <div class="virtual-lab-meta-row">
-                                <div class="virtual-lab-meta-label">${t("virtualLab.observeLabel", "Observe")}</div>
-                                <div class="virtual-lab-meta-value" id="virtual-lab-observation"></div>
-                            </div>
-                            <div class="virtual-lab-meta-row">
-                                <div class="virtual-lab-meta-label">${t("virtualLab.explainLabel", "Why it happens")}</div>
-                                <div class="virtual-lab-meta-value" id="virtual-lab-explanation"></div>
-                            </div>
-                        </div>
-
-                        <div class="virtual-lab-coming">
-                            <p class="virtual-lab-coming-title">${t("virtualLab.roadmapTitle", "Coming Soon")}</p>
-                            <ul class="virtual-lab-coming-list">
-                                <li>${t("virtualLab.roadmap1", "Gas tests")}</li>
-                                <li>${t("virtualLab.roadmap2", "Flame tests")}</li>
-                                <li>${t("virtualLab.roadmap3", "Indicator reactions")}</li>
-                                <li>${t("virtualLab.roadmap4", "Electrolysis")}</li>
-                                <li>${t("virtualLab.roadmap5", "More solubility demos")}</li>
-                            </ul>
-                        </div>
+                        <div class="virtual-lab-thermo-temp" id="virtual-lab-thermo-temp">20°</div>
+                        <div class="virtual-lab-thermo-label">TEMP</div>
+                    </div>
+                    <div class="virtual-lab-controls">
+                        <button class="virtual-lab-btn primary" id="virtual-lab-add-water-btn" type="button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px;margin-right:6px"><path d="M12 5v14M5 12h14"/></svg>${t("virtualLab.addWater", "Add Water")}
+                        </button>
+                        <button class="virtual-lab-btn secondary" id="virtual-lab-clear-water-btn" type="button" style="display:flex;align-items:center;gap:6px">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>${t("virtualLab.reset", "Reset")}
+                        </button>
+                        <button class="virtual-lab-btn secondary" id="virtual-lab-change-element-btn" type="button" style="display:flex;align-items:center;gap:6px">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>${t("virtualLab.element", "Element")}
+                        </button>
                     </div>
                 </div>
             </div>
+            <div class="virtual-lab-reaction-info" id="virtual-lab-reaction-info"></div>
+            <div class="virtual-lab-element-picker" id="virtual-lab-element-picker"></div>
         </div>
     `;
 }

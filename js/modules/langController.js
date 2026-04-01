@@ -128,15 +128,16 @@ function invalidateLocalizedCaches() {
 // ── Public API ──
 
 /** Lookup a translated string by dot-path key, e.g. t("nav.table", "Fallback") */
-export function t(key, fallback) {
+export function t(key, fallback, targetLang) {
   const parts = key.split(".");
-  let val = translations[lang];
+  const useLang = targetLang || lang;
+  let val = translations[useLang];
   for (const p of parts) {
-    if (val == null) return fallback !== undefined ? fallback : key;
+    if (val == null) break;
     val = val[p];
   }
   if (val != null) return val;
-  
+
   let fb = translations[DEFAULT];
   for (const p of parts) {
     if (fb == null) return fallback !== undefined ? fallback : key;
@@ -144,7 +145,6 @@ export function t(key, fallback) {
   }
   return fb != null ? fb : (fallback !== undefined ? fallback : key);
 }
-
 export function getLang() {
   return lang;
 }
@@ -270,6 +270,30 @@ export function initLangController() {
   // Language option clicks
   if (menu) {
     menu.addEventListener("click", (e) => {
+      const addBtn = e.target.closest("#lang-add-btn");
+      if (addBtn) {
+        if (dropdown) dropdown.classList.remove("open");
+        const settingsNav = document.querySelector('.nav-pill-btn[data-page="settings"]');
+        if (settingsNav) settingsNav.click();
+        
+        setTimeout(() => {
+          const suggestBox = document.getElementById("settings-suggestion-input");
+          if (suggestBox) {
+            suggestBox.scrollIntoView({ behavior: "smooth", block: "center" });
+            suggestBox.focus();
+            suggestBox.style.transition = "box-shadow 0.3s ease, background-color 0.3s ease";
+            suggestBox.style.boxShadow = "0 0 0 4px rgba(250, 204, 21, 0.4)";
+            suggestBox.style.backgroundColor = "rgba(254, 243, 199, 0.5)";
+            
+            setTimeout(() => {
+              suggestBox.style.boxShadow = "";
+              suggestBox.style.backgroundColor = "";
+            }, 800);
+          }
+        }, 300);
+        return;
+      }
+
       const btn = e.target.closest(".lang-option");
       if (!btn) return;
       const code = btn.dataset.lang;

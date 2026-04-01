@@ -99,6 +99,8 @@ export const translations = {
       solubilityDesc: "Quickly reference interactive charts and rules for ionic compound solubilities.",
       solubilityGrade: "Reference",
       solubilityTag: "Grid",
+      virtualLabName: "Virtual Lab",
+      virtualLabDesc: "Tilt a beaker and watch pseudo-liquid particles move and spill naturally.",
     },
     worksheet: {
       title: "Worksheet Generator",
@@ -157,6 +159,7 @@ export const translations = {
       chipOther: "Other",
       suggestPlaceholder: "Type your suggestion...",
       changelog: "Changelog",
+      addLanguage: "Add Language",
     },
     ionGroup: {
       plus1Cations: "+1 Cations",
@@ -268,6 +271,11 @@ export const translations = {
       suspiciousFormula: "This formula looks unusual. Please check the subscripts.",
       noSolutionConserve: "The formulas are valid, but these compounds alone do not conserve atoms. Try adding a missing reactant or product.",
       noSolutionGeneral: "This equation cannot be balanced as entered. You may be missing a reactant or product.",
+      splitReactantFormulaTitle: "Check the reactant formula",
+      splitProductFormulaTitle: "Check the product formula",
+      splitFormulaDesc: "Did you mean <code>{suggestion}</code>?",
+      splitFormulaTitleFallback: "Check the formula formatting",
+      splitFormulaDescFallback: "Remove spaces inside the formula.",
     },
     predictor: {
       error: "Error",
@@ -573,7 +581,7 @@ export const translations = {
       pill2: "Ion Engine",
       pill3: "Exam Ready",
       cta: "Get Started",
-      footer: "v2.0 · Rebuilt across the board",
+      footer: "v2.0 · Precision Lab Edition",
       viewUpdateHistory: "View Update History",
       authorRole: "Creator & Full Stack Developer",
       schoolInfo: "Aurora High School · Grade 11 (2027)",
@@ -581,28 +589,28 @@ export const translations = {
     },
     changelog: {
       eyebrow: "What's New",
-      subtitleLine1: "Welcome to 2.0.",
+      subtitleLine1: "Version 2.0.",
       subtitleLine2: "A full rebuild.",
       description: "EIT mode, redesigned tools, fuller multilingual support, richer element data, search upgrades, and dozens of fixes.",
-      pill1: "EIT Mode",
-      pill2: "Tools Redesign",
+      pill1: "Precision Lab",
+      pill2: "Guided Tours",
       pill3: "Multilingual",
       cta: "Got it - Let's go!",
-      footerDate: "March 22, 2026",
+      footerDate: "April 1, 2026",
       badgeNew: "NEW",
       badgeData: "DATA",
       badgePerf: "LANG",
       badgeUi: "UI",
-      card1Title: "Element Information Toggle",
-      card1Body: "Explore numeric properties across the table with the new EIT color and filter views.",
-      card2Title: "Redesigned Tools Workspace",
-      card2Body: "The chemistry tools homepage has been rebuilt with cleaner cards, better hierarchy, and smoother navigation.",
-      card3Title: "Expanded Multilingual Support",
-      card3Body: "Core pages, ion content, worksheet flows, and settings now feel more complete across every supported language.",
-      card4Title: "Deeper Element Information",
-      card4Body: "Elements now surface richer data, cleaner contextual notes, and more complete detail coverage.",
-      card5Title: "Search & Polish Pass",
-      card5Body: "Added a dedicated search button, improved localized search, and fixed a wide range of UI and translation bugs.",
+      card1Title: "Interactive Virtual Lab",
+      card1Body: "A completely new virtual chemistry laboratory powered by Matter.js for hands-on experiments and playful exploration.",
+      card2Title: "Guided Interactive Tutorials",
+      card2Body: "Step-by-step interactive guides added to every tool and element page to help you master chemistry components instantly.",
+      card3Title: "Expanded Language Support",
+      card3Body: "Core pages, tools, and technical content now features fuller translations across all 8 supported languages.",
+      card4Title: "Tool Workspace Cleanup",
+      card4Body: "Removed redundant legacy tools and streamlined the workspace interface for a faster and cleaner experience.",
+      card5Title: "Refined Design & Fixes",
+      card5Body: "Enhanced rendering performance, cleaner UI transitions, and fixed dozens of translation and layout bugs.",
     },
   },
 
@@ -702,6 +710,8 @@ export const translations = {
       solubilityDesc: "快速查阅离子化合物溶解性规则与交互图表。",
       solubilityGrade: "参考",
       solubilityTag: "表格",
+      virtualLabName: "虚拟实验室",
+      virtualLabDesc: "倾斜烧杯，观察伪液体粒子的自然流动与飞溅。",
     },
     worksheet: {
       title: "练习单生成器",
@@ -760,6 +770,7 @@ export const translations = {
       chipOther: "其他",
       suggestPlaceholder: "输入你的建议...",
       changelog: "更新日志",
+      addLanguage: "添加语言",
     },
     ionGroup: {
       plus1Cations: "+1 阳离子",
@@ -869,9 +880,14 @@ export const translations = {
       checkInputAgain: "请检查输入后重试",
       invalidFormulaEx: "化学式无效：{msg}",
       suspiciousFormula: "此化学式看起来异常，请检查下标是否正确。",
-      noSolutionConserve: "化学式格式正确，但这些物质无法实现原子守恒。请尝试添加缺失的反应物或生成物。",
+      noSolutionConserve: "化学式有效，但仅凭这些物质无法满足质量守恒。请尝试补充缺失的反应物或生成物。",
       noSolutionGeneral: "按当前输入无法配平此方程式，你可能缺少反应物或生成物。",
-    },
+      splitReactantFormulaTitle: "请检查反应物化学式",
+      splitProductFormulaTitle: "请检查生成物化学式",
+      splitFormulaDesc: "你是不是想写 <code>{suggestion}</code>？",
+      splitFormulaTitleFallback: "请检查化学式格式",
+      splitFormulaDescFallback: "不要在一个化学式中间加空格。",
+      },
     predictor: {
       error: "错误",
       selectType: "请选择一个反应类型。",
@@ -1177,7 +1193,7 @@ export const translations = {
       pill2: "离子专区",
       pill3: "考试更安心",
       cta: "开始使用",
-      footer: "v2.0 · 全面重构",
+      footer: "v2.0 · 实验室精准版",
       viewUpdateHistory: "查看更新历史",
       authorRole: "创作者 / 全栈开发者",
       schoolInfo: "Aurora High School · 11 年级（2027）",
@@ -1186,27 +1202,27 @@ export const translations = {
     changelog: {
       eyebrow: "更新内容",
       subtitleLine1: "2.0 版本",
-      subtitleLine2: "整站焕新升级。",
-      description: "加入 EIT、新版工具页、更完整的多语言、更多元素信息、搜索优化，以及大量细节修复。",
-      pill1: "EIT 模式",
-      pill2: "工具重设计",
-      pill3: "多语言",
-      cta: "知道了，进入！",
-      footerDate: "2026 年 3 月 22 日",
+      subtitleLine2: "物理实验室上线。",
+      description: "新版物理实验室、全程交互引导、多语言强化、工具层清理、大量细节优化。",
+      pill1: "物理实验室",
+      pill2: "交互引导",
+      pill3: "多语言增强",
+      cta: "知道了，立即探索！",
+      footerDate: "2026年4月1日",
       badgeNew: "新增",
-      badgeData: "数据",
-      badgePerf: "语言",
-      badgeUi: "界面",
-      card1Title: "EIT 元素信息视图",
-      card1Body: "现在可以用颜色或筛选模式，在整张元素表中查看任意数值属性。",
-      card2Title: "工具页面重新设计",
-      card2Body: "化学工具主页全面重排，信息层级更清晰，入口和交互都更顺手。",
-      card3Title: "多语言支持大幅补全",
-      card3Body: "主页面、离子页、练习页与设置页的多语言内容补得更完整，也修掉了大量漏翻与错翻。",
-      card4Title: "元素信息更丰富",
-      card4Body: "补充了更多元素说明与细节内容，让数据层和信息层都更完整。",
-      card5Title: "搜索与细节修复",
-      card5Body: "加入搜索按钮，改进多语言搜索，并修复了一批界面、排版与翻译细节问题。",
+      badgeData: "实验室",
+      badgePerf: "引导",
+      badgeUi: "性能",
+      card1Title: "交互式虚拟实验室",
+      card1Body: "全新的虚拟化学实验室，由 Matter.js 物理引擎驱动，支持更有趣的动手式探索。",
+      card2Title: "全程交互式引导指南",
+      card2Body: "为每个工具和元素页面添加了分步交互式引导，帮助您瞬间掌握所有化学功能。",
+      card3Title: "多语言深度支持",
+      card3Body: "核心页面、工具模块和专业内容现在对所有 8 种语言提供了更完整的本地化支持。",
+      card4Title: "工具箱瘦身与清理",
+      card4Body: "移除了重复的旧版工具，并简化了工作区界面，带来更快速、更清爽的使用体验。",
+      card5Title: "细节打磨与修复",
+      card5Body: "提升了渲染性能，优化了界面过渡效果，并修复了数十个翻译与布局相关的错误。",
     },
   },
 
@@ -1352,6 +1368,7 @@ export const translations = {
       chipOther: "Autre",
       suggestPlaceholder: "Entrez votre suggestion...",
       changelog: "Journal des modifications",
+      addLanguage: "Ajouter une langue",
     },
     ionGroup: {
       plus1Cations: "Cations +1",
@@ -4335,4 +4352,1239 @@ translations.tl = deepMerge(translations.en, {
     matte: "Tekstura: pinong matte",
     metal: "Tekstura: kinang-metal",
   },
+});
+
+translations.en = deepMerge(translations.en, {
+  tools: {
+    pageSubtitle: "Grade 9-12 Chemistry Tools & Labs",
+    virtualLabName: "Virtual Lab",
+    virtualLabDesc: "Explore guided mini-experiments and watch reaction changes step by step.",
+  },
+  virtualLab: {
+    title: "Guided Mini Experiments",
+    subtitle:
+      "Run polished preset reactions, watch the visible changes, and read the key idea without getting dropped into a huge sandbox.",
+    moreSoon: "More guided experiments coming soon",
+    acidMetalTitle: "Acid + Metal",
+    acidMetalCard: "Watch hydrogen bubbles appear as zinc reacts with acid.",
+    acidMetalObserve:
+      "Hydrogen bubbles rise from the zinc strip while the metal slowly wears away.",
+    acidMetalExplain:
+      "Hydrochloric acid reacts with zinc to form dissolved zinc chloride and hydrogen gas.",
+    acidMetalCloud: "H2 gas released",
+    acidMetalTag: "Zinc in acid",
+    neutralizationTitle: "Neutralization",
+    neutralizationCard:
+      "Mix acid and base, then watch the indicator settle near neutral.",
+    neutralizationObserve:
+      "The indicator shifts toward green as the mixed solution settles near neutral.",
+    neutralizationExplain:
+      "Hydrogen ions and hydroxide ions combine to form water, leaving dissolved salt behind.",
+    neutralizationCloud: "Neutralized",
+    neutralizationTag: "Indicator shift",
+    precipitationTitle: "Precipitation",
+    precipitationCard:
+      "Two clear liquids combine and a solid precipitate appears.",
+    precipitationObserve:
+      "A white solid forms and settles at the bottom while the remaining solution stays clear.",
+    precipitationExplain:
+      "Silver ions and chloride ions form insoluble silver chloride, so the solid drops out of solution.",
+    precipitationCloud: "AgCl precipitate",
+    precipitationTag: "White solid forms",
+    combustionTitle: "Combustion",
+    combustionCard: "Ignite methane and track the hot products released.",
+    combustionObserve:
+      "A bright flame appears and hot gases rise as methane burns in oxygen.",
+    combustionExplain:
+      "Combustion is an exothermic reaction in which methane reacts with oxygen to produce carbon dioxide and water.",
+    combustionCloud: "CO2 + H2O",
+    combustionTag: "Heat and light",
+    decompositionTitle: "Thermal Decomposition",
+    decompositionCard:
+      "Heat a solid sample and watch gas release with residue left behind.",
+    decompositionObserve:
+      "Heating releases carbon dioxide gas and leaves calcium oxide as a solid residue.",
+    decompositionExplain:
+      "Thermal energy breaks calcium carbonate apart into calcium oxide and carbon dioxide.",
+    decompositionCloud: "CO2 released",
+    decompositionTag: "CaO remains",
+    typeGasEvolution: "Gas evolution",
+    typeNeutralization: "Acid-base neutralization",
+    typePrecipitation: "Precipitation reaction",
+    typeCombustion: "Combustion",
+    typeDecomposition: "Thermal decomposition",
+    actionStart: "Start Reaction",
+    actionMix: "Mix Solutions",
+    actionIgnite: "Ignite",
+    actionHeat: "Heat Sample",
+    actionReplay: "Run Again",
+    statusReady: "Ready to run",
+    statusRunning: "Reaction running",
+    typeLabel: "Type",
+    observeLabel: "Observe",
+    explainLabel: "Why it happens",
+    roadmapTitle: "Coming Soon",
+    roadmap1: "Gas tests",
+    roadmap2: "Flame tests",
+    roadmap3: "Indicator reactions",
+    roadmap4: "Electrolysis",
+    roadmap5: "More solubility demos",
+  },
+});
+
+translations.zh = deepMerge(translations.zh, {
+  tools: {
+    pageSubtitle: "面向 9-12 年级的化学工具与实验",
+    virtualLabName: "虚拟实验室",
+    virtualLabDesc: "进入引导式迷你实验，逐步观察反应现象与变化。",
+  },
+  virtualLab: {
+    title: "引导式迷你实验",
+    subtitle: "从几个固定的小实验开始，直接观察现象、方程式和关键解释，不必一上来就掉进大而复杂的模拟器。",
+    moreSoon: "更多引导实验即将加入",
+    acidMetalTitle: "酸与金属",
+    acidMetalCard: "观察锌与酸反应时冒出的氢气气泡。",
+    acidMetalObserve: "锌片表面不断冒泡，金属本身也会慢慢被消耗。",
+    acidMetalExplain: "盐酸与锌反应，生成氯化锌溶液和氢气。",
+    acidMetalCloud: "释放 H2",
+    acidMetalTag: "锌投入酸中",
+    neutralizationTitle: "中和反应",
+    neutralizationCard: "混合酸和碱，观察指示颜色逐步回到中性。",
+    neutralizationObserve: "指示颜色逐渐转向中性，溶液状态也稳定下来。",
+    neutralizationExplain: "酸中的 H+ 与碱中的 OH- 结合生成水，溶液中留下可溶性的盐。",
+    neutralizationCloud: "已中和",
+    neutralizationTag: "指示剂变色",
+    precipitationTitle: "沉淀反应",
+    precipitationCard: "两种澄清溶液混合后，会出现白色沉淀。",
+    precipitationObserve: "白色固体逐渐生成并沉到杯底，上层溶液仍保持较清澈。",
+    precipitationExplain: "银离子和氯离子结合生成难溶的氯化银，因此会析出沉淀。",
+    precipitationCloud: "生成 AgCl 沉淀",
+    precipitationTag: "白色固体出现",
+    combustionTitle: "燃烧反应",
+    combustionCard: "点燃甲烷，观察放热与生成物。",
+    combustionObserve: "火焰点亮后释放热和光，并产生向上的高温气体。",
+    combustionExplain: "甲烷与氧气发生放热反应，生成二氧化碳和水。",
+    combustionCloud: "生成 CO2 与 H2O",
+    combustionTag: "放热并发光",
+    decompositionTitle: "热分解",
+    decompositionCard: "给固体加热，观察放气并留下固体残渣。",
+    decompositionObserve: "加热后释放二氧化碳气体，并留下氧化钙固体。",
+    decompositionExplain: "热能使碳酸钙分解成氧化钙和二氧化碳。",
+    decompositionCloud: "释放 CO2",
+    decompositionTag: "留下 CaO",
+    typeGasEvolution: "放气反应",
+    typeNeutralization: "酸碱中和",
+    typePrecipitation: "沉淀反应",
+    typeCombustion: "燃烧反应",
+    typeDecomposition: "热分解",
+    actionStart: "开始反应",
+    actionMix: "开始混合",
+    actionIgnite: "点燃",
+    actionHeat: "开始加热",
+    actionReplay: "再演示一次",
+    statusReady: "准备开始",
+    statusRunning: "反应进行中",
+    typeLabel: "类型",
+    observeLabel: "现象",
+    explainLabel: "解释",
+    roadmapTitle: "即将加入",
+    roadmap1: "气体检验",
+    roadmap2: "焰色反应",
+    roadmap3: "指示剂反应",
+    roadmap4: "电解实验",
+    roadmap5: "更多溶解度演示",
+  },
+});
+
+translations["zh-Hant"] = deepMerge(translations["zh-Hant"], {
+  tools: {
+    pageSubtitle: "面向 9-12 年級的化學工具與實驗",
+    virtualLabName: "虛擬實驗室",
+    virtualLabDesc: "進入引導式迷你實驗，逐步觀察反應現象與變化。",
+  },
+  virtualLab: {
+    title: "引導式迷你實驗",
+    subtitle: "先從幾個固定的小實驗開始，直接看見現象、方程式與重點解釋，不必一開始就掉進大型模擬器。",
+    moreSoon: "更多引導實驗即將加入",
+    acidMetalTitle: "酸與金屬",
+    acidMetalCard: "觀察鋅與酸反應時冒出的氫氣氣泡。",
+    acidMetalObserve: "鋅片表面持續冒泡，金屬本身也會慢慢被消耗。",
+    acidMetalExplain: "鹽酸與鋅反應，生成氯化鋅溶液與氫氣。",
+    acidMetalCloud: "釋放 H2",
+    acidMetalTag: "鋅投入酸中",
+    neutralizationTitle: "中和反應",
+    neutralizationCard: "混合酸與鹼，觀察指示顏色逐步回到中性。",
+    neutralizationObserve: "指示顏色逐漸轉向中性，溶液狀態也穩定下來。",
+    neutralizationExplain: "酸中的 H+ 與鹼中的 OH- 結合生成水，溶液中留下可溶性的鹽。",
+    neutralizationCloud: "已中和",
+    neutralizationTag: "指示劑變色",
+    precipitationTitle: "沉澱反應",
+    precipitationCard: "兩種澄清溶液混合後，會出現白色沉澱。",
+    precipitationObserve: "白色固體逐漸生成並沉到杯底，上層溶液仍保持較清澈。",
+    precipitationExplain: "銀離子與氯離子結合生成難溶的氯化銀，因此會析出沉澱。",
+    precipitationCloud: "生成 AgCl 沉澱",
+    precipitationTag: "白色固體出現",
+    combustionTitle: "燃燒反應",
+    combustionCard: "點燃甲烷，觀察放熱與生成物。",
+    combustionObserve: "火焰點亮後釋放熱與光，並產生向上的高溫氣體。",
+    combustionExplain: "甲烷與氧氣發生放熱反應，生成二氧化碳與水。",
+    combustionCloud: "生成 CO2 與 H2O",
+    combustionTag: "放熱並發光",
+    decompositionTitle: "熱分解",
+    decompositionCard: "加熱固體樣品，觀察放氣並留下固體殘留物。",
+    decompositionObserve: "加熱後釋放二氧化碳氣體，並留下氧化鈣固體。",
+    decompositionExplain: "熱能使碳酸鈣分解成氧化鈣與二氧化碳。",
+    decompositionCloud: "釋放 CO2",
+    decompositionTag: "留下 CaO",
+    typeGasEvolution: "放氣反應",
+    typeNeutralization: "酸鹼中和",
+    typePrecipitation: "沉澱反應",
+    typeCombustion: "燃燒反應",
+    typeDecomposition: "熱分解",
+    actionStart: "開始反應",
+    actionMix: "開始混合",
+    actionIgnite: "點燃",
+    actionHeat: "開始加熱",
+    actionReplay: "再演示一次",
+    statusReady: "準備開始",
+    statusRunning: "反應進行中",
+    typeLabel: "類型",
+    observeLabel: "現象",
+    explainLabel: "解釋",
+    roadmapTitle: "即將加入",
+    roadmap1: "氣體檢驗",
+    roadmap2: "焰色反應",
+    roadmap3: "指示劑反應",
+    roadmap4: "電解實驗",
+    roadmap5: "更多溶解度演示",
+  },
+  solubilityTutorial: {
+    inputTitle: "輸入化合物",
+    inputDesc: "在這裡輸入離子化合物，例如 AgCl 或 Na2CO3。示例中我們會自動填入 AgCl。",
+    checkTitle: "開始判斷",
+    checkDesc: "執行快速檢查，看看此化合物大概率可溶還是不溶。",
+    resultTitle: "結果卡片",
+    resultDesc: "這裡會摘要顯示判斷結果，以及對應的規則或例外。",
+    tableTitle: "參考表",
+    tableDesc: "右側表格整理了常見離子、例外與快速判斷線索，方便對照。",
+  },
+});
+
+translations.fr = deepMerge(translations.fr, {
+  tools: {
+    pageSubtitle: "Outils et mini-labos de chimie niveau 9-12",
+    virtualLabName: "Labo virtuel",
+    virtualLabDesc: "Explorez des mini-experiences guidees et observez les reactions etape par etape.",
+  },
+  virtualLab: {
+    title: "Mini-experiences guidees",
+    subtitle: "Lancez de petites scenes de reaction soignees pour voir le phenomene, l'equation et l'idee cle sans ouvrir un gros simulateur.",
+    moreSoon: "D'autres experiences guidees arrivent bientot",
+    acidMetalTitle: "Acide + metal",
+    acidMetalCard: "Regardez les bulles d'hydrogene apparaitre quand le zinc reagit avec l'acide.",
+    acidMetalObserve: "Des bulles montent du zinc pendant que la lame se consume lentement.",
+    acidMetalExplain: "L'acide chlorhydrique reagit avec le zinc pour former du chlorure de zinc dissous et du dihydrogene.",
+    acidMetalCloud: "H2 degage",
+    acidMetalTag: "Zinc + acide",
+    neutralizationTitle: "Neutralisation",
+    neutralizationCard: "Melangez un acide et une base, puis regardez l'indicateur revenir vers le neutre.",
+    neutralizationObserve: "L'indicateur se deplace vers le vert quand la solution se rapproche du neutre.",
+    neutralizationExplain: "Les ions H+ et OH- se combinent pour former de l'eau et laisser un sel dissous.",
+    neutralizationCloud: "Neutralise",
+    neutralizationTag: "Virage d'indicateur",
+    precipitationTitle: "Precipitation",
+    precipitationCard: "Deux liquides clairs se melangent et un precipite solide apparait.",
+    precipitationObserve: "Un solide blanc se forme puis se depose au fond pendant que la solution reste claire.",
+    precipitationExplain: "Les ions argent et chlorure forment du chlorure d'argent insoluble qui precipite hors de la solution.",
+    precipitationCloud: "Precipite d'AgCl",
+    precipitationTag: "Solide blanc",
+    combustionTitle: "Combustion",
+    combustionCard: "Enflammez le methane et observez les produits chauds formes.",
+    combustionObserve: "Une flamme vive apparait et des gaz chauds montent pendant la combustion du methane.",
+    combustionExplain: "Le methane reagit avec le dioxygene dans une reaction exothermique qui forme du dioxyde de carbone et de l'eau.",
+    combustionCloud: "CO2 + H2O",
+    combustionTag: "Chaleur et lumiere",
+    decompositionTitle: "Decomposition thermique",
+    decompositionCard: "Chauffez un solide et observez le gaz libere avec le residu restant.",
+    decompositionObserve: "Le chauffage libere du dioxyde de carbone et laisse un residu solide d'oxyde de calcium.",
+    decompositionExplain: "L'energie thermique decompose le carbonate de calcium en oxyde de calcium et en dioxyde de carbone.",
+    decompositionCloud: "CO2 degage",
+    decompositionTag: "CaO restant",
+    typeGasEvolution: "Degagement gazeux",
+    typeNeutralization: "Neutralisation acide-base",
+    typePrecipitation: "Reaction de precipitation",
+    typeCombustion: "Combustion",
+    typeDecomposition: "Decomposition thermique",
+    actionStart: "Demarrer",
+    actionMix: "Melanger",
+    actionIgnite: "Enflammer",
+    actionHeat: "Chauffer",
+    actionReplay: "Relancer",
+    statusReady: "Pret",
+    statusRunning: "Reaction en cours",
+    typeLabel: "Type",
+    observeLabel: "Observation",
+    explainLabel: "Explication",
+    roadmapTitle: "A venir",
+    roadmap1: "Tests de gaz",
+    roadmap2: "Tests a la flamme",
+    roadmap3: "Reactions d'indicateur",
+    roadmap4: "Electrolyse",
+    roadmap5: "Plus de demos de solubilite",
+  },
+  solubilityTutorial: {
+    inputTitle: "Saisie du compose",
+    inputDesc: "Entrez un compose ionique comme AgCl ou Na2CO3. Pour l'exemple, nous allons remplir AgCl.",
+    checkTitle: "Verifier la regle",
+    checkDesc: "Lancez la verification rapide pour voir si le compose est probablement soluble ou insoluble.",
+    resultTitle: "Carte resultat",
+    resultDesc: "La carte resume le verdict ainsi que la regle ou l'exception correspondante.",
+    tableTitle: "Table de reference",
+    tableDesc: "Utilisez le tableau de droite pour revoir les ions courants, les exceptions et les raccourcis utiles.",
+  },
+});
+
+translations.ru = deepMerge(translations.ru, {
+  tools: {
+    pageSubtitle: "Инструменты и мини-лаборатории по химии для 9-12 классов",
+    virtualLabName: "Виртуальная лаборатория",
+    virtualLabDesc: "Изучайте готовые мини-эксперименты и наблюдайте реакцию шаг за шагом.",
+  },
+  virtualLab: {
+    title: "Мини-эксперименты с подсказками",
+    subtitle: "Запускайте аккуратные готовые сценки реакций и сразу смотрите наблюдение, уравнение и объяснение без громоздкого симулятора.",
+    moreSoon: "Скоро появятся новые эксперименты",
+    acidMetalTitle: "Кислота + металл",
+    acidMetalCard: "Наблюдайте, как при реакции цинка с кислотой появляются пузырьки водорода.",
+    acidMetalObserve: "От цинковой пластинки поднимаются пузырьки, а сам металл постепенно расходуется.",
+    acidMetalExplain: "Соляная кислота реагирует с цинком, образуя раствор хлорида цинка и водород.",
+    acidMetalCloud: "Выделяется H2",
+    acidMetalTag: "Цинк в кислоте",
+    neutralizationTitle: "Нейтрализация",
+    neutralizationCard: "Смешайте кислоту и щелочь и посмотрите, как индикатор смещается к нейтральной зоне.",
+    neutralizationObserve: "Индикатор уходит к зеленому цвету по мере того, как раствор становится ближе к нейтральному.",
+    neutralizationExplain: "Ионы H+ и OH- соединяются в воду, а в растворе остается растворимая соль.",
+    neutralizationCloud: "Нейтрализовано",
+    neutralizationTag: "Сдвиг индикатора",
+    precipitationTitle: "Осаждение",
+    precipitationCard: "Две прозрачные жидкости смешиваются, и появляется белый осадок.",
+    precipitationObserve: "Белый твердый осадок образуется и опускается на дно, а раствор сверху остается прозрачным.",
+    precipitationExplain: "Ионы серебра и хлорида образуют нерастворимый хлорид серебра, поэтому он выпадает в осадок.",
+    precipitationCloud: "Осадок AgCl",
+    precipitationTag: "Белый осадок",
+    combustionTitle: "Горение",
+    combustionCard: "Подожгите метан и проследите за горячими продуктами реакции.",
+    combustionObserve: "Появляется яркое пламя, а вверх поднимаются горячие газы.",
+    combustionExplain: "Метан реагирует с кислородом в экзотермической реакции, образуя углекислый газ и воду.",
+    combustionCloud: "CO2 + H2O",
+    combustionTag: "Тепло и свет",
+    decompositionTitle: "Термическое разложение",
+    decompositionCard: "Нагрейте твердое вещество и наблюдайте выделение газа и оставшийся остаток.",
+    decompositionObserve: "При нагревании выделяется углекислый газ, а остается твердый оксид кальция.",
+    decompositionExplain: "Тепловая энергия разлагает карбонат кальция на оксид кальция и углекислый газ.",
+    decompositionCloud: "Выделяется CO2",
+    decompositionTag: "Остается CaO",
+    typeGasEvolution: "Газовыделение",
+    typeNeutralization: "Кислотно-основная нейтрализация",
+    typePrecipitation: "Реакция осаждения",
+    typeCombustion: "Горение",
+    typeDecomposition: "Термическое разложение",
+    actionStart: "Запустить",
+    actionMix: "Смешать",
+    actionIgnite: "Поджечь",
+    actionHeat: "Нагреть",
+    actionReplay: "Повторить",
+    statusReady: "Готово к запуску",
+    statusRunning: "Реакция идет",
+    typeLabel: "Тип",
+    observeLabel: "Наблюдение",
+    explainLabel: "Объяснение",
+    roadmapTitle: "Скоро",
+    roadmap1: "Газовые тесты",
+    roadmap2: "Пламенные пробы",
+    roadmap3: "Индикаторные реакции",
+    roadmap4: "Электролиз",
+    roadmap5: "Больше опытов по растворимости",
+  },
+  solubilityTutorial: {
+    inputTitle: "Ввод соединения",
+    inputDesc: "Введите ионное соединение, например AgCl или Na2CO3. Для примера мы автоматически подставим AgCl.",
+    checkTitle: "Проверка правила",
+    checkDesc: "Запустите быструю проверку, чтобы понять, скорее всего соединение растворимо или нет.",
+    resultTitle: "Карточка результата",
+    resultDesc: "Здесь кратко показывается итог и подходящее правило или исключение.",
+    tableTitle: "Справочная таблица",
+    tableDesc: "Используйте таблицу справа, чтобы быстро свериться с распространенными ионами, исключениями и подсказками.",
+  },
+});
+
+translations.fa = deepMerge(translations.fa, {
+  tools: {
+    pageSubtitle: "ابزارها و مینی لب های شیمی برای پایه های 9 تا 12",
+    virtualLabName: "آزمایشگاه مجازی",
+    virtualLabDesc: "چند آزمایش کوچک هدایت شده را مرحله به مرحله اجرا کنید و تغییرات واکنش را ببینید.",
+  },
+  virtualLab: {
+    title: "آزمایش های کوچک هدایت شده",
+    subtitle: "چند صحنه آماده و صیقلی را اجرا کنید و بدون درگیر شدن با یک شبیه ساز بزرگ، پدیده، معادله و توضیح را یکجا ببینید.",
+    moreSoon: "آزمایش های هدایت شده بیشتری به زودی اضافه می شوند",
+    acidMetalTitle: "اسید و فلز",
+    acidMetalCard: "حباب های هیدروژن را هنگام واکنش روی و اسید تماشا کنید.",
+    acidMetalObserve: "از نوار روی حباب بالا می آید و خود فلز به آرامی مصرف می شود.",
+    acidMetalExplain: "اسید کلریدریک با روی واکنش می دهد و کلرید روی محلول و گاز هیدروژن می سازد.",
+    acidMetalCloud: "آزاد شدن H2",
+    acidMetalTag: "روی در اسید",
+    neutralizationTitle: "خنثی سازی",
+    neutralizationCard: "اسید و باز را مخلوط کنید و ببینید رنگ شناساگر به سمت حالت خنثی برمی گردد.",
+    neutralizationObserve: "رنگ شناساگر به سمت سبز می رود و محلول به ناحیه خنثی نزدیک می شود.",
+    neutralizationExplain: "یون های H+ و OH- با هم آب می سازند و نمک محلول در محلول باقی می ماند.",
+    neutralizationCloud: "خنثی شد",
+    neutralizationTag: "تغییر شناساگر",
+    precipitationTitle: "واکنش رسوبی",
+    precipitationCard: "دو مایع شفاف با هم ترکیب می شوند و یک رسوب جامد ظاهر می شود.",
+    precipitationObserve: "یک جامد سفید تشکیل می شود و به پایین ظرف می نشیند، در حالی که بخش بالایی محلول شفاف می ماند.",
+    precipitationExplain: "یون های نقره و کلرید، کلرید نقره نامحلول می سازند و به صورت رسوب جدا می شوند.",
+    precipitationCloud: "رسوب AgCl",
+    precipitationTag: "جامد سفید",
+    combustionTitle: "احتراق",
+    combustionCard: "متان را روشن کنید و محصولات داغ واکنش را دنبال کنید.",
+    combustionObserve: "شعله روشن می شود و گازهای داغ به بالا حرکت می کنند.",
+    combustionExplain: "متان در یک واکنش گرماده با اکسیژن واکنش می دهد و دی اکسید کربن و آب می سازد.",
+    combustionCloud: "CO2 + H2O",
+    combustionTag: "نور و گرما",
+    decompositionTitle: "تجزیه گرمایی",
+    decompositionCard: "یک نمونه جامد را گرم کنید و آزاد شدن گاز و باقی ماندن جامد را ببینید.",
+    decompositionObserve: "با گرم شدن، گاز دی اکسید کربن آزاد می شود و اکسید کلسیم جامد باقی می ماند.",
+    decompositionExplain: "انرژی گرمایی، کربنات کلسیم را به اکسید کلسیم و دی اکسید کربن تجزیه می کند.",
+    decompositionCloud: "آزاد شدن CO2",
+    decompositionTag: "باقی ماندن CaO",
+    typeGasEvolution: "تولید گاز",
+    typeNeutralization: "خنثی سازی اسید و باز",
+    typePrecipitation: "واکنش رسوبی",
+    typeCombustion: "احتراق",
+    typeDecomposition: "تجزیه گرمایی",
+    actionStart: "شروع واکنش",
+    actionMix: "مخلوط کن",
+    actionIgnite: "روشن کن",
+    actionHeat: "گرم کن",
+    actionReplay: "دوباره اجرا کن",
+    statusReady: "آماده اجرا",
+    statusRunning: "واکنش در حال انجام است",
+    typeLabel: "نوع",
+    observeLabel: "مشاهده",
+    explainLabel: "توضیح",
+    roadmapTitle: "به زودی",
+    roadmap1: "آزمون های گازی",
+    roadmap2: "آزمون شعله",
+    roadmap3: "واکنش های شناساگر",
+    roadmap4: "الکترولیز",
+    roadmap5: "نمایش های بیشتر از حلالیت",
+  },
+  solubilityTutorial: {
+    inputTitle: "ورودی ترکیب",
+    inputDesc: "یک ترکیب یونی مثل AgCl یا Na2CO3 را وارد کنید. در مثال، AgCl را به طور خودکار می گذاریم.",
+    checkTitle: "بررسی قانون",
+    checkDesc: "بررسی سریع را اجرا کنید تا ببینید ترکیب به احتمال زیاد محلول است یا نامحلول.",
+    resultTitle: "کارت نتیجه",
+    resultDesc: "این کارت نتیجه کلی و قانون یا استثنای مربوط را خلاصه می کند.",
+    tableTitle: "جدول مرجع",
+    tableDesc: "برای مرور یون های رایج، استثناها و الگوهای سریع از جدول سمت راست استفاده کنید.",
+  },
+});
+
+translations.ur = deepMerge(translations.ur, {
+  tools: {
+    pageSubtitle: "گریڈ 9 تا 12 کے لیے کیمسٹری ٹولز اور منی لیب",
+    virtualLabName: "ورچوئل لیب",
+    virtualLabDesc: "رہنمائی شدہ چھوٹے تجربات چلائیں اور ردعمل کی تبدیلیاں مرحلہ وار دیکھیں۔",
+  },
+  virtualLab: {
+    title: "رہنمائی شدہ منی تجربات",
+    subtitle: "تیار شدہ چھوٹے ردعملی مناظر چلائیں اور بغیر کسی بڑے سمولیٹر میں پھنسے مشاہدہ، مساوات اور وضاحت ایک ساتھ دیکھیں۔",
+    moreSoon: "مزید رہنمائی شدہ تجربات جلد آرہے ہیں",
+    acidMetalTitle: "تیزاب اور دھات",
+    acidMetalCard: "دیکھیں کہ زنک اور تیزاب کے ردعمل سے ہائیڈروجن کے بلبلے کیسے بنتے ہیں۔",
+    acidMetalObserve: "زنک کی پٹی سے بلبلے اٹھتے ہیں اور دھات آہستہ آہستہ گھلتی جاتی ہے۔",
+    acidMetalExplain: "ہائیڈروکلورک ایسڈ زنک کے ساتھ ردعمل کر کے حل شدہ زنک کلورائیڈ اور ہائیڈروجن گیس بناتا ہے۔",
+    acidMetalCloud: "H2 خارج ہو رہی ہے",
+    acidMetalTag: "تیزاب میں زنک",
+    neutralizationTitle: "نیوٹرلائزیشن",
+    neutralizationCard: "تیزاب اور اساس کو ملائیں اور دیکھیں کہ انڈیکیٹر غیر جانبدار رنگ کی طرف آتا ہے۔",
+    neutralizationObserve: "انڈیکیٹر سبز سمت میں جاتا ہے اور محلول غیر جانبداری کے قریب آتا ہے۔",
+    neutralizationExplain: "H+ اور OH- آئن مل کر پانی بناتے ہیں اور محلول میں حل پذیر نمک باقی رہتا ہے۔",
+    neutralizationCloud: "غیر جانبدار ہوا",
+    neutralizationTag: "انڈیکیٹر کی تبدیلی",
+    precipitationTitle: "ترسیب",
+    precipitationCard: "دو شفاف محلول ملتے ہیں اور ایک سفید ٹھوس ترسیب بنتی ہے۔",
+    precipitationObserve: "سفید ٹھوس بنتا ہے اور نیچے بیٹھ جاتا ہے جبکہ اوپر کا محلول کافی حد تک صاف رہتا ہے۔",
+    precipitationExplain: "سلور اور کلورائیڈ آئن مل کر غیر حل پذیر سلور کلورائیڈ بناتے ہیں، اسی لئے ترسیب الگ ہو جاتی ہے۔",
+    precipitationCloud: "AgCl ترسیب",
+    precipitationTag: "سفید ٹھوس",
+    combustionTitle: "احتراق",
+    combustionCard: "میتھین کو جلائیں اور گرم مصنوعات کو دیکھیں۔",
+    combustionObserve: "روشن شعلہ بنتا ہے اور گرم گیسیں اوپر اٹھتی ہیں۔",
+    combustionExplain: "میتھین آکسیجن کے ساتھ ایک حرارت خارج کرنے والے ردعمل میں CO2 اور پانی بناتی ہے۔",
+    combustionCloud: "CO2 + H2O",
+    combustionTag: "حرارت اور روشنی",
+    decompositionTitle: "حرارتی تجزیہ",
+    decompositionCard: "ٹھوس نمونے کو گرم کریں اور گیس کے اخراج اور باقی ماندہ ٹھوس کو دیکھیں۔",
+    decompositionObserve: "گرم کرنے پر کاربن ڈائی آکسائیڈ خارج ہوتی ہے اور کیلشیم آکسائیڈ بطور ٹھوس باقی رہتی ہے۔",
+    decompositionExplain: "حرارت کیلشیم کاربونیٹ کو توڑ کر کیلشیم آکسائیڈ اور کاربن ڈائی آکسائیڈ بناتی ہے۔",
+    decompositionCloud: "CO2 خارج ہو رہی ہے",
+    decompositionTag: "CaO باقی",
+    typeGasEvolution: "گیس پیدا کرنے والا ردعمل",
+    typeNeutralization: "تیزاب اساس نیوٹرلائزیشن",
+    typePrecipitation: "ترسیبی ردعمل",
+    typeCombustion: "احتراق",
+    typeDecomposition: "حرارتی تجزیہ",
+    actionStart: "ردعمل شروع کریں",
+    actionMix: "محلول ملائیں",
+    actionIgnite: "جلائیں",
+    actionHeat: "گرم کریں",
+    actionReplay: "دوبارہ چلائیں",
+    statusReady: "چلانے کے لیے تیار",
+    statusRunning: "ردعمل جاری ہے",
+    typeLabel: "قسم",
+    observeLabel: "مشاہدہ",
+    explainLabel: "وضاحت",
+    roadmapTitle: "جلد آرہا ہے",
+    roadmap1: "گیس کے ٹیسٹ",
+    roadmap2: "شعلہ ٹیسٹ",
+    roadmap3: "انڈیکیٹر ردعمل",
+    roadmap4: "الیکٹرولائسز",
+    roadmap5: "حل پذیری کی مزید ڈیموز",
+  },
+  solubilityTutorial: {
+    inputTitle: "مرکب درج کریں",
+    inputDesc: "AgCl یا Na2CO3 جیسا کوئی آئنک مرکب درج کریں۔ مثال میں ہم AgCl خود بھر دیں گے۔",
+    checkTitle: "قاعدہ چیک کریں",
+    checkDesc: "فوری جانچ چلائیں تاکہ دیکھا جا سکے کہ مرکب غالب امکان کے ساتھ حل پذیر ہے یا نہیں۔",
+    resultTitle: "نتیجہ کارڈ",
+    resultDesc: "یہ کارڈ مختصر نتیجہ اور متعلقہ قاعدہ یا استثنا دکھاتا ہے۔",
+    tableTitle: "حوالہ جاتی جدول",
+    tableDesc: "دائیں طرف کا جدول عام آئن، استثنا اور فوری اشارے دوبارہ دیکھنے کے لئے استعمال کریں۔",
+  },
+});
+
+translations.tl = deepMerge(translations.tl, {
+  tools: {
+    pageSubtitle: "Mga tool at mini lab sa kimika para sa Grade 9-12",
+    virtualLabName: "Virtual Lab",
+    virtualLabDesc: "Subukan ang mga gabay na mini eksperimento at panoorin ang reaksyon nang paisa-isa.",
+  },
+  virtualLab: {
+    title: "Gabay na Mini Eksperimento",
+    subtitle: "Patakbuhin ang maliliit na handang eksena ng reaksyon at tingnan agad ang obserbasyon, equation, at paliwanag nang hindi muna gumagawa ng malaking simulator.",
+    moreSoon: "Mas marami pang guided experiments ang paparating",
+    acidMetalTitle: "Asido at Metal",
+    acidMetalCard: "Panoorin ang paglitaw ng hydrogen bubbles habang tumutugon ang zinc sa asido.",
+    acidMetalObserve: "Umaakyat ang mga bula mula sa zinc strip habang unti unti itong nauubos.",
+    acidMetalExplain: "Ang hydrochloric acid ay tumutugon sa zinc upang makabuo ng zinc chloride na natunaw sa tubig at hydrogen gas.",
+    acidMetalCloud: "May lumalabas na H2",
+    acidMetalTag: "Zinc sa asido",
+    neutralizationTitle: "Neutralization",
+    neutralizationCard: "Paghaluin ang asido at base, at panoorin ang indicator na bumalik sa neutral.",
+    neutralizationObserve: "Unti unting nagiging berde ang indicator habang lumalapit ang halo sa neutral.",
+    neutralizationExplain: "Ang H+ at OH- ions ay nagsasama upang bumuo ng tubig at nagiiwan ng natunaw na asin.",
+    neutralizationCloud: "Neutralized",
+    neutralizationTag: "Pagbabago ng indicator",
+    precipitationTitle: "Precipitation",
+    precipitationCard: "Pinagsasama ang dalawang malinaw na likido at biglang may namumuong solid.",
+    precipitationObserve: "May puting solid na nabubuo at lumulubog sa ilalim habang nananatiling malinaw ang nasa itaas.",
+    precipitationExplain: "Ang silver ions at chloride ions ay bumubuo ng hindi natutunaw na silver chloride kaya humihiwalay ito bilang precipitate.",
+    precipitationCloud: "AgCl precipitate",
+    precipitationTag: "Puting solid",
+    combustionTitle: "Combustion",
+    combustionCard: "Sindihan ang methane at tingnan ang maiinit na produktong nabubuo.",
+    combustionObserve: "May maliwanag na apoy at umaakyat ang maiinit na gas habang nasusunog ang methane.",
+    combustionExplain: "Ang methane ay tumutugon sa oxygen sa isang exothermic reaction upang bumuo ng carbon dioxide at tubig.",
+    combustionCloud: "CO2 + H2O",
+    combustionTag: "Init at liwanag",
+    decompositionTitle: "Thermal Decomposition",
+    decompositionCard: "Painitin ang solid sample at obserbahan ang paglabas ng gas at natitirang solid.",
+    decompositionObserve: "Kapag pinainit, lumalabas ang carbon dioxide gas at naiiwan ang calcium oxide bilang solid residue.",
+    decompositionExplain: "Binabasag ng init ang calcium carbonate upang maging calcium oxide at carbon dioxide.",
+    decompositionCloud: "May lumalabas na CO2",
+    decompositionTag: "May natirang CaO",
+    typeGasEvolution: "Paglabas ng gas",
+    typeNeutralization: "Acid-base neutralization",
+    typePrecipitation: "Precipitation reaction",
+    typeCombustion: "Combustion",
+    typeDecomposition: "Thermal decomposition",
+    actionStart: "Simulan ang reaksyon",
+    actionMix: "Paghaluin",
+    actionIgnite: "Sindihan",
+    actionHeat: "Painitin",
+    actionReplay: "Ulitin",
+    statusReady: "Handa nang simulan",
+    statusRunning: "Tumatakbo ang reaksyon",
+    typeLabel: "Uri",
+    observeLabel: "Obserbasyon",
+    explainLabel: "Paliwanag",
+    roadmapTitle: "Paparating",
+    roadmap1: "Gas tests",
+    roadmap2: "Flame tests",
+    roadmap3: "Indicator reactions",
+    roadmap4: "Electrolysis",
+    roadmap5: "Mas marami pang solubility demos",
+  },
+  solubilityTutorial: {
+    inputTitle: "Ilagay ang compound",
+    inputDesc: "Maglagay ng ionic compound tulad ng AgCl o Na2CO3. Sa halimbawa, awtomatiko nating ilalagay ang AgCl.",
+    checkTitle: "Suriin ang tuntunin",
+    checkDesc: "Patakbuhin ang mabilis na pagsusuri para makita kung malamang na natutunaw o hindi natutunaw ang compound.",
+    resultTitle: "Result card",
+    resultDesc: "Ipinapakita rito ang buod ng resulta at ang tumamang tuntunin o exception.",
+    tableTitle: "Reference table",
+    tableDesc: "Gamitin ang talahanayan sa kanan para suriin ang mga karaniwang ion, exceptions, at mabilis na pattern.",
+  },
+});
+
+translations.en = deepMerge(translations.en, {
+  tools: {
+    virtualLabDesc: "Drag a 2.5D beaker, add water, and play with simple lab physics.",
+  },
+  virtualLabTutorial: {
+    sceneTitle: "Virtual Chemistry Lab",
+    sceneDesc: "Welcome to the Virtual Lab! This is an interactive physics-based playground where you can test the reactivity of different metals.",
+    beakerTitle: "Interactive Beaker",
+    beakerDesc: "You can drag the beaker around or rotate it from the top. Add water or empty it using the buttons below.",
+    metalTitle: "The Metal Sample",
+    metalDesc: "Grab this metal cube and drop it into the water to see a reaction. Some elements react more violently than others!",
+    elementPickerTitle: "Change Element",
+    elementPickerDesc: "Click here to choose a different metal to test. Try comparing Alkali metals with Alkaline Earth metals.",
+    thermoTitle: "Thermometer",
+    thermoDesc: "Watch the temperature spike during exothermic reactions as heat is released!"
+  },
+  virtualLab: {
+    addWater: "Add Water",
+    removeWater: "Remove All Water",
+    beakerAria: "Draggable beaker",
+    reset: "Reset",
+    element: "Element",
+  },
+});
+
+translations.zh = deepMerge(translations.zh, {
+  tools: {
+    virtualLabDesc: "拖动 2.5D 烧杯、加入清水，并体验简单的实验物理效果。",
+  },
+  virtualLabTutorial: {
+    sceneTitle: "虚拟化学实验室",
+    sceneDesc: "欢迎来到虚拟实验室！这是一个基于物理的互动游乐场，你可以测试不同金属的反应性。",
+    beakerTitle: "互动烧杯",
+    beakerDesc: "你可以拖动烧杯，或者从顶部旋转倾倒。使用下方的按钮加水或清空。",
+    metalTitle: "金属样本",
+    metalDesc: "抓住这个金属方块，把它丢进水里看反应。有些元素的反应比其他元素剧烈得多！",
+    elementPickerTitle: "更改元素",
+    elementPickerDesc: "点击这里选择不同的金属来测试。试着比较碱金属和碱土金属的反应差异。",
+    thermoTitle: "温度计",
+    thermoDesc: "注意观察放热反应中释放热量时的温度峰值！"
+  },
+  virtualLab: {
+    addWater: "加水",
+    removeWater: "清空所有水",
+    beakerAria: "可拖动烧杯",
+    reset: "重置",
+    element: "元素",
+  },
+});
+
+translations["zh-Hant"] = deepMerge(translations["zh-Hant"], {
+  tools: {
+    virtualLabDesc: "拖動 2.5D 燒杯、加入清水，並體驗簡單的實驗物理效果。",
+  },
+  virtualLab: {
+    addWater: "加水",
+    removeWater: "清空所有水",
+    beakerAria: "可拖動燒杯",
+  },
+});
+
+translations.fr = deepMerge(translations.fr, {
+  tools: {
+    virtualLabDesc: "Faites glisser un becher 2.5D, ajoutez de l'eau et jouez avec une physique de labo simple.",
+  },
+  virtualLab: {
+    addWater: "Ajouter de l'eau",
+    removeWater: "Retirer toute l'eau",
+    beakerAria: "Becher deplacable",
+  },
+});
+
+translations.ru = deepMerge(translations.ru, {
+  tools: {
+    virtualLabDesc: "Перетаскивайте 2.5D стакан, добавляйте воду и играйте с простой лабораторной физикой.",
+  },
+  virtualLab: {
+    addWater: "Добавить воду",
+    removeWater: "Убрать всю воду",
+    beakerAria: "Перетаскиваемый стакан",
+  },
+});
+
+translations.fa = deepMerge(translations.fa, {
+  tools: {
+    virtualLabDesc: "یک بشر 2.5D را بکشید، به آن آب اضافه کنید و با فیزیک ساده آزمایشگاه بازی کنید.",
+  },
+  virtualLab: {
+    addWater: "افزودن آب",
+    removeWater: "حذف تمام آب",
+    beakerAria: "بشر قابل جابه جایی",
+  },
+});
+
+translations.ur = deepMerge(translations.ur, {
+  tools: {
+    virtualLabDesc: "2.5D بیکر کو گھسیٹیں، اس میں پانی شامل کریں، اور سادہ لیب فزکس کے ساتھ کھیلیں۔",
+  },
+  virtualLab: {
+    addWater: "پانی شامل کریں",
+    removeWater: "سارا پانی ہٹا دیں",
+    beakerAria: "کھینچا جا سکنے والا بیکر",
+  },
+});
+
+translations.tl = deepMerge(translations.tl, {
+  tools: {
+    virtualLabDesc: "I-drag ang 2.5D beaker, magdagdag ng tubig, at subukan ang simpleng physics ng lab.",
+  },
+  virtualLab: {
+    addWater: "Magdagdag ng tubig",
+    removeWater: "Tanggalin lahat ng tubig",
+    beakerAria: "Nahihilang beaker",
+  },
+});
+
+translations.en = deepMerge(translations.en, {
+  tools: {
+    virtualLabDesc: "A minimal blank beaker scene.",
+  },
+  virtualLab: {
+    beakerAria: "Beaker",
+  },
+});
+
+translations.zh = deepMerge(translations.zh, {
+  tools: {
+    virtualLabDesc: "一个极简的空白烧杯场景。",
+  },
+  virtualLab: {
+    beakerAria: "烧杯",
+  },
+});
+
+translations["zh-Hant"] = deepMerge(translations["zh-Hant"], {
+  tools: {
+    virtualLabDesc: "一個極簡的空白燒杯場景。",
+  },
+  virtualLab: {
+    beakerAria: "燒杯",
+  },
+});
+
+translations.fr = deepMerge(translations.fr, {
+  tools: {
+    virtualLabDesc: "Une scene minimale avec un becher vide.",
+  },
+  virtualLab: {
+    beakerAria: "Becher",
+  },
+});
+
+translations.ru = deepMerge(translations.ru, {
+  tools: {
+    virtualLabDesc: "Минималистичная сцена с пустым стаканом.",
+  },
+  virtualLab: {
+    beakerAria: "Стакан",
+  },
+});
+
+translations.fa = deepMerge(translations.fa, {
+  tools: {
+    virtualLabDesc: "یک صحنه مینیمال با یک بشر خالی.",
+  },
+  virtualLab: {
+    beakerAria: "بشر",
+  },
+});
+
+translations.ur = deepMerge(translations.ur, {
+  tools: {
+    virtualLabDesc: "ایک سادہ سا خالی بیکر منظر۔",
+  },
+  virtualLab: {
+    beakerAria: "بیکر",
+  },
+});
+
+translations.tl = deepMerge(translations.tl, {
+  tools: {
+    virtualLabDesc: "Isang napakasimpleng eksena ng bakanteng beaker.",
+  },
+  virtualLab: {
+    beakerAria: "Beaker",
+  },
+});
+
+translations.en = deepMerge(translations.en, {
+  tools: {
+    virtualLabDesc: "Tilt a beaker and play with particle water inside a simple lab scene.",
+  },
+});
+
+translations.zh = deepMerge(translations.zh, {
+  tools: {
+    virtualLabDesc: "倾斜烧杯，并在一个简洁的实验场景里玩颗粒水。",
+  },
+});
+
+translations["zh-Hant"] = deepMerge(translations["zh-Hant"], {
+  tools: {
+    virtualLabDesc: "傾斜燒杯，並在一個簡潔的實驗場景裡玩顆粒水。",
+  },
+});
+
+translations.fr = deepMerge(translations.fr, {
+  tools: {
+    virtualLabDesc: "Inclinez un becher et jouez avec une eau en particules dans une scene de labo simple.",
+  },
+});
+
+translations.ru = deepMerge(translations.ru, {
+  tools: {
+    virtualLabDesc: "Наклоняйте стакан и играйте с водой из частиц в простой лабораторной сцене.",
+  },
+});
+
+translations.fa = deepMerge(translations.fa, {
+  tools: {
+    virtualLabDesc: "بشر را کج کنید و با آب ذره ای در یک صحنه ساده آزمایشگاهی بازی کنید.",
+  },
+});
+
+translations.ur = deepMerge(translations.ur, {
+  tools: {
+    virtualLabDesc: "بیکر کو جھکائیں اور ایک سادہ لیب منظر میں ذراتی پانی کے ساتھ کھیلیں۔",
+  },
+});
+
+translations.tl = deepMerge(translations.tl, {
+  tools: {
+    virtualLabDesc: "Ikiling ang beaker at paglaruan ang particle water sa isang simpleng eksena ng lab.",
+  },
+});
+
+// --- Added translations for Virtual Lab ---
+translations["zh-Hant"] = deepMerge(translations["zh-Hant"], {
+  "virtualLabTutorial": {
+    "sceneTitle": "虛擬化學實驗室",
+    "sceneDesc": "歡迎來到虛擬實驗室！這是一個基於物理的互動遊樂場，你可以測試不同金屬的反應性。",
+    "beakerTitle": "互動燒杯",
+    "beakerDesc": "你可以拖動燒杯，或者從頂部旋轉傾倒。使用下方的按鈕加水或清空。",
+    "metalTitle": "金屬樣本",
+    "metalDesc": "抓住這個金屬方塊，把它丟進水裡看反應。有些元素的反應比其他元素劇烈得多！",
+    "elementPickerTitle": "更改元素",
+    "elementPickerDesc": "點擊這裡選擇不同的金屬來測試。試著比較鹼金屬和鹼土金屬的反應差異。",
+    "thermoTitle": "溫度計",
+    "thermoDesc": "注意觀察放熱反應中釋放熱量時的溫度峰值！"
+  },
+  "virtualLab": {
+    "addWater": "加水",
+    "removeWater": "清空所有水",
+    "beakerAria": "可拖動燒杯",
+    "reset": "重置",
+    "element": "元素"
+  }
+});
+translations["fr"] = deepMerge(translations["fr"], {
+  "virtualLabTutorial": {
+    "sceneTitle": "Laboratoire virtuel",
+    "sceneDesc": "Bienvenue dans le laboratoire virtuel ! Il s’agit d’un terrain de jeu interactif basé sur la physique.",
+    "beakerTitle": "Bécher interactif",
+    "beakerDesc": "Vous pouvez faire glisser le bécher ou le faire pivoter. Ajoutez de l’eau à l’aide des boutons.",
+    "metalTitle": "Échantillon de métal",
+    "metalDesc": "Saisissez ce cube métallique et déposez-le dans l’eau pour voir la réaction.",
+    "elementPickerTitle": "Changer d’élément",
+    "elementPickerDesc": "Cliquez ici pour choisir un autre métal à tester.",
+    "thermoTitle": "Thermomètre",
+    "thermoDesc": "Observez le pic de température pendant les réactions exothermiques !"
+  },
+  "virtualLab": {
+    "addWater": "Ajouter l’eau",
+    "removeWater": "Vider l’eau",
+    "beakerAria": "Bécher",
+    "reset": "Réinitialiser",
+    "element": "Élément"
+  }
+});
+translations["ru"] = deepMerge(translations["ru"], {
+  "virtualLabTutorial": {
+    "sceneTitle": "Виртуальная лаборатория",
+    "sceneDesc": "Добро пожаловать в виртуальную лабораторию! Это интерактивная площадка.",
+    "beakerTitle": "Интерактивный стакан",
+    "beakerDesc": "Вы можете перетаскивать стакан. Добавьте воду с помощью кнопок.",
+    "metalTitle": "Образец металла",
+    "metalDesc": "Поместите куб в воду, чтобы увидеть реакцию.",
+    "elementPickerTitle": "Изменить элемент",
+    "elementPickerDesc": "Нажмите здесь, чтобы выбрать другой металл.",
+    "thermoTitle": "Термометр",
+    "thermoDesc": "Следите за всплеском температуры во время реакций!"
+  },
+  "virtualLab": {
+    "addWater": "Добавить воду",
+    "removeWater": "Удалить воду",
+    "beakerAria": "Стакан",
+    "reset": "Сброс",
+    "element": "Элемент"
+  }
+});
+translations["fa"] = deepMerge(translations["fa"], {
+  "virtualLabTutorial": {
+    "sceneTitle": "آزمایشگاه مجازی",
+    "sceneDesc": "به آزمایشگاه مجازی خوش آمدید!",
+    "beakerTitle": "بشر تعاملی",
+    "beakerDesc": "می‌توانید بشر را بکشید یا بچرخانید. با استفاده از دکمه‌ها آب اضافه کنید.",
+    "metalTitle": "نمونه فلزی",
+    "metalDesc": "این مکعب را بگیرید و در آب بیندازید.",
+    "elementPickerTitle": "تغییر عنصر",
+    "elementPickerDesc": "برای انتخاب فلز دیگر اینجا کلیک کنید.",
+    "thermoTitle": "دماسنج",
+    "thermoDesc": "افزایش دما را در واکنش‌های گرمازا تماشا کنید!"
+  },
+  "virtualLab": {
+    "addWater": "افزودن آب",
+    "removeWater": "تخلیه آب",
+    "beakerAria": "بشر",
+    "reset": "بازنشانی",
+    "element": "عنصر"
+  }
+});
+translations["ur"] = deepMerge(translations["ur"], {
+  "virtualLabTutorial": {
+    "sceneTitle": "ورچوئل لیبارٹری",
+    "sceneDesc": "ورچوئل لیب میں خوش آمدید!",
+    "beakerTitle": "انٹرایکٹو بیکر",
+    "beakerDesc": "آپ بیکر کو گھسیٹ سکتے ہیں۔ پانی شامل کرنے کے لیے بٹن کا استعمال کریں۔",
+    "metalTitle": "دھاتی نمونہ",
+    "metalDesc": "اس مکعب کو پانی میں ڈال کر ردعمل دیکھیں۔",
+    "elementPickerTitle": "عنصر تبدیل کریں",
+    "elementPickerDesc": "دوسری دھات منتخب کرنے کے لیے یہاں کلک کریں۔",
+    "thermoTitle": "تھرمامیٹر",
+    "thermoDesc": "گرمی خارج ہونے پر درجہ حرارت میں اضافہ دیکھیں!"
+  },
+  "virtualLab": {
+    "addWater": "پانی شامل کریں",
+    "removeWater": "پانی ہٹائیں",
+    "beakerAria": "بیکر",
+    "reset": "ری سیٹ",
+    "element": "عنصر"
+  }
+});
+translations["tl"] = deepMerge(translations["tl"], {
+  "virtualLabTutorial": {
+    "sceneTitle": "Virtual Chemistry Lab",
+    "sceneDesc": "Welcome sa Virtual Lab! Isa itong interactive playground para sa mga metal.",
+    "beakerTitle": "Interactive Beaker",
+    "beakerDesc": "Maaari mong i-drag ang beaker. Magdagdag ng tubig gamit ang mga button.",
+    "metalTitle": "Metal Sample",
+    "metalDesc": "I-drop ang metal cube sa tubig para makita ang reaksyon.",
+    "elementPickerTitle": "Baguhin ang Element",
+    "elementPickerDesc": "I-click dito para pumili ng ibang metal.",
+    "thermoTitle": "Thermometer",
+    "thermoDesc": "Panoorin ang pagtaas ng temperatura!"
+  },
+  "virtualLab": {
+    "addWater": "Magdagdag ng Tubig",
+    "removeWater": "Alisin ang Tubig",
+    "beakerAria": "Beaker",
+    "reset": "I-reset",
+    "element": "Element"
+  }
+});
+
+// --- Added missing balancer mode translations ---
+translations["ru"] = deepMerge(translations["ru"], {
+  "balancer": {
+    "modeBalance": "Уравнять",
+    "modePredict": "Прогноз",
+    "reactants": "Реагенты",
+    "products": "Продукты",
+    "autoBalance": "Авто-баланс",
+    "clear": "Очистить"
+  }
+});
+translations["fr"] = deepMerge(translations["fr"], {
+  "balancer": {
+    "modeBalance": "Équilibrer",
+    "modePredict": "Prédire",
+    "reactants": "Réactifs",
+    "products": "Produits",
+    "autoBalance": "Auto-équilibrage",
+    "clear": "Effacer"
+  }
+});
+translations["zh-Hant"] = deepMerge(translations["zh-Hant"], {
+  "balancer": {
+    "modeBalance": "配平模式",
+    "modePredict": "預測模式",
+    "reactants": "反應物",
+    "products": "生成物",
+    "autoBalance": "自動配平",
+    "clear": "清除"
+  }
+});
+translations["fa"] = deepMerge(translations["fa"], {
+  "balancer": {
+    "modeBalance": "موازنه",
+    "modePredict": "پیش‌بینی",
+    "reactants": "واکنش‌دهنده‌ها",
+    "products": "محصولات",
+    "autoBalance": "موازنه خودکار",
+    "clear": "پاک کردن"
+  }
+});
+translations["ur"] = deepMerge(translations["ur"], {
+  "balancer": {
+    "modeBalance": "توازن",
+    "modePredict": "پیش گوئی",
+    "reactants": "ری ایکٹنٹس",
+    "products": "پراڈکٹس",
+    "autoBalance": "خودکار توازن",
+    "clear": "صاف کریں"
+  }
+});
+translations["tl"] = deepMerge(translations["tl"], {
+  "balancer": {
+    "modeBalance": "Balanse",
+    "modePredict": "Hula",
+    "reactants": "Mga Reactant",
+    "products": "Mga Produkto",
+    "autoBalance": "Auto Balance",
+    "clear": "Linisin"
+  }
+});
+
+// --- Full RU balancer translations ---
+translations["ru"] = deepMerge(translations["ru"], {
+  "balancer": {
+    "title": "Балансировка уравнений",
+    "modeBalance": "Уравнять",
+    "modePredict": "Прогноз",
+    "reactants": "Реагенты",
+    "reactantsPlaceholder": "например, Fe + O2",
+    "products": "Продукты",
+    "productsPlaceholder": "например, Fe2O3",
+    "autoBalance": "Авто-баланс",
+    "clear": "Очистить",
+    "enterEquation": "Введите несбалансированное уравнение",
+    "addProducts": "Добавьте продукты для завершения",
+    "addReactants": "Добавьте реагенты для завершения",
+    "balanced": "Идеально сбалансировано!",
+    "notBalanced": "Не сбалансировано",
+    "left": "слева",
+    "right": "справа",
+    "copied": "Скопировано!",
+    "couldNotBalance": "Не удалось автоматически сбалансировать",
+    "clickToCopy": "Нажмите, чтобы скопировать",
+    "checkInputAgain": "Проверьте ввод и попробуйте снова",
+    "invalidFormulaEx": "Неверная химическая формула: {msg}",
+    "suspiciousFormula": "Эта формула выглядит необычно. Проверьте индексы.",
+    "noSolutionConserve": "Формулы верны, но эти вещества не сохраняют атомы. Попробуйте добавить пропущенный реагент или продукт.",
+    "noSolutionGeneral": "Это уравнение не может быть сбалансировано в таком виде. Возможно, не хватает вещества.",
+    "splitReactantFormulaTitle": "Проверьте формулу реагента",
+    "splitProductFormulaTitle": "Проверьте формулу продукта",
+    "splitFormulaDesc": "Вы имели в виду <code>{suggestion}</code>?",
+    "splitFormulaTitleFallback": "Проверьте формат формулы",
+    "splitFormulaDescFallback": "Удалите пробелы внутри формулы."
+  }
+});
+
+// --- Global Translation Fix for missing keys ---
+translations["en"] = deepMerge(translations["en"], {
+  "balancer": {
+    "modeBalance": "Balance",
+    "modePredict": "Predict"
+  },
+  "predictor": {
+    "predict": "Predict Products"
+  }
+});
+translations["zh"] = deepMerge(translations["zh"], {
+  "balancer": {
+    "modeBalance": "配平模式",
+    "modePredict": "预测模式"
+  },
+  "predictor": {
+    "predict": "预测生成物"
+  }
+});
+translations["zh-Hant"] = deepMerge(translations["zh-Hant"], {
+  "balancer": {
+    "modeBalance": "配平模式",
+    "modePredict": "預測模式"
+  },
+  "predictor": {
+    "predict": "預測生成物"
+  }
+});
+translations["fr"] = deepMerge(translations["fr"], {
+  "balancer": {
+    "modeBalance": "Équilibrer",
+    "modePredict": "Prédire"
+  },
+  "predictor": {
+    "predict": "Prédire les produits"
+  }
+});
+translations["ru"] = deepMerge(translations["ru"], {
+  "balancer": {
+    "modeBalance": "Уравнять",
+    "modePredict": "Прогноз"
+  },
+  "predictor": {
+    "predict": "Предсказать продукты"
+  }
+});
+translations["fa"] = deepMerge(translations["fa"], {
+  "balancer": {
+    "modeBalance": "موازنه",
+    "modePredict": "پیش‌بینی"
+  },
+  "predictor": {
+    "predict": "پیش‌بینی محصولات"
+  }
+});
+translations["ur"] = deepMerge(translations["ur"], {
+  "balancer": {
+    "modeBalance": "توازن",
+    "modePredict": "پیش گوئی"
+  },
+  "predictor": {
+    "predict": "پراڈکٹس کی پیشگوئی"
+  }
+});
+translations["tl"] = deepMerge(translations["tl"], {
+  "balancer": {
+    "modeBalance": "Balanse",
+    "modePredict": "Hula"
+  },
+  "predictor": {
+    "predict": "Hulaan ang mga produkto"
+  }
+});
+
+// --- Onboarding and Send Button Patch ---
+translations["en"] = deepMerge(translations["en"], {
+  "settings": {
+    "sendBtnText": "Send"
+  },
+  "onboarding": {
+    "phrases": [
+      "Welcome to Zperiod",
+      "Interactive Chemistry",
+      "Master the Elements",
+      "Molecular Wonders"
+    ],
+    "start": "Start"
+  }
+});
+translations["zh"] = deepMerge(translations["zh"], {
+  "settings": {
+    "sendBtnText": "发送"
+  },
+  "onboarding": {
+    "phrases": [
+      "欢迎来到 Zperiod",
+      "互动化学世界",
+      "探索元素奥秘",
+      "分子之美"
+    ],
+    "start": "开始"
+  }
+});
+translations["zh-Hant"] = deepMerge(translations["zh-Hant"], {
+  "settings": {
+    "sendBtnText": "送出"
+  },
+  "onboarding": {
+    "phrases": [
+      "歡迎來到 Zperiod",
+      "互動化學世界",
+      "探索元素奧秘",
+      "分子之美"
+    ],
+    "start": "開始"
+  }
+});
+translations["fr"] = deepMerge(translations["fr"], {
+  "settings": {
+    "sendBtnText": "Envoyer"
+  },
+  "onboarding": {
+    "phrases": [
+      "Bienvenue sur Zperiod",
+      "Chimie Interactive",
+      "Maîtrisez les éléments",
+      "Merveilles moléculaires"
+    ],
+    "start": "Démarrer"
+  }
+});
+translations["ru"] = deepMerge(translations["ru"], {
+  "settings": {
+    "sendBtnText": "Отправить"
+  },
+  "onboarding": {
+    "phrases": [
+      "Добро пожаловать в Zperiod",
+      "Интерактивная химия",
+      "Изучайте элементы",
+      "Молекулярные чудеса"
+    ],
+    "start": "Начать"
+  }
+});
+translations["fa"] = deepMerge(translations["fa"], {
+  "settings": {
+    "sendBtnText": "ارسال"
+  },
+  "onboarding": {
+    "phrases": [
+      "به Zperiod خوش آمدید",
+      "شیمی تعاملی",
+      "تسلط بر عناصر",
+      "عجایب مولکولی"
+    ],
+    "start": "شروع"
+  }
+});
+translations["ur"] = deepMerge(translations["ur"], {
+  "settings": {
+    "sendBtnText": "بھیجیں"
+  },
+  "onboarding": {
+    "phrases": [
+      "Zperiod میں خوش آمدید",
+      "انٹرایکٹو کیمسٹری",
+      "عناصر پر مہارت",
+      "مالیکیولی عجائبات"
+    ],
+    "start": "شروع کریں"
+  }
+});
+translations["tl"] = deepMerge(translations["tl"], {
+  "settings": {
+    "sendBtnText": "Ipadala"
+  },
+  "onboarding": {
+    "phrases": [
+      "Maligayang pagdating sa Zperiod",
+      "Interactive na Chemistry",
+      "Kabisaduhin ang mga Elemento",
+      "Mga kamangha-manghang molekular"
+    ],
+    "start": "Simulan"
+  }
 });
