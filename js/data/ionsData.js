@@ -1,10 +1,11 @@
 // =============================================================================
-// Ions Data - Cleaned & Final
+// Ions Data - Extracted from script.js
 // Pure static data: ionsData array with all ion definitions
-// All text pre-cleaned, no runtime transformation needed
 // =============================================================================
 
 export const ionsData = [
+  // ===== 1. 基础单原子 (Basic Monatomic) =====
+  // +1 阳离子 - H+ Universal Schema Data
   {
     id: "h_plus",
     symbol: "H",
@@ -20,42 +21,43 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Cation / Acid",
-        source: "Acid in water, proton donor",
-        phase: "Aqueous, colorless",
-        valence: "No bound electrons",
-        keyCompounds: "HCl, H₂SO₄"
+        source: "Acids (HCl, H₂SO₄) - Loss of 1 e⁻",
+        phase: "Aqueous (aq as H₃O⁺) - Colorless",
+        valence: "0 (Empty Shell)",
+        keyCompounds: "HCl (Stomach Acid), H₂SO₄ (Battery Acid)",
       },
       level2: {
         molarMass: "1.008 g/mol",
         subatomic: "1 p⁺ | 0 e⁻",
-        statusBanner: "Defines acidity",
+        statusBanner: "The Definition of Acidity (pH)",
         slotA: {
           label: "LITMUS TEST",
           result: "Turns Red",
-          desc: "Turns blue paper red"
+          desc: "Turns Blue Paper Red",
         },
         slotB: {
           label: "REACTIVITY",
           result: "Fizzes",
-          desc: "Reacts with carbonates"
-        }
+          desc: "w/ Carbonates",
+        },
       },
       level3: {
-        config: "No electron shell",
-        oxidation: "+1 only",
-        ionicRadius: "Bare proton",
-        hydrationEnthalpy: "-1091 kJ/mol",
-        coordination: "Usually as H₃O⁺ in water"
+        config: "[1s]⁰ (Empty)",
+        oxidation: "+1",
+        ionicRadius: "~0.84 fm (Bare Nucleus)",
+        hydrationEnthalpy: "-1091 kJ/mol (Very High)",
+        coordination: "1 (Bonds to Lone Pair)",
       },
       level4: {
-        discoveryYear: "1884",
+        discoveryYear: "1884 (Concept Defined)",
         discoveredBy: "Svante Arrhenius",
-        namedBy: "Arrhenius acid concept",
-        stse: "Acid rain · ocean acidification",
-        commonUses: "Acids · batteries",
-        hazards: "Strongly corrosive"
-      }
-    }
+        namedBy: "Greek Hydro (Water) + Genes (Forming)",
+        stse: "Ocean Acidification (Coral damage); Acid Rain (Forest damage).",
+        commonUses:
+          "Digestion (Stomach Acid); Car Batteries (Electrolyte).",
+        hazards: "Corrosive (Chemical burns).",
+      },
+    },
   },
   {
     id: "li_plus",
@@ -72,10 +74,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Alkali Metal Cation",
-        source: "Group 1 atom, loses 1 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[He]",
-        keyCompounds: "Li-ion, Li₂CO₃"
+        source: "Group 1 Element - Loss of 1 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "0 (Stable Duplet)",
+        keyCompounds: "Li-ion (Battery), Li₂CO₃ (Meds)",
       },
       level2: {
         molarMass: "6.94 g/mol",
@@ -84,30 +86,30 @@ export const ionsData = [
         slotA: {
           label: "FLAME TEST",
           result: "Crimson Red",
-          desc: "670 nm"
+          desc: "(670 nm)",
         },
         slotB: {
           label: "BATTERY FLOW",
           result: "Ion Transport",
-          desc: "In lithium-ion cells"
-        }
+          desc: "In Li-ion Cells",
+        },
       },
       level3: {
-        config: "[1s]²",
+        config: "[1s]² (Stable Duplet)",
         oxidation: "+1",
-        ionicRadius: "76 pm",
-        hydrationEnthalpy: "-519 kJ/mol",
-        coordination: "4"
+        ionicRadius: "76 pm (Smallest alkali)",
+        hydrationEnthalpy: "-519 kJ/mol (High)",
+        coordination: "4 (Tetrahedral hydration)",
       },
       level4: {
         discoveryYear: "1817",
         discoveredBy: "Johan August Arfwedson",
-        namedBy: "Greek Lithos",
-        stse: "EV Revolution · Geopolitics",
-        commonUses: "Li-ion Batteries · Medicine",
-        hazards: "Toxicity · Corrosive"
-      }
-    }
+        namedBy: "Greek Lithos (Stone)",
+        stse: 'EV Revolution (Batteries); Geopolitics ("White Gold").',
+        commonUses: "Li-ion Batteries (Phones/Cars); Medicine (Bipolar).",
+        hazards: "Toxicity (Kidney impact); Corrosive (LiOH).",
+      },
+    },
   },
   {
     id: "na_plus",
@@ -124,42 +126,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Alkali Metal Cation",
-        source: "Group 1 atom, loses 1 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[Ne]",
-        keyCompounds: "NaCl, Na₂CO₃"
+        source: "Group 1 Element - Loss of 1 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "NaCl (Table Salt), Na₂CO₃ (Soda)",
       },
       level2: {
         molarMass: "22.99 g/mol",
         subatomic: "11 p⁺ | 10 e⁻",
-        statusBanner: "Always Soluble",
+        statusBanner: "Always Soluble (All-Pass Ion)",
         slotA: {
           label: "FLAME TEST",
           result: "Bright Yellow",
-          desc: "589 nm"
+          desc: "(589 nm)",
         },
         slotB: {
           label: "SOLUBILITY",
           result: "Dissolves",
-          desc: "Instantly"
-        }
+          desc: "Instantly",
+        },
       },
       level3: {
-        config: "[Ne]",
+        config: "[Ne] (Stable Octet)",
         oxidation: "+1",
-        ionicRadius: "102 pm",
+        ionicRadius: "102 pm (Shrinks from 186 pm)",
         hydrationEnthalpy: "-406 kJ/mol",
-        coordination: "6"
+        coordination: "6 (Octahedral)",
       },
       level4: {
         discoveryYear: "1807",
         discoveredBy: "Humphry Davy",
-        namedBy: "Latin Natrium",
-        stse: "Public Health · Road Salt Runoff",
-        commonUses: "Nerve Impulses · Street Lights · Food Preservative",
-        hazards: "Safe as ion"
-      }
-    }
+        namedBy: "Latin Natrium (Egyptian Soda)",
+        stse: "Public Health (Hypertension); Road Salt Runoff.",
+        commonUses: "Nerve Impulses; Street Lights; Food Preservative.",
+        hazards: "Safe as ion (Essential nutrient).",
+      },
+    },
   },
   {
     id: "k_plus",
@@ -176,42 +178,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Alkali Metal Cation",
-        source: "Group 1 atom, loses 1 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[Ar]",
-        keyCompounds: "KCl, KNO₃"
+        source: "Group 1 Element - Loss of 1 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "KCl (Fertilizer), KNO₃ (Gunpowder)",
       },
       level2: {
         molarMass: "39.10 g/mol",
         subatomic: "19 p⁺ | 18 e⁻",
-        statusBanner: "Always Soluble",
+        statusBanner: "Always Soluble (All-Pass Ion)",
         slotA: {
           label: "FLAME TEST",
           result: "Lilac / Violet",
-          desc: "766 nm"
+          desc: "(766 nm)",
         },
         slotB: {
           label: "GROWTH",
           result: "Fertilizer Effect",
-          desc: "N-P-K Nutrient"
-        }
+          desc: "N-P-K Nutrient",
+        },
       },
       level3: {
-        config: "[Ar]",
+        config: "[Ar] (Stable Octet)",
         oxidation: "+1",
-        ionicRadius: "138 pm",
+        ionicRadius: "138 pm (Larger than Na)",
         hydrationEnthalpy: "-322 kJ/mol",
-        coordination: "6-8"
+        coordination: "6-8",
       },
       level4: {
         discoveryYear: "1807",
         discoveredBy: "Humphry Davy",
-        namedBy: "Arabic al-qali",
-        stse: "Food Security · Radiation",
-        commonUses: "N-P-K Fertilizers · Soap · Muscle Function",
-        hazards: "Hyperkalemia · Safe in diet"
-      }
-    }
+        namedBy: "Arabic al-qali (Potash)",
+        stse: "Food Security (Fertilizers); Radiation (K-40).",
+        commonUses: "N-P-K Fertilizers; Soap; Muscle Function.",
+        hazards: "Hyperkalemia (Cardiac arrest); Safe in diet.",
+      },
+    },
   },
   {
     id: "ag_plus",
@@ -228,43 +230,45 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Transition Metal Cation",
-        source: "Group 11 atom, loses 1 e⁻",
-        phase: "Aqueous or precipitate",
-        valence: "Filled d shell",
-        keyCompounds: "AgNO₃, AgCl"
+        source: "Group 11 Element - Loss of 1 e⁻",
+        phase: "Aqueous / Precipitate",
+        valence: "18 (Pseudo-Noble Gas)",
+        keyCompounds: "AgNO₃ (Soluble), AgCl (White Ppt)",
       },
       level2: {
         molarMass: "107.87 g/mol",
         subatomic: "47 p⁺ | 46 e⁻",
-        statusBanner: "Insoluble with Halides",
+        statusBanner: "Insoluble with Halides (Cl/Br/I)",
         slotA: {
           label: "PRECIPITATE",
           result: "White Cloud",
-          desc: "w / Cl⁻"
+          desc: "w/ Cl⁻",
         },
         slotB: {
           label: "PHOTOSENSITIVE",
           result: "Darkens",
-          desc: "in Light"
-        }
+          desc: "in Light",
+        },
       },
       level3: {
-        config: "[Kr] 4d¹⁰",
+        config: "[Kr] 4d¹⁰ (Full d-shell)",
         oxidation: "+1",
-        ionicRadius: "115 pm",
+        ionicRadius: "115 pm (Similar to K⁺)",
         hydrationEnthalpy: "-473 kJ/mol",
-        coordination: "2"
+        coordination: "2 (Linear)",
       },
       level4: {
         discoveryYear: "Prehistoric",
         discoveredBy: "Unknown",
         namedBy: "Latin Argentum",
-        stse: "Photo-Waste · Nanosilver impact",
-        commonUses: "Photography · Wound Care · Electronics",
-        hazards: "Toxic to aquatic life · Argyria"
-      }
-    }
+        stse: "Photo-Waste (History); Nanosilver impact.",
+        commonUses: "Photography (Film); Wound Care; Electronics.",
+        hazards: "Toxic to aquatic life; Argyria (Blue skin).",
+      },
+    },
   },
+
+  // +2 阳离子
   {
     id: "mg_2plus",
     symbol: "Mg",
@@ -280,10 +284,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Alkaline Earth Cation",
-        source: "Group 2 atom, loses 2 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[Ne]",
-        keyCompounds: "MgO, Mg, MgSO₄"
+        source: "Group 2 Element - Loss of 2 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "0 (Stable Octet)",
+        keyCompounds: "MgO, Mg (Flash Powder), MgSO₄ (Epsom)",
       },
       level2: {
         molarMass: "24.31 g/mol",
@@ -292,30 +296,30 @@ export const ionsData = [
         slotA: {
           label: "PRECIPITATE",
           result: "White Gel",
-          desc: "w / Hydroxide"
+          desc: "w/ Hydroxide",
         },
         slotB: {
           label: "CHLOROPHYLL",
           result: "Central Atom",
-          desc: "Power"
-        }
+          desc: "Power",
+        },
       },
       level3: {
-        config: "[Ne]",
+        config: "[Ne] (Stable Octet)",
         oxidation: "+2",
-        ionicRadius: "72 pm",
-        hydrationEnthalpy: "-1921 kJ/mol",
-        coordination: "6"
+        ionicRadius: "72 pm (High charge density)",
+        hydrationEnthalpy: "-1921 kJ/mol (Very High)",
+        coordination: "6 (Octahedral)",
       },
       level4: {
         discoveryYear: "1808",
         discoveredBy: "Humphry Davy",
-        namedBy: "Greek Magnesia",
-        stse: "Hard Water Scale · Photosynthesis engine",
-        commonUses: "Alloys · Antacids",
-        hazards: "Safe"
-      }
-    }
+        namedBy: "Greek Magnesia (District)",
+        stse: "Hard Water Scale; Photosynthesis engine.",
+        commonUses: "Alloys (Car parts); Antacids (Milk of Magnesia).",
+        hazards: "Safe (Essential nutrient).",
+      },
+    },
   },
   {
     id: "ca_2plus",
@@ -332,42 +336,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Alkaline Earth Cation",
-        source: "Group 2 atom, loses 2 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[Ar]",
-        keyCompounds: "CaCO₃, CaCl₂"
+        source: "Group 2 Element - Loss of 2 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "0 (Stable Octet)",
+        keyCompounds: "CaCO₃ (Limestone), CaCl₂ (Road Salt)",
       },
       level2: {
         molarMass: "40.08 g/mol",
         subatomic: "20 p⁺ | 18 e⁻",
-        statusBanner: "Insoluble with Carbonate",
+        statusBanner: "Insoluble with Carbonate (CO₃²⁻)",
         slotA: {
           label: "FLAME TEST",
           result: "Brick Red",
-          desc: "Orange-red"
+          desc: "/ Orange",
         },
         slotB: {
-          label: "BIOLOGICAL ROLE",
+          label: "STRUCTURE",
           result: "Mineralization",
-          desc: "Bones and shells"
-        }
+          desc: "Bones & Shells",
+        },
       },
       level3: {
-        config: "[Ar]",
+        config: "[Ar] (Stable Octet)",
         oxidation: "+2",
-        ionicRadius: "100 pm",
-        hydrationEnthalpy: "-1577 kJ/mol",
-        coordination: "6-8"
+        ionicRadius: "100 pm (Shrinks from 197 pm)",
+        hydrationEnthalpy: "-1577 kJ/mol (High)",
+        coordination: "6-8",
       },
       level4: {
         discoveryYear: "1808",
         discoveredBy: "Humphry Davy",
-        namedBy: "Latin Calx",
-        stse: "Concrete Industry · Ocean Acidification",
-        commonUses: "Cement · Ice Melting · Bone Health",
-        hazards: "Safe"
-      }
-    }
+        namedBy: "Latin Calx (Lime)",
+        stse: "Concrete Industry; Ocean Acidification (CaCO₃).",
+        commonUses: "Cement; Ice Melting; Bone Health.",
+        hazards: "Safe (Essential nutrient).",
+      },
+    },
   },
   {
     id: "ba_2plus",
@@ -384,42 +388,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Heavy Alkaline Earth Cation",
-        source: "Group 2 atom, loses 2 e⁻",
-        phase: "Aqueous or insoluble solid",
-        valence: "[Xe]",
-        keyCompounds: "BaSO₄, BaCl₂"
+        source: "Group 2 Element - Loss of 2 e⁻",
+        phase: "Aqueous / Insoluble Solid",
+        valence: "0 (Stable Octet)",
+        keyCompounds: "BaSO₄ (Barium Meal), BaCl₂ (Toxic)",
       },
       level2: {
         molarMass: "137.33 g/mol",
         subatomic: "56 p⁺ | 54 e⁻",
-        statusBanner: "Insoluble with Sulfate",
+        statusBanner: "Insoluble with Sulfate (SO₄²⁻)",
         slotA: {
           label: "FLAME TEST",
           result: "Apple Green",
-          desc: "524 nm"
+          desc: "(524 nm)",
         },
         slotB: {
           label: "IMAGING",
           result: "X-Ray Shield",
-          desc: "X-ray contrast use"
-        }
+          desc: "(Contrast)",
+        },
       },
       level3: {
-        config: "[Xe]",
+        config: "[Xe] (Stable Octet)",
         oxidation: "+2",
-        ionicRadius: "135 pm",
+        ionicRadius: "135 pm (Shrinks from 217 pm)",
         hydrationEnthalpy: "-1305 kJ/mol",
-        coordination: "8-12"
+        coordination: "8-12",
       },
       level4: {
         discoveryYear: "1808",
         discoveredBy: "Humphry Davy",
-        namedBy: "Greek Barys",
-        stse: "Medical Imaging Safety · Drilling Fluids",
-        commonUses: "GI Tract X-rays · Fireworks",
-        hazards: "Toxic if soluble"
-      }
-    }
+        namedBy: "Greek Barys (Heavy)",
+        stse: "Medical Imaging Safety; Drilling Fluids.",
+        commonUses: "GI Tract X-rays; Fireworks (Green).",
+        hazards: "Toxic (Muscle paralysis) if soluble.",
+      },
+    },
   },
   {
     id: "zn_2plus",
@@ -436,43 +440,45 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Transition Metal Cation",
-        source: "Group 12 atom, loses 2 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "Filled d shell",
-        keyCompounds: "ZnO, ZnCl₂"
+        source: "Group 12 Element - Loss of 2 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "18 (Pseudo-Noble Gas)",
+        keyCompounds: "ZnO (Sunscreen), ZnCl₂ (Flux)",
       },
       level2: {
         molarMass: "65.38 g/mol",
         subatomic: "30 p⁺ | 28 e⁻",
-        statusBanner: "Amphoteric",
+        statusBanner: "Amphoteric (Dissolves in Acid/Base)",
         slotA: {
           label: "PRECIPITATE",
           result: "White Gel",
-          desc: ""
+          desc: "(Dissolves)",
         },
         slotB: {
           label: "GALVANIZE",
           result: "Steel Protection",
-          desc: "Anti-Corrosion"
-        }
+          desc: "Anti-Corrosion",
+        },
       },
       level3: {
-        config: "[Ar] 3d¹⁰",
+        config: "[Ar] 3d¹⁰ (Full d-shell)",
         oxidation: "+2",
-        ionicRadius: "74 pm",
+        ionicRadius: "74 pm (Shrinks from 134 pm)",
         hydrationEnthalpy: "-2046 kJ/mol",
-        coordination: "4 or 6"
+        coordination: "4 (Tetrahedral) or 6",
       },
       level4: {
         discoveryYear: "1746",
         discoveredBy: "Andreas Marggraf",
-        namedBy: "German Zink",
-        stse: "Corrosion Control · Immune Support",
-        commonUses: "Rust Protection · Sunscreen · Alloys",
-        hazards: "Metal fume fever"
-      }
-    }
+        namedBy: "German Zink (Prong)",
+        stse: "Corrosion Control; Immune Support.",
+        commonUses: "Rust Protection; Sunscreen; Alloys (Brass).",
+        hazards: "Metal fume fever (if inhaled).",
+      },
+    },
   },
+
+  // +3 阳离子
   {
     id: "al_3plus",
     symbol: "Al",
@@ -488,43 +494,45 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Post-Transition Cation",
-        source: "Group 13 atom, loses 3 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[Ne]",
-        keyCompounds: "Al₂O₃, KAl₂"
+        source: "Group 13 Element - Loss of 3 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "0 (Stable Octet)",
+        keyCompounds: "Al₂O₃ (Sapphire), KAl(SO₄)₂ (Alum)",
       },
       level2: {
         molarMass: "26.98 g/mol",
         subatomic: "13 p⁺ | 10 e⁻",
-        statusBanner: "Amphoteric Ppt",
+        statusBanner: "Amphoteric Ppt (White Gel)",
         slotA: {
           label: "OXIDATION",
           result: "Transparent Shield",
-          desc: "Al₂O₃ Layer"
+          desc: "Al₂O₃ Layer",
         },
         slotB: {
           label: "PRECIPITATE",
           result: "White Gel",
-          desc: "Amphoteric"
-        }
+          desc: "Amphoteric",
+        },
       },
       level3: {
-        config: "[Ne]",
+        config: "[Ne] (Stable Octet)",
         oxidation: "+3",
-        ionicRadius: "54 pm",
-        hydrationEnthalpy: "-4665 kJ/mol",
-        coordination: "6"
+        ionicRadius: "54 pm (Tiny & Highly Charged)",
+        hydrationEnthalpy: "-4665 kJ/mol (Extreme)",
+        coordination: "6 (Octahedral)",
       },
       level4: {
         discoveryYear: "1825",
         discoveredBy: "Hans Christian Oersted",
-        namedBy: "Latin Alumen",
-        stse: "Recycling Efficiency · Red Mud Waste",
-        commonUses: "Aircraft Alloys · Cans · Water Treatment",
-        hazards: "Neurotoxicity concerns"
-      }
-    }
+        namedBy: "Latin Alumen (Bitter salt)",
+        stse: "Recycling Efficiency; Red Mud Waste.",
+        commonUses: "Aircraft Alloys; Cans; Water Treatment.",
+        hazards: "Neurotoxicity concerns.",
+      },
+    },
   },
+
+  // -1 阴离子
   {
     id: "f_minus",
     symbol: "F",
@@ -540,42 +548,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Halogen Anion",
-        source: "Group 17 atom, gains 1 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[Ne]",
-        keyCompounds: "NaF, CaF₂"
+        source: "Group 17 Element - Gain of 1 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "NaF (Toothpaste), CaF₂ (Fluorite)",
       },
       level2: {
         molarMass: "19.00 g/mol",
         subatomic: "9 p⁺ | 10 e⁻",
-        statusBanner: "Insoluble with Calcium",
+        statusBanner: "Insoluble with Calcium (Ca²⁺)",
         slotA: {
           label: "PRECIPITATE",
           result: "White Solid",
-          desc: "w / Ca²⁺"
+          desc: "w/ Ca²⁺",
         },
         slotB: {
           label: "PROTECTION",
           result: "Hardens Enamel",
-          desc: "Cavity Prevention"
-        }
+          desc: "Cavity Prevention",
+        },
       },
       level3: {
-        config: "[Ne]",
+        config: "[Ne] (Stable Octet)",
         oxidation: "-1",
-        ionicRadius: "133 pm",
+        ionicRadius: "133 pm (Expands from 71 pm)",
         hydrationEnthalpy: "-515 kJ/mol",
-        coordination: "4-8"
+        coordination: "4-8",
       },
       level4: {
         discoveryYear: "1886",
         discoveredBy: "Henri Moissan",
-        namedBy: "Latin Fluere",
-        stse: "Water Fluoridation debate · Teflon pollution",
-        commonUses: "Cavity Prevention · Non-stick pans · Etching",
-        hazards: "Toxic at high levels"
-      }
-    }
+        namedBy: "Latin Fluere (To flow)",
+        stse: "Water Fluoridation debate; Teflon pollution.",
+        commonUses: "Cavity Prevention; Non-stick pans; Etching.",
+        hazards: "Toxic at high levels (Fluorosis).",
+      },
+    },
   },
   {
     id: "cl_minus",
@@ -592,42 +600,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Halogen Anion",
-        source: "Group 17 atom, gains 1 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[Ar]",
-        keyCompounds: "NaCl, AgCl"
+        source: "Group 17 Element - Gain of 1 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "NaCl (Table Salt), AgCl (White Ppt)",
       },
       level2: {
         molarMass: "35.45 g/mol",
         subatomic: "17 p⁺ | 18 e⁻",
-        statusBanner: "Insoluble with Silver",
+        statusBanner: "Insoluble with Silver (Ag⁺)",
         slotA: {
           label: "PRECIPITATE",
           result: "White Cloud",
-          desc: "w / Ag⁺"
+          desc: "w/ Ag⁺",
         },
         slotB: {
           label: "SANITATION",
           result: "Disinfects Water",
-          desc: "Pool & Tap"
-        }
+          desc: "Pool & Tap",
+        },
       },
       level3: {
-        config: "[Ar]",
+        config: "[Ar] (Stable Octet)",
         oxidation: "-1",
-        ionicRadius: "181 pm",
+        ionicRadius: "181 pm (Expands from 99 pm)",
         hydrationEnthalpy: "-381 kJ/mol",
-        coordination: "6"
+        coordination: "6",
       },
       level4: {
         discoveryYear: "1774",
         discoveredBy: "Carl Wilhelm Scheele",
-        namedBy: "Greek Chloros",
-        stse: "Sanitation · Road Salt damage",
-        commonUses: "Table Salt · Stomach Acid · PVC Plastics",
-        hazards: "Safe as ion"
-      }
-    }
+        namedBy: "Greek Chloros (Pale Green)",
+        stse: "Sanitation (Clean Water); Road Salt damage.",
+        commonUses: "Table Salt; Stomach Acid; PVC Plastics.",
+        hazards: "Safe as ion (Essential nutrient).",
+      },
+    },
   },
   {
     id: "br_minus",
@@ -644,42 +652,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Halogen Anion",
-        source: "Group 17 atom, gains 1 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[Kr]",
-        keyCompounds: "AgBr, NaBr"
+        source: "Group 17 Element - Gain of 1 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "AgBr (Film), NaBr (Sedative)",
       },
       level2: {
         molarMass: "79.90 g/mol",
         subatomic: "35 p⁺ | 36 e⁻",
-        statusBanner: "Insoluble with Silver",
+        statusBanner: "Insoluble with Silver (Cream Ppt)",
         slotA: {
           label: "PRECIPITATE",
           result: "Cream Solid",
-          desc: "w / Ag⁺"
+          desc: "w/ Ag⁺",
         },
         slotB: {
           label: "FIRE STOP",
           result: "Extinguisher",
-          desc: "Flame Retardant"
-        }
+          desc: "Flame Retardant",
+        },
       },
       level3: {
-        config: "[Kr]",
+        config: "[Kr] (Stable Octet)",
         oxidation: "-1",
-        ionicRadius: "196 pm",
+        ionicRadius: "196 pm (Expands from 114 pm)",
         hydrationEnthalpy: "-347 kJ/mol",
-        coordination: "6"
+        coordination: "6",
       },
       level4: {
         discoveryYear: "1826",
         discoveredBy: "Antoine Balard",
-        namedBy: "Greek Bromos",
-        stse: "Ozone Depletion · Fire Safety",
-        commonUses: "Photography · Flame Retardants · Hot Tubs",
-        hazards: "Chronic toxicity"
-      }
-    }
+        namedBy: "Greek Bromos (Stench)",
+        stse: "Ozone Depletion; Fire Safety (Retardants).",
+        commonUses: "Photography; Flame Retardants; Hot Tubs.",
+        hazards: "Chronic toxicity (Bromism).",
+      },
+    },
   },
   {
     id: "i_minus",
@@ -696,43 +704,45 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Halogen Anion",
-        source: "Group 17 atom, gains 1 e⁻",
-        phase: "Aqueous, colorless",
-        valence: "[Xe]",
-        keyCompounds: "KI, PbI₂"
+        source: "Group 17 Element - Gain of 1 e⁻",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "KI (Iodized Salt), PbI₂ (Golden Rain)",
       },
       level2: {
         molarMass: "126.90 g/mol",
         subatomic: "53 p⁺ | 54 e⁻",
-        statusBanner: "Insoluble with Pb²⁺",
+        statusBanner: "Insoluble with Pb²⁺ (Yellow)",
         slotA: {
           label: "PRECIPITATE",
           result: "Bright Yellow",
-          desc: "w / Lead"
+          desc: "w/ Lead",
         },
         slotB: {
           label: "THYROID",
           result: "Prevents Goiter",
-          desc: "Iodized Salt"
-        }
+          desc: "Iodized Salt",
+        },
       },
       level3: {
-        config: "[Xe]",
+        config: "[Xe] (Stable Octet)",
         oxidation: "-1",
-        ionicRadius: "220 pm",
+        ionicRadius: "220 pm (Huge Expansion)",
         hydrationEnthalpy: "-305 kJ/mol",
-        coordination: "6"
+        coordination: "6",
       },
       level4: {
         discoveryYear: "1811",
         discoveredBy: "Bernard Courtois",
-        namedBy: "Greek Iodes",
-        stse: "Goiter Prevention · Nuclear Safety",
-        commonUses: "Iodized Salt · Disinfectant · Cloud Seeding",
-        hazards: "Low toxicity"
-      }
-    }
+        namedBy: "Greek Iodes (Violet)",
+        stse: "Goiter Prevention; Nuclear Safety (Pills).",
+        commonUses: "Iodized Salt; Disinfectant; Cloud Seeding.",
+        hazards: "Low toxicity.",
+      },
+    },
   },
+
+  // -2 阴离子
   {
     id: "o_2minus",
     symbol: "O",
@@ -748,42 +758,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Chalcogen Anion",
-        source: "Group 16 atom, gains 2 e⁻",
-        phase: "Usually in solid oxides",
-        valence: "[Ne]",
-        keyCompounds: "MgO, Fe₂O₃, CaO"
+        source: "Group 16 Element - Gain of 2 e⁻",
+        phase: "Solid Oxides (Reacts in water)",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "MgO, Fe₂O₃ (Rust), CaO",
       },
       level2: {
         molarMass: "16.00 g/mol",
         subatomic: "8 p⁺ | 10 e⁻",
-        statusBanner: "Forms Basic Solution",
+        statusBanner: "Forms Basic Solution (OH⁻)",
         slotA: {
           label: "BASICITY",
           result: "Forms Hydroxide",
-          desc: "O²⁻ + H₂O → 2OH⁻"
+          desc: "O²⁻ + H₂O → 2OH⁻",
         },
         slotB: {
           label: "OXIDATION",
           result: "Rusts Iron",
-          desc: "Fe₂O₃"
-        }
+          desc: "Fe₂O₃ (Red-Brown)",
+        },
       },
       level3: {
-        config: "[Ne]",
+        config: "[Ne] (Stable Octet)",
         oxidation: "-2",
-        ionicRadius: "140 pm",
-        hydrationEnthalpy: "Reactive in water",
-        coordination: "4-6"
+        ionicRadius: "140 pm (Expands from 73 pm)",
+        hydrationEnthalpy: "High (Reacts)",
+        coordination: "4-6",
       },
       level4: {
         discoveryYear: "1774",
         discoveredBy: "Priestley / Scheele",
-        namedBy: "Greek Oxys",
-        stse: "Corrosion Costs · Climate Change",
-        commonUses: "Ceramics · Concrete · Ores extraction",
-        hazards: "Caustic"
-      }
-    }
+        namedBy: "Greek Oxys (Acid - mistaken)",
+        stse: "Corrosion Costs; Climate Change (CO₂).",
+        commonUses: "Ceramics; Concrete; Ores extraction.",
+        hazards: "Caustic (Strong base former).",
+      },
+    },
   },
   {
     id: "s_2minus",
@@ -800,43 +810,45 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Chalcogen Anion",
-        source: "Group 16 atom, gains 2 e⁻",
+        source: "Group 16 Element - Gain of 2 e⁻",
         phase: "Solid Ores / Aqueous",
-        valence: "[Ar]",
-        keyCompounds: "H₂S, FeS₂"
+        valence: "8 (Stable Octet)",
+        keyCompounds: "H₂S (Rotten Gas), FeS₂ (Pyrite)",
       },
       level2: {
         molarMass: "32.06 g/mol",
         subatomic: "16 p⁺ | 18 e⁻",
-        statusBanner: "Insoluble Black Ppts",
+        statusBanner: "Insoluble Black Ppts (HgS, CuS)",
         slotA: {
           label: "PRECIPITATE",
           result: "Black Solid",
-          desc: "w / Metals"
+          desc: "w/ Metals",
         },
         slotB: {
           label: "ODOR",
           result: "Rotten Eggs",
-          desc: "H₂S Gas"
-        }
+          desc: "H₂S Gas",
+        },
       },
       level3: {
-        config: "[Ar]",
+        config: "[Ar] (Stable Octet)",
         oxidation: "-2",
-        ionicRadius: "184 pm",
+        ionicRadius: "184 pm (Expands from 100 pm)",
         hydrationEnthalpy: "High",
-        coordination: "6"
+        coordination: "6",
       },
       level4: {
         discoveryYear: "Prehistoric",
         discoveredBy: "Unknown",
         namedBy: "Sanskrit Sulvere",
-        stse: "Acid Mine Drainage · Geothermal Energy",
-        commonUses: "Metal Ores · Paper Industry",
-        hazards: "Toxic Gas"
-      }
-    }
+        stse: "Acid Mine Drainage; Geothermal Energy.",
+        commonUses: "Metal Ores (Sphalerite); Paper Industry.",
+        hazards: "Toxic Gas (H₂S).",
+      },
+    },
   },
+
+  // -3 阴离子
   {
     id: "n_3minus",
     symbol: "N",
@@ -852,42 +864,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Pnictogen Anion",
-        source: "Group 15 atom, gains 3 e⁻",
-        phase: "Solid",
-        valence: "[Ne]",
-        keyCompounds: "NH₃, GaN"
+        source: "Group 15 Element - Gain of 3 e⁻",
+        phase: "Solid (Ceramics)",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "NH₃ (Ammonia), GaN (LED)",
       },
       level2: {
         molarMass: "14.01 g/mol",
         subatomic: "7 p⁺ | 10 e⁻",
-        statusBanner: "Hydrolyzes to Ammonia",
+        statusBanner: "Hydrolyzes to Ammonia (NH₃)",
         slotA: {
           label: "HYDROLYSIS",
           result: "Releases Ammonia",
-          desc: "N³⁻ + 3H₂O → NH₃"
+          desc: "N³⁻ + 3H₂O → NH₃",
         },
         slotB: {
           label: "LED LIGHT",
           result: "Blue Glow",
-          desc: "GaN Technology"
-        }
+          desc: "GaN Technology",
+        },
       },
       level3: {
-        config: "[Ne]",
+        config: "[Ne] (Stable Octet)",
         oxidation: "-3",
-        ionicRadius: "146 pm",
-        hydrationEnthalpy: "Reactive in water",
-        coordination: "4-6"
+        ionicRadius: "146 pm (Huge Expansion)",
+        hydrationEnthalpy: "Violently Reacts",
+        coordination: "4-6",
       },
       level4: {
         discoveryYear: "1772",
         discoveredBy: "Daniel Rutherford",
-        namedBy: "Greek Nitron",
-        stse: "Blue LEDs · Airbag Safety",
-        commonUses: "Semiconductors · Superhard Coatings",
-        hazards: "Reacts violently with water"
-      }
-    }
+        namedBy: "Greek Nitron (Soda)",
+        stse: "Blue LEDs (Nobel Prize); Airbag Safety.",
+        commonUses: "Semiconductors; Superhard Coatings.",
+        hazards: "Reacts violently with water.",
+      },
+    },
   },
   {
     id: "p_3minus",
@@ -904,10 +916,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Pnictogen Anion",
-        source: "Group 15 atom, gains 3 e⁻",
+        source: "Group 15 Element - Gain of 3 e⁻",
         phase: "Solid",
-        valence: "[Ar]",
-        keyCompounds: "AlP, InP"
+        valence: "8 (Stable Octet)",
+        keyCompounds: "AlP (Fumigant), InP (Chip)",
       },
       level2: {
         molarMass: "30.97 g/mol",
@@ -916,31 +928,34 @@ export const ionsData = [
         slotA: {
           label: "TOXIC GAS",
           result: "Phosphine Release",
-          desc: "PH₃"
+          desc: "PH₃ (Lethal)",
         },
         slotB: {
           label: "ELECTRONIC",
           result: "High Speed Chip",
-          desc: "InP Semiconductor"
-        }
+          desc: "InP Semiconductor",
+        },
       },
       level3: {
-        config: "[Ar]",
+        config: "[Ar] (Stable Octet)",
         oxidation: "-3",
-        ionicRadius: "212 pm",
-        hydrationEnthalpy: "Reactive in water",
-        coordination: "4"
+        ionicRadius: "212 pm (Expands from 110 pm)",
+        hydrationEnthalpy: "Reacts",
+        coordination: "4",
       },
       level4: {
         discoveryYear: "1669",
         discoveredBy: "Hennig Brand",
-        namedBy: "Greek Phosphoros",
-        stse: "Pest Control · E-waste Recycling",
-        commonUses: "Semiconductors · Rodenticides",
-        hazards: "Highly Toxic Gas"
-      }
-    }
+        namedBy: "Greek Phosphoros (Light)",
+        stse: "Pest Control; E-waste Recycling.",
+        commonUses: "Semiconductors; Rodenticides.",
+        hazards: "Highly Toxic Gas.",
+      },
+    },
   },
+
+  // ===== 2. 核心酸根 (Core Polyatomic) =====
+  // 含碳
   {
     id: "co3_2minus",
     symbol: "CO₃",
@@ -956,42 +971,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Oxyanion",
-        source: "Carbonic Acid, Loss of 2 H⁺",
-        phase: "Usually solid in salts",
-        valence: "Resonance-stabilized",
-        keyCompounds: "CaCO₃, Na₂CO₃"
+        source: "Carbonic Acid (H₂CO₃) - Loss of 2 H⁺",
+        phase: "Solid (in Salts) - White",
+        valence: "24 Total (Stable Octets)",
+        keyCompounds: "CaCO₃ (Limestone), Na₂CO₃ (Soda Ash)",
       },
       level2: {
         molarMass: "60.01 g/mol",
         subatomic: "1 C + 3 O | Charge -2",
-        statusBanner: "Insoluble",
+        statusBanner: "Insoluble (except Group 1 & NH₄⁺)",
         slotA: {
           label: "ACID TEST",
           result: "CO₂",
-          desc: "Fizzes violently"
+          desc: "Fizzes violently",
         },
         slotB: {
           label: "PRECIPITATE",
           result: "White Solid",
-          desc: "w / Ca²⁺"
-        }
+          desc: "w/ Ca²⁺",
+        },
       },
       level3: {
-        config: "Trigonal Planar",
+        config: "Trigonal Planar (sp²)",
         oxidation: "C is +4",
         ionicRadius: "178 pm",
         hydrationEnthalpy: "-1314 kJ/mol",
-        coordination: "Trigonal Planar"
+        coordination: "Trigonal Planar (120°)",
       },
       level4: {
         discoveryYear: "Ancient",
         discoveredBy: "-",
-        namedBy: "Latin Carbo",
-        stse: "Ocean Acidification · Carbon Cycle · Cement production",
-        commonUses: "Antacids · Glass manufacturing · Baking",
-        hazards: "Safe"
-      }
-    }
+        namedBy: "Latin Carbo (Coal)",
+        stse: "Ocean Acidification; Carbon Cycle; Cement production.",
+        commonUses: "Antacids (Tums); Glass manufacturing; Baking.",
+        hazards: "Safe (Essential blood buffer).",
+      },
+    },
   },
   {
     id: "c2o4_2minus",
@@ -1008,10 +1023,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Organic Anion",
-        source: "Oxalic Acid, Loss of 2 H⁺",
-        phase: "Usually solid in salts",
-        valence: "Dicarboxylate ion",
-        keyCompounds: "CaC₂O₄, K₂C₂O₄"
+        source: "Oxalic Acid - Loss of 2 H⁺",
+        phase: "Solid (in Salts) - White",
+        valence: "34 Total",
+        keyCompounds: "CaC₂O₄ (Kidney Stones), K₂C₂O₄",
       },
       level2: {
         molarMass: "88.02 g/mol",
@@ -1020,31 +1035,33 @@ export const ionsData = [
         slotA: {
           label: "CHELATION",
           result: "Metal Binding",
-          desc: "Grabs Metals Tightly"
+          desc: "Grabs Metals Tightly",
         },
         slotB: {
           label: "CRYSTALS",
           result: "Needles",
-          desc: "Sharp Needles"
-        }
+          desc: "Sharp Needles (Stones)",
+        },
       },
       level3: {
-        config: "Planar",
+        config: "Planar (Twisted in solution)",
         oxidation: "C is +3",
         ionicRadius: "Large planar ion",
         hydrationEnthalpy: "High",
-        coordination: "Two Trigonal Planar units"
+        coordination: "Two Trigonal Planar units",
       },
       level4: {
         discoveryYear: "1776",
         discoveredBy: "Carl Wilhelm Scheele",
-        namedBy: "Latin Oxalis",
-        stse: "Health · Botany",
-        commonUses: "Rust Removers · Bleaching wood",
-        hazards: "Toxic"
-      }
-    }
+        namedBy: "Latin Oxalis (Sorrel plant)",
+        stse: "Health (Kidney stones); Botany (Rhubarb toxicity).",
+        commonUses: "Rust Removers; Bleaching wood.",
+        hazards: "Toxic (Binds blood Calcium).",
+      },
+    },
   },
+
+  // 含氮
   {
     id: "no3_minus",
     symbol: "NO₃",
@@ -1060,42 +1077,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Oxyanion",
-        source: "Nitric Acid, Loss of 1 H⁺",
-        phase: "Aqueous, colorless",
-        valence: "Resonance-stabilized",
-        keyCompounds: "KNO₃, AgNO₃"
+        source: "Nitric Acid (HNO₃) - Loss of 1 H⁺",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "24 Total (Resonance)",
+        keyCompounds: "KNO₃ (Gunpowder), AgNO₃ (Testing)",
       },
       level2: {
         molarMass: "62.00 g/mol",
         subatomic: "1 N + 3 O | Charge -1",
-        statusBanner: "Always Soluble",
+        statusBanner: "Always Soluble (All-Pass Ion)",
         slotA: {
           label: "SOLUBILITY",
           result: "All-Pass",
-          desc: "Never Precipitates"
+          desc: "Never Precipitates",
         },
         slotB: {
           label: "EXPLOSIVE",
           result: "Oxidizer",
-          desc: "Oxidizes Gunpowder"
-        }
+          desc: "Oxidizes Gunpowder",
+        },
       },
       level3: {
-        config: "Trigonal Planar",
+        config: "Trigonal Planar (sp²)",
         oxidation: "N is +5",
         ionicRadius: "179 pm",
         hydrationEnthalpy: "-314 kJ/mol",
-        coordination: "Trigonal Planar"
+        coordination: "Trigonal Planar (120°)",
       },
       level4: {
         discoveryYear: "9th Century",
         discoveredBy: "Chinese Alchemists",
-        namedBy: "Nitre",
-        stse: "Eutrophication · Nitrogen Cycle · Explosives safety",
-        commonUses: "Fertilizers · Gunpowder · Meat curing",
-        hazards: "Runoff pollutes water · Strong Oxidizer"
-      }
-    }
+        namedBy: "Nitre (Saltpeter)",
+        stse: "Eutrophication (Algae); Nitrogen Cycle; Explosives safety.",
+        commonUses: "Fertilizers; Gunpowder; Meat curing.",
+        hazards: "Runoff pollutes water; Strong Oxidizer.",
+      },
+    },
   },
   {
     id: "no2_minus",
@@ -1112,10 +1129,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Oxyanion",
-        source: "Nitrous Acid, Loss of 1 H⁺",
-        phase: "Aqueous, pale yellow",
-        valence: "Lone-pair oxyanion",
-        keyCompounds: "NaNO₂, KNO₂"
+        source: "Nitrous Acid (HNO₂) - Loss of 1 H⁺",
+        phase: "Aqueous (aq) - Pale Yellow",
+        valence: "18 Total (Lone Pair)",
+        keyCompounds: "NaNO₂ (Preservative), KNO₂",
       },
       level2: {
         molarMass: "46.01 g/mol",
@@ -1124,31 +1141,33 @@ export const ionsData = [
         slotA: {
           label: "PRESERVE",
           result: "Antimicrobial",
-          desc: "Keeps Meat Red"
+          desc: "Keeps Meat Red",
         },
         slotB: {
           label: "BENT SHAPE",
           result: "Lone Pair",
-          desc: "Lone Pair Repulsion"
-        }
+          desc: "Lone Pair Repulsion",
+        },
       },
       level3: {
-        config: "Bent",
+        config: "Bent (sp²)",
         oxidation: "N is +3",
         ionicRadius: "192 pm",
         hydrationEnthalpy: "-410 kJ/mol",
-        coordination: "Bent"
+        coordination: "Bent (<120°)",
       },
       level4: {
         discoveryYear: "Industrial Era",
         discoveredBy: "-",
         namedBy: "Greek Nitron",
-        stse: "Food Safety · Blue Baby Syndrome",
-        commonUses: "Cured Meat Preservative · Dyes",
-        hazards: "Toxic"
-      }
-    }
+        stse: "Food Safety (Botulism vs Cancer); Blue Baby Syndrome.",
+        commonUses: "Cured Meat Preservative; Dyes.",
+        hazards: "Toxic (Interferes with oxygen transport).",
+      },
+    },
   },
+
+  // 含硫
   {
     id: "so4_2minus",
     symbol: "SO₄",
@@ -1164,42 +1183,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Oxyanion",
-        source: "Sulfuric Acid, Loss of 2 H⁺",
-        phase: "Aqueous, colorless",
-        valence: "Resonance-stabilized",
-        keyCompounds: "H₂SO₄, CaSO₄⋅2H₂O"
+        source: "Sulfuric Acid (H₂SO₄) - Loss of 2 H⁺",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "32 Total",
+        keyCompounds: "H₂SO₄ (Car Battery), CaSO₄⋅2H₂O (Gypsum)",
       },
       level2: {
         molarMass: "96.06 g/mol",
         subatomic: "1 S + 4 O | Charge -2",
-        statusBanner: "Insoluble with Barium / Lead",
+        statusBanner: "Insoluble with Barium/Lead",
         slotA: {
           label: "PRECIPITATE",
           result: "BaSO₄",
-          desc: "Thick White w / Ba²⁺"
+          desc: "Thick White w/ Ba²⁺",
         },
         slotB: {
           label: "POWER",
           result: "Electrolyte",
-          desc: "Lead-Acid Battery"
-        }
+          desc: "Lead-Acid Battery",
+        },
       },
       level3: {
-        config: "Tetrahedral",
+        config: "Tetrahedral (sp³)",
         oxidation: "S is +6",
         ionicRadius: "242 pm",
         hydrationEnthalpy: "-1059 kJ/mol",
-        coordination: "Tetrahedral"
+        coordination: "Tetrahedral (109.5°)",
       },
       level4: {
         discoveryYear: "8th Century",
         discoveredBy: "Jabir ibn Hayyan",
-        namedBy: "Vitriol",
-        stse: "Acid Rain · Battery Recycling",
-        commonUses: "Car Batteries · Plaster of Paris · Alum",
-        hazards: "Acid rain precursor"
-      }
-    }
+        namedBy: "Vitriol (Glassy)",
+        stse: "Acid Rain (Forest damage); Battery Recycling.",
+        commonUses: "Car Batteries; Plaster of Paris; Alum.",
+        hazards: "Acid rain precursor.",
+      },
+    },
   },
   {
     id: "so3_2minus",
@@ -1216,10 +1235,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Oxyanion",
-        source: "Sulfurous Acid",
-        phase: "Aqueous, colorless",
-        valence: "Lone-pair oxyanion",
-        keyCompounds: "Na₂SO₃, MgSO₃"
+        source: "Sulfurous Acid (H₂SO₃)",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "26 Total (Lone Pair)",
+        keyCompounds: "Na₂SO₃ (Preservative), MgSO₃",
       },
       level2: {
         molarMass: "80.06 g/mol",
@@ -1228,31 +1247,33 @@ export const ionsData = [
         slotA: {
           label: "BLEACHING",
           result: "Deodorize",
-          desc: "Turns Paper White"
+          desc: "Turns Paper White",
         },
         slotB: {
           label: "PUNGENT",
           result: "SO₂ Gas",
-          desc: "Rotten Smell"
-        }
+          desc: "Rotten Smell (Acidified)",
+        },
       },
       level3: {
-        config: "Trigonal Pyramidal",
+        config: "Trigonal Pyramidal (sp³)",
         oxidation: "S is +4",
         ionicRadius: "Large",
         hydrationEnthalpy: "-1300 kJ/mol",
-        coordination: "Trigonal Pyramidal"
+        coordination: "Trigonal Pyramidal (<109.5°)",
       },
       level4: {
         discoveryYear: "Ancient",
-        discoveredBy: "",
+        discoveredBy: "(Burning Sulfur)",
         namedBy: "Sulfur",
-        stse: "Wine Allergies · Acid Rain source",
-        commonUses: "Wine Preservative · Paper Bleaching",
-        hazards: "Asthma trigger · Toxic gas release"
-      }
-    }
+        stse: "Wine Allergies (Sulfites); Acid Rain source.",
+        commonUses: "Wine Preservative; Paper Bleaching.",
+        hazards: "Asthma trigger; Toxic gas release.",
+      },
+    },
   },
+
+  // 含磷
   {
     id: "po4_3minus",
     symbol: "PO₄",
@@ -1268,10 +1289,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Oxyanion",
-        source: "Phosphoric Acid, Loss of 3 H⁺",
-        phase: "Solid / Aqueous",
-        valence: "Resonance-stabilized",
-        keyCompounds: "Ca₃₂, ATP"
+        source: "Phosphoric Acid (H₃PO₄) - Loss of 3 H⁺",
+        phase: "Solid (Bones) / Aqueous",
+        valence: "32 Total",
+        keyCompounds: "Ca₃(PO₄)₂ (Bone), ATP (Energy)",
       },
       level2: {
         molarMass: "94.97 g/mol",
@@ -1280,31 +1301,33 @@ export const ionsData = [
         slotA: {
           label: "PRECIPITATE",
           result: "Yellow",
-          desc: "Yellow w / Silver"
+          desc: "Yellow w/ Silver (Ag₃PO₄)",
         },
         slotB: {
           label: "LIFE",
           result: "Backbone",
-          desc: "DNA Backbone"
-        }
+          desc: "DNA Backbone",
+        },
       },
       level3: {
-        config: "Tetrahedral",
+        config: "Tetrahedral (sp³)",
         oxidation: "P is +5",
         ionicRadius: "238 pm",
         hydrationEnthalpy: "-2765 kJ/mol",
-        coordination: "Tetrahedral"
+        coordination: "Tetrahedral (109.5°)",
       },
       level4: {
         discoveryYear: "1669",
         discoveredBy: "Hennig Brand",
-        namedBy: "Greek Phosphoros",
-        stse: "Eutrophication · Phosphorus Shortage",
-        commonUses: "Fertilizers · Cola · Detergents",
-        hazards: "Water pollution"
-      }
-    }
+        namedBy: "Greek Phosphoros (Light)",
+        stse: "Eutrophication (Algae blooms); Phosphorus Shortage.",
+        commonUses: "Fertilizers; Cola (Acidifier); Detergents.",
+        hazards: "Water pollution (Algae).",
+      },
+    },
   },
+
+  // 含氯
   {
     id: "clo3_minus",
     symbol: "ClO₃",
@@ -1320,10 +1343,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Halogen Oxyanion",
-        source: "Chloric Acid",
-        phase: "Aqueous, colorless",
-        valence: "Lone-pair oxyanion",
-        keyCompounds: "KClO₃, NaClO₃"
+        source: "Chloric Acid (HClO₃)",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "26 Total",
+        keyCompounds: "KClO₃ (Fireworks), NaClO₃",
       },
       level2: {
         molarMass: "83.45 g/mol",
@@ -1332,30 +1355,30 @@ export const ionsData = [
         slotA: {
           label: "EXPLOSION",
           result: "Oxidizer",
-          desc: "Oxidizer for Color"
+          desc: "Oxidizer for Color",
         },
         slotB: {
           label: "HERBICIDE",
           result: "Defoliant",
-          desc: "Kills Weeds"
-        }
+          desc: "Kills Weeds",
+        },
       },
       level3: {
-        config: "Trigonal Pyramidal",
+        config: "Trigonal Pyramidal (sp³)",
         oxidation: "Cl is +5",
         ionicRadius: "171 pm",
         hydrationEnthalpy: "Low",
-        coordination: "Trigonal Pyramidal"
+        coordination: "Trigonal Pyramidal (<109.5°)",
       },
       level4: {
         discoveryYear: "1786",
         discoveredBy: "Claude Louis Berthollet",
         namedBy: "Chlorine",
-        stse: "Safety · Agriculture",
-        commonUses: "Fireworks · Oxygen candles",
-        hazards: "Fire / Explosion risk with organics"
-      }
-    }
+        stse: "Safety (Explosives stability); Agriculture (Weed control).",
+        commonUses: "Fireworks; Oxygen candles (Submarines).",
+        hazards: "Fire/Explosion risk with organics.",
+      },
+    },
   },
   {
     id: "clo_minus",
@@ -1372,10 +1395,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Halogen Oxyanion",
-        source: "Bleach",
-        phase: "Aqueous, pale yellow",
-        valence: "Hypohalite ion",
-        keyCompounds: "NaClO, Ca₂"
+        source: "Bleach (OCl⁻)",
+        phase: "Aqueous (aq) - Pale Yellow",
+        valence: "14 Total",
+        keyCompounds: "NaClO (Bleach/Javex), Ca(ClO)₂",
       },
       level2: {
         molarMass: "51.45 g/mol",
@@ -1384,30 +1407,30 @@ export const ionsData = [
         slotA: {
           label: "WHITENING",
           result: "Oxidation",
-          desc: "Removes Stains"
+          desc: "Removes Stains",
         },
         slotB: {
           label: "DISINFECT",
           result: "Sterilize",
-          desc: "Kills Germs"
-        }
+          desc: "Kills Germs",
+        },
       },
       level3: {
         config: "Linear",
         oxidation: "Cl is +1",
         ionicRadius: "150 pm",
         hydrationEnthalpy: "-350 kJ/mol",
-        coordination: "Linear"
+        coordination: "Linear",
       },
       level4: {
         discoveryYear: "1789",
-        discoveredBy: "Berthollet",
-        namedBy: "Greek Hypo",
-        stse: "Public Health · Hygiene",
-        commonUses: "Household Bleach · Pool Sanitation",
-        hazards: "Toxic Gas if mixed with acid / ammonia"
-      }
-    }
+        discoveredBy: "Berthollet (Javel Water)",
+        namedBy: "Greek Hypo (Under)",
+        stse: "Public Health (Water Chlorination); Hygiene.",
+        commonUses: "Household Bleach; Pool Sanitation.",
+        hazards: "Toxic Gas (Cl₂) if mixed with acid/ammonia.",
+      },
+    },
   },
   {
     id: "clo4_minus",
@@ -1425,9 +1448,9 @@ export const ionsData = [
       level1: {
         type: "Halogen Oxyanion",
         source: "Perchloric Acid",
-        phase: "Solid",
-        valence: "Resonance-stabilized",
-        keyCompounds: "NH₄ClO₄, KClO₄"
+        phase: "Solid (Salts)",
+        valence: "32 Total",
+        keyCompounds: "NH₄ClO₄ (Rocket Fuel), KClO₄",
       },
       level2: {
         molarMass: "99.45 g/mol",
@@ -1436,31 +1459,34 @@ export const ionsData = [
         slotA: {
           label: "LAUNCH",
           result: "Propellant",
-          desc: "Solid Booster Fuel"
+          desc: "Solid Booster Fuel",
         },
         slotB: {
           label: "MARS SOIL",
           result: "Martian Soil",
-          desc: "Found on Mars"
-        }
+          desc: "Found on Mars",
+        },
       },
       level3: {
-        config: "Tetrahedral",
-        oxidation: "Cl is +7",
+        config: "Tetrahedral (sp³)",
+        oxidation: "Cl is +7 (Max)",
         ionicRadius: "240 pm",
         hydrationEnthalpy: "Low",
-        coordination: "Tetrahedral"
+        coordination: "Tetrahedral (109.5°)",
       },
       level4: {
         discoveryYear: "1816",
         discoveredBy: "Friedrich von Stadion",
-        namedBy: "Greek Hyper",
-        stse: "Space Exploration · Groundwater pollution · Thyroid health",
-        commonUses: "Rocket Propellant · Airbag inflators",
-        hazards: "Explosion risk · Thyroid toxin"
-      }
-    }
+        namedBy: "Greek Hyper (Over)",
+        stse: "Space Exploration; Groundwater pollution; Thyroid health.",
+        commonUses: "Rocket Propellant; Airbag inflators.",
+        hazards: "Explosion risk; Thyroid toxin.",
+      },
+    },
   },
+
+  // ===== 3. 过渡金属 (Transition Metals) =====
+  // 铜
   {
     id: "cu_plus",
     symbol: "Cu",
@@ -1476,10 +1502,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Transition Metal Cation",
-        source: "Group 11 atom, loses 1 e⁻",
-        phase: "Usually unstable in water",
-        valence: "Filled d shell",
-        keyCompounds: "Cu₂O, CuCl"
+        source: "Group 11 Element - Loss of 1 e⁻",
+        phase: "Aqueous (Unstable) / Solid",
+        valence: "18 (Pseudo-Noble Gas)",
+        keyCompounds: "Cu₂O (Red), CuCl (White)",
       },
       level2: {
         molarMass: "63.55 g/mol",
@@ -1488,30 +1514,30 @@ export const ionsData = [
         slotA: {
           label: "COLORLESS",
           result: "Clear",
-          desc: "Clear in pure Water"
+          desc: "Clear in pure Water",
         },
         slotB: {
           label: "DISPROPORTION",
           result: "Unstable",
-          desc: "2Cu⁺ ➔ Cu²⁺ + Cu"
-        }
+          desc: "2Cu⁺ ➔ Cu²⁺ + Cu",
+        },
       },
       level3: {
-        config: "[Ar] 3d¹⁰",
+        config: "[Ar] 3d¹⁰ (Full d-shell)",
         oxidation: "+1",
-        ionicRadius: "77 pm",
+        ionicRadius: "77 pm (Large for charge)",
         hydrationEnthalpy: "-593 kJ/mol",
-        coordination: "2"
+        coordination: "2 (Linear)",
       },
       level4: {
         discoveryYear: "Prehistoric",
         discoveredBy: "Unknown",
-        namedBy: "Latin Cuprum",
-        stse: "Ancient Metallurgy · Biological Electron Transfer",
-        commonUses: "Catalysis · Dyeing Process · Pesticides",
-        hazards: "Toxic to aquatic life"
-      }
-    }
+        namedBy: "Latin Cuprum (from Cyprus)",
+        stse: "Ancient Metallurgy; Biological Electron Transfer.",
+        commonUses: "Catalysis; Dyeing Process; Pesticides (Cu₂O).",
+        hazards: "Toxic to aquatic life.",
+      },
+    },
   },
   {
     id: "cu_2plus",
@@ -1528,43 +1554,45 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Transition Metal Cation",
-        source: "Group 11 Element, Loss of 2 e⁻",
-        phase: "Aqueous, bright blue",
-        valence: "d⁹ state",
-        keyCompounds: "CuSO₄, CuCO₃"
+        source: "Group 11 Element - Loss of 2 e⁻",
+        phase: "Aqueous (aq) - Bright Blue",
+        valence: "17 Total (d⁹)",
+        keyCompounds: "CuSO₄ (Blue Vitriol), CuCO₃ (Verdigris)",
       },
       level2: {
         molarMass: "63.55 g/mol",
         subatomic: "29 p⁺ | 27 e⁻",
-        statusBanner: "Paramagnetic",
+        statusBanner: "Paramagnetic (Blue Color)",
         slotA: {
           label: "COLOR",
           result: "Bright Blue",
-          desc: "Bright Cyan / Blue Solution"
+          desc: "Bright Cyan/Blue Solution",
         },
         slotB: {
           label: "FLAME TEST",
           result: "Blue-Green",
-          desc: "Blue-Green Flame"
-        }
+          desc: "Blue-Green Flame",
+        },
       },
       level3: {
         config: "[Ar] 3d⁹",
-        oxidation: "+2",
+        oxidation: "+2 (Most Stable)",
         ionicRadius: "73 pm",
-        hydrationEnthalpy: "-2100 kJ/mol",
-        coordination: "6"
+        hydrationEnthalpy: "-2100 kJ/mol (Extremely High)",
+        coordination: "6 (Jahn-Teller Octahedral)",
       },
       level4: {
         discoveryYear: "Prehistoric",
         discoveredBy: "Unknown",
         namedBy: "Latin Cuprum",
-        stse: "Electronics · Bordeaux Mixture",
-        commonUses: "Electroplating · Pigments · Wood Preservative",
-        hazards: "Corrosive · Harmful if swallowed"
-      }
-    }
+        stse: "Electronics (PCB Etching); Bordeaux Mixture (Fungicide).",
+        commonUses: "Electroplating; Pigments; Wood Preservative.",
+        hazards: "Corrosive; Harmful if swallowed.",
+      },
+    },
   },
+
+  // 铁
   {
     id: "fe_2plus",
     symbol: "Fe",
@@ -1580,10 +1608,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Transition Metal Cation",
-        source: "Group 8 Element, Loss of 2 e⁻",
-        phase: "Aqueous, pale green",
-        valence: "d⁶ state",
-        keyCompounds: "FeSO₄, FeCl₂"
+        source: "Group 8 Element - Loss of 2 e⁻",
+        phase: "Aqueous (aq) - Pale Green",
+        valence: "18 Total (d⁶)",
+        keyCompounds: "FeSO₄ (Green Vitriol), FeCl₂",
       },
       level2: {
         molarMass: "55.85 g/mol",
@@ -1592,30 +1620,30 @@ export const ionsData = [
         slotA: {
           label: "HEMOGLOBIN",
           result: "O₂ Binding",
-          desc: "Binds Oxygen in Lungs"
+          desc: "Binds Oxygen in Lungs",
         },
         slotB: {
           label: "PRECIPITATE",
           result: "Dirty Green",
-          desc: "Dirty Green w / OH⁻"
-        }
+          desc: "Dirty Green w/ OH⁻",
+        },
       },
       level3: {
         config: "[Ar] 3d⁶",
-        oxidation: "+2",
-        ionicRadius: "78 pm",
+        oxidation: "+2 (Ferrous)",
+        ionicRadius: "78 pm (High Spin)",
         hydrationEnthalpy: "-1920 kJ/mol",
-        coordination: "6"
+        coordination: "6 (Octahedral)",
       },
       level4: {
         discoveryYear: "Prehistoric",
         discoveredBy: "Various Cultures",
         namedBy: "Latin Ferrum",
-        stse: "Iron Deficiency Anemia · Biological Redox",
-        commonUses: "Nutritional Supplements · Water Treatment",
-        hazards: "Acute iron overdose is toxic"
-      }
-    }
+        stse: "Iron Deficiency Anemia; Biological Redox.",
+        commonUses: "Nutritional Supplements; Water Treatment.",
+        hazards: "Acute iron overdose is toxic.",
+      },
+    },
   },
   {
     id: "fe_3plus",
@@ -1632,10 +1660,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Transition Metal Cation",
-        source: "Group 8 Element, Loss of 3 e⁻",
-        phase: "Aqueous, Yellow / Brown",
-        valence: "d⁵ state",
-        keyCompounds: "FeCl₃, Fe₂O₃"
+        source: "Group 8 Element - Loss of 3 e⁻",
+        phase: "Aqueous (aq) - Yellow/Brown",
+        valence: "17 Total (d⁵)",
+        keyCompounds: "FeCl₃ (Etchant), Fe₂O₃ (Rust)",
       },
       level2: {
         molarMass: "55.85 g/mol",
@@ -1644,31 +1672,33 @@ export const ionsData = [
         slotA: {
           label: "RUST",
           result: "Oxidation",
-          desc: "Corroded Iron Surface"
+          desc: "Corroded Iron Surface",
         },
         slotB: {
           label: "PRECIPITATE",
           result: "Red-Brown",
-          desc: "Red-Brown Gel w / OH⁻"
-        }
+          desc: "Red-Brown Gel w/ OH⁻",
+        },
       },
       level3: {
-        config: "[Ar] 3d⁵",
-        oxidation: "+3",
-        ionicRadius: "64.5 pm",
-        hydrationEnthalpy: "-4430 kJ/mol",
-        coordination: "6"
+        config: "[Ar] 3d⁵ (Half-filled stability)",
+        oxidation: "+3 (Ferric)",
+        ionicRadius: "64.5 pm (Very Small)",
+        hydrationEnthalpy: "-4430 kJ/mol (Extreme)",
+        coordination: "6 (Octahedral)",
       },
       level4: {
         discoveryYear: "Prehistoric",
         discoveredBy: "Various Cultures",
         namedBy: "Latin Ferrum",
-        stse: "Acid Mine Drainage · Corrosion",
-        commonUses: "Sewage Treatment · Ink Making",
-        hazards: "Corrosive · Causes staining"
-      }
-    }
+        stse: "Acid Mine Drainage (Orange Rivers); Corrosion.",
+        commonUses: "Sewage Treatment (Flocculant); Ink Making.",
+        hazards: "Corrosive; Causes staining.",
+      },
+    },
   },
+
+  // 铅
   {
     id: "pb_2plus",
     symbol: "Pb",
@@ -1684,10 +1714,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Post-Transition Cation",
-        source: "Group 14 Element, Loss of 6s² outer pair",
-        phase: "Aqueous, colorless",
-        valence: "Inert-pair cation",
-        keyCompounds: "PbI₂, PbSO₄"
+        source: "Group 14 Element - Loss of 6s² outer pair",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "2 (Stable 6s² pair)",
+        keyCompounds: "PbI₂ (Gold Ppt), PbSO₄ (Battery Solid)",
       },
       level2: {
         molarMass: "207.2 g/mol",
@@ -1696,31 +1726,33 @@ export const ionsData = [
         slotA: {
           label: "PRECIPITATE",
           result: "Golden Rain",
-          desc: "Golden Rain w / Iodide"
+          desc: "Golden Rain w/ Iodide",
         },
         slotB: {
           label: "STORAGE",
           result: "Battery",
-          desc: "Lead-Acid Accumulator"
-        }
+          desc: "Lead-Acid Accumulator",
+        },
       },
       level3: {
         config: "[Xe] 4f¹⁴ 5d¹⁰ 6s²",
-        oxidation: "+2",
-        ionicRadius: "119 pm",
+        oxidation: "+2 (Most Stable for Lead)",
+        ionicRadius: "119 pm (Large)",
         hydrationEnthalpy: "-1481 kJ/mol",
-        coordination: "6-12"
+        coordination: "6-12 (Flexible)",
       },
       level4: {
-        discoveryYear: "Ancient",
+        discoveryYear: "Ancient (7000 BCE)",
         discoveredBy: "Unknown",
         namedBy: "Latin Plumbum",
-        stse: "Flint Water Crisis · Leaded Petrol History",
-        commonUses: "Car Batteries · Radiation Shielding",
-        hazards: "Neurotoxic · Bioaccumulative"
-      }
-    }
+        stse: "Flint Water Crisis; Leaded Petrol History.",
+        commonUses: "Car Batteries; Radiation Shielding.",
+        hazards: "Neurotoxic (Brain damage); Bioaccumulative.",
+      },
+    },
   },
+
+  // 含锰
   {
     id: "mno4_minus",
     symbol: "MnO₄",
@@ -1737,9 +1769,9 @@ export const ionsData = [
       level1: {
         type: "Transition Metal Oxyanion",
         source: "Manganese in +7 state",
-        phase: "Aqueous, Deep Purple",
-        valence: "Strong oxidizer",
-        keyCompounds: "KMnO₄"
+        phase: "Aqueous (aq) - Deep Purple",
+        valence: "31 Total (Resonance)",
+        keyCompounds: "KMnO₄ (Condy's Crystals)",
       },
       level2: {
         molarMass: "118.94 g/mol",
@@ -1748,31 +1780,33 @@ export const ionsData = [
         slotA: {
           label: "DEEP PURPLE",
           result: "Intense",
-          desc: "Intense Color even at 1ppm"
+          desc: "Intense Color even at 1ppm",
         },
         slotB: {
           label: "OXIDIZER",
           result: "Reactive",
-          desc: "Ignites Glycerin instantly"
-        }
+          desc: "Ignites Glycerin instantly",
+        },
       },
       level3: {
-        config: "Tetrahedral",
-        oxidation: "Mn is +7",
+        config: "Tetrahedral (d⁰ Complex)",
+        oxidation: "Mn is +7 (Maximum)",
         ionicRadius: "240 pm",
         hydrationEnthalpy: "High",
-        coordination: "Tetrahedral"
+        coordination: "Tetrahedral (109.5°)",
       },
       level4: {
-        discoveryYear: "1774",
+        discoveryYear: "1774 (Element)",
         discoveredBy: "Scheele / Gahn",
-        namedBy: "Latin Magnes",
-        stse: "Water Purification · Antiseptic",
-        commonUses: "Lab Titrations · Disinfectant · Fruit Preservation",
-        hazards: "Potent Oxidizer · Stains skin brown"
-      }
-    }
+        namedBy: "Latin Magnes (Magnet)",
+        stse: "Water Purification (Organic removal); Antiseptic.",
+        commonUses: "Lab Titrations; Disinfectant; Fruit Preservation.",
+        hazards: "Potent Oxidizer; Stains skin brown (MnO₂).",
+      },
+    },
   },
+
+  // 含铬
   {
     id: "cro4_2minus",
     symbol: "CrO₄",
@@ -1789,9 +1823,9 @@ export const ionsData = [
       level1: {
         type: "Transition Metal Oxyanion",
         source: "Chromium in +6 state",
-        phase: "Aqueous, bright yellow",
-        valence: "Resonance-stabilized",
-        keyCompounds: "K₂CrO₄, PbCrO₄"
+        phase: "Aqueous (aq) - Bright Yellow",
+        valence: "32 Total",
+        keyCompounds: "K₂CrO₄, PbCrO₄ (Chrome Yellow)",
       },
       level2: {
         molarMass: "116.00 g/mol",
@@ -1800,30 +1834,30 @@ export const ionsData = [
         slotA: {
           label: "PIGMENT",
           result: "Yellow",
-          desc: "Classic Chrome Yellow"
+          desc: "Classic Chrome Yellow",
         },
         slotB: {
           label: "pH SENSITIVE",
           result: "Equilibrium",
-          desc: "Turns Orange in Acid"
-        }
+          desc: "Turns Orange in Acid",
+        },
       },
       level3: {
         config: "Tetrahedral",
         oxidation: "Cr is +6",
         ionicRadius: "242 pm",
         hydrationEnthalpy: "-1000 kJ/mol",
-        coordination: "Tetrahedral"
+        coordination: "Tetrahedral (109.5°)",
       },
       level4: {
         discoveryYear: "1797",
         discoveredBy: "Louis Nicolas Vauquelin",
-        namedBy: "Greek Chroma",
-        stse: "Soil Pollution · Chrome Plating Waste",
-        commonUses: "Corrosion Inhibitor · Yellow Dye / Ink",
-        hazards: "Carcinogenic"
-      }
-    }
+        namedBy: "Greek Chroma (Color)",
+        stse: "Soil Pollution; Chrome Plating Waste.",
+        commonUses: "Corrosion Inhibitor; Yellow Dye/Ink.",
+        hazards: "Carcinogenic (Hexavalent Chromium).",
+      },
+    },
   },
   {
     id: "cr2o7_2minus",
@@ -1840,10 +1874,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Transition Metal Oxyanion",
-        source: "Two Chromate units",
-        phase: "Aqueous, bright orange",
-        valence: "Bridged oxyanion",
-        keyCompounds: "K₂Cr₂O₇, ₂Cr₂O₇"
+        source: "Two Chromate units (Acidic)",
+        phase: "Aqueous (aq) - Bright Orange",
+        valence: "52 Total",
+        keyCompounds: "K₂Cr₂O₇, (NH₄)₂Cr₂O₇ (Volcano)",
       },
       level2: {
         molarMass: "216.00 g/mol",
@@ -1852,31 +1886,34 @@ export const ionsData = [
         slotA: {
           label: "THERMAL",
           result: "Volcano",
-          desc: "Green Cr₂O₃ \"Ash\""
+          desc: 'Green Cr₂O₃ "Ash"',
         },
         slotB: {
           label: "TITRATION",
           result: "Redox",
-          desc: "Classic Orange-to-Green"
-        }
+          desc: "Classic Orange-to-Green",
+        },
       },
       level3: {
         config: "Two corners-shared Tetrahedra",
         oxidation: "Cr is +6",
         ionicRadius: "Large Dimeric Ion",
         hydrationEnthalpy: "High",
-        coordination: "Cr-O-Cr bridge"
+        coordination: "Cr-O-Cr bridge (126°)",
       },
       level4: {
         discoveryYear: "1797",
         discoveredBy: "Vauquelin",
-        namedBy: "Greek Di + Chroma",
-        stse: "Breathalyzer Tests · Leather Tanning",
-        commonUses: "Cleaning Glassware · Photo-engraving",
-        hazards: "Highly Toxic · Carcinogenic · Oxidizer"
-      }
-    }
+        namedBy: "Greek Di (Two) + Chroma",
+        stse: "Breathalyzer Tests (History); Leather Tanning.",
+        commonUses: "Cleaning Glassware; Photo-engraving.",
+        hazards: "Highly Toxic; Carcinogenic; Oxidizer.",
+      },
+    },
   },
+
+  // ===== 4. 特殊与有机 (Special & Organic) =====
+  // 特殊双子
   {
     id: "nh4_plus",
     symbol: "NH₄",
@@ -1892,42 +1929,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Polyatomic Cation",
-        source: "Ammonia, Gain of 1 H⁺",
-        phase: "Aqueous, colorless",
-        valence: "Tetrahedral ion",
-        keyCompounds: "NH₄NO₃, NH₄Cl"
+        source: "Ammonia - Gain of 1 H⁺",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "NH₄NO₃ (Fertilizer), NH₄Cl (Sal Ammoniac)",
       },
       level2: {
         molarMass: "18.04 g/mol",
         subatomic: "1 N + 4 H | Charge +1",
-        statusBanner: "Always soluble",
+        statusBanner: "⭐ Always Soluble (All-Pass Ion)",
         slotA: {
           label: "SMELL",
-          result: "Releases Ammonia w / Base",
-          desc: "NaOH Test"
+          result: "Releases Ammonia w/ Base",
+          desc: "NaOH Test",
         },
         slotB: {
           label: "GROWTH",
           result: "Nitrogen Source",
-          desc: "Fertilizer"
-        }
+          desc: "Fertilizer",
+        },
       },
       level3: {
         config: "Tetrahedral",
         oxidation: "N is -3",
-        ionicRadius: "143 pm",
+        ionicRadius: "143 pm (Similar to K⁺)",
         hydrationEnthalpy: "-307 kJ/mol",
-        coordination: "109.5°"
+        coordination: "Tetrahedral (109.5°)",
       },
       level4: {
         discoveryYear: "Ancient",
         discoveredBy: "Various",
         namedBy: "From Temple of Ammon",
-        stse: "Global Food Security · Nitrogen Cycle",
-        commonUses: "Fertilizers · Smelling Salts · Explosives",
-        hazards: "Releases toxic ammonia gas"
-      }
-    }
+        stse: "Global Food Security (Fertilizers); Nitrogen Cycle.",
+        commonUses: "Fertilizers; Smelling Salts; Explosives.",
+        hazards: "Releases toxic ammonia gas.",
+      },
+    },
   },
   {
     id: "oh_minus",
@@ -1944,43 +1981,45 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Polyatomic Anion / Base",
-        source: "Water or bases, loses H⁺",
-        phase: "Aqueous, colorless",
-        valence: "Linear ion",
-        keyCompounds: "NaOH, Ca₂"
+        source: "Water / Bases - Loss of H⁺",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "8 (Stable Octet)",
+        keyCompounds: "NaOH (Lye), Ca(OH)₂ (Lime Water)",
       },
       level2: {
         molarMass: "17.01 g/mol",
         subatomic: "1 O + 1 H | Charge -1",
-        statusBanner: "The Definition of Basicity",
+        statusBanner: "The Definition of Basicity (pOH)",
         slotA: {
           label: "LITMUS TEST",
           result: "Turns Red Paper Blue",
-          desc: "pH > 7"
+          desc: "pH > 7",
         },
         slotB: {
           label: "SLIPPERY",
           result: "Saponifies Skin Oils",
-          desc: "Soap-like Feel"
-        }
+          desc: "Soap-like Feel",
+        },
       },
       level3: {
         config: "Linear",
         oxidation: "O is -2",
         ionicRadius: "137 pm",
         hydrationEnthalpy: "-460 kJ/mol",
-        coordination: "180°"
+        coordination: "Linear (180°)",
       },
       level4: {
-        discoveryYear: "Ancient",
+        discoveryYear: "Ancient (Soap making)",
         discoveredBy: "Various",
         namedBy: "Greek Hydro + Oxys",
-        stse: "Soap Production · Acid Neutralization",
-        commonUses: "Drain Cleaner · Soap · Antacids",
-        hazards: "**Corrosive** · Blindness risk"
-      }
-    }
+        stse: "Soap Production (Saponification); Acid Neutralization.",
+        commonUses: "Drain Cleaner; Soap; Antacids.",
+        hazards: "**Corrosive** (Caustic burns); Blindness risk.",
+      },
+    },
   },
+
+  // 酸式根
   {
     id: "hco3_minus",
     symbol: "HCO₃",
@@ -1996,42 +2035,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Amphoteric Oxyanion",
-        source: "Carbonic Acid, Loss of 1 H⁺",
-        phase: "Solid or aqueous",
-        valence: "Amphoteric buffer ion",
-        keyCompounds: "NaHCO₃, KHCO₃"
+        source: "Carbonic Acid - Loss of 1 H⁺",
+        phase: "Solid (White) / Aqueous",
+        valence: "24 Total",
+        keyCompounds: "NaHCO₃ (Baking Soda), KHCO₃",
       },
       level2: {
         molarMass: "61.02 g/mol",
         subatomic: "1 C + 3 O + 1 H | Charge -1",
-        statusBanner: "Amphoteric",
+        statusBanner: "Amphoteric (Blood Buffer)",
         slotA: {
           label: "BUFFER",
           result: "Resists pH Change",
-          desc: "Blood pH 7.4"
+          desc: "Blood pH 7.4",
         },
         slotB: {
           label: "FIZZ",
-          result: "Releases CO₂ w / Acid",
-          desc: "Baking Soda"
-        }
+          result: "Releases CO₂ w/ Acid",
+          desc: "Baking Soda",
+        },
       },
       level3: {
-        config: "Trigonal planar at carbon",
+        config: "Trigonal Planar",
         oxidation: "C is +4",
         ionicRadius: "156 pm",
         hydrationEnthalpy: "-380 kJ/mol",
-        coordination: "Planar at carbon"
+        coordination: "Trigonal Planar (at C)",
       },
       level4: {
         discoveryYear: "1801",
         discoveredBy: "Valentin Rose",
-        namedBy: "Prefix Bi-",
-        stse: "Blood pH Buffer · Ocean Carbon Sink",
-        commonUses: "Baking · Antacids · Fire Extinguishers",
-        hazards: "Safe"
-      }
-    }
+        namedBy: "Prefix Bi- (Double Carbonate)",
+        stse: "Blood pH Buffer (Homeostasis); Ocean Carbon Sink.",
+        commonUses: "Baking (Leavening); Antacids; Fire Extinguishers.",
+        hazards: "Safe (Essential for life).",
+      },
+    },
   },
   {
     id: "hso4_minus",
@@ -2048,10 +2087,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Acidic Oxyanion",
-        source: "Sulfuric Acid, Loss of 1 H⁺",
-        phase: "Solid or aqueous",
-        valence: "Acidic sulfate ion",
-        keyCompounds: "NaHSO₄"
+        source: "Sulfuric Acid - Loss of 1 H⁺",
+        phase: "Solid (White) / Aqueous",
+        valence: "32 Total",
+        keyCompounds: "NaHSO₄ (Toilet Cleaner)",
       },
       level2: {
         molarMass: "97.07 g/mol",
@@ -2060,30 +2099,30 @@ export const ionsData = [
         slotA: {
           label: "ACIDIC",
           result: "Turns Blue Paper Red",
-          desc: "pH < 1"
+          desc: "pH < 1",
         },
         slotB: {
           label: "CLEANING",
           result: "Dissolves Scale",
-          desc: "Toilet Cleaner"
-        }
+          desc: "Toilet Cleaner",
+        },
       },
       level3: {
         config: "Tetrahedral",
         oxidation: "S is +6",
-        ionicRadius: "Large oxyanion",
+        ionicRadius: "Large",
         hydrationEnthalpy: "High",
-        coordination: "109.5°"
+        coordination: "Tetrahedral (109.5°)",
       },
       level4: {
         discoveryYear: "Industrial Era",
         discoveredBy: "Various",
         namedBy: "From Sulfuric Acid",
-        stse: "Industrial pH control · Cleaning agents safety",
-        commonUses: "Toilet Bowl Cleaners · Swimming Pool pH Lowering",
-        hazards: "Corrosive"
-      }
-    }
+        stse: "Industrial pH control; Cleaning agents safety.",
+        commonUses: "Toilet Bowl Cleaners; Swimming Pool pH Lowering.",
+        hazards: "Corrosive (Tissue damage).",
+      },
+    },
   },
   {
     id: "h2po4_minus",
@@ -2100,10 +2139,10 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Acidic Oxyanion",
-        source: "Phosphoric Acid, Loss of 1 H⁺",
+        source: "Phosphoric Acid - Loss of 1 H⁺",
         phase: "Solid / Aqueous",
-        valence: "Acidic phosphate ion",
-        keyCompounds: "Ca₂"
+        valence: "32 Total",
+        keyCompounds: "Ca(H₂PO₄)₂ (Superphosphate)",
       },
       level2: {
         molarMass: "96.99 g/mol",
@@ -2112,31 +2151,33 @@ export const ionsData = [
         slotA: {
           label: "ROOTS",
           result: "Promotes Root Growth",
-          desc: "N-P-K Fertilizer"
+          desc: "N-P-K Fertilizer",
         },
         slotB: {
           label: "SOLUBILITY",
-          result: "Soluble w / Calcium",
-          desc: "Superphosphate"
-        }
+          result: "Soluble w/ Calcium",
+          desc: "Superphosphate",
+        },
       },
       level3: {
         config: "Tetrahedral",
         oxidation: "P is +5",
-        ionicRadius: "Large oxyanion",
+        ionicRadius: "Large",
         hydrationEnthalpy: "High",
-        coordination: "109.5°"
+        coordination: "Tetrahedral (109.5°)",
       },
       level4: {
         discoveryYear: "1840s",
         discoveredBy: "Lawes",
         namedBy: "From Phosphate",
-        stse: "Green Revolution · Eutrophication",
-        commonUses: "Superphosphate Fertilizers · Baking Powder · Buffers",
-        hazards: "Eye irritant · Water pollution"
-      }
-    }
+        stse: "Green Revolution (Fertilizers); Eutrophication.",
+        commonUses: "Superphosphate Fertilizers; Baking Powder; Buffers.",
+        hazards: "Eye irritant; Water pollution.",
+      },
+    },
   },
+
+  // 有机/其他
   {
     id: "ch3coo_minus",
     symbol: "CH₃COO",
@@ -2152,42 +2193,42 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Organic Anion",
-        source: "Vinegar, Loss of 1 H⁺",
-        phase: "Aqueous, colorless",
-        valence: "Resonance-stabilized",
-        keyCompounds: "CH₃COONa, Vinegar"
+        source: "Vinegar (CH₃COOH) - Loss of 1 H⁺",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "24 Total",
+        keyCompounds: "CH₃COONa (Hot Ice), Vinegar",
       },
       level2: {
         molarMass: "59.04 g/mol",
         subatomic: "2 C + 2 O + 3 H | Charge -1",
-        statusBanner: "Always soluble",
+        statusBanner: "⭐ Always Soluble (All-Pass Ion)",
         slotA: {
           label: "VINEGAR",
-          result: "Pungent Smell",
-          desc: "CH₃COOH"
+          result: "Pungent Smell (Acid)",
+          desc: "CH₃COOH",
         },
         slotB: {
           label: "HOT ICE",
           result: "Exothermic Crystallization",
-          desc: "Sodium Acetate"
-        }
+          desc: "Sodium Acetate",
+        },
       },
       level3: {
-        config: "Planar carboxylate",
-        oxidation: "Carboxyl carbon is +3",
+        config: "Trigonal Planar (Carboxyl)",
+        oxidation: "C is +3 (Carboxyl)",
         ionicRadius: "162 pm",
         hydrationEnthalpy: "-400 kJ/mol",
-        coordination: "Planar carboxylate"
+        coordination: "Tetrahedral (Methyl) + Planar (Carboxyl)",
       },
       level4: {
         discoveryYear: "Ancient",
         discoveredBy: "Various",
-        namedBy: "Latin Acetum",
-        stse: "Fermentation · Biodegradable Plastics",
-        commonUses: "Vinegar · Hand Warmers · Textiles",
-        hazards: "Concentrated acid is corrosive"
-      }
-    }
+        namedBy: "Latin Acetum (Vinegar)",
+        stse: "Fermentation (Biotech); Biodegradable Plastics.",
+        commonUses: "Vinegar (Food); Hand Warmers (Hot Ice); Textiles.",
+        hazards: "Concentrated acid is corrosive.",
+      },
+    },
   },
   {
     id: "cn_minus",
@@ -2204,41 +2245,41 @@ export const ionsData = [
     customData: {
       level1: {
         type: "Toxic Pseudo-Halogen",
-        source: "Prussic Acid, Loss of 1 H⁺",
-        phase: "Aqueous, colorless",
-        valence: "Linear pseudo-halide",
-        keyCompounds: "NaCN, KCN"
+        source: "Prussic Acid (HCN) - Loss of 1 H⁺",
+        phase: "Aqueous (aq) - Colorless",
+        valence: "10 (Isoelectronic w/ N₂)",
+        keyCompounds: "NaCN (Gold Mining), KCN (Poison)",
       },
       level2: {
         molarMass: "26.02 g/mol",
         subatomic: "1 C + 1 N | Charge -1",
-        statusBanner: "Extreme Toxin",
+        statusBanner: "⚠️ Extreme Toxin",
         slotA: {
           label: "TOXICITY",
           result: "Stops Cell Respiration",
-          desc: "Blocks Cytochrome"
+          desc: "Blocks Cytochrome",
         },
         slotB: {
           label: "LEACHING",
           result: "Dissolves Gold",
-          desc: "Au₂⁻ Complex"
-        }
+          desc: "Au(CN)₂⁻ Complex",
+        },
       },
       level3: {
         config: "Linear",
         oxidation: "C is +2",
         ionicRadius: "191 pm",
         hydrationEnthalpy: "-350 kJ/mol",
-        coordination: "Triple bond, linear"
+        coordination: "Linear (Triple Bond)",
       },
       level4: {
         discoveryYear: "1782",
         discoveredBy: "Scheele",
-        namedBy: "Greek Kyanos",
-        stse: "Mining Ethics · Environmental Contamination",
-        commonUses: "Gold Extraction · Electroplating",
-        hazards: "**Lethal**"
-      }
-    }
-  }
+        namedBy: "Greek Kyanos (Dark Blue)",
+        stse: "Mining Ethics (Spills); Environmental Contamination.",
+        commonUses: "Gold Extraction; Electroplating.",
+        hazards: "**Lethal** (Inhibits Respiration).",
+      },
+    },
+  },
 ];

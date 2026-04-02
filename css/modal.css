@@ -160,34 +160,6 @@
   font-size: 1.4rem;
 }
 
-.modal-export-btn {
-  min-width: 56px;
-  height: 40px;
-  border: none;
-  background: rgba(0, 0, 0, 0.04);
-  border-radius: 999px;
-  color: #4f5d75;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 0 14px;
-}
-
-.modal-export-btn:hover:not(:disabled) {
-  background: rgba(0, 0, 0, 0.85);
-  color: #fff;
-}
-
-.modal-export-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .modal-close:hover {
   background: rgba(0, 0, 0, 0.85);
   color: #fff;

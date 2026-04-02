@@ -80,7 +80,7 @@
     <link rel="stylesheet" href="css/ions.css?v=2.1.0">
     <link rel="stylesheet" href="css/worksheet-styles.css?v=2.1.0">
     <link rel="stylesheet" href="css/ion-animations.css?v=2.1.0">
-    <link rel="stylesheet" href="css/mobile-landing.css?v=2.1.0">
+    <link rel="stylesheet" href="css/mobile-landing.css?v=2.1.8">
     <link rel="stylesheet" href="css/tool-modals/shared.css?v=2.1.0">
 
     <script type="text/javascript">
@@ -114,6 +114,7 @@
             <!-- Hero Section -->
             <section class="ml-hero">
                 <div class="ml-hero-bg"></div>
+                <div class="ml-bg-stream" id="ml-bg-stream" aria-hidden="true"></div>
                 <div class="ml-hero-content">
                     <img src="logo.svg" alt="Zperiod – Interactive Periodic Table" class="ml-logo">
                     <h1 class="ml-title">Zperiod</h1>
@@ -152,7 +153,7 @@
                     <h3 class="ml-feature-title">Periodic Table</h3>
                     <p class="ml-feature-desc">All 118 elements with category color-coding, phase data at STP, and
                         instant access to comprehensive chemical information.</p>
-                    <div class="ml-img-frame">
+                    <div class="ml-img-frame ml-img-frame-table">
                         <picture>
                             <source srcset="images/preview-table.avif" type="image/avif">
                             <img src="images/preview-table.png"
@@ -168,10 +169,10 @@
                     <h3 class="ml-feature-title">Atom Models</h3>
                     <p class="ml-feature-desc">Interactive 3D atom structures with electron shells, swipeable info
                         cards, and detailed properties for every element.</p>
-                    <div class="ml-img-frame">
+                    <div class="ml-img-frame ml-img-frame-modal">
                         <picture>
-                            <source srcset="images/preview-modal.avif" type="image/avif">
-                            <img src="images/preview-modal.png"
+                            <source srcset="images/mobile-atom-2.png?v=1" type="image/png">
+                            <img src="images/mobile-atom-2.png?v=1"
                                 alt="3D atom model showing electron shells and element properties" loading="lazy"
                                 decoding="async" width="2940" height="1846">
                         </picture>
@@ -181,14 +182,14 @@
                 <!-- Feature 3: Chemistry Tools -->
                 <div class="ml-feature ml-reveal">
                     <div class="ml-feature-tag">Chemistry Tools</div>
-                    <h3 class="ml-feature-title">Equation Balancer</h3>
-                    <p class="ml-feature-desc">Balance chemical equations with a real-time physics-based scale
-                        visualization and one-click auto-balance.</p>
-                    <div class="ml-img-frame">
+                    <h3 class="ml-feature-title">Tools Workspace</h3>
+                    <p class="ml-feature-desc">A cleaner tools workspace with faster access to balancing, molar mass,
+                        solubility, and virtual lab workflows.</p>
+                    <div class="ml-img-frame ml-img-frame-tools">
                         <picture>
                             <source srcset="images/preview-tools.avif" type="image/avif">
                             <img src="images/preview-tools.png"
-                                alt="Chemical equation balancer with real-time scale visualization" loading="lazy"
+                                alt="Updated chemistry tools workspace on mobile" loading="lazy"
                                 decoding="async" width="2940" height="1846">
                         </picture>
                     </div>
@@ -200,7 +201,7 @@
                     <h3 class="ml-feature-title">Worksheet Generator</h3>
                     <p class="ml-feature-desc">Generate print-ready balanced equation worksheets with adjustable
                         difficulty, multiple reaction types, and PDF export.</p>
-                    <div class="ml-img-frame">
+                    <div class="ml-img-frame ml-img-frame-worksheet">
                         <picture>
                             <source srcset="images/preview-worksheet.avif" type="image/avif">
                             <img src="images/preview-worksheet.png"
@@ -1782,11 +1783,72 @@
 
             if (!isRealMobile) {
                 document.body.classList.add("is-desktop");
+                return;
             }
+
+            var mobileLanding = document.querySelector(".mobile-landing");
+            if (!mobileLanding) return;
+
+            mobileLanding.classList.add("ml-stream-enabled");
         })();
+
+        function initFirstVisitBackgroundStream() {
+            var landing = document.querySelector(".mobile-landing.ml-stream-enabled");
+            var stream = document.getElementById("ml-bg-stream");
+            if (!landing || !stream) return;
+
+            var phrases = [
+                "Chemistry is visual",
+                "Periodic Table",
+                "Atom • Ion • Molecule",
+                "118 Elements",
+                "Bonding and Reactions",
+                "化学与世界",
+                "元素与反应",
+                "La chimie est partout",
+                "Химия вокруг нас",
+                "Mol • Ion • Isotope",
+                "C6H12O6",
+                "H2O • CO2 • NH3",
+                "تعلّم الكيمياء بصريًا",
+                "کیمیا زندگی ہے",
+                "Science for everyone",
+                "Discover atoms"
+            ];
+
+            stream.innerHTML = "";
+            var laneCount = 6;
+            var itemCount = laneCount;
+            var phraseOffset = Math.floor(Math.random() * phrases.length);
+            for (var i = 0; i < itemCount; i++) {
+                var chip = document.createElement("span");
+                chip.className = "ml-bg-chip";
+                chip.textContent = phrases[(phraseOffset + i) % phrases.length];
+
+                var laneIndex = i;
+                var laneStep = 72 / Math.max(1, laneCount - 1);
+                var top = 14 + (laneIndex * laneStep);
+                var size = 15 + Math.random() * 4;
+                var duration = 13 + Math.random() * 4;
+                var delay = -(laneIndex * 1.5);
+                var alpha = 0.14 + Math.random() * 0.08;
+                var drift = -4 + Math.random() * 8;
+
+                chip.style.setProperty("--ml-top", top.toFixed(2) + "%");
+                chip.style.setProperty("--ml-size", size.toFixed(2) + "px");
+                chip.style.setProperty("--ml-duration", duration.toFixed(2) + "s");
+                chip.style.setProperty("--ml-delay", delay.toFixed(2) + "s");
+                chip.style.setProperty("--ml-alpha", alpha.toFixed(2));
+                chip.style.setProperty("--ml-drift", drift.toFixed(2) + "px");
+
+                stream.appendChild(chip);
+            }
+        }
 
         /* ---- Scroll reveal observer ---- */
         document.addEventListener("DOMContentLoaded", function () {
+            initFirstVisitBackgroundStream();
+
             var els = document.querySelectorAll(".ml-reveal");
             if (!els.length) return;
             var revealObserver = new IntersectionObserver(function (entries) {

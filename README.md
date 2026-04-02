@@ -36,6 +36,17 @@
 | **Empirical & Molecular Formula** | Derive formulas from mass data | 10-11 |
 | **Solubility Table** | Quick reference for ionic compounds | 9-12 |
 
+---
+
+## 🆕 Recent Updates (April 2026)
+
+- Mobile-first landing refreshed with softer background motion text stream.
+- Mobile landing no longer triggers desktop onboarding/welcome flow.
+- Element modal export/download button was removed.
+- Custom mobile assets were organized into the `images/` folder:
+	- `images/mobile-bg-1.png`
+	- `images/mobile-atom-2.png`
+
 ### 📝 Worksheet Generator
 - Generate balanced equation practice problems
 - Multiple reaction types (Synthesis, Decomposition, Combustion, etc.)
@@ -155,6 +166,16 @@ Zperiod follows modern design principles:
 *Comprehensive element information with 3D atom model*
 
 ![Element Modal](images/preview-modal.png)
+
+### Mobile Welcome Stream Style
+*Subtle multilingual background stream style used on the mobile-first landing experience*
+
+![Mobile Welcome Stream](images/mobile-bg-1.png)
+
+### Mobile Atom Card Visual
+*Custom Atom Models card visual used in the mobile landing feature preview*
+
+![Mobile Atom Card](images/mobile-atom-2.png)
 
 ### Equation Balancer
 *Balance chemical equations with real-time scale visualization*
