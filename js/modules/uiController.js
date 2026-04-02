@@ -2690,10 +2690,10 @@ export function showModal(element) {
     category =
       element.series.charAt(0).toUpperCase() + element.series.slice(1);
   } else if (element.row === 7 && element.column === 18) {
-    category = "Noble Gas";
+    category = t("tableLegend.nobleGas");
   }
-  if (element.isLanthanide) category = "Lanthanide";
-  if (element.isActinide) category = "Actinide";
+  if (element.isLanthanide) category = t("tableLegend.lanthanide");
+  if (element.isActinide) category = t("tableLegend.actinide");
   if (modalCategory) {
     modalCategory.textContent = category;
   }
