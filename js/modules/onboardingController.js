@@ -54,12 +54,12 @@ export function initOnboardingFlow() {
       }
 
       .logo-container.expanded .logo-z {
-        transform: translateX(-125px);
+        transform: translateX(-95px);
       }
 
       .logo-container.expanded .logo-text {
         opacity: 1;
-        transform: translateX(0px);
+        transform: translateX(-15px);
       }
 
       .danmaku-container {

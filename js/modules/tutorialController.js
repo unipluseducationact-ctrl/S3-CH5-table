@@ -286,8 +286,25 @@ export async function initSolubilityTutorial(force = false) {
     }
 }
 
+
+function checkAndObserveModal(modalId, destroyCallback) {
+    const modal = document.getElementById(modalId);
+    if (!modal || !modal.classList.contains('active')) return false;
+
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.attributeName === 'class' && !modal.classList.contains('active')) {
+                destroyCallback();
+            }
+        });
+    });
+    observer.observe(modal, { attributes: true });
+    return observer;
+}
+
 function startTutorial(driver, tutorialKey, delayMs = 1200) {
     let tutorialDriver;
+    let observer_startTutorial = null;
     
     // Keyboard handler for space and right arrow
     const handleKeydown = (e) => {
@@ -300,7 +317,7 @@ function startTutorial(driver, tutorialKey, delayMs = 1200) {
                 tutorialDriver.moveNext();
             } else {
                 // If it's the last step, act like Done was clicked
-                fadeAndDestroy();
+                fadeAndDestroy(true);
             }
         } else if (e.key === 'ArrowLeft') {
             e.preventDefault();
@@ -311,26 +328,33 @@ function startTutorial(driver, tutorialKey, delayMs = 1200) {
         }
     };
 
-    const fadeAndDestroy = () => {
+    const fadeAndDestroy = (isCompleted = false) => {
+        if (observer_startTutorial) { observer_startTutorial.disconnect(); observer_startTutorial = null; }
         const popover = document.querySelector('.custom-driver-popover');
         const overlay = document.querySelector('.driver-overlay');
         
         if (popover) popover.classList.add('fade-out');
         if (overlay) overlay.classList.add('fade-out');
         
-        localStorage.setItem(tutorialKey, 'true');
+        document.body.classList.remove('tutorial-active');
+        if (isCompleted) {
+            localStorage.setItem(tutorialKey, 'true');
+        }
         
         // Remove keyboard listener
         document.removeEventListener('keydown', handleKeydown, { capture: true });
         
         // Wait for fade transition before destroying
         setTimeout(() => {
+        observer_startTutorial = checkAndObserveModal('element-modal', fadeAndDestroy);
+        if (!observer_startTutorial) return;
             tutorialDriver.destroy();
         }, 350);
     };
 
     // Set a delay to ensure the modal animation finishes fully and content is settled
     setTimeout(() => {
+        document.body.classList.add('tutorial-active');
         tutorialDriver = driver({
             showProgress: true,
             animate: true,
@@ -382,7 +406,11 @@ function startTutorial(driver, tutorialKey, delayMs = 1200) {
                 }
             ],
             onDestroyStarted: () => {
-                fadeAndDestroy();
+                if (tutorialDriver && !tutorialDriver.hasNextStep()) {
+                    fadeAndDestroy(true);
+                } else {
+                    fadeAndDestroy(false);
+                }
             }
         });
 
@@ -396,30 +424,36 @@ function startTutorial(driver, tutorialKey, delayMs = 1200) {
 
 function startBalancerTour(driver, tutorialKey, delayMs = 800) {
     let tutorialDriver;
+    let observer_startBalancerTour = null;
     
     const handleKeydown = (e) => {
         if (!tutorialDriver) return;
         if (e.code === 'Space' || e.key === 'ArrowRight') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasNextStep()) tutorialDriver.moveNext();
-            else fadeAndDestroy();
+            else fadeAndDestroy(true);
         } else if (e.key === 'ArrowLeft') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasPreviousStep()) tutorialDriver.movePrevious();
         }
     };
 
-    const fadeAndDestroy = () => {
+    const fadeAndDestroy = (isCompleted = false) => {
+        if (observer_startBalancerTour) { observer_startBalancerTour.disconnect(); observer_startBalancerTour = null; }
         const popover = document.querySelector('.custom-driver-popover');
         const overlay = document.querySelector('.driver-overlay');
         if (popover) popover.classList.add('fade-out');
         if (overlay) overlay.classList.add('fade-out');
-        localStorage.setItem(tutorialKey, 'true');
+        if (isCompleted) {
+            localStorage.setItem(tutorialKey, 'true');
+        }
         document.removeEventListener('keydown', handleKeydown, { capture: true });
         setTimeout(() => tutorialDriver.destroy(), 350);
     };
 
     setTimeout(() => {
+        observer_startBalancerTour = checkAndObserveModal('feature-modal', fadeAndDestroy);
+        if (!observer_startBalancerTour) return;
         tutorialDriver = driver({
             showProgress: true,
             animate: true,
@@ -434,6 +468,7 @@ function startBalancerTour(driver, tutorialKey, delayMs = 800) {
             stageRadius: 20,
             steps: [
                 {
+                    
                     element: '#mode-switcher-pill',
                     popover: {
                         title: t('balancerTutorial.modeTitle') || "Mode Switcher",
@@ -510,7 +545,7 @@ function startBalancerTour(driver, tutorialKey, delayMs = 800) {
                     }
                 }
             ],
-            onDestroyStarted: () => fadeAndDestroy()
+            onDestroyStarted: () => { if (tutorialDriver && !tutorialDriver.hasNextStep()) fadeAndDestroy(true); else fadeAndDestroy(false); }
         });
 
         document.addEventListener('keydown', handleKeydown, { capture: true });
@@ -521,30 +556,36 @@ function startBalancerTour(driver, tutorialKey, delayMs = 800) {
 
 function startPredictorTour(driver, tutorialKey, delayMs = 800) {
     let tutorialDriver;
+    let observer_startPredictorTour = null;
     
     const handleKeydown = (e) => {
         if (!tutorialDriver) return;
         if (e.code === 'Space' || e.key === 'ArrowRight') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasNextStep()) tutorialDriver.moveNext();
-            else fadeAndDestroy();
+            else fadeAndDestroy(true);
         } else if (e.key === 'ArrowLeft') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasPreviousStep()) tutorialDriver.movePrevious();
         }
     };
 
-    const fadeAndDestroy = () => {
+    const fadeAndDestroy = (isCompleted = false) => {
+        if (observer_startPredictorTour) { observer_startPredictorTour.disconnect(); observer_startPredictorTour = null; }
         const popover = document.querySelector('.custom-driver-popover');
         const overlay = document.querySelector('.driver-overlay');
         if (popover) popover.classList.add('fade-out');
         if (overlay) overlay.classList.add('fade-out');
-        localStorage.setItem(tutorialKey, 'true');
+        if (isCompleted) {
+            localStorage.setItem(tutorialKey, 'true');
+        }
         document.removeEventListener('keydown', handleKeydown, { capture: true });
         setTimeout(() => tutorialDriver.destroy(), 350);
     };
 
     setTimeout(() => {
+        observer_startPredictorTour = checkAndObserveModal('feature-modal', fadeAndDestroy);
+        if (!observer_startPredictorTour) return;
         tutorialDriver = driver({
             showProgress: true,
             animate: true,
@@ -559,6 +600,7 @@ function startPredictorTour(driver, tutorialKey, delayMs = 800) {
             stageRadius: 20,
             steps: [
                 {
+                    
                     element: '#mode-switcher-pill',
                     popover: {
                         title: t('predictorTutorial.modeTitle') || "Mode Switcher",
@@ -623,7 +665,7 @@ function startPredictorTour(driver, tutorialKey, delayMs = 800) {
                     }
                 }
             ],
-            onDestroyStarted: () => fadeAndDestroy()
+            onDestroyStarted: () => { if (tutorialDriver && !tutorialDriver.hasNextStep()) fadeAndDestroy(true); else fadeAndDestroy(false); }
         });
 
         document.addEventListener('keydown', handleKeydown, { capture: true });
@@ -634,6 +676,7 @@ function startPredictorTour(driver, tutorialKey, delayMs = 800) {
 
 function startMolarMassTour(driver, tutorialKey, delayMs = 800) {
     let tutorialDriver;
+    let observer_startMolarMassTour = null;
     const setReceiptHighlight = (active) => {
         document.getElementById('receipt-wrapper')?.classList.toggle('tutorial-highlight', active);
         document.querySelector('.receipt-anim-container')?.classList.toggle('tutorial-highlight-shell', active);
@@ -644,25 +687,30 @@ function startMolarMassTour(driver, tutorialKey, delayMs = 800) {
         if (e.code === 'Space' || e.key === 'ArrowRight') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasNextStep()) tutorialDriver.moveNext();
-            else fadeAndDestroy();
+            else fadeAndDestroy(true);
         } else if (e.key === 'ArrowLeft') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasPreviousStep()) tutorialDriver.movePrevious();
         }
     };
 
-    const fadeAndDestroy = () => {
+    const fadeAndDestroy = (isCompleted = false) => {
+        if (observer_startMolarMassTour) { observer_startMolarMassTour.disconnect(); observer_startMolarMassTour = null; }
         const popover = document.querySelector('.custom-driver-popover');
         const overlay = document.querySelector('.driver-overlay');
         if (popover) popover.classList.add('fade-out');
         if (overlay) overlay.classList.add('fade-out');
         setReceiptHighlight(false);
-        localStorage.setItem(tutorialKey, 'true');
+        if (isCompleted) {
+            localStorage.setItem(tutorialKey, 'true');
+        }
         document.removeEventListener('keydown', handleKeydown, { capture: true });
         setTimeout(() => tutorialDriver.destroy(), 350);
     };
 
     setTimeout(() => {
+        observer_startMolarMassTour = checkAndObserveModal('feature-modal', fadeAndDestroy);
+        if (!observer_startMolarMassTour) return;
         tutorialDriver = driver({
             showProgress: true,
             animate: true,
@@ -741,7 +789,7 @@ function startMolarMassTour(driver, tutorialKey, delayMs = 800) {
                     onHighlighted: () => setReceiptHighlight(false)
                 }
             ],
-            onDestroyStarted: () => fadeAndDestroy()
+            onDestroyStarted: () => { if (tutorialDriver && !tutorialDriver.hasNextStep()) fadeAndDestroy(true); else fadeAndDestroy(false); }
         });
 
         document.addEventListener('keydown', handleKeydown, { capture: true });
@@ -751,30 +799,36 @@ function startMolarMassTour(driver, tutorialKey, delayMs = 800) {
 
 function startSolubilityTour(driver, tutorialKey, delayMs = 800) {
     let tutorialDriver;
+    let observer_startSolubilityTour = null;
 
     const handleKeydown = (e) => {
         if (!tutorialDriver) return;
         if (e.code === 'Space' || e.key === 'ArrowRight') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasNextStep()) tutorialDriver.moveNext();
-            else fadeAndDestroy();
+            else fadeAndDestroy(true);
         } else if (e.key === 'ArrowLeft') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasPreviousStep()) tutorialDriver.movePrevious();
         }
     };
 
-    const fadeAndDestroy = () => {
+    const fadeAndDestroy = (isCompleted = false) => {
+        if (observer_startSolubilityTour) { observer_startSolubilityTour.disconnect(); observer_startSolubilityTour = null; }
         const popover = document.querySelector('.custom-driver-popover');
         const overlay = document.querySelector('.driver-overlay');
         if (popover) popover.classList.add('fade-out');
         if (overlay) overlay.classList.add('fade-out');
-        localStorage.setItem(tutorialKey, 'true');
+        if (isCompleted) {
+            localStorage.setItem(tutorialKey, 'true');
+        }
         document.removeEventListener('keydown', handleKeydown, { capture: true });
         setTimeout(() => tutorialDriver.destroy(), 350);
     };
 
     setTimeout(() => {
+        observer_startSolubilityTour = checkAndObserveModal('feature-modal', fadeAndDestroy);
+        if (!observer_startSolubilityTour) return;
         tutorialDriver = driver({
             showProgress: true,
             animate: true,
@@ -835,7 +889,7 @@ function startSolubilityTour(driver, tutorialKey, delayMs = 800) {
                     }
                 }
             ],
-            onDestroyStarted: () => fadeAndDestroy()
+            onDestroyStarted: () => { if (tutorialDriver && !tutorialDriver.hasNextStep()) fadeAndDestroy(true); else fadeAndDestroy(false); }
         });
 
         document.addEventListener('keydown', handleKeydown, { capture: true });
@@ -873,30 +927,36 @@ export async function initVirtualLabTutorial(force = false) {
 
 function startVirtualLabTour(driver, tutorialKey, delayMs = 800) {
     let tutorialDriver;
+    let observer_startVirtualLabTour = null;
 
     const handleKeydown = (e) => {
         if (!tutorialDriver) return;
         if (e.code === 'Space' || e.key === 'ArrowRight') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasNextStep()) tutorialDriver.moveNext();
-            else fadeAndDestroy();
+            else fadeAndDestroy(true);
         } else if (e.key === 'ArrowLeft') {
             e.preventDefault(); e.stopPropagation();
             if (tutorialDriver.hasPreviousStep()) tutorialDriver.movePrevious();
         }
     };
 
-    const fadeAndDestroy = () => {
+    const fadeAndDestroy = (isCompleted = false) => {
+        if (observer_startVirtualLabTour) { observer_startVirtualLabTour.disconnect(); observer_startVirtualLabTour = null; }
         const popover = document.querySelector('.custom-driver-popover');
         const overlay = document.querySelector('.driver-overlay');
         if (popover) popover.classList.add('fade-out');
         if (overlay) overlay.classList.add('fade-out');
-        localStorage.setItem(tutorialKey, 'true');
+        if (isCompleted) {
+            localStorage.setItem(tutorialKey, 'true');
+        }
         document.removeEventListener('keydown', handleKeydown, { capture: true });
         setTimeout(() => tutorialDriver.destroy(), 350);
     };
 
     setTimeout(() => {
+        observer_startVirtualLabTour = checkAndObserveModal('feature-modal', fadeAndDestroy);
+        if (!observer_startVirtualLabTour) return;
         tutorialDriver = driver({
             showProgress: true,
             animate: true,
@@ -956,7 +1016,7 @@ function startVirtualLabTour(driver, tutorialKey, delayMs = 800) {
                     }
                 }
             ],
-            onDestroyStarted: () => fadeAndDestroy()
+            onDestroyStarted: () => { if (tutorialDriver && !tutorialDriver.hasNextStep()) fadeAndDestroy(true); else fadeAndDestroy(false); }
         });
 
         document.addEventListener('keydown', handleKeydown, { capture: true });

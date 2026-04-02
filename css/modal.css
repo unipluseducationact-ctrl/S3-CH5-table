@@ -3601,3 +3601,19 @@ html[lang^="zh"] .element-text[data-name-length="very-short"] .element-name {
 html[lang^="zh"] .element-text[data-name-length="short"] .element-name {
   font-size: clamp(3.8rem, 20cqi, 4.4rem);
 }
+
+/* Ensure slider controls and lock button are fully visible during the tutorial, even on short screens */
+body.tutorial-active .simplified-element-box .slider-controls {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateX(-50%) translateY(50%) !important;
+  z-index: 9999 !important;
+}
+
+body.tutorial-active .level-lock-btn {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  z-index: 9999 !important;
+}

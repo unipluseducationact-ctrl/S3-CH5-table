@@ -2228,7 +2228,7 @@ export const ur_elements = {
     ]
   },
   "109": {
-    "name": "Meitnerium",
+    "name": "میٹنیریم",
     "ions": "کوئی عام آئن نہیں۔",
     "history": {
       "discoveryYear": "1982",
@@ -2246,7 +2246,7 @@ export const ur_elements = {
     ]
   },
   "110": {
-    "name": "Darmstadtium",
+    "name": "ڈارمسٹیڈیم",
     "ions": "کوئی عام آئن نہیں۔",
     "history": {
       "discoveryYear": "1994",
