@@ -114,8 +114,6 @@ function initSettingsSuggestionForm() {
     }
 
     flashSentState(suggSend, {
-      originalHTML: originalSendHTML,
-      successHTML: SUCCESS_ICON_SVG,
       duration: SETTINGS_FEEDBACK_DURATION_MS,
       onReset: () => {
         if (suggStatus) {
@@ -313,10 +311,6 @@ function initGlobalUnitControls({ l3UnitState, setGlobalUnit }) {
 
       setGlobalUnit(type, idx);
       syncGlobalUnitButtons();
-      button.style.transform = "scale(0.95)";
-      window.setTimeout(() => {
-        button.style.transform = "";
-      }, 100);
     });
   });
 

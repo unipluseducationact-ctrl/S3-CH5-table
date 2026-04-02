@@ -29,49 +29,23 @@ export function flashSentState(button, options = {}) {
   if (!button) return;
 
   const {
-    originalHTML = button.innerHTML,
-    successHTML = SUCCESS_ICON_SVG,
     successClass = "sent",
     duration = 1000,
+    originalHTML,
+    successHTML,
     onReset,
   } = options;
 
-  // Lock the width to prevent layout jumping
-  const rect = button.getBoundingClientRect();
-  button.style.width = `${rect.width}px`;
-  
-  // Smoothly fade out current content
-  button.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.15s ease';
-  button.style.opacity = '0';
-
-  setTimeout(() => {
+  button.classList.add(successClass);
+  if (successHTML) {
     button.innerHTML = successHTML;
-    button.classList.add(successClass);
-    
-    // Ensure the SVG inside gets properly scaled
-    const svg = button.querySelector('svg');
-    if (svg) {
-      svg.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-      svg.style.transform = 'scale(1.2)';
+  }
+
+  window.setTimeout(() => {
+    button.classList.remove(successClass);
+    if (originalHTML) {
+      button.innerHTML = originalHTML;
     }
-
-    button.style.opacity = '1';
-
-    window.setTimeout(() => {
-      button.style.opacity = '0';
-      
-      setTimeout(() => {
-        button.innerHTML = originalHTML;
-        button.classList.remove(successClass);
-        button.style.width = '';
-        button.style.opacity = '1';
-        // Cleanup inline styles if any
-        setTimeout(() => {
-            button.style.transition = '';
-        }, 50);
-
-        if (typeof onReset === "function") onReset();
-      }, 150);
-    }, duration);
-  }, 150);
+    if (typeof onReset === "function") onReset();
+  }, duration);
 }

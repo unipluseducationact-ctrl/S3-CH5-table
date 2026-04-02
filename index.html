@@ -791,6 +791,14 @@
                             <button class="preview-tab" data-mode="answer" data-i18n="worksheet.answerKey">Answer Key</button>
                         </div>
                         <div class="export-buttons">
+                            <button class="export-btn" id="print-worksheet-btn" onclick="window.print()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                    <rect x="6" y="14" width="12" height="8"></rect>
+                                </svg>
+                                <span data-i18n="worksheet.print">Print</span>
+                            </button>
                             <button class="export-btn" id="fill-date-btn" disabled>
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
@@ -864,7 +872,7 @@
                         </svg>
                     </a>
                     <button class="sv-link-card" id="settings-open-welcome">
-                        <div class="sv-link-card-icon sv-icon-blue">
+                        <div class="sv-link-card-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
@@ -992,15 +1000,23 @@
                     <div class="sv-suggest-row">
                         <textarea id="settings-suggestion-input" class="sv-suggest-input sv-suggest-textarea"
                             placeholder="Type your suggestion..." maxlength="500" rows="3" data-i18n-placeholder="settings.suggestPlaceholder"></textarea>
-                        <button id="settings-suggestion-send" class="sv-suggest-send" title="Send" data-i18n-title="aria.send" data-i18n-aria-label="aria.send">
-                            <span data-i18n="settings.sendBtnText" style="margin-right:8px;">Send</span>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="22" y1="2" x2="11" y2="13"></line>
-                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                            </svg>
-                        </button>
-                        <div class="sv-suggest-status" id="suggest-status"></div>
+                        <div class="sv-suggest-actions-bottom">
+                            <div class="sv-suggest-status" id="suggest-status"></div>
+                            <button id="settings-suggestion-send" class="sv-suggest-send" title="Send" data-i18n-title="aria.send" data-i18n-aria-label="aria.send">
+                                <div class="sv-send-content-default">
+                                    <span class="send-text" data-i18n="settings.sendBtnText">Send</span>
+                                    <svg class="icon-default" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                    </svg>
+                                </div>
+                                <div class="sv-send-content-success">
+                                    <svg class="icon-success" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
+                            </button>
+                        </div>
                     </div>
                 </section>
             </main>

@@ -617,7 +617,7 @@ function renderWorksheet(worksheet, mode) {
 
     worksheet.questions.forEach((q, index) => {
         const equationHtml = formatEquation(q, isAnswerKey, isPractice, index);
-        const resultClass = userAnswers[index] !== undefined
+        const resultClass = (isPractice && userAnswers[index] !== undefined)
             ? (checkSingleAnswer(index) ? 'correct' : 'incorrect')
             : '';
         html += `
