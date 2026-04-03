@@ -659,7 +659,7 @@ html.dark-theme .feature-tag {
 
 
 .feature-modal-body {
-  padding: 60px;
+  padding: clamp(20px, 5vh, 60px) 60px;
   height: 100%;
   overflow: auto;
   display: flex;

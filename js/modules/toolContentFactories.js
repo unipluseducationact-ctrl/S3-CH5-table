@@ -1108,10 +1108,12 @@ function generateVirtualLabToolContent() {
                 display: flex;
                 flex: 1;
                 flex-direction: column;
-                min-height: 520px;
+                min-height: 0; /* Remove hardcoded 520px to allow shrinking */
+                height: 100%;  /* Fill available space */
+                max-height: 100%;
                 width: 100%;
                 box-sizing: border-box;
-                padding: 0; /* Remove redundant padding, modal already provides 40px */
+                padding: 0;
                 background: transparent;
                 position: relative;
                 user-select: none;
