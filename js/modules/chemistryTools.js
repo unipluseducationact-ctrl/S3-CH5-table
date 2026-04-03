@@ -647,7 +647,7 @@ export function balanceEquationModal(equation) {
         throw new Error(`<strong>${ct("balancer.checkFormulaFormatTitle", "Check the formula formatting")}</strong><br>${ct("balancer.removeSpacesCoeff", "Remove spaces after coefficients.")}`);
       }
       // Reject symbols: "2*H2" -> error
-      if (/^\d+[^\w\(\[\{]/.test(token)) {
+      if (/^\d+[^\w([{]/.test(token)) {
         throw new Error(`<strong>${ct("balancer.checkFormulaFormatTitle", "Check the formula formatting")}</strong><br>${ct("balancer.invalidCoeff", "Invalid coefficient format.")}`);
       }
       const match = token.match(/^(\d+)(.*)/);
@@ -698,7 +698,7 @@ export function balanceEquationModal(equation) {
 
     // Heuristic C: HYDRATE FORMAT VALIDATION
     if (f.includes("•")) {
-      if (/\•\s*\•/.test(f) || /^\•/.test(f) || /\•$/.test(f)) {
+      if (/•\s*•/.test(f) || /^•/.test(f) || /•$/.test(f)) {
         throw new Error(`<span class="balancer-error">${ct("balancer.invalidHydrate", "Invalid hydrate notation")}</span>`);
       }
     }
