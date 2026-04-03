@@ -62,7 +62,7 @@ function containsCjkScript(text = "") {
 
 function mergeIonCustomData(baseData = {}, localeData = {}) {
   if (!localeData) return baseData;
-  const merged = structuredClone(baseData);
+  const merged = JSON.parse(JSON.stringify(baseData));
 
   ["level1", "level2", "level3", "level4"].forEach((levelKey) => {
     if (!localeData[levelKey]) return;
