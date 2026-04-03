@@ -1,4 +1,100 @@
 /* =========================================
+   Rotate-Device Overlay (Tablet Portrait)
+   Shows on touch tablets held in portrait.
+   ========================================= */
+
+/* Hidden by default */
+.rotate-device-overlay {
+  display: none;
+}
+
+/* Show on touch tablets in portrait (min-width: 768px avoids phones) */
+@media (pointer: coarse) and (orientation: portrait) and (min-width: 768px) {
+  .rotate-device-overlay {
+    display: flex !important;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    background: #f5f0eb;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  /* Hide everything else behind it */
+  .desktop-only-overlay,
+  .container,
+  .global-nav,
+  .floating-about-btn,
+  .copyright-notice {
+    display: none !important;
+  }
+}
+
+/* On desktop or landscape, never show */
+@media (pointer: fine), (orientation: landscape) {
+  .rotate-device-overlay {
+    display: none !important;
+  }
+}
+
+.rotate-device-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 320px;
+}
+
+.rotate-device-icon {
+  position: relative;
+  color: #1d1d1f;
+  opacity: 0.7;
+  animation: rotate-device-tilt 2.5s ease-in-out infinite;
+}
+
+.rotate-arrow-svg {
+  position: absolute;
+  bottom: -4px;
+  right: -12px;
+  color: #86868b;
+  animation: rotate-arrow-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes rotate-device-tilt {
+  0%, 100% { transform: rotate(0deg); }
+  30% { transform: rotate(-90deg); }
+  50% { transform: rotate(-90deg); }
+  80% { transform: rotate(0deg); }
+}
+
+@keyframes rotate-arrow-pulse {
+  0%, 100% { opacity: 1; }
+  30% { opacity: 0; }
+  50% { opacity: 0; }
+  80% { opacity: 1; }
+}
+
+.rotate-device-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.rotate-device-text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  font-size: 0.95rem;
+  color: #86868b;
+  line-height: 1.6;
+  font-weight: 450;
+  margin: 0;
+}
+
+/* =========================================
    Mobile Landing Page — Zperiod Showcase
    Only active on touch devices with screens <= 1024px
    ========================================= */
