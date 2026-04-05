@@ -256,13 +256,17 @@ export function initLangController() {
   if (toggle && dropdown) {
     toggle.addEventListener("click", (e) => {
       e.stopPropagation();
-      dropdown.classList.toggle("open");
+      const isOpen = dropdown.classList.toggle("open");
+      document.body.classList.toggle("lang-menu-blur", isOpen);
     });
 
     // Close on outside click
     document.addEventListener("click", (e) => {
       if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove("open");
+        if (dropdown.classList.contains("open")) {
+          dropdown.classList.remove("open");
+          document.body.classList.remove("lang-menu-blur");
+        }
       }
     });
   }
