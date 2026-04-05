@@ -1,3 +1,5 @@
+/* global console, process */
+
 /**
  * Zperiod i18n Toolkit
  * 
@@ -9,25 +11,8 @@
 
 import { translations } from "../js/data/translations.js";
 import fs from "fs";
-import path from "path";
 
 const MASTER_LANG = "en";
-const TARGET_DIR = "./js/data/locales/ui";
-
-/**
- * Deep merge utility (same as in translations.js)
- */
-function deepMerge(target, source) {
-  for (const key in source) {
-    if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
-      if (!target[key]) target[key] = {};
-      deepMerge(target[key], source[key]);
-    } else {
-      target[key] = source[key];
-    }
-  }
-  return target;
-}
 
 /**
  * Flatten an object to dot-path keys
@@ -46,27 +31,6 @@ function flatten(obj, prefix = "", out = {}) {
 }
 
 /**
- * Unflatten dot-paths back to object
- */
-function unflatten(flat) {
-    const root = {};
-    for (const key in flat) {
-        const parts = key.split('.');
-        let current = root;
-        for (let i = 0; i < parts.length; i++) {
-            const part = parts[i];
-            if (i === parts.length - 1) {
-                current[part] = flat[key];
-            } else {
-                if (!current[part]) current[part] = {};
-                current = current[part];
-            }
-        }
-    }
-    return root;
-}
-
-/**
  * Audit a language against English
  */
 export function auditLanguage(langCode) {
@@ -81,7 +45,7 @@ export function auditLanguage(langCode) {
     const fallback = []; // Keys that exist but match English (likely untranslated)
 
     for (const key in enFlat) {
-        if (!targetFlat.hasOwnProperty(key)) {
+        if (!Object.prototype.hasOwnProperty.call(targetFlat, key)) {
             missing.push(key);
         } else if (targetFlat[key] === enFlat[key] && enFlat[key].length > 3) {
             // Heuristic: If it's the same and > 3 chars, it's likely a fallback

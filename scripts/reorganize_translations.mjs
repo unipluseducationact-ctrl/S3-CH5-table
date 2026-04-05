@@ -1,3 +1,5 @@
+/* global console */
+
 /**
  * Reorganize translations.js into clean, separate modules
  */
@@ -41,3 +43,4 @@ aggregator += `};\n`;
 
 fs.writeFileSync("./js/data/translations_aggregator.js", aggregator);
 console.log("Created aggregator file.");
+
