@@ -108,7 +108,7 @@ export function ensureThreeLibLoaded() {
   }
   if (threeLoadPromise) return threeLoadPromise;
   threeLoadPromise = new Promise((resolve, reject) => {
-    const existing = document.querySelector('script[data-zperiod-three="1"]');
+    const existing = document.querySelector('script[data-uniplus-three="1"]');
     if (existing) {
       existing.addEventListener("load", () => resolve(window.THREE));
       existing.addEventListener("error", () =>
@@ -119,7 +119,7 @@ export function ensureThreeLibLoaded() {
     const script = document.createElement("script");
     script.src = "three.min.js";
     script.async = true;
-    script.dataset.zperiodThree = "1";
+    script.dataset.uniplusThree = "1";
     script.onload = () => resolve(window.THREE);
     script.onerror = () =>
       reject(new Error("Failed to load script: three.min.js"));
@@ -373,7 +373,7 @@ export function updateAtomStructure(element) {
   // --- Red point light for nucleus glow ---
   if (atomicNumber > 1) {
     let lightIntensity = 2.0;
-    if (atomicNumber === 11 && window._zperiodNaMode === "cloud") lightIntensity = 5.0;
+    if (atomicNumber === 11 && window._uniplusNaMode === "cloud") lightIntensity = 5.0;
     nucleusGroup.add(new THREE.PointLight(0xff0000, lightIntensity, 15));
   }
 
@@ -575,8 +575,8 @@ export function animateAtom() {
   if (!renderer) return;
   animationId = requestAnimationFrame(animateAtom);
 
-  const isPaused = window._zperiodAnimPaused || false;
-  const speedMul = (typeof window._zperiodAnimSpeed === "number") ? window._zperiodAnimSpeed : 0.6;
+  const isPaused = window._uniplusAnimPaused || false;
+  const speedMul = (typeof window._uniplusAnimSpeed === "number") ? window._uniplusAnimSpeed : 0.6;
   const time = Date.now() * 0.001;
 
   if (!atomGroup) return;
@@ -640,7 +640,7 @@ export function animateAtom() {
 
   // --- Intro camera animation ---
   const isNa = window.currentAtomElement && window.currentAtomElement.number === 11;
-  const isEdu = isNa && window._zperiodNaMode === "educational";
+  const isEdu = isNa && window._uniplusNaMode === "educational";
 
   if (isIntroAnimating) {
     const elapsed = (Date.now() - introStartTime) * 0.001;

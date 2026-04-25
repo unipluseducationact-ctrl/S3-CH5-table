@@ -1,5 +1,5 @@
 {
-  "name": "zperiod",
+  "name": "uniplus",
   "private": true,
   "version": "2.0.0",
   "scripts": {
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "driver.js": "^1.4.0",
+    "html2canvas": "^1.4.1",
     "marked": "^17.0.4"
   }
 }

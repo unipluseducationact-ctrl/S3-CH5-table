@@ -4,8 +4,8 @@
 
 import { translations } from "../data/translations.js";
 
-const STORAGE_KEY = "zperiod_lang";
-const SUPPORTED = ["en", "zh", "zh-Hant", "fr", "ru", "fa", "ur", "tl"];
+const STORAGE_KEY = "uniplus_lang";
+const SUPPORTED = ["en", "zh", "zh-Hant"];
 const DEFAULT = "en";
 
 let lang = DEFAULT;
@@ -154,7 +154,7 @@ export function setLang(code) {
   if (!SUPPORTED.includes(code) || code === lang) return;
   
   localStorage.setItem(STORAGE_KEY, code);
-  sessionStorage.setItem("zperiod_lang_transition", "true");
+  sessionStorage.setItem("uniplus_lang_transition", "true");
 
   // Create an overlay to hide the page before reload
   const overlay = document.createElement("div");
@@ -225,8 +225,8 @@ export function initLangController() {
   }
   document.documentElement.lang = lang;
 
-  if (sessionStorage.getItem("zperiod_lang_transition") === "true") {
-    sessionStorage.removeItem("zperiod_lang_transition");
+  if (sessionStorage.getItem("uniplus_lang_transition") === "true") {
+    sessionStorage.removeItem("uniplus_lang_transition");
     const overlay = document.createElement("div");
     overlay.style.position = "fixed";
     overlay.style.top = "0";

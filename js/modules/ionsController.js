@@ -50,6 +50,30 @@ const ION_GROUP_COLORS = {
   spec_org: "#D7CCC8",
 };
 
+// HKDSE (DSE) aqueous-solution colors.
+// All ions not listed here are colorless in aqueous solution, so we render them as white.
+const ION_AQUEOUS_COLOR_BY_ID = {
+  // Transition-metal ions with distinct colors (memorization set)
+  cu_2plus: "#1E90FF", // Cu²⁺ blue
+  fe_2plus: "#A8E4A0", // Fe²⁺ pale green
+  fe_3plus: "#C68E17", // Fe³⁺ yellow / yellowish-brown
+  mno4_minus: "#8B008B", // MnO₄⁻ purple
+  cro4_2minus: "#FFD700", // CrO₄²⁻ yellow
+  cr2o7_2minus: "#FF7F00", // Cr₂O₇²⁻ orange
+};
+
+function getReadableTextColor(hex) {
+  if (!hex || typeof hex !== "string") return "#0f172a";
+  const h = hex.replace("#", "").trim();
+  if (h.length !== 6) return "#0f172a";
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  if ([r, g, b].some((v) => Number.isNaN(v))) return "#0f172a";
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq < 150 ? "#ffffff" : "#0f172a";
+}
+
 const IONS_BY_ID = new Map(ionsData.map((ion) => [ion.id, ion]));
 let ionLangSyncBound = false;
 let activeIonId = null;
@@ -512,10 +536,14 @@ export async function initIonsTable() {
         cell.className = "element ion-table-cell";
         cell.dataset.ionId = ion.id;
 
-        // apply Group-Specific Color (Overriding class-based colors)
-        const bgColor = ION_GROUP_COLORS[groupId] || "#f0f0f0";
+        // Aqueous-solution color coding (HKDSE):
+        // - listed transition-metal ions get their characteristic solution color
+        // - everything else is colorless → white
+        const bgColor = ION_AQUEOUS_COLOR_BY_ID[ion.id] || "#ffffff";
         cell.style.backgroundColor = bgColor;
-        cell.style.borderColor = "rgba(0,0,0,0.1)";
+        cell.style.borderColor =
+          bgColor === "#ffffff" ? "rgba(15, 23, 42, 0.12)" : "rgba(0,0,0,0.10)";
+        cell.style.color = getReadableTextColor(bgColor);
 
         // Long formulas get a CSS class for smaller symbol text
         if (ion.id === "ch3coo_minus") {
@@ -1224,7 +1252,7 @@ function openIonModal(ion) {
 
   // Show modal
   modal.classList.add("active");
-  document.title = `Zperiod - ${localizedIon.name}`;
+  document.title = `Uni+ - ${localizedIon.name}`;
 
   // Re-apply fitText after modal is active to ensure clientWidth is correct
   setTimeout(() => {
@@ -1258,7 +1286,7 @@ function openIonModal(ion) {
     closeBtn.onclick = () => {
       modal.classList.remove("active");
       document.body.classList.remove("hide-nav");
-      document.title = "Zperiod";
+      document.title = "Uni+";
 
       // Reset headline layout for element modal?
       // No, this is #ion-modal, distinct from #element-modal.
@@ -1269,11 +1297,11 @@ function openIonModal(ion) {
   }
 
   modal.onclick = (e) => {
-    if (window._zperiodIsDragging) return;
+    if (window._uniplusIsDragging) return;
     if (e.target === modal) {
       modal.classList.remove("active");
       document.body.classList.remove("hide-nav");
-      document.title = "Zperiod";
+      document.title = "Uni+";
     }
   };
 }

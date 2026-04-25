@@ -1,16 +1,8 @@
-import { changelogData } from "../data/changelogData.js";
-import { changelogLocales } from "../data/changelogLocales.js";
-import {
-  SUCCESS_ICON_SVG,
-  flashSentState,
-  submitSuggestion,
-} from "./feedbackController.js";
-import { getLang, onLangChange, t } from "./langController.js";
+import { getLang } from "./langController.js";
 
-const ANIMATION_PAUSED_KEY = "zperiod_anim_paused";
-const ANIMATION_SPEED_KEY = "zperiod_anim_speed";
+const ANIMATION_PAUSED_KEY = "uniplus_anim_paused";
+const ANIMATION_SPEED_KEY = "uniplus_anim_speed";
 const DEFAULT_ANIMATION_SPEED = 0.6;
-const SETTINGS_FEEDBACK_DURATION_MS = 2500;
 const UNIT_SYNC_RESIZE_DELAY_MS = 80;
 const UNIT_SYNC_BOOTSTRAP_DELAYS_MS = [150, 600];
 const UNIT_SLIDER_TRANSITION =
@@ -35,13 +27,10 @@ export function applyAnimationPauseState(paused) {
 export function initSettingsController(options = {}) {
   const { onOpenWelcome, l3UnitState, setGlobalUnit } = options;
 
-  renderChangelog();
-  initSettingsSuggestionForm();
   initWelcomeButton(onOpenWelcome);
   initAnimationControls();
   initPreferencesCard();
   syncCardHeights();
-  onLangChange(() => renderChangelog());
 
   const syncGlobalUnitButtons = initGlobalUnitControls({
     l3UnitState,
@@ -79,140 +68,6 @@ function syncCardHeights() {
   sync();
 }
 
-function renderChangelog() {
-  const changelogList = document.getElementById("settings-changelog-list");
-  if (!changelogList) return;
-  const lang = getLang();
-
-  changelogList.innerHTML = changelogData
-    .map(
-      (entry) => {
-        const localizedEntry = changelogLocales[lang]?.[entry.version];
-        const changes = localizedEntry?.changes || entry.changes;
-        return `
-      <div class="changelog-entry">
-        <div class="changelog-header">
-          <span class="changelog-version">v${entry.version}</span>
-          <span class="changelog-date">${localizedEntry?.date || entry.date}</span>
-        </div>
-        <ul class="changelog-items">
-          ${changes.map((change) => `<li>${change}</li>`).join("")}
-        </ul>
-      </div>
-    `;
-      },
-    )
-    .join("");
-}
-
-function initSettingsSuggestionForm() {
-  const suggInput = document.getElementById("settings-suggestion-input");
-  const suggSend = document.getElementById("settings-suggestion-send");
-  const suggStatus = document.getElementById("suggest-status");
-  const chipContainer = document.getElementById("suggest-chips");
-
-  if (!suggInput || !suggSend) return;
-
-  initSuggestionChips({ chipContainer, suggInput });
-
-  const originalSendHTML = suggSend.innerHTML;
-
-  const resizeTextarea = () => {
-    suggInput.style.height = "auto";
-    suggInput.style.height = `${Math.min(suggInput.scrollHeight, 160)}px`;
-  };
-
-  const sendSuggestion = async () => {
-    const text = suggInput.value.trim();
-    if (!text) return;
-
-    await submitSuggestion(text, { source: "Zperiod Settings" });
-
-    suggInput.value = "";
-    resizeTextarea();
-    clearActiveSuggestionChip(chipContainer);
-
-    if (suggStatus) {
-      suggStatus.textContent = t("settingsCtrl.suggSent");
-      suggStatus.className = "sv-suggest-status success";
-    }
-
-    flashSentState(suggSend, {
-      duration: SETTINGS_FEEDBACK_DURATION_MS,
-      onReset: () => {
-        if (suggStatus) {
-          suggStatus.textContent = "";
-          suggStatus.className = "sv-suggest-status";
-        }
-        suggInput.placeholder = t("settingsCtrl.suggPlaceholder");
-      },
-    });
-  };
-
-  suggSend.addEventListener("click", sendSuggestion);
-  suggInput.addEventListener("input", resizeTextarea);
-}
-
-function initSuggestionChips({ chipContainer, suggInput }) {
-  if (!chipContainer || !suggInput) return;
-
-  let activeChip = null;
-
-  const getChipPrefillText = (chip) => {
-    if (!chip) return "";
-    const prefillKey = chip.dataset.prefillKey;
-    if (prefillKey) return t(prefillKey);
-    return chip.dataset.text || "";
-  };
-
-  const resizeTextarea = () => {
-    suggInput.style.height = "auto";
-    suggInput.style.height = `${Math.min(suggInput.scrollHeight, 160)}px`;
-  };
-
-  onLangChange(() => {
-    const prefill = getChipPrefillText(activeChip);
-    if (activeChip) {
-      suggInput.value = prefill;
-    }
-    suggInput.placeholder = prefill
-      ? t("settingsCtrl.continuePlaceholder")
-      : t("settingsCtrl.suggPlaceholder");
-    resizeTextarea();
-  });
-
-  chipContainer.addEventListener("click", (event) => {
-    const chip = event.target.closest(".sv-chip");
-    if (!chip) return;
-
-    if (activeChip) activeChip.classList.remove("active");
-
-    if (activeChip === chip) {
-      activeChip = null;
-      suggInput.value = "";
-      suggInput.placeholder = t("settingsCtrl.suggPlaceholder");
-      resizeTextarea();
-      return;
-    }
-
-    activeChip = chip;
-    chip.classList.add("active");
-
-    const prefill = getChipPrefillText(chip);
-    suggInput.value = prefill;
-    suggInput.placeholder = prefill
-      ? t("settingsCtrl.continuePlaceholder")
-      : t("settingsCtrl.suggPlaceholder");
-    resizeTextarea();
-    suggInput.focus();
-  });
-}
-
-function clearActiveSuggestionChip(chipContainer) {
-  const activeChip = chipContainer?.querySelector(".sv-chip.active");
-  if (activeChip) activeChip.classList.remove("active");
-}
-
 function initWelcomeButton(onOpenWelcome) {
   const openWelcomeBtn = document.getElementById("settings-open-welcome");
   if (!openWelcomeBtn || typeof onOpenWelcome !== "function") return;
@@ -228,31 +83,31 @@ function initAnimationControls() {
   const speedLabel = document.getElementById("speed-value-label");
 
   if (speedSlider) {
-    speedSlider.value = window._zperiodAnimSpeed;
+    speedSlider.value = window._uniplusAnimSpeed;
     if (speedLabel) {
-      speedLabel.textContent = `${window._zperiodAnimSpeed.toFixed(1)}×`;
+      speedLabel.textContent = `${window._uniplusAnimSpeed.toFixed(1)}×`;
     }
   }
 
   if (playToggle) {
-    updatePlayToggleIcon(playToggle, window._zperiodAnimPaused);
+    updatePlayToggleIcon(playToggle, window._uniplusAnimPaused);
   }
 
-  applyAnimationPauseState(window._zperiodAnimPaused);
+  applyAnimationPauseState(window._uniplusAnimPaused);
 
   if (playToggle) {
     playToggle.addEventListener("click", () => {
-      window._zperiodAnimPaused = !window._zperiodAnimPaused;
-      localStorage.setItem(ANIMATION_PAUSED_KEY, window._zperiodAnimPaused);
-      updatePlayToggleIcon(playToggle, window._zperiodAnimPaused);
-      applyAnimationPauseState(window._zperiodAnimPaused);
+      window._uniplusAnimPaused = !window._uniplusAnimPaused;
+      localStorage.setItem(ANIMATION_PAUSED_KEY, window._uniplusAnimPaused);
+      updatePlayToggleIcon(playToggle, window._uniplusAnimPaused);
+      applyAnimationPauseState(window._uniplusAnimPaused);
     });
   }
 
   if (speedSlider) {
     speedSlider.addEventListener("input", () => {
       const value = parseFloat(speedSlider.value);
-      window._zperiodAnimSpeed = value;
+      window._uniplusAnimSpeed = value;
       localStorage.setItem(ANIMATION_SPEED_KEY, value);
       if (speedLabel) speedLabel.textContent = `${value.toFixed(1)}×`;
     });
@@ -278,11 +133,11 @@ function initPreferencesCard() {
   const clearBtn = document.getElementById("settings-clear-data");
 
   if (reduceToggle) {
-    const isReduced = localStorage.getItem("zperiod_reduce_motion") === "true";
+    const isReduced = localStorage.getItem("uniplus_reduce_motion") === "true";
     reduceToggle.checked = isReduced;
     
     reduceToggle.addEventListener("change", (e) => {
-      localStorage.setItem("zperiod_reduce_motion", e.target.checked);
+      localStorage.setItem("uniplus_reduce_motion", e.target.checked);
       if (e.target.checked) document.body.classList.add("reduce-motion");
       else document.body.classList.remove("reduce-motion");
     });

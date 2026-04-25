@@ -1,5 +1,5 @@
 // =============================================================================
-// Changelog Data — Zperiod version history
+// Changelog Data — Uni+ version history
 // =============================================================================
 
 export const changelogData = [
@@ -61,14 +61,14 @@ export const changelogData = [
     version: "1.0.0",
     date: "2026-02-07",
     changes: [
-      "Official v1.0 release — Zperiod goes public",
+      "Official v1.0 release — Uni+ goes public",
       "118 elements with full chemical data",
       "3D atom models with interactive electron orbits",
       "Ion engine with 50+ common ions",
       "Chemistry Tools: Equation Balancer, Molar Mass, Empirical Formula, Solubility Table",
       "Worksheet Generator with PDF export",
       "Google Analytics & Microsoft Clarity integration",
-      "Custom domain (zperiod.app) configured",
+      "Custom domain (uniplus.app) configured",
     ],
   },
   {

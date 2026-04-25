@@ -1,15 +1,18 @@
 
-import { t, setLang } from "./langController.js";
+import { t } from "./langController.js";
 
 /**
- * Enhanced Onboarding Flow for Zperiod 2.0
+ * Entry landing for ALL devices:
+ * - Logo + Uni+ title
+ * - Floating chemistry words in the background
+ * - Start button → enter main app
  */
-export function initOnboardingFlow() {
+export function initEntryLanding(onComplete) {
   const overlay = document.createElement("div");
-  overlay.id = "zperiod-onboarding-overlay";
+  overlay.id = "uniplus-entry-overlay";
   overlay.innerHTML = `
     <style>
-      #zperiod-onboarding-overlay {
+      #uniplus-entry-overlay {
         position: fixed;
         inset: 0;
         background: #ffffff;
@@ -30,36 +33,43 @@ export function initOnboardingFlow() {
         height: 120px;
       }
 
-      .logo-z {
-        width: 100px;
-        height: 100px;
-        z-index: 2;
-        transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-        background: transparent;
-      }
-
-      .logo-text {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 64px;
-        font-weight: 800;
-        color: #1e293b;
-        letter-spacing: -2px;
+      .onboarding-logo-img {
+        height: 96px;
+        width: auto;
+        max-width: min(520px, 86vw);
+        object-fit: contain;
         opacity: 0;
-        white-space: nowrap;
+        transform: translateY(6px) scale(0.98);
+        transition:
+          opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+          transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         pointer-events: none;
         z-index: 1;
-        transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.10));
       }
 
-      .logo-container.expanded .logo-z {
-        transform: translateX(-95px);
-      }
-
-      .logo-container.expanded .logo-text {
+      .logo-container.expanded .onboarding-logo-img {
         opacity: 1;
-        transform: translateX(-15px);
+        transform: translateY(0) scale(1);
+      }
+
+      .brand-title {
+        margin-top: 10px;
+        font-size: 3rem;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        color: #0f172a;
+        opacity: 0;
+        transform: translateY(6px);
+        transition:
+          opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+          transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        z-index: 2;
+      }
+
+      .logo-container.expanded ~ .brand-title {
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .danmaku-container {
@@ -121,98 +131,18 @@ export function initOnboardingFlow() {
         background: #000;
         box-shadow: 0 8px 20px rgba(0,0,0,0.15);
       }
-
-      /* Language Selection Screen */
-      .lang-selection {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        gap: 32px;
-        width: 100%;
-        max-width: 900px;
-        padding: 40px;
-        z-index: 20;
-      }
-
-      .lang-selection.visible {
-        display: flex;
-        animation: fadeIn 0.5s ease forwards;
-      }
-
-      .lang-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-        width: 100%;
-      }
-
-      .lang-btn {
-        position: relative;
-        padding: 24px;
-        background: #ffffff;
-        border: 1px solid rgba(0,0,0,0.06);
-        border-radius: 20px;
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #1e293b;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-      }
-
-      .lang-btn::after {
-        content: '→';
-        position: absolute;
-        right: 20px;
-        opacity: 0;
-        transform: translateX(-10px);
-        transition: all 0.3s ease;
-      }
-
-      .lang-btn:hover {
-        border-color: #1e293b;
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.06);
-        background: #fafafa;
-      }
-
-      .lang-btn:hover::after {
-        opacity: 1;
-        transform: translateX(0);
-      }
-
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
     </style>
     <div class="danmaku-container" id="danmaku-field"></div>
-    
+
     <div id="animation-stage" style="display:flex; flex-direction:column; align-items:center;">
         <div class="logo-container" id="onboarding-logo">
-          <img src="logo.svg" class="logo-z" alt="Z">
-          <span class="logo-text">Zperiod</span>
+          <img class="onboarding-logo-img" src="images/uniplus-logo.png" alt="Uni+ logo" decoding="async" />
         </div>
-        
-        <div class="start-btn-container" id="start-btn-box">
-          <button class="onboarding-btn" id="onboarding-start-btn">Start</button>
-        </div>
-    </div>
+        <div class="brand-title" aria-hidden="true">Uni+</div>
 
-    <div class="lang-selection" id="lang-select-screen">
-      <h2 style="font-size: 2.5rem; color: #1e293b; margin-bottom: 0px; font-weight: 800; letter-spacing: -1px;">Select Language</h2>
-      <p style="color: #64748b; margin-bottom: 20px; font-size: 1.1rem;">Choose your preferred language to continue</p>
-      <div class="lang-grid">
-        <button class="lang-btn" data-lang="en">English</button>
-        <button class="lang-btn" data-lang="zh">简体中文</button>
-        <button class="lang-btn" data-lang="zh-Hant">繁體中文</button>
-        <button class="lang-btn" data-lang="fr">Français</button>
-        <button class="lang-btn" data-lang="ru">Русский</button>
-        <button class="lang-btn" data-lang="fa">فارسی</button>
-        <button class="lang-btn" data-lang="ur">اردو</button>
-        <button class="lang-btn" data-lang="tl">Tagalog</button>
-      </div>
+        <div class="start-btn-container" id="start-btn-box">
+          <button class="onboarding-btn" id="onboarding-start-btn" type="button">Start</button>
+        </div>
     </div>
   `;
   document.body.appendChild(overlay);
@@ -221,8 +151,8 @@ export function initOnboardingFlow() {
   const danmakuField = document.getElementById("danmaku-field");
   const startBtnBox = document.getElementById("start-btn-box");
   const startBtn = document.getElementById("onboarding-start-btn");
-  const stage = document.getElementById("animation-stage");
-  const langScreen = document.getElementById("lang-select-screen");
+
+  startBtn.textContent = t("onboarding.start", "Start");
 
   // Step 1: Initial Delay then Expand Logo
   setTimeout(() => {
@@ -237,7 +167,7 @@ export function initOnboardingFlow() {
   }, 1600);
 
   function startDanmaku() {
-    const supportedLangs = ["en", "zh", "zh-Hant", "fr", "ru", "fa", "ur", "tl"];
+    const supportedLangs = ["en", "zh", "zh-Hant"];
     const allPhrases = [];
     supportedLangs.forEach(l => {
         const phrases = t(`onboarding.phrases`, [], l);
@@ -245,7 +175,7 @@ export function initOnboardingFlow() {
     });
 
     if (allPhrases.length === 0) {
-        allPhrases.push("Zperiod", "Chemistry", "Atom", "Molecule");
+        allPhrases.push("Uni+", "Chemistry", "Atom", "Molecule");
     }
 
     const createItem = () => {
@@ -253,18 +183,18 @@ export function initOnboardingFlow() {
       const item = document.createElement("div");
       item.className = "danmaku-item";
       item.textContent = allPhrases[Math.floor(Math.random() * allPhrases.length)];
-      
-      const top = Math.random() * 85 + 5; 
-      const size = Math.random() * 0.8 + 0.9; 
-      const duration = Math.random() * 12 + 10; 
-      
+
+      const top = Math.random() * 85 + 5;
+      const size = Math.random() * 0.8 + 0.9;
+      const duration = Math.random() * 12 + 10;
+
       item.style.top = `${top}%`;
       item.style.fontSize = `${size}rem`;
       item.style.animationDuration = `${duration}s`;
-      
+
       danmakuField.appendChild(item);
       item.addEventListener("animationend", () => item.remove());
-      
+
       setTimeout(createItem, 1500 + Math.random() * 1000);
     };
 
@@ -272,44 +202,12 @@ export function initOnboardingFlow() {
   }
 
   startBtn.addEventListener("click", () => {
-    // Background danmaku fades out
-    danmakuField.style.opacity = "0";
-    stage.style.transition = "all 0.5s ease";
-    stage.style.opacity = "0";
-    stage.style.transform = "translateY(-20px)";
-    
+    overlay.style.pointerEvents = "none";
+    overlay.style.transition = "opacity 0.45s ease";
+    overlay.style.opacity = "0";
     setTimeout(() => {
-        stage.style.display = "none";
-        langScreen.classList.add("visible");
-    }, 500);
-  });
-
-  langScreen.addEventListener("click", (e) => {
-    const btn = e.target.closest(".lang-btn");
-    if (!btn) return;
-    const lang = btn.dataset.lang;
-    
-    localStorage.setItem("zperiod_welcomed_v2", "true");
-    sessionStorage.setItem("zperiod_lang_transition", "true");
-    
-    // Smooth seamless transition: Create a temporary white overlay to hide the reload flash
-    const transitionOverlay = document.createElement("div");
-    Object.assign(transitionOverlay.style, {
-      position: "fixed",
-      inset: "0",
-      background: "white",
-      zIndex: "2000000",
-      opacity: "0",
-      transition: "opacity(0.4s ease)"
-    });
-    document.body.appendChild(transitionOverlay);
-
-    requestAnimationFrame(() => {
-      transitionOverlay.style.opacity = "1";
-      setTimeout(() => {
-        localStorage.setItem("zperiod_lang", lang);
-        window.location.reload();
-      }, 450);
-    });
+      overlay.remove();
+      if (typeof onComplete === "function") onComplete();
+    }, 480);
   });
 }

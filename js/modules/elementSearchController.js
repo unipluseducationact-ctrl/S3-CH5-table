@@ -3,7 +3,7 @@
 // =============================================================================
 
 import { elements } from "../data/elementsData.js";
-import { showModal } from "./uiController.js";
+import { showModal, scrollPeriodicTableToElement } from "./uiController.js";
 import {
   t,
   getLang,
@@ -185,6 +185,7 @@ export function initElementSearch({ showPage, updateGlobalNavActive } = {}) {
     }
 
     showModal(result.element);
+    scrollPeriodicTableToElement(result.element);
     input.value = "";
     hide();
     input.blur();

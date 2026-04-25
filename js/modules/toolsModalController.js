@@ -109,8 +109,6 @@ export function createToolsModalController(options = {}) {
           import("./tutorialController.js").then((m) => m.initMolarMassTutorial(true));
         } else if (activeToolType === "solubility") {
           import("./tutorialController.js").then((m) => m.initSolubilityTutorial(true));
-        } else if (activeToolType === "virtual-lab") {
-          import("./tutorialController.js").then((m) => m.initVirtualLabTutorial(true));
         } else {
           helpOverlay.style.display = helpOverlay.style.display === "none" ? "flex" : "none";
         }
@@ -124,7 +122,7 @@ export function createToolsModalController(options = {}) {
 
     if (modal) {
       modal.addEventListener("click", (e) => {
-        if (window._zperiodIsDragging) return;
+        if (window._uniplusIsDragging) return;
         if (e.target === modal) closeToolModal();
       });
     }
@@ -163,8 +161,6 @@ export function createToolsModalController(options = {}) {
             import("./tutorialController.js").then((m) => m.initMolarMassTutorial(false));
           } else if (toolType === "solubility") {
             import("./tutorialController.js").then((m) => m.initSolubilityTutorial(false));
-          } else if (toolType === "virtual-lab") {
-            import("./tutorialController.js").then((m) => m.initVirtualLabTutorial(false));
           }
         });
       }

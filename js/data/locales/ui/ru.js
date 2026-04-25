@@ -14,9 +14,9 @@ export const ruUI = {
   },
   "mobile": {
     "desktopOnlyTitle": "Только для компьютера",
-    "desktopOnlyText": "Пожалуйста, откройте Zperiod в браузере на компьютере.",
+    "desktopOnlyText": "Пожалуйста, откройте Uni+ в браузере на компьютере.",
     "rotateTitle": "Поверните iPad",
-    "rotateText": "Zperiod лучше работает в альбомном режиме. Пожалуйста, поверните устройство."
+    "rotateText": "Uni+ лучше работает в альбомном режиме. Пожалуйста, поверните устройство."
   },
   "aria": {
     "changeLanguage": "Сменить язык",
@@ -136,7 +136,7 @@ export const ruUI = {
     "density": "Плотность",
     "energy": "Энергия",
     "sendSuggestion": "Отправить предложение",
-    "suggestHint": "Помогите улучшить Zperiod — выберите тему или напишите свою.",
+    "suggestHint": "Помогите улучшить Uni+ — выберите тему или напишите свою.",
     "sendBtnText": "Отправить",
     "preferences": "Preferences",
     "appearance": "Appearance",
@@ -559,13 +559,13 @@ export const ruUI = {
   },
   "assistant": {
     "fabAriaOpen": "Open AI Assistant",
-    "name": "Zperiod AI",
+    "name": "Uni+ AI",
     "status": "Chemistry Assistant",
     "closeAria": "Close assistant",
     "stopAria": "Stop generation",
     "inputPlaceholder": "Ask a chemistry question...",
     "sendAria": "Send message",
-    "welcomeLine1": "Welcome to Zperiod AI. How can I assist you with chemistry today?",
+    "welcomeLine1": "Welcome to Uni+ AI. How can I assist you with chemistry today?",
     "welcomeLine2": "You can ask me directly to:",
     "welcomeMolar": "Calculate molar mass (e.g., H2O)",
     "welcomeBalance": "Balance equations (e.g., Fe + O2 -> Fe2O3)",
@@ -602,9 +602,9 @@ export const ruUI = {
     "cta": "Начать",
     "footer": "v2.0 · Полная переработка",
     "viewUpdateHistory": "Посмотреть историю обновлений",
-    "authorRole": "Создатель и full-stack разработчик",
-    "schoolInfo": "Aurora High School · 11 класс (2027)",
-    "location": "Торонто, Канада"
+    "authorRole": "",
+    "schoolInfo": "",
+    "location": ""
   },
   "changelog": {
     "eyebrow": "Что нового",
@@ -706,7 +706,7 @@ export const ruUI = {
   },
   "onboarding": {
     "phrases": [
-      "Добро пожаловать в Zperiod",
+      "Добро пожаловать в Uni+",
       "Интерактивная химия",
       "Изучайте элементы",
       "Молекулярные чудеса"

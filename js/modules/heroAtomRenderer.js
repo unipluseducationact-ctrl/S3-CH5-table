@@ -231,10 +231,10 @@ export async function initHeroAtom() {
   function animateHero() {
     heroAnimationId = requestAnimationFrame(animateHero);
 
-    const isPaused = window._zperiodAnimPaused || false;
+    const isPaused = window._uniplusAnimPaused || false;
     const speedMul =
-      typeof window._zperiodAnimSpeed === "number"
-        ? window._zperiodAnimSpeed
+      typeof window._uniplusAnimSpeed === "number"
+        ? window._uniplusAnimSpeed
         : 0.6;
     const time = Date.now() * 0.001;
 

@@ -9,9 +9,9 @@ function ensureDriverTutorialAssets() {
         document.head.appendChild(link);
     }
 
-    if (!document.getElementById('driver-custom-zperiod')) {
+    if (!document.getElementById('driver-custom-uniplus')) {
         const style = document.createElement('style');
-        style.id = 'driver-custom-zperiod';
+        style.id = 'driver-custom-uniplus';
         style.textContent = `
             .driver-overlay { transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important; }
             .custom-driver-popover {
@@ -135,7 +135,7 @@ export async function initElementTutorial(force = false) {
                     transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
                 }
                 
-                /* Style the popover to look more elegant and modern, matching Zperiod UI */
+                /* Style the popover to look more elegant and modern, matching Uni+ UI */
                 .custom-driver-popover {
                     border-radius: 20px !important;
                     box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
@@ -973,129 +973,3 @@ function startSolubilityTour(driver, tutorialKey, delayMs = 800) {
     }, delayMs);
 }
 
-/**
- * Initializes and triggers the Virtual Lab tool tutorial.
- */
-export async function initVirtualLabTutorial(force = false) {
-    const tutorialKey = 'hasSeenVirtualLabTutorialV1';
-
-    if (!force && localStorage.getItem(tutorialKey)) {
-        return;
-    }
-
-    try {
-        const { driver } = await import('https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.js.mjs');
-
-        if (!document.getElementById('driver-css')) {
-            const link = document.createElement('link');
-            link.id = 'driver-css';
-            link.rel = 'stylesheet';
-            link.href = 'https://cdn.jsdelivr.net/npm/driver.js@1.3.1/dist/driver.css';
-            document.head.appendChild(link);
-        }
-        ensureDriverTutorialAssets();
-
-        startVirtualLabTour(driver, tutorialKey, force ? 100 : 800);
-    } catch (e) {
-        console.error("Failed to load driver.js tutorial:", e);
-    }
-}
-
-function startVirtualLabTour(driver, tutorialKey, delayMs = 800) {
-    let tutorialDriver;
-    let observer_startVirtualLabTour = null;
-
-    const handleKeydown = (e) => {
-        if (!tutorialDriver) return;
-        if (e.code === 'Space' || e.key === 'ArrowRight') {
-            e.preventDefault(); e.stopPropagation();
-            if (tutorialDriver.hasNextStep()) tutorialDriver.moveNext();
-            else fadeAndDestroy(true);
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault(); e.stopPropagation();
-            if (tutorialDriver.hasPreviousStep()) tutorialDriver.movePrevious();
-        }
-    };
-
-    const fadeAndDestroy = (isCompleted = false) => {
-        if (observer_startVirtualLabTour) { observer_startVirtualLabTour.disconnect(); observer_startVirtualLabTour = null; }
-        const popover = document.querySelector('.custom-driver-popover');
-        const overlay = document.querySelector('.driver-overlay');
-        if (popover) popover.classList.add('fade-out');
-        if (overlay) overlay.classList.add('fade-out');
-        if (isCompleted) {
-            localStorage.setItem(tutorialKey, 'true');
-        }
-        document.removeEventListener('keydown', handleKeydown, { capture: true });
-        setTimeout(() => tutorialDriver.destroy(), 350);
-    };
-
-    setTimeout(() => {
-        observer_startVirtualLabTour = checkAndObserveModal('feature-modal', fadeAndDestroy);
-        if (!observer_startVirtualLabTour) return;
-        tutorialDriver = driver({
-            showProgress: true,
-            animate: true,
-            allowClose: true,
-            allowKeyboardControl: false,
-            prevBtnText: t("tutorial.previous") || "Previous",
-            nextBtnText: t("tutorial.next") || "Next",
-            doneBtnText: t("tutorial.done") || "Done",
-            overlayColor: 'rgba(0, 0, 0, 0.65)',
-            popoverClass: 'custom-driver-popover',
-            stagePadding: 8,
-            stageRadius: 20,
-            steps: [
-                {
-                    element: '#virtual-lab-scene',
-                    popover: {
-                        title: t('virtualLabTutorial.sceneTitle', 'Virtual Chemistry Lab'),
-                        description: t('virtualLabTutorial.sceneDesc', 'Welcome to the Virtual Lab! This is an interactive physics-based playground where you can test the reactivity of different metals.'),
-                        side: 'bottom',
-                        align: 'center'
-                    }
-                },
-                {
-                    element: '#virtual-lab-beaker-wrap',
-                    popover: {
-                        title: t('virtualLabTutorial.beakerTitle', 'Interactive Beaker'),
-                        description: t('virtualLabTutorial.beakerDesc', 'You can drag the beaker around or rotate it from the top. Add water or empty it using the buttons below.'),
-                        side: 'right',
-                        align: 'center'
-                    }
-                },
-                {
-                    element: '#virtual-lab-metal-cube',
-                    popover: {
-                        title: t('virtualLabTutorial.metalTitle', 'The Metal Sample'),
-                        description: t('virtualLabTutorial.metalDesc', 'Grab this metal cube and drop it into the water to see a reaction. Some elements react more violently than others!'),
-                        side: 'left',
-                        align: 'center'
-                    }
-                },
-                {
-                    element: '#virtual-lab-change-element-btn',
-                    popover: {
-                        title: t('virtualLabTutorial.elementPickerTitle', 'Change Element'),
-                        description: t('virtualLabTutorial.elementPickerDesc', 'Click here to choose a different metal to test. Try comparing Alkali metals with Alkaline Earth metals.'),
-                        side: 'top',
-                        align: 'center'
-                    }
-                },
-                {
-                    element: '#virtual-lab-thermometer',
-                    popover: {
-                        title: t('virtualLabTutorial.thermoTitle', 'Thermometer'),
-                        description: t('virtualLabTutorial.thermoDesc', 'Watch the temperature spike during exothermic reactions as heat is released!'),
-                        side: 'top',
-                        align: 'center'
-                    }
-                }
-            ],
-            onDestroyStarted: () => { if (tutorialDriver && !tutorialDriver.hasNextStep()) fadeAndDestroy(true); else fadeAndDestroy(false); }
-        });
-
-        document.addEventListener('keydown', handleKeydown, { capture: true });
-        tutorialDriver.drive();
-    }, delayMs);
-}

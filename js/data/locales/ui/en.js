@@ -14,9 +14,9 @@ export const enUI = {
   },
   "mobile": {
     "desktopOnlyTitle": "Desktop Experience Only",
-    "desktopOnlyText": "Please access Zperiod on a desktop browser.",
+    "desktopOnlyText": "Please access Uni+ on a desktop browser.",
     "rotateTitle": "Rotate Your iPad",
-    "rotateText": "Zperiod is best experienced in landscape mode. Please rotate your device."
+    "rotateText": "Uni+ is best experienced in landscape mode. Please rotate your device."
   },
   "aria": {
     "changeLanguage": "Change language",
@@ -40,7 +40,7 @@ export const enUI = {
     "unknown": "Unknown"
   },
   "elementL2": {
-    "avgAtomicMass": "Avg. Atomic Mass",
+    "avgAtomicMass": "Relative Atomic Mass",
     "protons": "Protons (p⁺)",
     "electronsNeutral": "Electrons (neutral)",
     "protonsShort": "p⁺ Protons",
@@ -138,7 +138,7 @@ export const enUI = {
     "density": "Density",
     "energy": "Energy",
     "sendSuggestion": "Send a Suggestion",
-    "suggestHint": "Help us improve Zperiod — pick a topic or write your own.",
+    "suggestHint": "Help us improve Uni+ — pick a topic or write your own.",
     "sendBtnText": "Send",
     "preferences": "Preferences",
     "appearance": "Appearance",
@@ -362,6 +362,10 @@ export const enUI = {
     "color": "Color",
     "filter": "Filter",
     "reset": "Reset",
+    "first20": "First 20",
+    "style": {
+      "electrons": "Electron layout"
+    },
     "selected": "Selected",
     "clickToChangeUnit": "Click again to change unit",
     "inSelectedRange": "in selected range",
@@ -560,13 +564,13 @@ export const enUI = {
   },
   "assistant": {
     "fabAriaOpen": "Open AI Assistant",
-    "name": "Zperiod AI",
+    "name": "Uni+ AI",
     "status": "Chemistry Assistant",
     "closeAria": "Close assistant",
     "stopAria": "Stop generation",
     "inputPlaceholder": "Ask a chemistry question...",
     "sendAria": "Send message",
-    "welcomeLine1": "Welcome to Zperiod AI. How can I assist you with chemistry today?",
+    "welcomeLine1": "Welcome to Uni+ AI. How can I assist you with chemistry today?",
     "welcomeLine2": "You can ask me directly to:",
     "welcomeMolar": "Calculate molar mass (e.g., H2O)",
     "welcomeBalance": "Balance equations (e.g., Fe + O2 -> Fe2O3)",
@@ -603,9 +607,9 @@ export const enUI = {
     "cta": "Get Started",
     "footer": "v2.0 · Precision Lab Edition",
     "viewUpdateHistory": "View Update History",
-    "authorRole": "Creator & Full Stack Developer",
-    "schoolInfo": "Aurora High School · Grade 11 (2027)",
-    "location": "Toronto (Canada)"
+    "authorRole": "",
+    "schoolInfo": "",
+    "location": ""
   },
   "changelog": {
     "eyebrow": "What's New",
@@ -707,10 +711,33 @@ export const enUI = {
   },
   "onboarding": {
     "phrases": [
-      "Welcome to Zperiod",
-      "Interactive Chemistry",
-      "Master the Elements",
-      "Molecular Wonders"
+      "H • He • Li • Be • B • C • N • O • F • Ne",
+      "Na⁺ • K⁺ • Ca²⁺ • Mg²⁺ • Al³⁺",
+      "Cl⁻ • NO₃⁻ • SO₄²⁻ • CO₃²⁻ • OH⁻",
+      "H₂O",
+      "CO₂",
+      "NH₃",
+      "CH₄",
+      "NaCl",
+      "HCl(aq)",
+      "H₂SO₄",
+      "HNO₃",
+      "CaCO₃",
+      "CuSO₄·5H₂O",
+      "AgNO₃",
+      "KMnO₄",
+      "Atomic Structure",
+      "Bonding",
+      "Mole & Stoichiometry",
+      "Redox",
+      "Acids & Bases",
+      "Chemical Equilibrium",
+      "Kinetics",
+      "Electrochemistry",
+      "Energetics",
+      "Organic Chemistry",
+      "Polymers",
+      "Analytical Chemistry"
     ],
     "start": "Start"
   },

@@ -1,7 +1,7 @@
 /* global console, process */
 
 /**
- * Zperiod i18n Toolkit
+ * Uni+ i18n Toolkit
  * 
  * Functions:
  * 1. Audit: Compare any language against English master

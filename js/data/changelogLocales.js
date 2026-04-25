@@ -54,14 +54,14 @@ export const changelogLocales = {
     "1.0.0": {
       "date": "2026-02-07",
       "changes": [
-        "正式v1.0发布——Zperiod上市",
+        "正式v1.0发布——Uni+上市",
         "118 种元素，具有完整的化学数据",
         "具有交互式电子轨道的 3D 原子模型",
         "具有 50 多种常见离子的离子发动机",
         "化学工具：方程配平器、摩尔质量、经验公式、溶解度表",
         "具有 PDF 导出功能的工作表生成器",
         "Google Analytics 和 Microsoft Clarity 集成",
-        "配置的自定义域 (zperiod.app)"
+        "配置的自定义域 (uniplus.app)"
       ]
     },
     "0.5.0": {
@@ -132,14 +132,14 @@ export const changelogLocales = {
     "1.0.0": {
       "date": "2026-02-07",
       "changes": [
-        "Sortie officielle v1.0 — Zperiod devient public",
+        "Sortie officielle v1.0 — Uni+ devient public",
         "118 éléments avec des données chimiques complètes",
         "Modèles d'atomes 3D avec orbites électroniques interactives",
         "Moteur ionique avec plus de 50 ions communs",
         "Outils de chimie : équilibreur d'équation, masse molaire, formule empirique, tableau de solubilité",
         "Générateur de feuilles de calcul avec exportation PDF",
         "Intégration de Google Analytics et Microsoft Clarity",
-        "Domaine personnalisé (zperiod.app) configuré"
+        "Domaine personnalisé (uniplus.app) configuré"
       ]
     },
     "0.5.0": {
@@ -288,14 +288,14 @@ export const changelogLocales = {
     "1.0.0": {
       "date": "2026-02-07",
       "changes": [
-        "نسخه رسمی نسخه 1.0 - Zperiod عمومی می شود",
+        "نسخه رسمی نسخه 1.0 - Uni+ عمومی می شود",
         "118 عنصر با داده های شیمیایی کامل",
         "مدل های اتم سه بعدی با مدارهای الکترونی تعاملی",
         "موتور یونی با بیش از 50 یون مشترک",
         "ابزارهای شیمی: متعادل کننده معادلات، جرم مولی، فرمول تجربی، جدول حلالیت",
         "مولد کاربرگ با صادرات PDF",
         "ادغام Google Analytics و Microsoft Clarity",
-        "دامنه سفارشی (zperiod.app) پیکربندی شد"
+        "دامنه سفارشی (uniplus.app) پیکربندی شد"
       ]
     },
     "0.5.0": {
@@ -366,14 +366,14 @@ export const changelogLocales = {
     "1.0.0": {
       "date": "2026-02-07",
       "changes": [
-        "سرکاری v1.0 ریلیز — Zperiod عوامی ہے۔",
+        "سرکاری v1.0 ریلیز — Uni+ عوامی ہے۔",
         "مکمل کیمیائی ڈیٹا کے ساتھ 118 عناصر",
         "انٹرایکٹو الیکٹران مدار کے ساتھ 3D ایٹم ماڈل",
         "50+ عام آئنوں کے ساتھ آئن انجن",
         "کیمسٹری کے اوزار: مساوات کا توازن، داڑھ ماس، تجرباتی فارمولہ، حل پذیری ٹیبل",
         "پی ڈی ایف ایکسپورٹ کے ساتھ ورک شیٹ جنریٹر",
         "گوگل تجزیات اور مائیکروسافٹ کلیرٹی انضمام",
-        "حسب ضرورت ڈومین (zperiod.app) کنفیگر ہو گیا۔"
+        "حسب ضرورت ڈومین (uniplus.app) کنفیگر ہو گیا۔"
       ]
     },
     "0.5.0": {
@@ -444,14 +444,14 @@ export const changelogLocales = {
     "1.0.0": {
       "date": "2026-02-07",
       "changes": [
-        "Opisyal na paglabas ng v1.0 — Pumupunta sa publiko ang Zperiod",
+        "Opisyal na paglabas ng v1.0 — Pumupunta sa publiko ang Uni+",
         "118 elemento na may buong data ng kemikal",
         "Mga modelong 3D atom na may mga interactive na electron orbit",
         "Ion engine na may 50+ karaniwang ion",
         "Mga Tool sa Chemistry: Equation Balancer, Molar Mass, Empirical Formula, Solubility Table",
         "Worksheet Generator na may PDF export",
         "Pagsasama ng Google Analytics at Microsoft Clarity",
-        "Na-configure ang custom na domain (zperiod.app)."
+        "Na-configure ang custom na domain (uniplus.app)."
       ]
     },
     "0.5.0": {
@@ -522,14 +522,14 @@ export const changelogLocales = {
     "1.0.0": {
       "date": "2026-02-07",
       "changes": [
-        "正式v1.0發佈——Zperiod上市",
+        "正式v1.0發佈——Uni+上市",
         "118 種元素，具有完整的化學數據",
         "具有交互式電子軌道的 3D 原子模型",
         "具有 50 多種常見離子的離子發動機",
         "化學工具：方程配平器、摩爾質量、經驗公式、溶解度表",
         "具有 PDF 導出功能的工作表生成器",
         "Google Analytics 和 Microsoft Clarity 集成",
-        "配置的自定義域 (zperiod.app)"
+        "配置的自定義域 (uniplus.app)"
       ]
     },
     "0.5.0": {

@@ -14,9 +14,9 @@ export const zhHantUI = {
   },
   "mobile": {
     "desktopOnlyTitle": "仅支持桌面端体验",
-    "desktopOnlyText": "请在桌面浏览器中访问 Zperiod。",
+    "desktopOnlyText": "请在桌面浏览器中访问 Uni+。",
     "rotateTitle": "请横屏使用",
-    "rotateText": "Zperiod 在横屏模式下体验更佳，请旋转您的设备。"
+    "rotateText": "Uni+ 在横屏模式下体验更佳，请旋转您的设备。"
   },
   "aria": {
     "changeLanguage": "切換語言",
@@ -40,7 +40,7 @@ export const zhHantUI = {
     "unknown": "未知"
   },
   "elementL2": {
-    "avgAtomicMass": "平均原子質量",
+    "avgAtomicMass": "相對原子質量",
     "protons": "質子 (p⁺)",
     "electronsNeutral": "電子（中性）",
     "protonsShort": "p⁺ 質子",
@@ -79,7 +79,6 @@ export const zhHantUI = {
   },
   "tools": {
     "pageTitle": "化學工具",
-    "pageSubtitle": "面向 9-12 年級的化學工具與實驗",
     "balancerName": "方程式配平",
     "balancerDesc": "自動配平複雜化學方程式，並提供清楚的化學計量回饋。",
     "balancerGrade": "國中至高中",
@@ -136,7 +135,7 @@ export const zhHantUI = {
     "density": "密度",
     "energy": "能量",
     "sendSuggestion": "送出建議",
-    "suggestHint": "幫助我們改進 Zperiod — 選擇主題或自由輸入。",
+    "suggestHint": "幫助我們改進 Uni+ — 選擇主題或自由輸入。",
     "sendBtnText": "送出",
     "preferences": "高级能力",
     "appearance": "外观设置",
@@ -181,7 +180,7 @@ export const zhHantUI = {
   },
   "ionSection": {
     "basicMonatomic": "基礎單原子",
-    "corePolyatomic": "核心多原子",
+    "corePolyatomic": "多原子離子",
     "transitionMetals": "過渡金屬",
     "specialOrganic": "特殊 / 有機"
   },
@@ -317,7 +316,7 @@ export const zhHantUI = {
     "transitionMetal": "過渡金屬",
     "metalloid": "類金屬",
     "halogen": "鹵素",
-    "nobleGas": "稀有氣體",
+    "nobleGas": "貴氣體",
     "lanthanide": "鑭系",
     "actinide": "錒系",
     "otherNonmetal": "其他非金屬",
@@ -361,6 +360,10 @@ export const zhHantUI = {
     "color": "著色",
     "filter": "篩選",
     "reset": "重設",
+    "first20": "首 20 元素",
+    "style": {
+      "electrons": "電子排布"
+    },
     "selected": "已選",
     "clickToChangeUnit": "再次點擊可切換單位",
     "inSelectedRange": "位於所選範圍",
@@ -559,13 +562,13 @@ export const zhHantUI = {
   },
   "assistant": {
     "fabAriaOpen": "打开 AI 助手",
-    "name": "Zperiod AI",
+    "name": "Uni+ AI",
     "status": "化学助手",
     "closeAria": "关闭助手",
     "stopAria": "停止生成",
     "inputPlaceholder": "输入一个化学问题...",
     "sendAria": "发送消息",
-    "welcomeLine1": "欢迎使用 Zperiod AI。今天想了解什么化学内容？",
+    "welcomeLine1": "欢迎使用 Uni+ AI。今天想了解什么化学内容？",
     "welcomeLine2": "你可以直接让我：",
     "welcomeMolar": "计算摩尔质量（例如 H2O）",
     "welcomeBalance": "配平化学方程式（例如 Fe + O2 -> Fe2O3）",
@@ -602,9 +605,9 @@ export const zhHantUI = {
     "cta": "開始使用",
     "footer": "v2.0 · 全面重構",
     "viewUpdateHistory": "查看更新歷史",
-    "authorRole": "創作者 / 全棧開發者",
-    "schoolInfo": "Aurora High School · 11 年級（2027）",
-    "location": "加拿大 多倫多"
+    "authorRole": "",
+    "schoolInfo": "",
+    "location": ""
   },
   "changelog": {
     "eyebrow": "更新內容",
@@ -706,10 +709,33 @@ export const zhHantUI = {
   },
   "onboarding": {
     "phrases": [
-      "歡迎來到 Zperiod",
-      "互動化學世界",
-      "探索元素奧秘",
-      "分子之美"
+      "H • He • Li • Be • B • C • N • O • F • Ne",
+      "Na⁺ • K⁺ • Ca²⁺ • Mg²⁺ • Al³⁺",
+      "Cl⁻ • NO₃⁻ • SO₄²⁻ • CO₃²⁻ • OH⁻",
+      "H₂O",
+      "CO₂",
+      "NH₃",
+      "CH₄",
+      "NaCl",
+      "HCl(aq)",
+      "H₂SO₄",
+      "HNO₃",
+      "CaCO₃",
+      "CuSO₄·5H₂O",
+      "AgNO₃",
+      "KMnO₄",
+      "原子結構 Atomic Structure",
+      "化學鍵 Bonding",
+      "摩爾與化學計量 Mole & Stoichiometry",
+      "氧化還原 Redox",
+      "酸與鹼 Acids & Bases",
+      "化學平衡 Equilibrium",
+      "反應速率 Kinetics",
+      "電化學 Electrochemistry",
+      "能量變化 Energetics",
+      "有機化學 Organic Chemistry",
+      "聚合物 Polymers",
+      "分析化學 Analytical Chemistry"
     ],
     "start": "開始"
   }

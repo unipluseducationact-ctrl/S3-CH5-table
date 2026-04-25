@@ -14,9 +14,9 @@ export const zhUI = {
   },
   "mobile": {
     "desktopOnlyTitle": "仅支持桌面端体验",
-    "desktopOnlyText": "请在桌面浏览器中访问 Zperiod。",
+    "desktopOnlyText": "请在桌面浏览器中访问 Uni+。",
     "rotateTitle": "请横屏使用",
-    "rotateText": "Zperiod 在横屏模式下体验更佳，请旋转您的设备。"
+    "rotateText": "Uni+ 在横屏模式下体验更佳，请旋转您的设备。"
   },
   "aria": {
     "changeLanguage": "切换语言",
@@ -40,7 +40,7 @@ export const zhUI = {
     "unknown": "未知"
   },
   "elementL2": {
-    "avgAtomicMass": "平均原子质量",
+    "avgAtomicMass": "相对原子质量",
     "protons": "质子 (p⁺)",
     "electronsNeutral": "电子（中性）",
     "protonsShort": "p⁺ 质子",
@@ -138,7 +138,7 @@ export const zhUI = {
     "density": "密度",
     "energy": "能量",
     "sendSuggestion": "发送反馈",
-    "suggestHint": "帮助我们改进 Zperiod — 选择一个话题或自由输入。",
+    "suggestHint": "帮助我们改进 Uni+ — 选择一个话题或自由输入。",
     "sendBtnText": "发送",
     "preferences": "高级能力",
     "appearance": "外观设置",
@@ -363,6 +363,10 @@ export const zhUI = {
     "color": "着色",
     "filter": "筛选",
     "reset": "重置",
+    "first20": "首 20 元素",
+    "style": {
+      "electrons": "电子排布"
+    },
     "selected": "已选",
     "clickToChangeUnit": "再次点击可切换单位",
     "inSelectedRange": "位于所选范围",
@@ -561,13 +565,13 @@ export const zhUI = {
   },
   "assistant": {
     "fabAriaOpen": "打开 AI 助手",
-    "name": "Zperiod AI",
+    "name": "Uni+ AI",
     "status": "化学助手",
     "closeAria": "关闭助手",
     "stopAria": "停止生成",
     "inputPlaceholder": "输入一个化学问题...",
     "sendAria": "发送消息",
-    "welcomeLine1": "欢迎使用 Zperiod AI。今天想了解什么化学内容？",
+    "welcomeLine1": "欢迎使用 Uni+ AI。今天想了解什么化学内容？",
     "welcomeLine2": "你可以直接让我：",
     "welcomeMolar": "计算摩尔质量（例如 H2O）",
     "welcomeBalance": "配平化学方程式（例如 Fe + O2 -> Fe2O3）",
@@ -604,9 +608,9 @@ export const zhUI = {
     "cta": "开始使用",
     "footer": "v2.0 · 实验室精准版",
     "viewUpdateHistory": "查看更新历史",
-    "authorRole": "创作者 / 全栈开发者",
-    "schoolInfo": "Aurora High School · 11 年级（2027）",
-    "location": "加拿大 多伦多"
+    "authorRole": "",
+    "schoolInfo": "",
+    "location": ""
   },
   "changelog": {
     "eyebrow": "更新内容",
@@ -708,10 +712,33 @@ export const zhUI = {
   },
   "onboarding": {
     "phrases": [
-      "欢迎来到 Zperiod",
-      "互动化学世界",
-      "探索元素奥秘",
-      "分子之美"
+      "H • He • Li • Be • B • C • N • O • F • Ne",
+      "Na⁺ • K⁺ • Ca²⁺ • Mg²⁺ • Al³⁺",
+      "Cl⁻ • NO₃⁻ • SO₄²⁻ • CO₃²⁻ • OH⁻",
+      "H₂O",
+      "CO₂",
+      "NH₃",
+      "CH₄",
+      "NaCl",
+      "HCl(aq)",
+      "H₂SO₄",
+      "HNO₃",
+      "CaCO₃",
+      "CuSO₄·5H₂O",
+      "AgNO₃",
+      "KMnO₄",
+      "原子结构 Atomic Structure",
+      "化学键 Bonding",
+      "摩尔与化学计量 Mole & Stoichiometry",
+      "氧化还原 Redox",
+      "酸与碱 Acids & Bases",
+      "化学平衡 Equilibrium",
+      "反应速率 Kinetics",
+      "电化学 Electrochemistry",
+      "能量变化 Energetics",
+      "有机化学 Organic Chemistry",
+      "聚合物 Polymers",
+      "分析化学 Analytical Chemistry"
     ],
     "start": "开始"
   },

@@ -21,7 +21,7 @@ import {
   registerCacheCleanup,
   t
 } from "./js/modules/langController.js";
-import { initOnboardingFlow } from "./js/modules/onboardingController.js";
+import { initEntryLanding } from "./js/modules/onboardingController.js";
 
 function isRealMobileDevice() {
   // Wide viewports (> 1024px) get the full desktop app, even on touch devices like iPad.
@@ -42,7 +42,7 @@ function isRealMobileDevice() {
 // ========================================
 // Global Dragging State (used to prevent accidental panel close)
 // ========================================
-window._zperiodIsDragging = false;
+window._uniplusIsDragging = false;
 (function initGlobalDragTracking() {
   let pointerDown = false;
   let startX = 0, startY = 0;
@@ -57,17 +57,17 @@ window._zperiodIsDragging = false;
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
     if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
-      window._zperiodIsDragging = true;
+      window._uniplusIsDragging = true;
     }
   }, true);
   document.addEventListener('pointerup', () => {
     pointerDown = false;
     // Delay clearing drag state so click handlers see it
-    setTimeout(() => { window._zperiodIsDragging = false; }, 80);
+    setTimeout(() => { window._uniplusIsDragging = false; }, 80);
   }, true);
   document.addEventListener('pointercancel', () => {
     pointerDown = false;
-    setTimeout(() => { window._zperiodIsDragging = false; }, 80);
+    setTimeout(() => { window._uniplusIsDragging = false; }, 80);
   }, true);
   window.addEventListener('blur', () => {
     pointerDown = false;
@@ -79,8 +79,8 @@ window._zperiodIsDragging = false;
 // Global Animation Speed State
 // ========================================
 const savedAnimationState = getSavedAnimationState();
-window._zperiodAnimPaused = savedAnimationState.paused;
-window._zperiodAnimSpeed = savedAnimationState.speed;
+window._uniplusAnimPaused = savedAnimationState.paused;
+window._uniplusAnimSpeed = savedAnimationState.speed;
 
 // ========================================
 // Lazy Script/Module Loaders (performance)
@@ -126,147 +126,8 @@ function loadHeroAtomModule() {
 }
 
 function initWelcomeModal() {
-  if (isRealMobileDevice()) return;
-
-  const welcomeModal = document.getElementById("welcome-modal");
-  const closeBtn = document.getElementById("welcome-close-btn");
-  const startBtn = document.getElementById("welcome-start-btn");
-
-  const changelogModal = document.getElementById("changelog-modal");
-  const changelogCloseBtn = document.getElementById("changelog-close-btn");
-  const changelogDismissBtn = document.getElementById("changelog-dismiss-btn");
-
-  // ===== Current version for changelog gating =====
-  const CURRENT_VERSION = "2.0.1";
-  
-  // Cache busting force reload (one-time for each release)
-  const lastForced = localStorage.getItem("zperiod_force_refresh");
-  if (lastForced !== CURRENT_VERSION) {
-    localStorage.setItem("zperiod_force_refresh", CURRENT_VERSION);
-    // Add version to URL and reload to bypass disk cache once
-    const url = new URL(window.location.href);
-    url.searchParams.set('v', CURRENT_VERSION);
-    window.location.replace(url.toString());
-    return;
-  }
-
-  // ===== Welcome helpers =====
-  function openWelcomeModal() {
-    if (!welcomeModal) return;
-    welcomeModal.classList.add("active");
-    document.body.classList.add("welcome-active");
-    document.body.classList.add("hide-nav");
-    void loadHeroAtomModule()
-      .then(({ initHeroAtom }) => initHeroAtom())
-      .catch((e) => console.error("Hero 3D init error:", e));
-  }
-
-  function closeWelcome() {
-    if (!welcomeModal) return;
-    welcomeModal.classList.remove("active");
-    document.body.classList.remove("welcome-active");
-    document.body.classList.remove("hide-nav");
-    localStorage.setItem("zperiod_welcomed", "true");
-    if (window._heroCleanup) window._heroCleanup();
-  }
-
-  // ===== Changelog helpers =====
-  function openChangelogModal() {
-    if (!changelogModal) return;
-    changelogModal.classList.add("active");
-    document.body.classList.add("hide-nav");
-  }
-
-  function closeChangelog() {
-    if (!changelogModal) return;
-    changelogModal.classList.remove("active");
-    document.body.classList.remove("hide-nav");
-    localStorage.setItem("zperiod_changelog_seen", CURRENT_VERSION);
-    // Also mark as welcomed so the welcome modal won't pop up after
-    localStorage.setItem("zperiod_welcomed", "true");
-  }
-
-  // ===== Decide which to show =====
-  const seenChangelogVersion = localStorage.getItem("zperiod_changelog_seen");
-  const hasVisited = localStorage.getItem("zperiod_welcomed");
-
-  if (seenChangelogVersion !== CURRENT_VERSION) {
-    // Changelog takes priority — show to ALL users (new or returning)
-    openChangelogModal();
-  } else if (!hasVisited) {
-    // No pending changelog, but first-time visitor → show welcome
-    openWelcomeModal();
-  }
-
-  // ===== Global helper to manually trigger welcome =====
-  window._showWelcome = function showWelcome() {
-    openWelcomeModal();
-  };
-
-  // ===== Event bindings: Welcome =====
-  if (closeBtn) closeBtn.addEventListener("click", closeWelcome);
-  if (startBtn) startBtn.addEventListener("click", closeWelcome);
-  if (welcomeModal) {
-    welcomeModal.addEventListener("click", (e) => {
-      if (window._zperiodIsDragging) return;
-      if (e.target === welcomeModal) closeWelcome();
-    });
-  }
-
-  // ===== Event bindings: Changelog =====
-  if (changelogCloseBtn) changelogCloseBtn.addEventListener("click", closeChangelog);
-  if (changelogDismissBtn) changelogDismissBtn.addEventListener("click", closeChangelog);
-
-  const showChangelogBtn = document.getElementById("show-changelog-btn");
-  if (showChangelogBtn) {
-    showChangelogBtn.addEventListener("click", () => {
-      // Hide welcome modal and open changelog directly
-      if (welcomeModal) welcomeModal.classList.remove("active");
-      openChangelogModal();
-    });
-  }
-
-  if (changelogModal) {
-    changelogModal.addEventListener("click", (e) => {
-      if (window._zperiodIsDragging) return;
-      if (e.target === changelogModal) closeChangelog();
-    });
-  }
-
-  // ===== Escape key closes whichever is active =====
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-    if (changelogModal && changelogModal.classList.contains("active")) {
-      closeChangelog();
-    } else if (welcomeModal && welcomeModal.classList.contains("active")) {
-      closeWelcome();
-    }
-  });
+  // Deprecated: welcome modal removed (direct-to-app).
 }
-
-// Email copy function
-window.copyEmail = function (text, btn) {
-  navigator.clipboard
-    .writeText(text)
-    .then(() => {
-      const copyIcon = btn.querySelector(".icon-copy");
-      const checkIcon = btn.querySelector(".icon-check");
-
-      if (copyIcon) copyIcon.style.display = "none";
-      if (checkIcon) checkIcon.style.display = "block";
-
-      btn.style.transform = "scale(0.98)";
-      setTimeout(() => (btn.style.transform = "scale(1)"), 100);
-
-      setTimeout(() => {
-        if (copyIcon) copyIcon.style.display = "block";
-        if (checkIcon) checkIcon.style.display = "none";
-      }, 2000);
-    })
-    .catch((err) => {
-      console.error("Failed to copy: ", err);
-    });
-};
 
 // ========================================
 // Periodic Table Auto-Scale on Short Viewport
@@ -512,108 +373,11 @@ function initNavResponsive() {
 }
 
 // Global Data Version State
-window.zperiodVersion = 'old';
+window.uniplusVersion = 'old';
 
-function bootstrapApp() {
-  initLangController();
+function initMainApp() {
+  // No welcome / notice pages — go straight to main app.
 
-  if (isRealMobileDevice()) {
-    // Keep real mobile users on the dedicated landing and avoid desktop onboarding/welcome flows.
-    return;
-  }
-
-  // Release-gated onboarding: force-show the intro animation once per release.
-  const ONBOARDING_VERSION = "2.0.1";
-  const seenOnboardingVersion = localStorage.getItem("zperiod_onboarding_seen_version");
-  if (seenOnboardingVersion !== ONBOARDING_VERSION) {
-    localStorage.setItem("zperiod_onboarding_seen_version", ONBOARDING_VERSION);
-    localStorage.removeItem("zperiod_welcomed_v2");
-  }
-
-  if (!localStorage.getItem("zperiod_welcomed_v2")) {
-    initOnboardingFlow();
-    return;
-  }
-
-  initWelcomeModal();
-
-
-  // Version Dropdown Logic
-  const dropdown = document.getElementById("version-dropdown");
-  const toggle = document.getElementById("version-dropdown-toggle");
-  const option = document.getElementById("version-dropdown-option");
-  const currentLabel = toggle?.querySelector(".version-current-label");
-
-  if (toggle && dropdown) {
-    // Toggle dropdown open/close
-    toggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropdown.classList.toggle("open");
-    });
-
-    // Close dropdown on outside click
-    document.addEventListener("click", () => {
-      dropdown.classList.remove("open");
-    });
-
-    // Switch version — Advanced is disabled (not ready)
-    // Create tooltip element
-    const tooltip = document.createElement('div');
-    tooltip.className = 'advanced-tooltip';
-    
-    // Set localized text and update on lang change
-    tooltip.innerText = t("ionModal.comingSoon") || 'Coming Soon...';
-    onLangChange(() => {
-      tooltip.innerText = t("ionModal.comingSoon") || 'Coming Soon...';
-    });
-
-    // Opaque Styles
-    Object.assign(tooltip.style, {
-      position: 'fixed',
-      background: '#1a1a1a', // Dark opaque background
-      color: '#fff', // White text
-      padding: '6px 12px', // Compact padding
-      borderRadius: '20px', // Pill shape
-      fontSize: '12px',
-      fontWeight: '500',
-      lineHeight: '1',
-      pointerEvents: 'none',
-      zIndex: '9999',
-      display: 'none',
-      whiteSpace: 'nowrap',
-      transform: 'translateY(-50%)',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)', // Softer shadow
-      fontFamily: '"Inter", sans-serif',
-      textAlign: 'center',
-      border: 'none' // Remove border since it's opaque
-    });
-    document.body.appendChild(tooltip);
-
-    // Hover logic
-    if (option) {
-      option.addEventListener('mouseenter', () => {
-        const rect = option.getBoundingClientRect();
-        // Position to the right of the dropdown menu
-        tooltip.style.top = (rect.top + rect.height / 2) + 'px';
-        tooltip.style.left = (rect.right + 12) + 'px'; // 12px gap
-        tooltip.style.display = 'block';
-
-        // Add a subtle fade-in animation
-        tooltip.animate([
-          { opacity: 0, transform: 'translateY(-50%) translateX(-5px)' },
-          { opacity: 1, transform: 'translateY(-50%) translateX(0)' }
-        ], { duration: 200, easing: 'ease-out' });
-      });
-      option.addEventListener('mouseleave', () => {
-        tooltip.style.display = 'none';
-      });
-
-      // Keep click disabled
-      option.addEventListener("click", (e) => {
-        e.stopPropagation();
-      });
-    }
-  }
   initPeriodicTableScale();
   initNavResponsive();
 
@@ -672,7 +436,7 @@ function bootstrapApp() {
   });
   initSettingsController({
     onOpenWelcome: () => {
-      if (window._showWelcome) window._showWelcome();
+      // Welcome modal removed.
     },
     l3UnitState,
     setGlobalUnit,
@@ -680,6 +444,13 @@ function bootstrapApp() {
 
   // Initialize mascot chemistry assistant
   initMascotController();
+}
+
+function bootstrapApp() {
+  initLangController();
+  // Unified landing for desktop + mobile.
+  // No intermediate pages; Start goes straight to main app.
+  initEntryLanding(() => initMainApp());
 }
 
 if (document.readyState === "loading") {

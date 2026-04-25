@@ -33,7 +33,7 @@ import {
 } from "../data/locales/zhHantUi.js";
 
 
-// v2 dataset stub — file removed; branches gated by zperiodVersion === 'new' are inert.
+// v2 dataset stub — file removed; branches gated by uniplusVersion === 'new' are inert.
 const elementsData_v2 = [];
 const REPRESENTATIVE_MASS_NUMBERS = [
   1, 4, 7, 9, 11, 12, 14, 16, 19, 20,
@@ -593,7 +593,7 @@ function localizeIsotopeNotes(text) {
         .replace(/No chemical properties have been experimentally verified/gi, "其化學性質尚未通過實驗驗證")
         .replace(/Predicted to be near the island of stability/gi, "預計接近穩定島")
         .replace(/Relativistic effects predict/gi, "相對論效應預測")
-        .replace(/it may be a solid or a semiconductor rather than a noble gas/gi, "它可能是固體或半導體，而非稀有氣體")
+        .replace(/it may be a solid or a semiconductor rather than a noble gas/gi, "它可能是固體或半導體，而非貴氣體")
         .replace(/high volatility, possibly liquid or gaseous at STP/gi, "具有高揮發性，在標準狀態下可能為液態或氣態")
         .replace(/volatile/gi, "揮發性")
         .replace(/like osmium/gi, "與鋨類似")
@@ -783,6 +783,102 @@ function normalizeCategoryClass(catClass) {
     "non-metal": "other-nonmetal",
   };
   return aliasMap[catClass] || catClass;
+}
+
+// ===== Display helpers: HKDSE-style group numbering =====
+// - Transition metals (d-block, columns 3–12): no group number shown
+// - Lanthanides/actinides (f-block): no group number shown
+// - Main group: 1,2 then 3–7 for columns 13–17; noble gases are group 0 (column 18)
+function getDisplayGroupHKDSE(element) {
+  if (!element) return null;
+  if (element.series === "lanthanide" || element.series === "actinide") return null;
+  const col = element.column;
+  if (!Number.isInteger(col)) return null;
+  if (col >= 3 && col <= 12) return null;
+  if (col === 18) return 0;
+  if (col === 13) return 3;
+  if (col === 14) return 4;
+  if (col === 15) return 5;
+  if (col === 16) return 6;
+  if (col === 17) return 7;
+  if (col === 1 || col === 2) return col;
+  return null;
+}
+
+// ===== Electron arrangement helpers (Bohr shell allocation) =====
+const BOHR_SHELL_CAPACITIES = [2, 8, 8, 18, 18, 32, 32];
+
+function getElectronArrangementByZ(z) {
+  if (!Number.isFinite(z) || z <= 0) return [];
+  let left = Math.floor(z);
+  const out = [];
+  for (let i = 0; i < BOHR_SHELL_CAPACITIES.length && left > 0; i++) {
+    const cap = BOHR_SHELL_CAPACITIES[i];
+    const take = Math.min(left, cap);
+    out.push(take);
+    left -= take;
+  }
+  return out;
+}
+
+function renderMiniBohr(container, shells) {
+  if (!container) return;
+  container.innerHTML = "";
+  if (!Array.isArray(shells) || shells.length === 0) return;
+
+  const sizePx = 44;
+  const center = sizePx / 2;
+  const ringGap = shells.length <= 1 ? 0 : 6.8;
+
+  container.style.width = `${sizePx}px`;
+  container.style.height = `${sizePx}px`;
+
+  shells.forEach((count, idx) => {
+    const ring = document.createElement("div");
+    ring.className = "electron-bohr-ring";
+    const r = 10.2 + idx * ringGap;
+    ring.style.width = `${r * 2}px`;
+    ring.style.height = `${r * 2}px`;
+    ring.style.left = `${center}px`;
+    ring.style.top = `${center}px`;
+    container.appendChild(ring);
+
+    const n = Math.max(0, Math.floor(count || 0));
+    if (n <= 0) return;
+
+    // Pair electrons for shells 2+, but keep the first shell unpaired (even spacing).
+    if (idx === 0) {
+      for (let i = 0; i < n; i++) {
+        const dot = document.createElement("span");
+        dot.className = "electron-bohr-dot";
+        const deg = (360 / n) * i;
+        dot.style.left = `${center}px`;
+        dot.style.top = `${center}px`;
+        dot.style.transform = `translate(-50%, -50%) rotate(${deg}deg) translate(${r}px) rotate(${-deg}deg)`;
+        container.appendChild(dot);
+      }
+      return;
+    }
+
+    const pairCount = Math.ceil(n / 2);
+    const pairSpreadDeg = 8;
+    for (let p = 0; p < pairCount; p++) {
+      const baseDeg = (360 / pairCount) * p;
+      const remaining = n - p * 2;
+      const dotsInPair = remaining >= 2 ? 2 : 1;
+      for (let k = 0; k < dotsInPair; k++) {
+        const dot = document.createElement("span");
+        dot.className = "electron-bohr-dot";
+        const offset =
+          dotsInPair === 2 ? (k === 0 ? -pairSpreadDeg / 2 : pairSpreadDeg / 2) : 0;
+        const deg = baseDeg + offset;
+        dot.style.left = `${center}px`;
+        dot.style.top = `${center}px`;
+        dot.style.transform = `translate(-50%, -50%) rotate(${deg}deg) translate(${r}px) rotate(${-deg}deg)`;
+        container.appendChild(dot);
+      }
+    }
+  });
 }
 
 let legendMeasureCanvas = null;
@@ -1030,6 +1126,47 @@ export function buildPeriodicTable(tableContainer) {
   eitController.resetEITRegistry();
   eitController.resetEITState();
 
+  // Clear previous build (including labels)
+  tableContainer.innerHTML = "";
+
+  // Top-left blank corner
+  const corner = document.createElement("div");
+  corner.className = "empty";
+  corner.style.gridRow = 1;
+  corner.style.gridColumn = 1;
+  tableContainer.appendChild(corner);
+
+  // Group labels (HKDSE: I, II, III–VII, 0)
+  const groupLabelByColumn = {
+    1: "I",
+    2: "II",
+    13: "III",
+    14: "IV",
+    15: "V",
+    16: "VI",
+    17: "VII",
+    18: "0",
+  };
+  for (let c = 1; c <= 18; c++) {
+    const label = groupLabelByColumn[c] || "";
+    const cell = document.createElement("div");
+    cell.className = "group-label";
+    cell.textContent = label;
+    cell.style.gridRow = 1;
+    cell.style.gridColumn = c + 1; // +1 because col 1 is period labels
+    tableContainer.appendChild(cell);
+  }
+
+  // Period labels (1–7)
+  for (let r = 1; r <= 7; r++) {
+    const cell = document.createElement("div");
+    cell.className = "period-label";
+    cell.textContent = String(r);
+    cell.style.gridRow = r + 1; // +1 because row 1 is group labels
+    cell.style.gridColumn = 1;
+    tableContainer.appendChild(cell);
+  }
+
   const grid = {};
   elements.forEach((element) => {
     if (element.row && element.column) {
@@ -1041,7 +1178,12 @@ export function buildPeriodicTable(tableContainer) {
       const element = grid[`${r}-${c}`];
       const cell = document.createElement("div");
       if (element) {
+        const relMass = finallyData?.[element.number]?.level2_atomic?.mass?.highSchool || "";
+        const relMassHtml = relMass
+          ? `<span class="rel-mass" aria-hidden="true" style="position:absolute;left:calc(var(--tvmin, 1vmin) * 0.6);bottom:calc(var(--tvmin, 1vmin) * 0.35);font-size:9cqi;font-weight:700;opacity:0.42;letter-spacing:-0.01em;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none;">${escapeHtml(relMass)}</span>`
+          : `<span class="rel-mass" aria-hidden="true" style="display:none;"></span>`;
         cell.classList.add("element");
+        if (element.row === 7) cell.classList.add("period-7");
         cell.dataset.elementNumber = String(element.number);
         cell.setAttribute("role", "button");
         cell.setAttribute("tabindex", "0");
@@ -1052,10 +1194,23 @@ export function buildPeriodicTable(tableContainer) {
             .replace(/[^a-z0-9-]/g, ""));
           cell.classList.add(catClass);
         }
+        const shells = getElectronArrangementByZ(element.number);
+        const arrangementText = shells.length ? shells.join(",") : "—";
+        const showGraph = typeof element.number === "number" && element.number <= 20;
+        if (showGraph) cell.classList.add("electron-arrangement-has-graph");
         cell.innerHTML = `
                       <span class="number">${element.number}</span>
                       <span class="symbol">${element.symbol}</span>
                       <span class="name">${localizeElementName(element)}</span>
+                      ${relMassHtml}
+                      <span class="electron-arrangement" aria-hidden="true">
+                        <span class="electron-arrangement-text">${arrangementText}</span>
+                        ${
+                          showGraph
+                            ? `<span class="electron-bohr-wrap"><span class="electron-bohr" data-shells="${shells.join(",")}"></span><span class="electron-bohr-symbol">${element.symbol}</span></span>`
+                            : ``
+                        }
+                      </span>
                   `;
         // Range blocks (La-Lu, Ac-Lr): toggle category highlight instead of modal
         if (element.symbol === "La-Lu" || element.symbol === "Ac-Lr") {
@@ -1096,8 +1251,8 @@ export function buildPeriodicTable(tableContainer) {
       } else {
         cell.classList.add("empty");
       }
-      cell.style.gridRow = r;
-      cell.style.gridColumn = c;
+      cell.style.gridRow = r + 1;
+      cell.style.gridColumn = c + 1;
       tableContainer.appendChild(cell);
     }
   }
@@ -1111,6 +1266,10 @@ export function buildPeriodicTable(tableContainer) {
   lanthanides.forEach((element, index) => {
     const cell = document.createElement("div");
     cell.classList.add("element", "lanthanide");
+    const relMass = finallyData?.[element.number]?.level2_atomic?.mass?.highSchool || "";
+    const relMassHtml = relMass
+      ? `<span class="rel-mass" aria-hidden="true" style="position:absolute;left:calc(var(--tvmin, 1vmin) * 0.6);bottom:calc(var(--tvmin, 1vmin) * 0.35);font-size:9cqi;font-weight:700;opacity:0.42;letter-spacing:-0.01em;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none;">${escapeHtml(relMass)}</span>`
+      : `<span class="rel-mass" aria-hidden="true" style="display:none;"></span>`;
     cell.dataset.elementNumber = String(element.number);
     cell.setAttribute("role", "button");
     cell.setAttribute("tabindex", "0");
@@ -1125,23 +1284,42 @@ export function buildPeriodicTable(tableContainer) {
         .replace(/[^a-z0-9-]/g, ""));
       cell.classList.add(catClass);
     }
+    const shells = getElectronArrangementByZ(element.number);
+    const arrangementText = shells.length ? shells.join(",") : "—";
+    const showGraph = typeof element.number === "number" && element.number <= 20;
+    if (showGraph) cell.classList.add("electron-arrangement-has-graph");
     cell.innerHTML = `
               <span class="number">${element.number}</span>
               <span class="symbol">${element.symbol}</span>
               <span class="name">${localizeElementName(element)}</span>
+              ${relMassHtml}
+              <span class="electron-arrangement" aria-hidden="true">
+                <span class="electron-arrangement-text">${arrangementText}</span>
+                ${
+                  showGraph
+                    ? `<span class="electron-bohr-wrap"><span class="electron-bohr" data-shells="${shells.join(",")}"></span><span class="electron-bohr-symbol">${element.symbol}</span></span>`
+                    : ``
+                }
+              </span>
           `;
     const openElementModal = () => showModal(element);
     cell.addEventListener("click", openElementModal);
     bindKeyboardActivation(cell, openElementModal);
     eitController.registerEITElementCell(cell, element);
 
-    cell.style.gridRow = 9;
-    cell.style.gridColumn = 4 + index;
+    // After adding header row: periods occupy rows 2–8, gap is row 9.
+    // Place La–Lu on the first row after the gap.
+    cell.style.gridRow = 10;
+    cell.style.gridColumn = 5 + index;
     tableContainer.appendChild(cell);
   });
   actinides.forEach((element, index) => {
     const cell = document.createElement("div");
     cell.classList.add("element", "actinide");
+    const relMass = finallyData?.[element.number]?.level2_atomic?.mass?.highSchool || "";
+    const relMassHtml = relMass
+      ? `<span class="rel-mass" aria-hidden="true" style="position:absolute;left:calc(var(--tvmin, 1vmin) * 0.6);bottom:calc(var(--tvmin, 1vmin) * 0.35);font-size:9cqi;font-weight:700;opacity:0.42;letter-spacing:-0.01em;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none;">${escapeHtml(relMass)}</span>`
+      : `<span class="rel-mass" aria-hidden="true" style="display:none;"></span>`;
     cell.dataset.elementNumber = String(element.number);
     cell.setAttribute("role", "button");
     cell.setAttribute("tabindex", "0");
@@ -1156,23 +1334,46 @@ export function buildPeriodicTable(tableContainer) {
         .replace(/[^a-z0-9-]/g, ""));
       cell.classList.add(catClass);
     }
+    const shells = getElectronArrangementByZ(element.number);
+    const arrangementText = shells.length ? shells.join(",") : "—";
+    const showGraph = typeof element.number === "number" && element.number <= 20;
+    if (showGraph) cell.classList.add("electron-arrangement-has-graph");
     cell.innerHTML = `
               <span class="number">${element.number}</span>
               <span class="symbol">${element.symbol}</span>
               <span class="name">${localizeElementName(element)}</span>
+              ${relMassHtml}
+              <span class="electron-arrangement" aria-hidden="true">
+                <span class="electron-arrangement-text">${arrangementText}</span>
+                ${
+                  showGraph
+                    ? `<span class="electron-bohr-wrap"><span class="electron-bohr" data-shells="${shells.join(",")}"></span><span class="electron-bohr-symbol">${element.symbol}</span></span>`
+                    : ``
+                }
+              </span>
           `;
     const openElementModal = () => showModal(element);
     cell.addEventListener("click", openElementModal);
     bindKeyboardActivation(cell, openElementModal);
     eitController.registerEITElementCell(cell, element);
 
-    cell.style.gridRow = 10;
-    cell.style.gridColumn = 4 + index;
+    // Place Ac–Lr on the second row after the gap.
+    cell.style.gridRow = 11;
+    cell.style.gridColumn = 5 + index;
     tableContainer.appendChild(cell);
   });
   
   // Apply text cramping and correct language classes initially
   updatePeriodicTableLocalizedText(tableContainer);
+
+  // Hydrate mini Bohr diagrams once per build (Z <= 20 only).
+  tableContainer.querySelectorAll(".electron-bohr").forEach((node) => {
+    const shells = String(node.dataset.shells || "")
+      .split(",")
+      .map((n) => Number.parseInt(n, 10))
+      .filter((n) => Number.isFinite(n) && n > 0);
+    renderMiniBohr(node, shells);
+  });
 
   if (!tableContainer.dataset.langBound) {
     onLangChange(() => {
@@ -1199,7 +1400,7 @@ export function buildPeriodicTable(tableContainer) {
 let modal, modalClose, modalSymbol, modalName, modalNumber, modalCategory,
   modalPhase, modalCategoryDisplay, modalConfigLarge, modalDiscovery,
   modalEtymology, modalDescription, modalDensity, modalMelt, modalBoil,
-  modalNegativity, modalRadius, modalIonization, modalElectronAffinity, modalWatermark,
+  modalNegativity, modalRadius, modalWatermark,
   atomContainer, modalCharge, modalP, modalE, modalN, modalPeriod,
   modalGroup, modalCompounds, modalUses, modalHazards,
   eduNames, eduIsotopes, eduCardsContainer;
@@ -1252,7 +1453,7 @@ function getElementCategory(element) {
 // Tracks the current unit index per metric key so cycling persists during a modal session
 let savedUnits = null;
 try {
-  const stored = localStorage.getItem('zperiod_units');
+  const stored = localStorage.getItem('uniplus_units');
   if (stored) savedUnits = JSON.parse(stored);
 } catch (e) {
   // Ignore storage access failures and fall back to default units.
@@ -1261,7 +1462,7 @@ export const l3UnitState = savedUnits || { ie: 0, ea: 0, melt: 0, boil: 0, densi
 
 function saveUnits() {
   try {
-    localStorage.setItem('zperiod_units', JSON.stringify(l3UnitState));
+    localStorage.setItem('uniplus_units', JSON.stringify(l3UnitState));
   } catch (e) {
     // Ignore storage access failures so the UI keeps working.
   }
@@ -1490,7 +1691,7 @@ const L3_UNIT_CONFIGS = {
 let _globalExtremes = null;
 function getGlobalPhysicalExtremes() {
   if (_globalExtremes) return _globalExtremes;
-  const metrics = ['firstIonization', 'electronAffinity', 'electronegativity', 'density', 'meltingPoint', 'boilingPoint', 'atomicRadius', 'specificHeat'];
+  const metrics = ['electronegativity', 'density', 'meltingPoint', 'boilingPoint', 'atomicRadius'];
   _globalExtremes = {};
   metrics.forEach(m => _globalExtremes[m] = { min: Infinity, max: -Infinity, minElements: new Set(), maxElements: new Set() });
 
@@ -1716,34 +1917,22 @@ function populateSimplifiedView(element) {
     let typeDisplay = element.category || "Unknown";
     let phaseDisplay = element.phase || "Unknown";
 
-    if (window.zperiodVersion === 'new' && v2Data) {
+    if (window.uniplusVersion === 'new' && v2Data) {
       typeDisplay = v2Data.level1_basic.type || typeDisplay;
       phaseDisplay = v2Data.level1_basic.phaseAtSTP || phaseDisplay;
     }
 
     setText("#l1-type-value", localizeSimpleStatusText(typeDisplay, t("elementL1.unknown")));
     let displayRow = element.row;
-    let displayCol = element.column;
+    let displayCol = getDisplayGroupHKDSE(element);
     if (element.series === "lanthanide") {
       displayRow = 6;
-      displayCol = 3;
     } else if (element.series === "actinide") {
       displayRow = 7;
-      displayCol = 3;
     }
 
-    setText("#l1-group-period-value", `${displayCol || "-"} / ${displayRow || "-"}`);
+    setText("#l1-group-period-value", `${(displayCol ?? "-")} / ${displayRow || "-"}`);
     setText("#l1-phase-value", localizeSimpleStatusText(phaseDisplay, t("elementL1.unknown")));
-
-    const getElectronBlock = (z, col) => {
-      if ((z >= 57 && z <= 71) || (z >= 89 && z <= 103)) return "f";
-      if (z === 2) return "s";
-      if (col >= 1 && col <= 2) return "s";
-      if (col >= 3 && col <= 12) return "d";
-      if (col >= 13 && col <= 18) return "p";
-      return "—";
-    };
-    setText("#l1-electron-block-value", getElectronBlock(element.number, element.column));
 
     const ionsSection = greenCard.querySelector(".ions-section");
     if (ionsSection) {
@@ -1751,7 +1940,7 @@ function populateSimplifiedView(element) {
         .querySelectorAll(".ion-item")
         .forEach((item) => item.remove());
       let commonIonsText = finallyElementData.level1_basic?.commonIons || "";
-      if (window.zperiodVersion === 'new' && v2Data) {
+      if (window.uniplusVersion === 'new' && v2Data) {
         commonIonsText = v2Data.level1_basic.commonIons || "";
       }
       const langCode = getLang();
@@ -1831,18 +2020,8 @@ function populateSimplifiedView(element) {
     ".yellow-rectangle .card-info-container",
   );
   if (yellowCard) {
-    let valenceStr = "";
-    if (window.zperiodVersion === 'new' && v2Data) {
-      valenceStr = v2Data.level1_basic.valenceElectrons || "—";
-    } else if (finallyElementData.level1_basic?.valenceElectrons !== undefined && finallyElementData.level1_basic?.valenceElectrons !== null) {
-      const valence = finallyElementData.level1_basic.valenceElectrons;
-      valenceStr = typeof valence === "string" ? valence : valence.toString();
-    } else {
-      valenceStr = "—";
-    }
-
     let avgMass = finallyElementData.level2_atomic?.mass?.highSchool || "—";
-    if (window.zperiodVersion === 'new' && v2Data && v2Data.level2_atomic.mass.standard) {
+    if (window.uniplusVersion === 'new' && v2Data && v2Data.level2_atomic.mass.standard) {
       avgMass = v2Data.level2_atomic.mass.standard;
     }
     const representativeMass = getRepresentativeMassNumber(element.number);
@@ -1850,24 +2029,19 @@ function populateSimplifiedView(element) {
       ? representativeMass - element.number
       : "—";
     let level2Config = finallyElementData.level3_properties?.electronic?.configuration || "—";
-    if (window.zperiodVersion === 'new' && v2Data && v2Data.level3_properties?.electronic?.configuration) {
+    if (window.uniplusVersion === 'new' && v2Data && v2Data.level3_properties?.electronic?.configuration) {
       level2Config = v2Data.level3_properties.electronic.configuration;
     }
 
     setText("#l2-avg-mass-value", formatAverageAtomicMass(avgMass, element.number, element.weight));
-    setText("#l2-valence-electrons-value", localizeValence(valenceStr));
     setText("#l2-protons-value", element.number.toString());
     setText("#l2-neutrons-value", String(neutronCount));
     setText("#l2-electrons-value", element.number.toString());
-    const level2ValenceRow = yellowCard.querySelector("#l2-valence-electrons-value");
-    if (level2ValenceRow) {
-      const valenceText = String(valenceStr || "");
-      const needsCompact = valenceText.length >= 20 || valenceText.includes("Variable (");
-      level2ValenceRow.classList.toggle("valence-compact", needsCompact);
-    }
     const level2ConfigNode = yellowCard.querySelector("#l2-configuration-value");
     if (level2ConfigNode) {
-      level2ConfigNode.innerHTML = formatElectronConfigurationHtml(level2Config);
+      const shells = getElectronArrangementByZ(element.number);
+      const arrangement = shells.length ? shells.join(",") : "—";
+      level2ConfigNode.textContent = arrangement;
     }
 
     const isotopesSection = yellowCard.querySelector(".ions-section");
@@ -1888,7 +2062,7 @@ function populateSimplifiedView(element) {
                   ? finallyElementData.level2_atomic.mostStableIsotopes
                   : [];
 
-      if (window.zperiodVersion === 'new' && v2Data) {
+      if (window.uniplusVersion === 'new' && v2Data) {
         isotopesToDisplay = v2Data.level2_atomic.naturalIsotopes || [];
       }
       isotopesToDisplay.forEach((iso) => {
@@ -1932,17 +2106,14 @@ function populateSimplifiedView(element) {
   if (blueCard) {
     const configHero = blueCard.querySelector(".config-hero");
     if (configHero) {
-      let config = finallyElementData.level3_properties?.electronic?.configuration || "—";
-      if (window.zperiodVersion === 'new' && v2Data && v2Data.level3_properties.electronic.configuration) {
-        config = v2Data.level3_properties.electronic.configuration;
-      }
-      configHero.innerHTML = formatElectronConfigurationHtml(config);
+      const shells = getElectronArrangementByZ(element.number);
+      configHero.textContent = shells.length ? shells.join(",") : "—";
     }
     const oxidationContainer = blueCard.querySelector(".oxidation-container");
     if (oxidationContainer) {
       oxidationContainer.innerHTML = "";
       let statesObj = finallyElementData.level3_properties?.electronic?.oxidationStates || { common: [], possible: [] };
-      if (window.zperiodVersion === 'new' && v2Data) {
+      if (window.uniplusVersion === 'new' && v2Data) {
         const v2Ox = v2Data.level3_properties?.electronic?.oxidationStates;
         if (v2Ox && ((v2Ox.common && v2Ox.common.length > 0) || (v2Ox.possible && v2Ox.possible.length > 0))) {
           statesObj = v2Ox;
@@ -1991,23 +2162,17 @@ function populateSimplifiedView(element) {
       }
     }
     let en = finallyElementData.level3_properties?.physical?.electronegativity ?? null;
-    let ie = finallyElementData.level3_properties?.physical?.firstIonization || "";
     let den = finallyElementData.level3_properties?.physical?.density || "";
     let melt = finallyElementData.level3_properties?.physical?.meltingPoint || "";
     let boil = finallyElementData.level3_properties?.physical?.boilingPoint || "";
-    let ea = finallyElementData.level3_properties?.physical?.electronAffinity || "";
     let ar = finallyElementData.level3_properties?.physical?.atomicRadius || "";
-    let sh = finallyElementData.level3_properties?.physical?.specificHeat || "";
 
-    if (window.zperiodVersion === 'new' && v2Data) {
+    if (window.uniplusVersion === 'new' && v2Data) {
       en = v2Data.level3_properties.physical.electronegativity ?? en;
-      ie = v2Data.level3_properties.physical.firstIonization || ie;
       den = v2Data.level3_properties.physical.density || den;
       melt = v2Data.level3_properties.physical.meltingPoint || melt;
       boil = v2Data.level3_properties.physical.boilingPoint || boil;
-      ea = v2Data.level3_properties.physical.electronAffinity || ea;
       ar = v2Data.level3_properties.physical.atomicRadius || ar;
-      sh = v2Data.level3_properties.physical.specificHeat || sh;
     }
 
     const ext = getGlobalPhysicalExtremes();
@@ -2015,15 +2180,10 @@ function populateSimplifiedView(element) {
       return "";
     }
 
-    setText(".blue-rectangle .l3-stat-item:nth-child(1) .l3-stat-value", formatIonization(ie));
-
-    const eaDisplay = ea && ea !== "N/A" ? ea.replace(" kJ/mol", "").trim() : localizeNA();
-    setText(".blue-rectangle .l3-stat-item:nth-child(2) .l3-stat-value", eaDisplay);
-
     const enText = formatElectronegativity(en);
     const enExt = getExt('electronegativity');
-    const enTitleEl = blueCard.querySelector(".l3-stat-item:nth-child(3) .l3-stat-unit");
-    setText(".blue-rectangle .l3-stat-item:nth-child(3) .l3-stat-value", enText);
+    const enTitleEl = blueCard.querySelector(".l3-stat-item:nth-child(1) .l3-stat-unit");
+    setText(".blue-rectangle .l3-stat-item:nth-child(1) .l3-stat-value", enText);
     if (enTitleEl && enText !== "N/A" && enText !== localizeNA()) {
       enTitleEl.innerHTML = `${t("elementModal.pauling")} ${enExt ? `<span class="l3-stat-ext">${enExt}</span>` : ''}`;
     } else if (enTitleEl) {
@@ -2031,16 +2191,16 @@ function populateSimplifiedView(element) {
     }
 
     const densityData = formatDensity(den);
-    setText(".blue-rectangle .l3-stat-item:nth-child(4) .l3-stat-value", densityData.value);
-    const densityUnit = blueCard.querySelector(".l3-stat-item:nth-child(4) .l3-stat-unit");
+    setText(".blue-rectangle .l3-stat-item:nth-child(2) .l3-stat-value", densityData.value);
+    const densityUnit = blueCard.querySelector(".l3-stat-item:nth-child(2) .l3-stat-unit");
     if (densityUnit) densityUnit.textContent = densityData.unit;
 
-    setText(".blue-rectangle .l3-stat-item:nth-child(5) .l3-stat-value", formatTemp(melt));
-    setText(".blue-rectangle .l3-stat-item:nth-child(6) .l3-stat-value", formatTemp(boil));
+    setText(".blue-rectangle .l3-stat-item:nth-child(3) .l3-stat-value", formatTemp(melt));
+    setText(".blue-rectangle .l3-stat-item:nth-child(4) .l3-stat-value", formatTemp(boil));
 
     const arDisplay = ar && ar !== "N/A" ? ar.replace(" pm", "").trim() : localizeNA();
-    setText(".blue-rectangle .l3-stat-item:nth-child(7) .l3-stat-value", arDisplay);
-    const arUnitEl = blueCard.querySelector(".l3-stat-item:nth-child(7) .l3-stat-unit");
+    setText(".blue-rectangle .l3-stat-item:nth-child(5) .l3-stat-value", arDisplay);
+    const arUnitEl = blueCard.querySelector(".l3-stat-item:nth-child(5) .l3-stat-unit");
     const arExt = getExt('atomicRadius');
     if (arUnitEl && arDisplay !== "N/A" && arDisplay !== localizeNA()) {
         arUnitEl.innerHTML = `pm ${arExt ? `<span class="l3-stat-ext">${arExt}</span>` : ''}`;
@@ -2048,23 +2208,11 @@ function populateSimplifiedView(element) {
         arUnitEl.innerHTML = "pm";
     }
 
-    const shDisplay = sh && sh !== "N/A" ? sh.replace(" J/(g·°C)", "").trim() : localizeNA();
-    setText(".blue-rectangle .l3-stat-item:nth-child(8) .l3-stat-value", shDisplay);
-    const shUnitEl = blueCard.querySelector(".l3-stat-item:nth-child(8) .l3-stat-unit");
-    const shExt = getExt('specificHeat');
-    if (shUnitEl && shDisplay !== "N/A" && shDisplay !== localizeNA()) {
-        shUnitEl.innerHTML = `J/(g·°C) ${shExt ? `<span class="l3-stat-ext">${shExt}</span>` : ''}`;
-    } else if (shUnitEl) {
-        shUnitEl.innerHTML = "J/(g·°C)";
-    }
-
     // ---- Clickable unit conversion on L3 stat items ----
-    setupL3UnitConversion(blueCard, { ie, ea, melt, boil, density: den }, {
-        ie: getExt('firstIonization'),
-        ea: getExt('electronAffinity'),
-        density: getExt('density'),
-        melt: getExt('meltingPoint'),
-        boil: getExt('boilingPoint')
+    setupL3UnitConversion(blueCard, { melt, boil, density: den }, {
+      density: getExt('density'),
+      melt: getExt('meltingPoint'),
+      boil: getExt('boilingPoint'),
     });
   }
   const redCard = document.querySelector(
@@ -2120,7 +2268,7 @@ function populateSimplifiedView(element) {
       });
     });
     let year = finallyElementData.level4_history_stse?.history?.discoveryYear || "—";
-    if (window.zperiodVersion === 'new' && v2Data && v2Data.level4_history_stse.history.discoveryYear) {
+    if (window.uniplusVersion === 'new' && v2Data && v2Data.level4_history_stse.history.discoveryYear) {
       year = v2Data.level4_history_stse.history.discoveryYear;
     }
 
@@ -2129,7 +2277,7 @@ function populateSimplifiedView(element) {
     let discoveredBy = finallyElementData.level4_history_stse?.history?.discoveredBy || "—";
     let namedBy = finallyElementData.level4_history_stse?.history?.namedBy || "—";
 
-    if (window.zperiodVersion === 'new' && v2Data) {
+    if (window.uniplusVersion === 'new' && v2Data) {
       discoveredBy = v2Data.level4_history_stse.history.discoveredBy || "—";
       namedBy = v2Data.level4_history_stse.history.namedBy || "—";
     }
@@ -2160,7 +2308,7 @@ function populateSimplifiedView(element) {
         const stseContent = findContentDiv(stseCell, "stse");
 
         let stseVal = (finallyElementData.level4_history_stse?.stseContext || []).join("; ");
-        if (window.zperiodVersion === 'new' && v2Data) {
+        if (window.uniplusVersion === 'new' && v2Data) {
           stseVal = v2Data.level4_history_stse.stseContext && v2Data.level4_history_stse.stseContext.length > 0
             ? v2Data.level4_history_stse.stseContext.join(" • ")
             : "";
@@ -2188,7 +2336,7 @@ function populateSimplifiedView(element) {
         const usesContent = findContentDiv(usesCell, "uses");
 
         let usesVal = (finallyElementData.level4_history_stse?.commonUses || []).join(", ") || "—";
-        if (window.zperiodVersion === 'new' && v2Data) {
+        if (window.uniplusVersion === 'new' && v2Data) {
           usesVal = v2Data.level4_history_stse.commonUses && v2Data.level4_history_stse.commonUses.length > 0
             ? v2Data.level4_history_stse.commonUses.join(", ")
             : "—";
@@ -2211,7 +2359,7 @@ function populateSimplifiedView(element) {
         const hazardsContent = findContentDiv(hazardsCell, "hazards");
 
         let hazardsVal = (finallyElementData.level4_history_stse?.hazards || []).join(", ") || "—";
-        if (window.zperiodVersion === 'new' && v2Data) {
+        if (window.uniplusVersion === 'new' && v2Data) {
           hazardsVal = v2Data.level4_history_stse.hazards && v2Data.level4_history_stse.hazards.length > 0
             ? v2Data.level4_history_stse.hazards.join(", ")
             : "—";
@@ -2229,6 +2377,16 @@ function populateSimplifiedView(element) {
       }
     }
   }
+}
+
+// ===== Periodic table focus (search / navigation) =====
+export function scrollPeriodicTableToElement(element) {
+  const n = element && typeof element.number === "number" ? element.number : null;
+  if (!n) return;
+  requestAnimationFrame(() => {
+    const cell = document.querySelector(`#periodic-table [data-element-number="${n}"]`);
+    cell?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  });
 }
 
 // ===== Show Modal (main element modal) =====
@@ -2261,6 +2419,15 @@ export function showModal(element) {
     }
   }
   initializeLevelSystem(element);
+  if (window._uniplusAtomPauseBtn) {
+    // Ensure the pause button is visible and label is up-to-date whenever the modal opens.
+    const btn = window._uniplusAtomPauseBtn;
+    btn.style.display = "block";
+    const paused = !!window._uniplusAnimPaused;
+    btn.textContent = paused ? "Resume" : "Stop";
+    btn.classList.toggle("is-paused", paused);
+    btn.setAttribute("aria-label", paused ? "Resume 3D animation" : "Pause 3D animation");
+  }
   const isSimplifiedView = element.number <= 118;
   const elementContent = document.querySelector(".element-content");
   const simplifiedBox = document.querySelector(".simplified-element-box");
@@ -2374,7 +2541,8 @@ export function showModal(element) {
     modalCategoryDisplay.textContent = localizeSimpleStatusText(element.category, "—");
   }
   if (modalConfigLarge) {
-    modalConfigLarge.textContent = element.electronConfig || "—";
+    const shells = getElectronArrangementByZ(element.number);
+    modalConfigLarge.textContent = shells.length ? shells.join(",") : "—";
   }
   if (modalDiscovery) modalDiscovery.textContent = element.discovery;
   if (modalEtymology) modalEtymology.textContent = element.etymology;
@@ -2394,8 +2562,6 @@ export function showModal(element) {
       if (metricKey === "density") modalDensity = newEl;
       if (metricKey === "melt") modalMelt = newEl;
       if (metricKey === "boil") modalBoil = newEl;
-      if (metricKey === "ie") modalIonization = newEl;
-      if (metricKey === "ea") modalElectronAffinity = newEl;
       return;
     }
 
@@ -2439,8 +2605,6 @@ export function showModal(element) {
     if (metricKey === "density") modalDensity = newEl;
     if (metricKey === "melt") modalMelt = newEl;
     if (metricKey === "boil") modalBoil = newEl;
-    if (metricKey === "ie") modalIonization = newEl;
-    if (metricKey === "ea") modalElectronAffinity = newEl;
   }
 
   const ext = getGlobalPhysicalExtremes();
@@ -2461,13 +2625,6 @@ export function showModal(element) {
     modalNegativity.textContent = enVal;
   }
   if (modalRadius) modalRadius.textContent = element.radius || "—";
-
-  if (modalIonization) {
-    bindModalUnit(modalIonization, "ie", finallyElementData.level3_properties?.physical?.firstIonization || "—", getExt('firstIonization'));
-  }
-  if (modalElectronAffinity) {
-    bindModalUnit(modalElectronAffinity, "ea", finallyElementData.level3_properties?.physical?.electronAffinity || "—", getExt('electronAffinity'));
-  }
   const grp = element.column;
   if (eduNames && modalCharge) {
     if (eduData && eduData.stockNames) {
@@ -2508,17 +2665,12 @@ export function showModal(element) {
 
   // Correct display for Lanthanides and Actinides
   let displayPeriod = element.row;
-  let displayGroup = grp;
-  if (element.series === "lanthanide") {
-    displayPeriod = 6;
-    displayGroup = 3;
-  } else if (element.series === "actinide") {
-    displayPeriod = 7;
-    displayGroup = 3;
-  }
+  let displayGroup = getDisplayGroupHKDSE(element);
+  if (element.series === "lanthanide") displayPeriod = 6;
+  else if (element.series === "actinide") displayPeriod = 7;
 
   if (modalPeriod) modalPeriod.textContent = displayPeriod || "—";
-  if (modalGroup) modalGroup.textContent = displayGroup || "—";
+  if (modalGroup) modalGroup.textContent = (displayGroup ?? "—");
   const amphotericCard = document.getElementById("amphoteric-card");
   if (amphotericCard) {
     if (eduData && eduData.amphoteric) {
@@ -2762,7 +2914,7 @@ export function showModal(element) {
   }
   modal.classList.add("active");
   initElementTutorial();
-  document.title = `Zperiod - ${localizeElementName(element)}`;
+  document.title = `Uni+ - ${localizeElementName(element)}`;
   document.body.classList.add("hide-nav");
   if (isSimplifiedView) {
     const slider = document.querySelector(".cards-slider");
@@ -2985,8 +3137,6 @@ export function initModalUI() {
   modalBoil = document.getElementById("modal-boil");
   modalNegativity = document.getElementById("modal-electronegativity");
   modalRadius = document.getElementById("modal-radius");
-  modalIonization = document.getElementById("modal-ionization");
-  modalElectronAffinity = document.getElementById("modal-electron-affinity");
   modalWatermark = document.getElementById("modal-watermark");
   atomContainer = document.getElementById("atom-container");
   modalCharge = document.getElementById("modal-charge");
@@ -3001,6 +3151,39 @@ export function initModalUI() {
   eduNames = document.getElementById("edu-names");
   eduIsotopes = document.getElementById("edu-isotopes");
   eduCardsContainer = document.getElementById("edu-cards-container");
+  // Always render pause button at document level so it never gets covered by the 3D canvas/layout.
+  let atomPauseBtn = document.getElementById("atom-pause-btn");
+  if (!atomPauseBtn) {
+    atomPauseBtn = document.createElement("button");
+    atomPauseBtn.id = "atom-pause-btn";
+    atomPauseBtn.type = "button";
+    atomPauseBtn.textContent = "Stop";
+    document.body.appendChild(atomPauseBtn);
+  }
+  atomPauseBtn.className = "atom-pause-btn";
+  atomPauseBtn.style.cssText = [
+    "position:fixed",
+    "left:12px",
+    "bottom:12px",
+    "z-index:2147483647",
+    "display:none",
+    "pointer-events:auto",
+    "height:38px",
+    "padding:0 14px",
+    "border-radius:999px",
+    "border:1px solid rgba(0,0,0,0.12)",
+    "background:rgba(255,255,255,0.92)",
+    "color:rgba(17,24,39,0.95)",
+    "font-weight:800",
+    "font-size:14px",
+    "letter-spacing:-0.01em",
+    "cursor:pointer",
+    "backdrop-filter:blur(10px)",
+    "-webkit-backdrop-filter:blur(10px)",
+    "box-shadow:0 10px 24px rgba(0,0,0,0.12)",
+    "user-select:none",
+  ].join(";");
+  window._uniplusAtomPauseBtn = atomPauseBtn;
 
   // Modal close handler
   function resetModalUI() {
@@ -3026,16 +3209,47 @@ export function initModalUI() {
   function closeElementModal() {
     modal.classList.remove("active");
     document.body.classList.remove("hide-nav");
-    document.title = "Zperiod";
+    document.title = "Uni+";
     clearHeadlineResizeHandler();
     cleanup3D(true);
     atomContainer.classList.remove("visible");
+    if (window._uniplusAtomPauseBtn) window._uniplusAtomPauseBtn.style.display = "none";
     resetModalUI();
   }
 
   modalClose.addEventListener("click", () => {
     closeElementModal();
   });
+
+  if (atomPauseBtn) {
+    const renderPauseBtn = () => {
+      const paused = !!window._uniplusAnimPaused;
+      atomPauseBtn.textContent = paused ? "Resume" : "Stop";
+      atomPauseBtn.classList.toggle("is-paused", paused);
+      atomPauseBtn.setAttribute("aria-label", paused ? "Resume 3D animation" : "Pause 3D animation");
+      atomPauseBtn.style.background = paused ? "rgba(17,24,39,0.88)" : "rgba(255,255,255,0.92)";
+      atomPauseBtn.style.color = paused ? "#fff" : "rgba(17,24,39,0.95)";
+    };
+    renderPauseBtn();
+
+    atomPauseBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      window._uniplusAnimPaused = !window._uniplusAnimPaused;
+      try {
+        localStorage.setItem("uniplus_anim_paused", String(window._uniplusAnimPaused));
+      } catch (err) {
+        // ignore storage errors
+      }
+      renderPauseBtn();
+    });
+
+    // Keep label in sync if settings page toggles it
+    window.addEventListener("storage", (e) => {
+      if (e && e.key === "uniplus_anim_paused") {
+        renderPauseBtn();
+      }
+    });
+  }
 
 
   const tutorialBtn = document.getElementById("element-tutorial-btn");
@@ -3046,7 +3260,7 @@ export function initModalUI() {
   }
 
   modal.addEventListener("click", (e) => {
-    if (window._zperiodIsDragging) return;
+    if (window._uniplusIsDragging) return;
     if (e.target === modal) {
       closeElementModal();
     }

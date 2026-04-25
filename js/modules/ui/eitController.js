@@ -17,7 +17,6 @@ export function createEITController(options = {}) {
 
 const EIT_PROPERTY_CONFIG = [
   { key: "category", labelKey: "eit.property.category", label: "Category", type: "category", group: "classification" },
-  { key: "block", labelKey: "eit.property.block", label: "Block", type: "category", group: "classification" },
   { key: "metalType", labelKey: "eit.property.metalType", label: "Metal Type", type: "category", group: "classification" },
   { key: "state", labelKey: "eit.property.state", label: "State", type: "category", group: "classification" },
   {
@@ -76,34 +75,6 @@ const EIT_PROPERTY_CONFIG = [
     source: "electronegativity",
   },
   {
-    key: "firstIonization",
-    labelKey: "eit.property.firstIonization",
-    label: "1st Ionization",
-    type: "numeric",
-    group: "property",
-    unit: "kJ/mol",
-    digits: 0,
-    source: "firstIonization",
-    units: [
-      { unit: "kJ/mol", digits: 0, convert: (v) => v },
-      { unit: "eV", digits: 2, convert: (v) => v / 96.485 },
-    ],
-  },
-  {
-    key: "electronAffinity",
-    labelKey: "eit.property.electronAffinity",
-    label: "Electron Affinity",
-    type: "numeric",
-    group: "property",
-    unit: "kJ/mol",
-    digits: 0,
-    source: "electronAffinity",
-    units: [
-      { unit: "kJ/mol", digits: 0, convert: (v) => v },
-      { unit: "eV", digits: 2, convert: (v) => v / 96.485 },
-    ],
-  },
-  {
     key: "atomicRadius",
     labelKey: "eit.property.atomicRadius",
     label: "Atomic Radius",
@@ -118,21 +89,7 @@ const EIT_PROPERTY_CONFIG = [
       { unit: "nm", digits: 3, convert: (v) => v / 1000 },
     ],
   },
-  {
-    key: "specificHeat",
-    labelKey: "eit.property.specificHeat",
-    label: "Specific Heat",
-    type: "numeric",
-    group: "property",
-    unit: "J/(g·°C)",
-    digits: 3,
-    source: "specificHeat",
-    units: [
-      { unit: "J/(g·°C)", digits: 3, convert: (v) => v },
-      { unit: "J/(kg·K)", digits: 0, convert: (v) => v * 1000 },
-      { unit: "cal/(g·°C)", digits: 3, convert: (v) => v / 4.184 },
-    ],
-  }
+  // Note: removed firstIonization / electronAffinity / specificHeat options per Uni+ product requirements.
 ];
 const EIT_PROPERTY_MAP = new Map(EIT_PROPERTY_CONFIG.map((cfg) => [cfg.key, cfg]));
 
@@ -148,6 +105,44 @@ let eitState = {
   numericRanges: new Map(),
   unitIndex: new Map(),   // tracks which unit is active per property key
 };
+let first20OverlayActive = false;
+let tableElectronStyleActive = false;
+
+const TABLE_STYLE_STORAGE_KEY = "uniplus_table_style";
+const TABLE_STYLE_ELECTRONS_VALUE = "electrons";
+
+function applyTableStyleClass(tableContainer) {
+  if (!tableContainer) return;
+  tableContainer.classList.toggle("table-style-electrons", tableElectronStyleActive === true);
+}
+
+function applyFirst20Overlay(tableContainer) {
+  if (!tableContainer) return;
+  const root = document.getElementById("eit-controller");
+  const active = first20OverlayActive === true;
+  root?.classList.toggle("eit-first20-active", active);
+  tableContainer.classList.toggle("eit-first20-active", active);
+
+  // Range-block placeholders (La-Lu / Ac-Lr) are not real Z elements — always dim them when overlay is active.
+  const rangeBlocks = tableContainer.querySelectorAll(".element.range-block");
+  rangeBlocks.forEach((cell) => {
+    cell.classList.toggle("eit-first20-in", false);
+    cell.classList.toggle("eit-first20-out", active);
+    if (!active) cell.classList.remove("eit-first20-out");
+  });
+
+  for (let i = 0; i < eitRegistry.length; i++) {
+    const entry = eitRegistry[i];
+    const cell = entry?.cell;
+    if (!cell) continue;
+    const isIn = typeof entry.number === "number" && entry.number >= 1 && entry.number <= 20;
+    cell.classList.toggle("eit-first20-in", active && isIn);
+    cell.classList.toggle("eit-first20-out", active && !isIn);
+    if (!active) {
+      cell.classList.remove("eit-first20-in", "eit-first20-out");
+    }
+  }
+}
 
 /** Get the active unit config for a property (with conversion function) */
 function getActiveUnit(config) {
@@ -789,6 +784,10 @@ function applyEIT(tableContainer) {
     // all classes and overwrites strictly what's necessary, resulting in butter-smooth FPS.
     applyNumericEIT(config);
   }
+
+  if (first20OverlayActive) {
+    applyFirst20Overlay(tableContainer);
+  }
 }
 
 function ensureEITController(tableContainer) {
@@ -848,6 +847,8 @@ function ensureEITController(tableContainer) {
         <button type="button" class="eit-mode-btn" data-mode="filter" aria-pressed="false">${t("eit.filter")}</button>
       </div>
       <button type="button" class="eit-reset-btn" id="eit-reset-btn">${t("eit.reset")}</button>
+      <button type="button" class="eit-reset-btn" id="eit-first20-btn" aria-pressed="false">${t("eit.first20")}</button>
+      <button type="button" class="eit-reset-btn" id="eit-style-toggle-btn" aria-pressed="false">${t("eit.style.electrons")}</button>
       <div class="eit-property-panel" id="eit-property-panel">
         <div class="eit-property-chips" id="eit-property-chips">
           ${chipsHTML}
@@ -887,6 +888,8 @@ function ensureEITController(tableContainer) {
     modeButtons: Array.from(root.querySelectorAll(".eit-mode-btn")),
     modeSlider: root.querySelector("#eit-mode-slider"),
     resetButton: root.querySelector("#eit-reset-btn"),
+    first20Button: root.querySelector("#eit-first20-btn"),
+    styleToggleButton: root.querySelector("#eit-style-toggle-btn"),
     closeButton: root.querySelector("#eit-panel-close"),
     legend: root.querySelector("#eit-legend"),
     legendTitle: root.querySelector("#eit-legend-title"),
@@ -896,6 +899,34 @@ function ensureEITController(tableContainer) {
     legendMid: root.querySelector("#eit-legend-mid"),
     legendMax: root.querySelector("#eit-legend-max"),
   };
+
+  // If the EIT toolbar DOM already existed (dataset.bound=true) but we shipped new controls later,
+  // ensure new buttons still get listeners without duplicating the whole binding block.
+  if (root.dataset.bound === "true" && eitUI.first20Button && root.dataset.first20Bound !== "true") {
+    eitUI.first20Button.addEventListener("click", () => {
+      first20OverlayActive = !first20OverlayActive;
+      eitUI.first20Button?.setAttribute("aria-pressed", first20OverlayActive ? "true" : "false");
+      applyFirst20Overlay(tableContainer);
+    });
+    root.dataset.first20Bound = "true";
+  }
+
+  if (root.dataset.bound === "true" && eitUI.styleToggleButton && root.dataset.styleToggleBound !== "true") {
+    eitUI.styleToggleButton.addEventListener("click", () => {
+      tableElectronStyleActive = !tableElectronStyleActive;
+      try {
+        localStorage.setItem(
+          TABLE_STYLE_STORAGE_KEY,
+          tableElectronStyleActive ? TABLE_STYLE_ELECTRONS_VALUE : "",
+        );
+      } catch (e) {
+        // ignore storage failures
+      }
+      eitUI.styleToggleButton?.setAttribute("aria-pressed", tableElectronStyleActive ? "true" : "false");
+      applyTableStyleClass(tableContainer);
+    });
+    root.dataset.styleToggleBound = "true";
+  }
 
   // Populate hidden select (backwards compat)
   eitUI.propertySelect.innerHTML = "";
@@ -1027,9 +1058,35 @@ function ensureEITController(tableContainer) {
     });
     // Reset
     eitUI.resetButton.addEventListener("click", () => {
+      first20OverlayActive = false;
+      applyFirst20Overlay(tableContainer);
       resetEITState();
       applyEIT(tableContainer);
     });
+
+    // First 20 toggle
+    eitUI.first20Button?.addEventListener("click", () => {
+      first20OverlayActive = !first20OverlayActive;
+      eitUI.first20Button?.setAttribute("aria-pressed", first20OverlayActive ? "true" : "false");
+      applyFirst20Overlay(tableContainer);
+    });
+    root.dataset.first20Bound = "true";
+
+    // Table style toggle (symbol + electron arrangement view)
+    eitUI.styleToggleButton?.addEventListener("click", () => {
+      tableElectronStyleActive = !tableElectronStyleActive;
+      try {
+        localStorage.setItem(
+          TABLE_STYLE_STORAGE_KEY,
+          tableElectronStyleActive ? TABLE_STYLE_ELECTRONS_VALUE : "",
+        );
+      } catch (e) {
+        // ignore storage failures
+      }
+      eitUI.styleToggleButton?.setAttribute("aria-pressed", tableElectronStyleActive ? "true" : "false");
+      applyTableStyleClass(tableContainer);
+    });
+    root.dataset.styleToggleBound = "true";
     // Close on outside click
     document.addEventListener("click", (event) => {
       if (!eitUI || !eitUI.root.contains(event.target)) {
@@ -1057,6 +1114,8 @@ function ensureEITController(tableContainer) {
         if (colorBtn) colorBtn.textContent = t("eit.color");
         if (filterBtn) filterBtn.textContent = t("eit.filter");
         if (eitUI?.resetButton) eitUI.resetButton.textContent = t("eit.reset");
+        if (eitUI?.first20Button) eitUI.first20Button.textContent = t("eit.first20");
+        if (eitUI?.styleToggleButton) eitUI.styleToggleButton.textContent = t("eit.style.electrons");
         
         // Update group labels
         const groupLabels = root.querySelectorAll(".eit-chip-group-label");
@@ -1073,6 +1132,16 @@ function ensureEITController(tableContainer) {
   }
 
   applyEIT(tableContainer);
+  applyFirst20Overlay(tableContainer);
+  // Apply persisted table style
+  try {
+    tableElectronStyleActive =
+      localStorage.getItem(TABLE_STYLE_STORAGE_KEY) === TABLE_STYLE_ELECTRONS_VALUE;
+  } catch (e) {
+    tableElectronStyleActive = false;
+  }
+  eitUI?.styleToggleButton?.setAttribute("aria-pressed", tableElectronStyleActive ? "true" : "false");
+  applyTableStyleClass(tableContainer);
   if (typeof window._scalePeriodicTable === "function") {
     requestAnimationFrame(() => {
       window._scalePeriodicTable();
