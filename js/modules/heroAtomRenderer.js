@@ -1,4 +1,4 @@
-import { ensureThreeLibLoaded } from "./threeRenderer.js";
+import { ensureThreeLibLoaded, bohrShellElectronAngleRad } from "./threeRenderer.js";
 
 // Welcome modal hero atom renderer (loaded on demand)
 export async function initHeroAtom() {
@@ -196,7 +196,7 @@ export async function initHeroAtom() {
 
       for (let e = 0; e < count; e++) {
         const elMesh = new THREE.Mesh(elGeo, elMat);
-        const angleOffset = (e / count) * Math.PI * 2;
+        const angleOffset = bohrShellElectronAngleRad(s, e, count);
         elMesh.userData = {
           radius,
           angle: angleOffset,

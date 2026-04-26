@@ -1442,7 +1442,7 @@ function getElementCategory(element) {
   if (element.number === 1) return "Other nonmetal";
   const c = element.column;
   const metalloids = [5, 14, 32, 33, 51, 52, 85];
-  if (metalloids.includes(element.number)) return "Metalloid";
+  if (metalloids.includes(element.number)) return t("tableLegend.metalloid");
   if (c === 18) return "Other nonmetal (Noble Gas)";
   if (c === 17) return "Other nonmetal (Halogen)";
   const otherNonmetals = [6, 7, 8, 15, 16, 34];

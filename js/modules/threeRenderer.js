@@ -52,6 +52,28 @@ function getQualityProfile(atomicNumber) {
   };
 }
 
+/**
+ * Initial polar angle (rad) for a Bohr-ring electron. Shell index 0 stays evenly
+ * spaced (e.g. two opposite); deeper shells place electrons in close pairs that
+ * share the same mean angle so they orbit together.
+ */
+export function bohrShellElectronAngleRad(shellIndex, electronIndex, count) {
+  if (count <= 0) return 0;
+  if (shellIndex === 0) {
+    return (electronIndex / count) * Math.PI * 2;
+  }
+  const pairSplit = 0.14;
+  const fullPairs = Math.floor(count / 2);
+  const hasLone = count % 2 === 1;
+  const numSlots = fullPairs + (hasLone ? 1 : 0);
+  if (electronIndex < fullPairs * 2) {
+    const pairIndex = Math.floor(electronIndex / 2);
+    const base = (pairIndex / numSlots) * Math.PI * 2;
+    return electronIndex % 2 === 0 ? base - pairSplit : base + pairSplit;
+  }
+  return (fullPairs / numSlots) * Math.PI * 2;
+}
+
 // ===== Geometry cache helpers =====
 function getSphereGeometry(radius, segments) {
   const key = `s:${radius}:${segments}`;
@@ -492,7 +514,7 @@ export function updateAtomStructure(element) {
 
     for (let e = 0; e < count; e++) {
       const elMesh = new THREE.Mesh(elGeo, mats.electronMat);
-      const angleOffset = (e / count) * Math.PI * 2;
+      const angleOffset = bohrShellElectronAngleRad(s, e, count);
       elMesh.userData = {
         radius: radius,
         angle: angleOffset,

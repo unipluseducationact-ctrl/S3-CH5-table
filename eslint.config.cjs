@@ -5,6 +5,7 @@ module.exports = [
   {
     ignores: [
       "dist/**",
+      ".deploy-gh-pages/**",
       "node_modules/**",
       ".continue/**",
       "public/**",
