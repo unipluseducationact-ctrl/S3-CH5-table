@@ -202,6 +202,9 @@ export function applyStaticTranslations() {
   document.querySelectorAll("[data-i18n-title]").forEach((el) => {
     el.setAttribute("title", t(el.getAttribute("data-i18n-title")));
   });
+  document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+    el.setAttribute("alt", t(el.getAttribute("data-i18n-alt")));
+  });
 }
 
 // ── Dropdown visual state ──
@@ -277,8 +280,8 @@ export function initLangController() {
       const addBtn = e.target.closest("#lang-add-btn");
       if (addBtn) {
         if (dropdown) dropdown.classList.remove("open");
-        const settingsNav = document.querySelector('.nav-pill-btn[data-page="settings"]');
-        if (settingsNav) settingsNav.click();
+        const summaryNav = document.querySelector('.nav-pill-btn[data-page="summary"]');
+        if (summaryNav) summaryNav.click();
         
         setTimeout(() => {
           const suggestBox = document.getElementById("settings-suggestion-input");

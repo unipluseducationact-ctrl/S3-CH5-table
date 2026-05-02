@@ -17,7 +17,7 @@ function flatten(obj, prefix = "", out = {}) {
 const INTENTIONAL_SHARED_KEYS = new Set([
   "settings.github",
   "assistant.name",
-  "nav.ions",
+  "nav.notes",
   "tools.solubilityGrade",
   "worksheet.decomposition",
   "worksheet.combustion",

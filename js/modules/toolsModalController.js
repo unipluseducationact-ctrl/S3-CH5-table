@@ -67,13 +67,14 @@ export function createToolsModalController(options = {}) {
   }
 
   function closeToolModal() {
-    const { modal, helpOverlay } = getModalElements();
+    const { modal, helpOverlay, helpButton } = getModalElements();
     if (!modal) return;
     openRequestToken += 1;
     activeToolType = null;
     modal.classList.remove("active");
     document.body.classList.remove("hide-nav");
     if (helpOverlay) helpOverlay.style.display = "none";
+    if (helpButton) helpButton.hidden = false;
   }
 
   function clearToolContentCache() {
@@ -98,6 +99,7 @@ export function createToolsModalController(options = {}) {
     // Help button (?) toggle
     if (helpButton && helpOverlay) {
       helpButton.addEventListener("click", () => {
+        if (activeToolType === "atomic-arcade") return;
         if (activeToolType === "balancer") {
           const predictorPanel = document.getElementById("predictor-panel");
           if (predictorPanel && predictorPanel.classList.contains("active")) {
@@ -131,7 +133,7 @@ export function createToolsModalController(options = {}) {
   }
 
   async function openToolModal(toolType) {
-    const { modal, body, helpOverlay } = getModalElements();
+    const { modal, body, helpOverlay, helpButton } = getModalElements();
     if (!modal || !body) {
       return;
     }
@@ -140,6 +142,9 @@ export function createToolsModalController(options = {}) {
     modal.classList.add("active");
     document.body.classList.add("hide-nav");
     if (helpOverlay) helpOverlay.style.display = "none";
+    if (helpButton) {
+      helpButton.hidden = toolType === "atomic-arcade";
+    }
     setToolHelpContent(toolType);
     body.innerHTML = `<div class="tool-modal-loading">${t("toolModal.loading")}</div>`;
 

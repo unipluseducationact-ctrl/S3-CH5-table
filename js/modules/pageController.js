@@ -7,17 +7,19 @@ import { onLangChange } from "./langController.js";
 export function initPageController(options = {}) {
   const {
     onTablePageShown,
-    onIonsPageShown,
     onToolsPageShown,
     onWorksheetPageShown,
     onSettingsPageShown,
+    onFlashcardsPageShown,
   } = options;
 
   const mainContainer = document.getElementById("main-container");
   const blankPage1 = document.getElementById("blank-page-1");
   const blankPage2 = document.getElementById("blank-page-2");
-  const ionsPage = document.getElementById("ions-page");
+  const notesPage = document.getElementById("notes-page");
+  const flashcardsPage = document.getElementById("flashcards-page");
   const settingsPage = document.getElementById("settings-page");
+  const ionsPage = document.getElementById("ions-page");
 
   let currentPage = "table";
 
@@ -25,14 +27,17 @@ export function initPageController(options = {}) {
     table: () => {
       if (mainContainer) mainContainer.style.display = "";
     },
-    ions: () => {
-      if (ionsPage) ionsPage.classList.add("active");
+    notes: () => {
+      if (notesPage) notesPage.classList.add("active");
     },
     blank1: () => {
       if (blankPage1) blankPage1.classList.add("active");
     },
     blank2: () => {
       if (blankPage2) blankPage2.classList.add("active");
+    },
+    flashcards: () => {
+      if (flashcardsPage) flashcardsPage.classList.add("active");
     },
     settings: () => {
       if (settingsPage) settingsPage.classList.add("active");
@@ -43,8 +48,10 @@ export function initPageController(options = {}) {
     if (mainContainer) mainContainer.style.display = "none";
     if (blankPage1) blankPage1.classList.remove("active");
     if (blankPage2) blankPage2.classList.remove("active");
-    if (ionsPage) ionsPage.classList.remove("active");
+    if (notesPage) notesPage.classList.remove("active");
+    if (flashcardsPage) flashcardsPage.classList.remove("active");
     if (settingsPage) settingsPage.classList.remove("active");
+    if (ionsPage) ionsPage.classList.remove("active");
   }
 
   function showPage(page) {
@@ -54,12 +61,17 @@ export function initPageController(options = {}) {
     pages[page]();
     currentPage = page;
 
-    if (page === "table" && typeof onTablePageShown === "function") {
-      requestAnimationFrame(onTablePageShown);
+    if (page === "settings") {
+      requestAnimationFrame(() => {
+        const sp = document.getElementById("settings-page");
+        const shell = document.getElementById("page-settings");
+        if (sp) sp.scrollTop = 0;
+        if (shell) shell.scrollTop = 0;
+      });
     }
 
-    if (page === "ions" && typeof onIonsPageShown === "function") {
-      onIonsPageShown();
+    if (page === "table" && typeof onTablePageShown === "function") {
+      requestAnimationFrame(onTablePageShown);
     }
 
     if (page === "blank1" && typeof onToolsPageShown === "function") {
@@ -73,15 +85,20 @@ export function initPageController(options = {}) {
     if (page === "settings" && typeof onSettingsPageShown === "function") {
       onSettingsPageShown();
     }
+
+    if (page === "flashcards" && typeof onFlashcardsPageShown === "function") {
+      onFlashcardsPageShown();
+    }
   }
 
   const globalNavBtns = document.querySelectorAll(".nav-pill-btn, .nav-logo-link, .nav-brand");
   const navPageMap = {
     table: "table",
-    ions: "ions",
+    notes: "notes",
     tools: "blank1",
     worksheet: "blank2",
-    settings: "settings",
+    flashcards: "flashcards",
+    summary: "settings",
   };
 
   function updateGlobalNavActive(activePage) {

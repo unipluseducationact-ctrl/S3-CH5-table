@@ -3,7 +3,9 @@
    ======================================== */
 .worksheet-generator-page {
     width: 100%;
-    height: 100%;
+    flex: 1 1 0%;
+    min-height: 0;
+    max-height: 100%;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -11,10 +13,19 @@
 }
 
 .worksheet-container {
-    flex: 1;
+    flex: 1 1 0%;
     display: grid;
     grid-template-columns: 300px 1fr;
+    grid-template-rows: minmax(0, 1fr);
     gap: 20px;
+    min-height: 0;
+    max-height: 100%;
+    /* Grid items default min-height:auto — can block shrinking; children also get min-height:0 below */
+    align-items: stretch;
+}
+
+.worksheet-container > .worksheet-controls,
+.worksheet-container > .worksheet-preview {
     min-height: 0;
 }
 
@@ -27,7 +38,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    height: fit-content;
+    align-self: start;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
@@ -168,6 +179,9 @@
     flex-direction: column;
     overflow: hidden;
     min-height: 0;
+    min-width: 0;
+    height: 100%;
+    max-height: 100%;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
@@ -245,9 +259,38 @@
 }
 
 .preview-content {
-    flex: 1;
+    flex: 1 1 0%;
+    min-height: 0;
+    /* Flexbox scroll region: ignore intrinsic content height so overflow can kick in */
+    height: 0;
     overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) var(--bg-color);
     padding: 20px;
+}
+
+/* Make the scrollbar easy to see (incl. macOS overlay / thin defaults) */
+.preview-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.preview-content::-webkit-scrollbar-track {
+    background: var(--bg-color);
+    border-radius: 6px;
+}
+
+.preview-content::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 6px;
+    border: 2px solid var(--bg-color);
+}
+
+.preview-content::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
 }
 
 .preview-placeholder {
@@ -777,4 +820,240 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
+}
+
+/* =============================================================================
+   Worksheet hub (type picker) + equation panel
+   ============================================================================= */
+/* Worksheets overlay: plain .blank-page centers flex children — force column + full viewport
+   so #worksheet-shell gets a real height (detail panels are position:absolute and add no in-flow size). */
+#blank-page-2.blank-page.active,
+#blank-page-2.worksheet-root-page.active {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    box-sizing: border-box !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    padding-top: 60px !important;
+}
+
+.worksheet-root-page {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Shell is the flex child that fills space below nav padding; absolute panels size to this box */
+#worksheet-shell.worksheet-shell {
+    position: relative;
+    flex: 1 1 0%;
+    min-height: 0;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    height: auto;
+}
+
+#worksheet-hub.worksheet-hub {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: auto;
+}
+
+.worksheet-hub-inner {
+    height: 100%;
+    justify-content: center;
+}
+
+.worksheet-hub-grid {
+    max-height: 60vh;
+}
+
+.worksheet-type-card--pending {
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.95;
+}
+
+.worksheet-type-card--pending:hover,
+.worksheet-type-card--pending:active {
+    transform: none;
+}
+
+/* Worksheet detail panels: hidden by default; full-viewport overlay when active */
+#worksheet-panel-equation.worksheet-panel,
+#worksheet-panel-atomic-structure.worksheet-panel,
+#worksheet-panel-isotope-ram.worksheet-panel,
+#worksheet-panel-cursor-chem.worksheet-panel {
+    display: none !important;
+    flex-direction: column;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    max-height: 100%;
+    background: var(--bg-color);
+    box-sizing: border-box;
+}
+
+#worksheet-shell.worksheet-shell--detail #worksheet-hub {
+    display: none !important;
+}
+
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="equation"] #worksheet-panel-equation {
+    display: flex !important;
+}
+
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="atomic-structure"] #worksheet-panel-atomic-structure {
+    display: flex !important;
+}
+
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="isotope-ram"] #worksheet-panel-isotope-ram {
+    display: flex !important;
+}
+
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="cursor-chem"] #worksheet-panel-cursor-chem {
+    display: flex !important;
+}
+
+.worksheet-panel-bar {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 14px 20px 12px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--element-bg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* Match worksheet .option-btn / control chips (not default browser button) */
+.worksheet-back-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 7px 16px 7px 14px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-color);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.25;
+    cursor: pointer;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.1s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.worksheet-back-btn::before {
+    content: "←";
+    display: inline-block;
+    font-size: 1em;
+    opacity: 0.75;
+    transform: translateY(-0.5px);
+}
+
+.worksheet-back-btn:hover {
+    border-color: var(--text-secondary);
+    background: #fff;
+    color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.worksheet-back-btn:active {
+    transform: scale(0.98);
+}
+
+.worksheet-back-btn:focus-visible {
+    outline: 2px solid var(--text-highlight);
+    outline-offset: 2px;
+}
+
+/* Scroll happens inside .preview-content only; body does not expand past the viewport */
+.worksheet-panel-body {
+    flex: 1 1 0%;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="equation"] .worksheet-generator-page {
+    flex: 1 1 0%;
+    min-height: 0;
+    max-height: 100%;
+}
+
+/* Equation overlay: harden flex chain so the preview column cannot grow past the shell */
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="equation"] #worksheet-panel-equation {
+    min-height: 0;
+}
+
+/* Embedded HTML/React worksheets: back bar + iframe only (no nested generator card) */
+.worksheet-panel--embed-full {
+    min-height: 0;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.worksheet-panel--embed-full .worksheet-embed-fs {
+    position: relative;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+    min-width: 0;
+    width: 100% !important;
+    overflow: hidden;
+    background: var(--bg-color);
+}
+
+.worksheet-panel--embed-full .worksheet-embed-fs-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: var(--bg-color);
+}
+
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="atomic-structure"] #worksheet-panel-atomic-structure,
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="isotope-ram"] #worksheet-panel-isotope-ram,
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="cursor-chem"] #worksheet-panel-cursor-chem {
+    min-height: 0;
+}
+
+/*
+ * Embedded worksheets: pin to the viewport (below global nav offset).
+ * Absolute/in-flow sizing inside #worksheet-shell was still collapsing to ~0 in some layouts;
+ * fixed + explicit dimensions guarantees a full usable rectangle for the iframe.
+ */
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="atomic-structure"] #worksheet-panel-atomic-structure.worksheet-panel--embed-full,
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="isotope-ram"] #worksheet-panel-isotope-ram.worksheet-panel--embed-full,
+#worksheet-shell.worksheet-shell--detail[data-worksheet-panel="cursor-chem"] #worksheet-panel-cursor-chem.worksheet-panel--embed-full {
+    position: fixed !important;
+    top: 60px !important;
+    left: 0 !important;
+    right: auto !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: calc(100dvh - 60px) !important;
+    min-height: calc(100dvh - 60px) !important;
+    max-height: calc(100dvh - 60px) !important;
+    inset: unset !important;
+    z-index: 5000 !important;
+    overflow: hidden !important;
 }

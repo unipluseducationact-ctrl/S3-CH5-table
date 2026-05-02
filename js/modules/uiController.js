@@ -789,8 +789,10 @@ function normalizeCategoryClass(catClass) {
 // - Transition metals (d-block, columns 3–12): no group number shown
 // - Lanthanides/actinides (f-block): no group number shown
 // - Main group: 1,2 then 3–7 for columns 13–17; noble gases are group 0 (column 18)
+// - Hydrogen is not assigned to Group I (alkali metals) in HKDSE-style teaching
 function getDisplayGroupHKDSE(element) {
   if (!element) return null;
+  if (element.number === 1) return null;
   if (element.series === "lanthanide" || element.series === "actinide") return null;
   const col = element.column;
   if (!Number.isInteger(col)) return null;

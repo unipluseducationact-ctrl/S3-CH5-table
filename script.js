@@ -8,6 +8,7 @@ import {
   l3UnitState
 } from "./js/modules/uiController.js";
 import { initPageController } from "./js/modules/pageController.js";
+import { initChemFlashcard } from "./js/modules/chemFlashcardApp.js";
 import { createToolsModalController } from "./js/modules/toolsModalController.js";
 import {
   getSavedAnimationState,
@@ -22,6 +23,10 @@ import {
   t
 } from "./js/modules/langController.js";
 import { initEntryLanding } from "./js/modules/onboardingController.js";
+import {
+  initWorksheetHub,
+  applyWorksheetEmbedIframesLang,
+} from "./js/modules/worksheetHubController.js";
 
 function isRealMobileDevice() {
   // Wide viewports (> 1024px) get the full desktop app, even on touch devices like iPad.
@@ -86,7 +91,6 @@ window._uniplusAnimSpeed = savedAnimationState.speed;
 // Lazy Script/Module Loaders (performance)
 // ========================================
 const lazyScriptPromises = new Map();
-let ionsTableReady = false;
 let worksheetReady = false;
 let heroAtomModulePromise = null;
 
@@ -103,14 +107,6 @@ function loadClassicScriptOnce(src) {
   });
   lazyScriptPromises.set(src, promise);
   return promise;
-}
-
-async function ensureIonsTableReady() {
-  if (ionsTableReady) return;
-  await loadClassicScriptOnce("js/ion-animations.js");
-  const { initIonsTable } = await import("./js/modules/ionsController.js");
-  await initIonsTable();
-  ionsTableReady = true;
 }
 
 async function ensureWorksheetReady() {
@@ -396,28 +392,31 @@ function initMainApp() {
     toolsModalController.clearToolContentCache();
   });
 
+  const worksheetHub = initWorksheetHub();
+
   const pageCtrl = initPageController({
     onTablePageShown: () => {
       if (window._scalePeriodicTable) window._scalePeriodicTable(true);
-    },
-    onIonsPageShown: () => {
-      void ensureIonsTableReady().catch((e) =>
-        console.error("Ions lazy init error:", e),
-      );
     },
     onToolsPageShown: () => {
       setTimeout(() => toolsModalController.initChemToolCards(), 100);
     },
     onWorksheetPageShown: () => {
-      void ensureWorksheetReady().catch((e) =>
-        console.error("Worksheet lazy init error:", e),
-      );
+      void ensureWorksheetReady()
+        .then(() => {
+          worksheetHub.resetWorksheetHub();
+          applyWorksheetEmbedIframesLang();
+        })
+        .catch((e) => console.error("Worksheet lazy init error:", e));
     },
     onSettingsPageShown: () => {
       requestAnimationFrame(() => {
          if (window._syncGlobalUnitButtons) window._syncGlobalUnitButtons(true);
       });
-    }
+    },
+    onFlashcardsPageShown: () => {
+      requestAnimationFrame(() => initChemFlashcard());
+    },
   });
 
   // Initialize element search in navbar

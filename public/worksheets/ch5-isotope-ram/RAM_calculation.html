@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKDSE Chemistry — 同位素與相對原子質量（Uni+）</title>
+    <style>
+        /* Soft pastel UI — aligned with Uni+ periodic table */
+        :root {
+            --bg: #f0f2f5;
+            --bg-elevated: #f8f9fa;
+            --card: #ffffff;
+            --text: #2d3436;
+            --muted: #636e72;
+            --border: #e9ecef;
+            --shadow: 0 4px 14px rgba(45, 52, 54, 0.06);
+            --shadow-hover: 0 8px 24px rgba(45, 52, 54, 0.1);
+            --accent: #7c9ce0;
+            --accent-soft: #dfe6fb;
+            --accent2: #7bc9a8;
+            --accent2-soft: #d5f4e6;
+            --accent3: #e8b4d4;
+            --accent3-soft: #fce8f2;
+            --accent4: #f4c27a;
+            --accent4-soft: #fff3e0;
+            --danger: #e5989b;
+            --danger-soft: #ffe5e5;
+            --ok: #8fbc8f;
+            --ok-soft: #e8f5e9;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-pill: 9999px;
+            font-family: system-ui, "Segoe UI", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.55;
+        }
+        /* Slim top bar: language only (parent site already has nav + logo) */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0.75rem 1.25rem 0.35rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .lang-select {
+            appearance: none;
+            padding: 0.5rem 2rem 0.5rem 0.95rem;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text);
+            background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23636e72' d='M3 4.5L6 8l3-3.5'/%3E%3C/svg%3E") no-repeat right 0.65rem center;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+        .lang-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto 2.5rem;
+            padding: 0 1.25rem 1.25rem;
+        }
+        .page-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem 1.65rem 2rem;
+            box-shadow: var(--shadow);
+        }
+        h1 {
+            margin: 0 0 1.25rem;
+            text-align: center;
+            font-size: 1.35rem;
+            font-weight: 650;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .controls {
+            background: var(--bg-elevated);
+            padding: 1.15rem 1.2rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .control-group label {
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            font-size: 0.84rem;
+            color: var(--muted);
+        }
+        .controls select,
+        .controls input[type="number"] {
+            padding: 0.55rem 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            background: var(--card);
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .controls select:focus,
+        .controls input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+        .btn-group {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 0.35rem;
+        }
+        button {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+        }
+        button.primary,
+        #ui-btn-gen {
+            background: linear-gradient(135deg, #a8d4f0 0%, #b8b5f0 100%);
+            border: 1px solid rgba(124, 156, 224, 0.35);
+            color: var(--text);
+            box-shadow: 0 2px 10px rgba(124, 156, 224, 0.25);
+        }
+        button.primary:hover,
+        #ui-btn-gen:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-1px);
+        }
+        .btn-print {
+            background: var(--accent2-soft);
+            border: 1px solid rgba(123, 201, 168, 0.45);
+            color: #2d5a45;
+        }
+        .btn-print:hover {
+            background: #c5ecd8;
+            transform: translateY(-1px);
+        }
+        .btn-solutions {
+            background: var(--accent3-soft);
+            border: 1px solid rgba(232, 180, 212, 0.5);
+            color: #6b4a5c;
+        }
+        .btn-solutions:hover {
+            background: #f5d6e8;
+            transform: translateY(-1px);
+        }
+        .btn-doc {
+            background: var(--accent4-soft);
+            border: 1px solid rgba(244, 194, 122, 0.55);
+            color: #6b4a20;
+        }
+        .btn-doc:hover {
+            background: #ffe8cc;
+            transform: translateY(-1px);
+        }
+        .worksheet-note {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin: 0 0 1rem;
+        }
+        #summary-panel {
+            display: none;
+            margin-top: 1.25rem;
+            padding: 1.1rem 1.2rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(143, 188, 143, 0.55);
+            background: var(--ok-soft);
+            box-shadow: 0 2px 10px rgba(45, 52, 54, 0.04);
+        }
+        #summary-panel.visible { display: block; }
+        #summary-panel h2 {
+            margin-top: 0;
+            color: #2d5a2d;
+            font-size: 1.1rem;
+            font-weight: 650;
+        }
+        #summary-panel p { margin: 0.5rem 0; color: var(--text); }
+        #progress-line {
+            margin: 1rem 0 0;
+            padding: 0.65rem 1rem;
+            background: var(--accent-soft);
+            border: 1px solid rgba(124, 156, 224, 0.25);
+            border-radius: var(--radius-md);
+            font-size: 0.92rem;
+            color: var(--text);
+        }
+        .question-box {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.1rem 1.15rem;
+            margin-bottom: 0.9rem;
+            box-shadow: 0 2px 8px rgba(45, 52, 54, 0.04);
+        }
+        .question-text {
+            font-size: 0.96rem;
+            line-height: 1.6;
+            margin-bottom: 0.85rem;
+            color: var(--text);
+        }
+        .interaction-area {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+        .interaction-area input[type="number"] {
+            width: 8.5rem;
+            padding: 0.55rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--card);
+            font-size: 0.95rem;
+        }
+        .interaction-area input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+        .interaction-area button {
+            background: linear-gradient(135deg, #a8d4f0 0%, #b8b5f0 100%);
+            border: 1px solid rgba(124, 156, 224, 0.35);
+            color: var(--text);
+            box-shadow: 0 2px 8px rgba(124, 156, 224, 0.2);
+        }
+        .interaction-area button:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-hover);
+        }
+        .hint {
+            color: #8b5a2b;
+            background: var(--accent4-soft);
+            padding: 0.75rem 0.9rem;
+            border: 1px solid rgba(244, 194, 122, 0.45);
+            border-radius: var(--radius-md);
+            margin-top: 0.65rem;
+            display: none;
+            font-style: normal;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+        .feedback {
+            font-weight: 600;
+            margin-top: 0.55rem;
+            font-size: 0.9rem;
+            padding: 0.35rem 0;
+        }
+
+        .summary-actions {
+            margin: 0.75rem 0 0;
+        }
+        .summary-actions button {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.55rem 1.1rem;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-size: 0.86rem;
+            font-weight: 500;
+            box-shadow: 0 1px 4px rgba(45, 52, 54, 0.04);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .summary-actions button:hover {
+            background: var(--bg-elevated);
+            box-shadow: var(--shadow);
+        }
+        .session-analysis-panel {
+            margin-top: 1rem;
+            padding: 1rem 1.1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background: var(--bg-elevated);
+            box-shadow: 0 2px 10px rgba(45, 52, 54, 0.04);
+        }
+        .session-analysis-panel[hidden] { display: none !important; }
+        .session-analysis-panel h3 {
+            margin: 0 0 0.65rem;
+            font-size: 1rem;
+            font-weight: 650;
+            color: var(--text);
+        }
+        .session-analysis-panel .summary-score {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+        }
+        .session-analysis-panel .summary-sub {
+            font-size: 0.86rem;
+            color: var(--muted);
+            margin: 0 0 0.85rem;
+        }
+        .summary-by-type-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 1rem 0 0.5rem;
+        }
+        .summary-type-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.86rem;
+            margin: 0 0 0.5rem;
+        }
+        .summary-type-table th,
+        .summary-type-table td {
+            padding: 0.45rem 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .summary-type-table th {
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+        .summary-type-table td.num {
+            text-align: right;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .summary-type-table tr:last-child td { border-bottom: none; }
+        .summary-type-table .type-name { font-weight: 600; color: var(--text); }
+        .summary-type-table .type-code-cell {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .summary-wrong-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0.75rem 0 0.45rem;
+        }
+        .summary-wrong-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .summary-wrong-list li {
+            margin-bottom: 0.45rem;
+            padding: 0.55rem 0.75rem;
+            border-radius: var(--radius-md);
+            background: var(--danger-soft);
+            border: 1px solid rgba(229, 152, 155, 0.45);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #7a3d42;
+        }
+        .summary-wrong-list li .type-code {
+            font-weight: 500;
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+        .summary-none {
+            font-size: 0.88rem;
+            color: var(--ok);
+            font-weight: 600;
+            margin: 0.25rem 0 0;
+        }
+        .summary-revision {
+            margin-top: 1rem;
+            padding: 0.95rem 1.05rem;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(124, 156, 224, 0.38);
+            background: var(--accent-soft);
+        }
+        .summary-revision h4 {
+            margin: 0 0 0.55rem;
+            font-size: 0.92rem;
+            font-weight: 650;
+            color: var(--text);
+        }
+        .summary-revision ul {
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+        .summary-revision li {
+            margin-bottom: 0.4rem;
+            font-size: 0.86rem;
+            line-height: 1.48;
+            color: var(--text);
+        }
+        .summary-revision li:last-child { margin-bottom: 0; }
+
+        @media print {
+            body { background-color: #fff; padding: 0; }
+            .app-header, .controls, .interaction-area, .btn-group, .hint, .feedback, #progress-line, #summary-panel, .summary-actions, #session-analysis-panel {
+                display: none !important;
+            }
+            .container { padding: 0; max-width: 100%; }
+            .page-card { box-shadow: none; border: none; padding: 0; }
+            .question-box {
+                border: none;
+                border-bottom: 1px dashed #ccc;
+                background: #fff;
+                box-shadow: none;
+                padding: 0 0 100px 0;
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+            }
+            h1::after {
+                content: "\A 姓名 (Name): _________________  班別 (Class): ____  日期 (Date): _________";
+                white-space: pre;
+                display: block;
+                font-size: 14px;
+                text-align: right;
+                margin-top: 20px;
+                color: #000;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="app-header" role="banner">
+    <div class="header-actions">
+        <select id="lang" class="lang-select" onchange="updateUI()" aria-label="語言 Language">
+            <option value="zh">繁體中文</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+</header>
+
+<div class="container">
+<div class="page-card">
+    <h1 id="ui-title">同位素與相對原子質量工作紙</h1>
+    
+    <div class="controls">
+        <div class="control-group">
+            <label id="ui-label-type">題目類型:</label>
+            <select id="qType">
+                <option value="all">混合所有類型 (Mixed)</option>
+                <option value="1">類型 1: 計算相對原子質量 (RAM)</option>
+                <option value="2">類型 2: 計算百分比豐度 (%)</option>
+                <option value="3">類型 3: 計算同位素質量 (Mass)</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label id="ui-label-diff">難度:</label>
+            <select id="diff">
+                <option value="easy">簡單</option>
+                <option value="medium">中等</option>
+                <option value="hard">困難</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label id="ui-label-num">題目數量:</label>
+            <input type="number" id="numQs" value="5" min="1" max="20">
+        </div>
+        <div class="btn-group">
+            <button type="button" id="ui-btn-gen" onclick="generateWorksheet()">生成工作紙</button>
+            <button id="ui-btn-print" class="btn-print" onclick="window.print()">工作紙 PDF</button>
+            <button type="button" id="ui-btn-solutions-pdf" class="btn-solutions" onclick="openSolutionsPdf()">完整題解 PDF</button>
+            <button type="button" id="ui-btn-solutions-doc" class="btn-doc" onclick="downloadSolutionsDoc()">完整題解 Word</button>
+            <button type="button" id="ui-btn-worksheet-doc" class="btn-doc" onclick="downloadWorksheetDoc()">工作紙 Word</button>
+        </div>
+    </div>
+
+    <div id="worksheet"></div>
+    <div class="summary-actions">
+        <button type="button" id="btn-session-summary">學習摘要</button>
+    </div>
+    <div id="session-analysis-panel" class="session-analysis-panel" hidden role="region" aria-live="polite"></div>
+    <div id="progress-line" style="display:none;"></div>
+    <div id="summary-panel"></div>
+</div>
+</div>
+
+<script>
+    const i18n = {
+        zh: {
+            title: "同位素與相對原子質量工作紙",
+            labelType: "題目類型:",
+            labelDiff: "難度:",
+            labelNum: "題目數量:",
+            btnGen: "生成工作紙",
+            btnPrint: "工作紙 PDF",
+            btnSolutionsPdf: "完整題解 PDF",
+            btnSolutionsDoc: "完整題解 Word",
+            btnWorksheetDoc: "工作紙 Word",
+            note: "註：如有需要，請將最終答案四捨五入至兩位小數。",
+            check: "檢查答案",
+            correct: "正確！ ✓",
+            wrong1: "錯誤。請參閱提示再試一次！",
+            wrong2: "仍然錯誤。請參閱更詳細的步驟再試一次！",
+            finalWrong: "錯誤。正確答案約為 ",
+            placeholder: "輸入答案",
+            progress: "進度：已答對",
+            progressOf: "／",
+            progressSuffix: "題",
+            summaryTitle: "完成摘要",
+            summaryIntro: "你已答對本工作紙的全部題目。",
+            summaryAttempts: "有效提交次數（每次按「檢查答案」計一次）：",
+            summaryHint: "提示：在列印對話框中選擇「另存為 PDF」即可下載完整題解。",
+            alertNoSheet: "請先生成工作紙。",
+            types: ["混合所有類型", "類型 1: 計算相對原子質量", "類型 2: 計算百分比豐度", "類型 3: 計算同位素質量"],
+            diffs: ["簡單", "中等", "困難"],
+            btnSessionSummary: "學習摘要與分析",
+            analysisTitle: "摘要與分析",
+            summaryScoreLabel: "得分（答對／總題數）",
+            summaryFirstTry: "首次即答對",
+            summaryByTypeTitle: "各題型答對率",
+            summaryByTypeColType: "題型",
+            summaryByTypeColFraction: "答對／該題型題數",
+            summaryByTypeColRate: "答對率",
+            summaryByTypeColFirst: "首次即對／該題型題數",
+            summaryWrongTitle: "三次皆錯（已顯示答案）— 需重溫（題號與題型）",
+            summaryNoneWrong: "沒有此類題目 — 尚未出現「三次皆錯」。",
+            summaryIncomplete: "尚未答對（仍可作答）",
+            revTitle: "評語與溫習建議",
+            revBandExcellent: "整體答對率很高。建議持續混合三類題型，熟練加權平均與代數整理。",
+            revBandGood: "整體表現不錯。請參考上表，對答對率較低的題型加做一輪。",
+            revBandFair: "表現參差：請重溫 RAM 公式（豐度以 % 代入時須 ÷100）、聯立方程與小數運算。",
+            revBandLow: "建議先重溫課本「相對原子質量與豐度」一節，再重新產生題目練習。",
+            revWeakOne: "建議優先溫習「{type}」：本次該題型為 {c}/{t}（{pct}%）。",
+            revStrongOne: "強項：「{type}」本次全對（共 {n} 題）。",
+            revThreeStrike: "曾三次答錯而顯示答案的題目：請對照參考答案，檢查是否漏除 100 或代數移項錯誤，再勾選同類題型重練。",
+            revIncomplete: "尚有題目未答對，建議先完成，摘要才完整反映強弱項。",
+            revFirstTryLow: "不少題目需多次嘗試才答對。作答前寫出 RAM 關係式並逐步代入數值。",
+            revBalanced: "錯誤分散在三類題型中，宜均衡練習並針對上表較低答對率者加強。"
+        },
+        en: {
+            title: "Isotopes & Relative Atomic Mass Worksheet",
+            labelType: "Question Type:",
+            labelDiff: "Difficulty:",
+            labelNum: "Number of Questions:",
+            btnGen: "Generate Worksheet",
+            btnPrint: "Worksheet PDF",
+            btnSolutionsPdf: "Full solutions PDF",
+            btnSolutionsDoc: "Full solutions Word",
+            btnWorksheetDoc: "Worksheet Word",
+            note: "Note: Round final answers to 2 decimal places if necessary.",
+            check: "Check Answer",
+            correct: "Correct! ✓",
+            wrong1: "Incorrect. Check the hint and try again!",
+            wrong2: "Still incorrect. Check the step-by-step solution and try again!",
+            finalWrong: "Incorrect. The correct answer is approx. ",
+            placeholder: "Answer",
+            progress: "Progress: ",
+            progressOf: " of ",
+            progressSuffix: " correct",
+            summaryTitle: "Session summary",
+            summaryIntro: "You answered every question on this worksheet correctly.",
+            summaryAttempts: "Valid check submissions (each Check click): ",
+            summaryHint: "Tip: In the print dialog, choose Save as PDF to download the full worked solutions.",
+            alertNoSheet: "Generate a worksheet first.",
+            types: ["Mix of All Types", "Type 1: Calculate RAM", "Type 2: Calculate % Abundance", "Type 3: Calculate Isotopic Mass"],
+            diffs: ["Easy", "Medium", "Hard"],
+            btnSessionSummary: "Session summary & analysis",
+            analysisTitle: "Summary & analysis",
+            summaryScoreLabel: "Score (correct / total)",
+            summaryFirstTry: "Correct on first attempt",
+            summaryByTypeTitle: "Correct rate by question type",
+            summaryByTypeColType: "Type",
+            summaryByTypeColFraction: "Correct / in type",
+            summaryByTypeColRate: "Rate",
+            summaryByTypeColFirst: "First-try / in type",
+            summaryWrongTitle: "Three wrong attempts (answer shown) — review (Q & type)",
+            summaryNoneWrong: "None — no item reached three wrong attempts.",
+            summaryIncomplete: "Still in progress (not yet correct)",
+            revTitle: "Comments & revision suggestions",
+            revBandExcellent: "Very strong accuracy. Keep rotating all three task types so the RAM formula stays automatic.",
+            revBandGood: "Solid work. Use the table to spot weaker types and drill those with another generated set.",
+            revBandFair: "Mixed results: revisit the weighted RAM formula (% to fraction), simultaneous equations, and careful arithmetic.",
+            revBandLow: "Review the textbook section on relative atomic mass and abundances before another full worksheet.",
+            revWeakOne: "Prioritise revision on {type} — this session you scored {c}/{t} ({pct}%) in that category.",
+            revStrongOne: "Strength: every {type} item was correct ({n} questions).",
+            revThreeStrike: "For questions that showed the model answer after three tries: check dividing by 100 and your algebra, then regenerate with those types only.",
+            revIncomplete: "Finish open questions so the next summary reflects your gaps fairly.",
+            revFirstTryLow: "Many items needed several tries. Write the RAM relationship before substituting numbers.",
+            revBalanced: "Errors are spread across types—keep balanced practice and focus on the lowest rates in the table."
+        }
+    };
+
+    window.questionData = [];
+
+    function updateUI() {
+        const l = document.getElementById('lang').value;
+        document.documentElement.lang = l === 'en' ? 'en' : 'zh-Hant';
+        document.getElementById('ui-title').innerText = i18n[l].title;
+        document.getElementById('ui-label-type').innerText = i18n[l].labelType;
+        document.getElementById('ui-label-diff').innerText = i18n[l].labelDiff;
+        document.getElementById('ui-label-num').innerText = i18n[l].labelNum;
+        document.getElementById('ui-btn-gen').innerText = i18n[l].btnGen;
+        document.getElementById('ui-btn-print').innerText = i18n[l].btnPrint;
+        document.getElementById('ui-btn-solutions-pdf').innerText = i18n[l].btnSolutionsPdf;
+        document.getElementById('ui-btn-solutions-doc').innerText = i18n[l].btnSolutionsDoc;
+        document.getElementById('ui-btn-worksheet-doc').innerText = i18n[l].btnWorksheetDoc;
+        document.getElementById('btn-session-summary').innerText = i18n[l].btnSessionSummary;
+
+        const qSelect = document.getElementById('qType');
+        for(let i=0; i<qSelect.options.length; i++) qSelect.options[i].text = i18n[l].types[i];
+        
+        const dSelect = document.getElementById('diff');
+        for(let i=0; i<dSelect.options.length; i++) dSelect.options[i].text = i18n[l].diffs[i];
+    }
+
+    function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    /**
+     * Full worked solution (HTML) for teacher / PDF; language matches worksheet.
+     */
+    function buildFullSolution(ctx) {
+        const { type, diff, l, elName, m1, m2, m3, p1, p2, p3, ram, ans } = ctx;
+        const R = (n) => (typeof n === 'number' ? n.toFixed(2) : String(n));
+        const ramS = ram.toFixed(2);
+
+        if (type === 1) {
+            if (diff === 'hard') {
+                const num = (m1 * p1) + (m2 * p2) + (m3 * p3);
+                if (l === 'zh') {
+                    return `<p><strong>解題步驟</strong></p>
+<p>相對原子質量 = [(質量₁×豐度₁) + (質量₂×豐度₂) + (質量₃×豐度₃)] ÷ 100</p>
+<p>= [(${m1}×${p1}) + (${m2}×${p2}) + (${m3}×${p3})] ÷ 100 = ${num} ÷ 100 = <strong>${R(ans)}</strong></p>
+<p>故 ${elName} 的相對原子質量約為 <strong>${R(ans)}</strong>。</p>`;
+                }
+                return `<p><strong>Worked solution</strong></p>
+<p>RAM = [(m₁×%₁) + (m₂×%₂) + (m₃×%₃)] / 100</p>
+<p>= [(${m1}×${p1}) + (${m2}×${p2}) + (${m3}×${p3})] / 100 = ${num} / 100 = <strong>${R(ans)}</strong></p>
+<p>Relative atomic mass of ${elName} ≈ <strong>${R(ans)}</strong>.</p>`;
+            }
+            const num = (m1 * p1) + (m2 * p2);
+            if (l === 'zh') {
+                return `<p><strong>解題步驟</strong></p>
+<p>相對原子質量 = [(${m1}×${p1}) + (${m2}×${p2})] ÷ 100 = ${num} ÷ 100 = <strong>${R(ans)}</strong></p>
+<p>故 ${elName} 的相對原子質量約為 <strong>${R(ans)}</strong>。</p>`;
+            }
+            return `<p><strong>Worked solution</strong></p>
+<p>RAM = [(${m1}×${p1}) + (${m2}×${p2})] / 100 = ${num} / 100 = <strong>${R(ans)}</strong></p>
+<p>Relative atomic mass of ${elName} ≈ <strong>${R(ans)}</strong>.</p>`;
+        }
+
+        if (type === 2) {
+            if (diff === 'hard') {
+                if (l === 'zh') {
+                    return `<p><strong>解題步驟</strong></p>
+<p>設 ${elName}-${m1} 的豐度為 <em>x</em>%，則 ${elName}-${m2} 為 (100 − ${p3} − <em>x</em>)% = (${100 - p3} − <em>x</em>)%。</p>
+<p>${ramS} = [${m1}<em>x</em> + ${m2}(${100 - p3} − <em>x</em>) + (${m3}×${p3})] ÷ 100</p>
+<p>兩邊同乘 100，整理後可得 <em>x</em> ≈ <strong>${R(ans)}</strong>。</p>
+<p>故 ${elName}-${m1} 的百分比豐度約為 <strong>${R(ans)}%</strong>。</p>`;
+                }
+                return `<p><strong>Worked solution</strong></p>
+<p>Let abundance of ${elName}-${m1} be <em>x</em>%. Then ${elName}-${m2} is (${100 - p3} − <em>x</em>)%.</p>
+<p>${ramS} = [${m1}<em>x</em> + ${m2}(${100 - p3} − <em>x</em>) + (${m3}×${p3})] / 100</p>
+<p>Multiply by 100 and rearrange → <em>x</em> ≈ <strong>${R(ans)}</strong>.</p>
+<p>% abundance of ${elName}-${m1} ≈ <strong>${R(ans)}%</strong>.</p>`;
+            }
+            if (l === 'zh') {
+                return `<p><strong>解題步驟</strong></p>
+<p>設 ${elName}-${m1} 為 <em>x</em>%，則 ${elName}-${m2} 為 (100 − <em>x</em>)%。</p>
+<p>${ramS} = [${m1}<em>x</em> + ${m2}(100 − <em>x</em>)] ÷ 100 → 100×${ramS} = ${m1}<em>x</em> + ${m2}(100 − <em>x</em>)</p>
+<p>整理得 <em>x</em> = (100×${ramS} − ${m2}×100) ÷ (${m1} − ${m2}) ≈ <strong>${R(ans)}</strong>。</p>
+<p>故 ${elName}-${m1} 的百分比豐度約為 <strong>${R(ans)}%</strong>。</p>`;
+            }
+            return `<p><strong>Worked solution</strong></p>
+<p>Let abundance of ${elName}-${m1} be <em>x</em>%. Then ${elName}-${m2} is (100 − <em>x</em>)%.</p>
+<p>${ramS} = [${m1}<em>x</em> + ${m2}(100 − <em>x</em>)] / 100 → 100×${ramS} = ${m1}<em>x</em> + ${m2}(100 − <em>x</em>)</p>
+<p>Solve → <em>x</em> ≈ <strong>${R(ans)}</strong>.</p>
+<p>% abundance of ${elName}-${m1} ≈ <strong>${R(ans)}%</strong>.</p>`;
+        }
+
+        /* type 3 — isotopic mass */
+        if (diff === 'hard') {
+            const rhs = 100 * ram - m1 * p1 - m2 * p2;
+            if (l === 'zh') {
+                return `<p><strong>解題步驟</strong></p>
+<p>設第三種同位素質量為 <em>m</em>。</p>
+<p>${ramS} = [(${m1}×${p1}) + (${m2}×${p2}) + (<em>m</em>×${p3})] ÷ 100</p>
+<p>100×${ramS} − (${m1}×${p1}) − (${m2}×${p2}) = ${p3}×<em>m</em> → <em>m</em> = ${rhs.toFixed(2)} ÷ ${p3} ≈ <strong>${R(ans)}</strong></p>
+<p>故該同位素質量約為 <strong>${R(ans)}</strong>。</p>`;
+            }
+            return `<p><strong>Worked solution</strong></p>
+<p>Let the third isotopic mass be <em>m</em>.</p>
+<p>${ramS} = [(${m1}×${p1}) + (${m2}×${p2}) + (<em>m</em>×${p3})] / 100</p>
+<p><em>m</em> = (100×${ramS} − ${m1}×${p1} − ${m2}×${p2}) / ${p3} ≈ <strong>${R(ans)}</strong>.</p>
+<p>Isotopic mass ≈ <strong>${R(ans)}</strong>.</p>`;
+        }
+        const rhs = 100 * ram - m1 * p1;
+        if (l === 'zh') {
+            return `<p><strong>解題步驟</strong></p>
+<p>設未知同位素質量為 <em>m</em>。</p>
+<p>${ramS} = [(${m1}×${p1}) + (<em>m</em>×${p2})] ÷ 100 → 100×${ramS} − (${m1}×${p1}) = ${p2}×<em>m</em></p>
+<p><em>m</em> = ${rhs.toFixed(2)} ÷ ${p2} ≈ <strong>${R(ans)}</strong></p>
+<p>故該同位素質量約為 <strong>${R(ans)}</strong>。</p>`;
+        }
+        return `<p><strong>Worked solution</strong></p>
+<p>Let the unknown isotopic mass be <em>m</em>.</p>
+<p>${ramS} = [(${m1}×${p1}) + (<em>m</em>×${p2})] / 100 → <em>m</em> = (100×${ramS} − ${m1}×${p1}) / ${p2} ≈ <strong>${R(ans)}</strong>.</p>
+<p>Isotopic mass ≈ <strong>${R(ans)}</strong>.</p>`;
+    }
+
+    function countSolved() {
+        return window.questionData.filter((d) => d && d.solved).length;
+    }
+
+    function totalCheckSubmissions() {
+        return window.questionData.reduce((s, d) => s + (d && d.checkSubmissions ? d.checkSubmissions : 0), 0);
+    }
+
+    function updateProgressUI(l) {
+        const n = window.questionData.length;
+        if (!n) return;
+        const done = countSolved();
+        const pl = document.getElementById('progress-line');
+        pl.style.display = 'block';
+        pl.innerText = i18n[l].progress + done + i18n[l].progressOf + n + i18n[l].progressSuffix;
+    }
+
+    function maybeShowSummary(l) {
+        const n = window.questionData.length;
+        if (!n || countSolved() < n) {
+            updateProgressUI(l);
+            return;
+        }
+        const panel = document.getElementById('summary-panel');
+        panel.classList.add('visible');
+        const subs = totalCheckSubmissions();
+        panel.innerHTML =
+            '<h2>' + i18n[l].summaryTitle + '</h2>' +
+            '<p>' + i18n[l].summaryIntro + '</p>' +
+            '<p>' + i18n[l].summaryAttempts + '<strong>' + subs + '</strong></p>' +
+            '<p style="font-size:14px;color:#555;">' + i18n[l].summaryHint + '</p>';
+        updateProgressUI(l);
+    }
+
+    function escapeHtml(s) {
+        return String(s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function T(key, langOpt) {
+        const l = langOpt != null ? langOpt : document.getElementById('lang').value;
+        return (i18n[l] && i18n[l][key]) || i18n.en[key] || key;
+    }
+
+    function qTypeLongLabel(lang, typeNum) {
+        const arr = i18n[lang].types;
+        if (typeNum >= 1 && typeNum <= 3) return arr[typeNum];
+        return String(typeNum);
+    }
+
+    function revFill(template, map) {
+        let out = template;
+        Object.keys(map).forEach((k) => {
+            out = out.split('{' + k + '}').join(map[k]);
+        });
+        return out;
+    }
+
+    function buildRevisionSuggestionsRAM(lang, total, correct, firstTry, failed, incomplete, byType) {
+        const lines = [];
+        const seen = new Set();
+        function addLine(s) {
+            if (!s || seen.has(s)) return;
+            seen.add(s);
+            lines.push(s);
+        }
+        const pctAll = total ? Math.round((100 * correct) / total) : 0;
+        const ftPctAll = total ? Math.round((100 * firstTry) / total) : 0;
+
+        if (pctAll >= 85) addLine(T('revBandExcellent', lang));
+        else if (pctAll >= 65) addLine(T('revBandGood', lang));
+        else if (pctAll >= 40) addLine(T('revBandFair', lang));
+        else addLine(T('revBandLow', lang));
+
+        const typeRows = [];
+        byType.forEach((agg, tid) => {
+            if (!agg || !agg.total) return;
+            const n = Number(tid);
+            const pct = Math.round((100 * agg.correct) / agg.total);
+            typeRows.push({
+                name: qTypeLongLabel(lang, n),
+                total: agg.total,
+                correct: agg.correct,
+                firstTry: agg.firstTry,
+                pct
+            });
+        });
+        typeRows.sort((a, b) => a.pct - b.pct || b.total - a.total);
+
+        let weakPick = typeRows.filter((r) => r.total >= 2 && r.pct < 66);
+        if (!weakPick.length) weakPick = typeRows.filter((r) => r.total >= 1 && r.pct < 50);
+        weakPick = weakPick.slice(0, 2);
+
+        weakPick.forEach((r) => {
+            addLine(
+                revFill(T('revWeakOne', lang), {
+                    type: r.name,
+                    c: String(r.correct),
+                    t: String(r.total),
+                    pct: String(r.pct)
+                })
+            );
+        });
+
+        const strongOnes = typeRows.filter((r) => r.total >= 2 && r.pct === 100);
+        if (strongOnes.length && !weakPick.length) {
+            const r0 = strongOnes[0];
+            addLine(revFill(T('revStrongOne', lang), { type: r0.name, n: String(r0.total) }));
+        }
+
+        if (total >= 4 && pctAll >= 45 && ftPctAll < 40) {
+            addLine(T('revFirstTryLow', lang));
+        }
+        if (failed.length) addLine(T('revThreeStrike', lang));
+        if (incomplete.length) addLine(T('revIncomplete', lang));
+        if (!weakPick.length && typeRows.length >= 2 && pctAll >= 35 && pctAll < 78) {
+            addLine(T('revBalanced', lang));
+        }
+
+        return lines;
+    }
+
+    function renderSessionAnalysis() {
+        const l = document.getElementById('lang').value;
+        const qs = window.questionData;
+        if (!qs || !qs.length || !qs[0]) {
+            alert(T('alertNoSheet'));
+            return;
+        }
+        const total = qs.length;
+        let correct = 0;
+        let firstTry = 0;
+        const failed = [];
+        const incomplete = [];
+        const byType = new Map();
+        qs.forEach((d, idx) => {
+            if (!d) return;
+            const tid = String(d.type);
+            if (!byType.has(tid)) {
+                byType.set(tid, { total: 0, correct: 0, firstTry: 0 });
+            }
+            const agg = byType.get(tid);
+            agg.total += 1;
+            const att = d.attempts || 0;
+            const solved = d.solved;
+            if (solved) {
+                agg.correct += 1;
+                if (att === 0) agg.firstTry += 1;
+            }
+            if (solved) {
+                correct += 1;
+                if (att === 0) firstTry += 1;
+            } else if (att >= 3) {
+                failed.push({ n: idx + 1, q: d });
+            } else {
+                incomplete.push(idx + 1);
+            }
+        });
+
+        let html = '<h3>' + escapeHtml(T('analysisTitle', l)) + '</h3>';
+        html += '<div class="summary-score">' + escapeHtml(T('summaryScoreLabel', l)) + '：' + correct + ' / ' + total + '</div>';
+        html += '<p class="summary-sub">' + escapeHtml(T('summaryFirstTry', l)) + '：' + firstTry + ' / ' + total + '</p>';
+
+        html += '<div class="summary-by-type-title">' + escapeHtml(T('summaryByTypeTitle', l)) + '</div>';
+        html += '<table class="summary-type-table" aria-label="' + escapeHtml(T('summaryByTypeTitle', l)) + '">';
+        html +=
+            '<thead><tr><th>' +
+            escapeHtml(T('summaryByTypeColType', l)) +
+            '</th><th class="num">' +
+            escapeHtml(T('summaryByTypeColFraction', l)) +
+            '</th><th class="num">' +
+            escapeHtml(T('summaryByTypeColRate', l)) +
+            '</th><th class="num">' +
+            escapeHtml(T('summaryByTypeColFirst', l)) +
+            '</th></tr></thead><tbody>';
+        [1, 2, 3].forEach((typeNum) => {
+            const agg = byType.get(String(typeNum));
+            if (!agg || !agg.total) return;
+            const pct = Math.round((100 * agg.correct) / agg.total);
+            const ftPct = Math.round((100 * agg.firstTry) / agg.total);
+            const name = qTypeLongLabel(l, typeNum);
+            html +=
+                '<tr><td><span class="type-name">' +
+                escapeHtml(name) +
+                '</span> <span class="type-code-cell">(type ' +
+                typeNum +
+                ')</span></td><td class="num">' +
+                agg.correct +
+                ' / ' +
+                agg.total +
+                '</td><td class="num">' +
+                pct +
+                '%</td><td class="num">' +
+                agg.firstTry +
+                ' / ' +
+                agg.total +
+                ' (' +
+                ftPct +
+                '%)</td></tr>';
+        });
+        html += '</tbody></table>';
+
+        const revLines = buildRevisionSuggestionsRAM(l, total, correct, firstTry, failed, incomplete, byType);
+        html += '<div class="summary-revision"><h4>' + escapeHtml(T('revTitle', l)) + '</h4><ul>';
+        revLines.forEach((line) => {
+            html += '<li>' + escapeHtml(line) + '</li>';
+        });
+        html += '</ul></div>';
+
+        html += '<div class="summary-wrong-title">' + escapeHtml(T('summaryWrongTitle', l)) + '</div>';
+        if (!failed.length) {
+            html += '<p class="summary-none">' + escapeHtml(T('summaryNoneWrong', l)) + '</p>';
+        } else {
+            html += '<ul class="summary-wrong-list">';
+            failed.forEach((f) => {
+                const label = qTypeLongLabel(l, f.q.type);
+                html +=
+                    '<li>Q' +
+                    f.n +
+                    ' · ' +
+                    escapeHtml(label) +
+                    ' <span class="type-code">(type ' +
+                    f.q.type +
+                    ')</span></li>';
+            });
+            html += '</ul>';
+        }
+        if (incomplete.length) {
+            html +=
+                '<p class="summary-sub" style="margin-top:0.75rem">' +
+                escapeHtml(T('summaryIncomplete', l)) +
+                '：' +
+                incomplete.map((x) => 'Q' + x).join(l === 'zh' ? '、' : ', ') +
+                '</p>';
+        }
+
+        const panel = document.getElementById('session-analysis-panel');
+        panel.hidden = false;
+        panel.innerHTML = html;
+    }
+
+    function hasWorksheetData() {
+        return window.questionData && window.questionData.length > 0 && window.questionData[0];
+    }
+
+    function getSolutionsTitle(l) {
+        return l === 'zh'
+            ? '完整題解 — 同位素與相對原子質量'
+            : 'Worked solutions — Isotopes & relative atomic mass';
+    }
+
+    function buildSolutionsBodyInnerHtml(l) {
+        let body = '';
+        window.questionData.forEach((d, i) => {
+            if (!d) return;
+            body +=
+                '<section style="margin-bottom:28px;page-break-inside:avoid;">' +
+                '<h2 style="color:#2c3e50;border-bottom:1px solid #3498db;padding-bottom:6px;">Q' +
+                (i + 1) +
+                '</h2>' +
+                '<p style="font-size:15px;line-height:1.55;">' +
+                escapeHtml(d.qText) +
+                '</p>' +
+                '<div style="margin-top:12px;font-size:15px;line-height:1.6;">' +
+                d.fullSolution +
+                '</div>' +
+                '<p style="margin-top:10px;"><strong>' +
+                (l === 'zh' ? '參考答案：' : 'Answer key: ') +
+                '</strong>' +
+                d.ans +
+                '</p>' +
+                '</section>';
+        });
+        return body;
+    }
+
+    function buildSolutionsDocumentHtml(l) {
+        const title = getSolutionsTitle(l);
+        const body = buildSolutionsBodyInnerHtml(l);
+        const styles =
+            'body{font-family:Segoe UI,Microsoft JhengHei,微軟正黑體,sans-serif;padding:24px;color:#222;max-width:800px;margin:0 auto;}' +
+            'h1{font-size:22px;text-align:center;}';
+        return (
+            '<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+            'xmlns:w="urn:schemas-microsoft-com:office:word" lang="' +
+            (l === 'zh' ? 'zh-Hant' : 'en') +
+            '"><head><meta charset="UTF-8"><title>' +
+            escapeHtml(title) +
+            '</title><style>' +
+            styles +
+            '</style></head><body><h1>' +
+            title +
+            '</h1>' +
+            body +
+            '</body></html>'
+        );
+    }
+
+    function buildWorksheetDocumentHtml(l) {
+        const title = i18n[l].title;
+        let body =
+            '<p style="font-style:italic;font-size:14px;">' +
+            escapeHtml(i18n[l].note) +
+            '</p>';
+        window.questionData.forEach((d, i) => {
+            if (!d) return;
+            body +=
+                '<h2 style="font-size:16px;color:#2c3e50;margin-top:18px;">Q' +
+                (i + 1) +
+                '</h2>' +
+                '<p style="font-size:15px;line-height:1.6;">' +
+                escapeHtml(d.qText) +
+                '</p>' +
+                '<p style="border-bottom:1px dashed #999;padding-bottom:36px;margin-bottom:8px;">&nbsp;</p>';
+        });
+        body +=
+            '<p style="margin-top:24px;font-size:14px;">' +
+            (l === 'zh'
+                ? '姓名：________________　班別：________　日期：________'
+                : 'Name: ________________　Class: ______　Date: ________') +
+            '</p>';
+        const styles =
+            'body{font-family:Segoe UI,Microsoft JhengHei,微軟正黑體,sans-serif;padding:24px;color:#222;}';
+        return (
+            '<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+            'xmlns:w="urn:schemas-microsoft-com:office:word" lang="' +
+            (l === 'zh' ? 'zh-Hant' : 'en') +
+            '"><head><meta charset="UTF-8"><title>' +
+            escapeHtml(title) +
+            '</title><style>' +
+            styles +
+            '</style></head><body><h1 style="text-align:center;font-size:20px;">' +
+            title +
+            '</h1>' +
+            body +
+            '</body></html>'
+        );
+    }
+
+    /** Word opens HTML saved as .doc (application/msword). */
+    function downloadAsWordFile(htmlString, filename) {
+        const blob = new Blob(['\ufeff', htmlString], {
+            type: 'application/msword;charset=utf-8'
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function docFilenameStem(kind) {
+        const d = new Date();
+        const stamp =
+            d.getFullYear() +
+            String(d.getMonth() + 1).padStart(2, '0') +
+            String(d.getDate()).padStart(2, '0');
+        if (kind === 'solutions') return 'isotope-solutions-' + stamp;
+        return 'isotope-worksheet-' + stamp;
+    }
+
+    function downloadSolutionsDoc() {
+        const l = document.getElementById('lang').value;
+        if (!hasWorksheetData()) {
+            alert(i18n[l].alertNoSheet);
+            return;
+        }
+        downloadAsWordFile(buildSolutionsDocumentHtml(l), docFilenameStem('solutions') + '.doc');
+    }
+
+    function downloadWorksheetDoc() {
+        const l = document.getElementById('lang').value;
+        if (!hasWorksheetData()) {
+            alert(i18n[l].alertNoSheet);
+            return;
+        }
+        downloadAsWordFile(buildWorksheetDocumentHtml(l), docFilenameStem('worksheet') + '.doc');
+    }
+
+    function openSolutionsPdf() {
+        const l = document.getElementById('lang').value;
+        if (!hasWorksheetData()) {
+            alert(i18n[l].alertNoSheet);
+            return;
+        }
+        const html = buildSolutionsDocumentHtml(l);
+        const w = window.open('', '_blank');
+        if (!w) {
+            alert(l === 'zh' ? '請允許彈出視窗以產生題解。' : 'Please allow pop-ups to open solutions.');
+            return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+        w.onload = function () {
+            setTimeout(function () {
+                try {
+                    w.focus();
+                    w.print();
+                } catch (e) {}
+            }, 150);
+        };
+    }
+
+    function generateWorksheet() {
+        const l = document.getElementById('lang').value;
+        const numQs = parseInt(document.getElementById('numQs').value);
+        const typeSelect = document.getElementById('qType').value;
+        const diff = document.getElementById('diff').value;
+        const container = document.getElementById('worksheet');
+        
+        container.innerHTML = `<p class="worksheet-note">${i18n[l].note}</p>`;
+        window.questionData = [];
+        document.getElementById('summary-panel').classList.remove('visible');
+        document.getElementById('summary-panel').innerHTML = '';
+        const sap = document.getElementById('session-analysis-panel');
+        sap.hidden = true;
+        sap.innerHTML = '';
+        const pl = document.getElementById('progress-line');
+        pl.style.display = 'none';
+        pl.innerText = '';
+        const elements = ["X", "Y", "Z", "A", "B", "M", "Q"];
+
+        for (let i = 0; i < numQs; i++) {
+            let currentType = typeSelect === 'all' ? randInt(1, 3) : parseInt(typeSelect);
+            createQuestion(currentType, diff, i, elements[i % elements.length], container, l);
+        }
+        updateProgressUI(l);
+    }
+
+    function createQuestion(type, diff, index, elName, container, l) {
+        let m1, m2, m3, p1, p2, p3, ram, qText, ans, hint1, hint2;
+
+        m1 = randInt(10, 80);
+        m2 = m1 + randInt(1, 4);
+        m3 = m2 + randInt(1, 4);
+
+        if (diff === 'easy') {
+            p1 = randInt(1, 4) * 20; p2 = 100 - p1; p3 = 0;
+        } else if (diff === 'medium') {
+            p1 = randInt(15, 85); p2 = 100 - p1; p3 = 0;
+        } else {
+            p1 = randInt(30, 60); p2 = randInt(10, 30); p3 = 100 - p1 - p2;
+        }
+
+        ram = (diff === 'hard') ? ((m1*p1)+(m2*p2)+(m3*p3))/100 : ((m1*p1)+(m2*p2))/100;
+
+        if (type === 1) {
+            ans = ram;
+            if (l === 'zh') {
+                qText = (diff==='hard') ? `元素 ${elName} 有三種同位素：${elName}-${m1} (${p1}%)、${elName}-${m2} (${p2}%) 及 ${elName}-${m3} (${p3}%)。計算 ${elName} 的相對原子質量。` : `元素 ${elName} 有兩種同位素：${elName}-${m1} (豐度為 ${p1}%) 及 ${elName}-${m2} (豐度為 ${p2}%)。計算 ${elName} 的相對原子質量。`;
+                hint1 = "提示 1：相對原子質量 = (質量1 × 豐度1) + (質量2 × 豐度2) + ... 注意百分比需除以 100。";
+                hint2 = (diff==='hard') ? `提示 2 (步驟)：<br>RAM = [(${m1} × ${p1}) + (${m2} × ${p2}) + (${m3} × ${p3})] / 100` : `提示 2 (步驟)：<br>RAM = [(${m1} × ${p1}) + (${m2} × ${p2})] / 100`;
+            } else {
+                qText = (diff==='hard') ? `Element ${elName} has three isotopes: ${elName}-${m1} (${p1}%), ${elName}-${m2} (${p2}%), and ${elName}-${m3} (${p3}%). Calculate the relative atomic mass.` : `Element ${elName} has two isotopes: ${elName}-${m1} (${p1}%) and ${elName}-${m2} (${p2}%). Calculate the relative atomic mass.`;
+                hint1 = "Hint 1: RAM = (Mass1 × %1) + (Mass2 × %2)... Remember to divide by 100.";
+                hint2 = (diff==='hard') ? `Hint 2 (Steps):<br>RAM = [(${m1} × ${p1}) + (${m2} × ${p2}) + (${m3} × ${p3})] / 100` : `Hint 2 (Steps):<br>RAM = [(${m1} × ${p1}) + (${m2} × ${p2})] / 100`;
+            }
+        } else if (type === 2) {
+            ans = p1;
+            let p2Expr = (diff==='hard') ? `(100 - ${p3} - x)` : `(100 - x)`;
+            if (l === 'zh') {
+                qText = (diff==='hard') ? `元素 ${elName} 有三種同位素：${elName}-${m1}、${elName}-${m2} 及 ${elName}-${m3}。相對原子質量為 ${ram.toFixed(2)}。已知 ${elName}-${m3} 的豐度為 ${p3}%，求 ${elName}-${m1} 的百分比豐度。` : `元素 ${elName} 有兩種同位素：${elName}-${m1} 及 ${elName}-${m2}。其相對原子質量為 ${ram.toFixed(2)}。求 ${elName}-${m1} 的百分比豐度。`;
+                hint1 = "提示 1：設未知豐度為 x%，則另一同位素為 (100 - 已知% - x)%。代入公式求解 x。";
+                hint2 = `提示 2 (步驟)：<br>設 ${elName}-${m1} 的豐度為 x%。<br>${ram.toFixed(2)} = [${m1}x + ${m2}${p2Expr}` + (diff==='hard' ? ` + (${m3} × ${p3})` : "") + `] / 100<br>展開括號並解出 x。`;
+            } else {
+                qText = `Element ${elName} has isotopes ${elName}-${m1} and ${elName}-${m2}. The RAM is ${ram.toFixed(2)}. Calculate the % abundance of ${elName}-${m1}.`;
+                if(diff === 'hard') qText = `Element ${elName} has isotopes ${elName}-${m1}, ${elName}-${m2}, and ${elName}-${m3} (${p3}%). The RAM is ${ram.toFixed(2)}. Calculate the % abundance of ${elName}-${m1}.`;
+                
+                hint1 = "Hint 1: Let abundance of isotope 1 be x%. Then isotope 2 is (100 - known% - x)%. Solve for x.";
+                hint2 = `Hint 2 (Steps):<br>Let the abundance of ${elName}-${m1} be x%.<br>${ram.toFixed(2)} = [${m1}x + ${m2}${p2Expr}` + (diff==='hard' ? ` + (${m3} × ${p3})` : "") + `] / 100<br>Expand the brackets and solve for x.`;
+            }
+        } else {
+            ans = (diff==='hard') ? m3 : m2;
+            if (l === 'zh') {
+                qText = (diff==='hard') ? `元素 ${elName} 的相對原子質量為 ${ram.toFixed(2)}。其中兩款同位素為 ${elName}-${m1} (${p1}%) 及 ${elName}-${m2} (${p2}%)。求第三種豐度為 ${p3}% 的同位素質量。` : `元素 ${elName} 的相對原子質量為 ${ram.toFixed(2)}。其中一款同位素為 ${elName}-${m1} (${p1}%)。求另一款豐度為 ${p2}% 的同位素質量。`;
+                hint1 = "提示 1：將所有數值代入 RAM 公式，設未知質量為 m，解方程求出 m。";
+                hint2 = `提示 2 (步驟)：<br>設未知同位素質量為 m。<br>${ram.toFixed(2)} = [(${m1} × ${p1}) + ` + (diff==='hard' ? `(${m2} × ${p2}) + (m × ${p3})` : `(m × ${p2})`) + `] / 100<br>解出 m。`;
+            } else {
+                qText = (diff==='hard') ? `Element ${elName} (RAM ${ram.toFixed(2)}) has isotopes ${elName}-${m1} (${p1}%) and ${elName}-${m2} (${p2}%). Calculate the isotopic mass of the third isotope (abundance ${p3}%).` : `Element ${elName} (RAM ${ram.toFixed(2)}) has an isotope ${elName}-${m1} (${p1}%). Calculate the isotopic mass of the other isotope (abundance ${p2}%).`;
+                hint1 = "Hint 1: Use the RAM formula, set the unknown mass as 'm', and solve the equation.";
+                hint2 = `Hint 2 (Steps):<br>Let the unknown mass be m.<br>${ram.toFixed(2)} = [(${m1} × ${p1}) + ` + (diff==='hard' ? `(${m2} × ${p2}) + (m × ${p3})` : `(m × ${p2})`) + `] / 100<br>Solve for m.`;
+            }
+        }
+
+        const fullSolution = buildFullSolution({
+            type,
+            diff,
+            l,
+            elName,
+            m1,
+            m2,
+            m3,
+            p1,
+            p2,
+            p3,
+            ram,
+            ans: parseFloat(ans.toFixed(2))
+        });
+
+        window.questionData[index] = {
+            ans: parseFloat(ans.toFixed(2)),
+            hint1,
+            hint2,
+            attempts: 0,
+            solved: false,
+            checkSubmissions: 0,
+            type,
+            qText,
+            fullSolution
+        };
+
+        const qDiv = document.createElement('div');
+        qDiv.className = 'question-box';
+        qDiv.innerHTML = `
+            <div class="question-text"><strong>Q${index + 1}.</strong> ${qText}</div>
+            <div class="interaction-area">
+                <input type="number" id="ans_${index}" step="0.01" placeholder="${i18n[l].placeholder}">
+                <button onclick="checkAnswer(${index}, '${l}')">${i18n[l].check}</button>
+            </div>
+            <div id="hint_${index}" class="hint"></div>
+            <div id="fb_${index}" class="feedback"></div>
+        `;
+        container.appendChild(qDiv);
+    }
+
+    function checkAnswer(index, l) {
+        const raw = document.getElementById('ans_' + index).value;
+        const userVal = parseFloat(raw);
+        const data = window.questionData[index];
+        const fb = document.getElementById('fb_' + index);
+        const ht = document.getElementById('hint_' + index);
+
+        if (raw === '' || raw === null || Number.isNaN(userVal)) {
+            fb.innerText = l === 'zh' ? '請輸入數字答案。' : 'Please enter a numeric answer.';
+            fb.style.color = '#c0392b';
+            updateProgressUI(l);
+            return;
+        }
+        data.checkSubmissions = (data.checkSubmissions || 0) + 1;
+
+        if (Math.abs(userVal - data.ans) <= 0.05) {
+            fb.innerText = i18n[l].correct;
+            fb.style.color = "#27ae60";
+            ht.style.display = 'none';
+            data.solved = true;
+            maybeShowSummary(l);
+        } else {
+            data.attempts++;
+            if (data.attempts === 1) {
+                fb.innerText = i18n[l].wrong1; 
+                fb.style.color = "#c0392b";
+                ht.innerHTML = data.hint1; 
+                ht.style.display = 'block';
+            } else if (data.attempts === 2) {
+                fb.innerText = i18n[l].wrong2; 
+                fb.style.color = "#c0392b";
+                ht.innerHTML = data.hint1 + "<br><br>" + data.hint2; 
+            } else {
+                fb.innerText = i18n[l].finalWrong + data.ans;
+                fb.style.color = "#c0392b";
+            }
+        }
+        updateProgressUI(l);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const q = (new URLSearchParams(window.location.search).get('lang') || '').toLowerCase();
+        const sel = document.getElementById('lang');
+        if (q && sel) {
+            if (q === 'en') sel.value = 'en';
+            else if (q === 'zh' || q === 'zh-hant' || q === 'zh-tw' || q === 'zh-hk') sel.value = 'zh';
+            document.documentElement.lang = sel.value === 'en' ? 'en' : 'zh-Hant';
+        }
+        updateUI();
+        document.getElementById('btn-session-summary').addEventListener('click', renderSessionAnalysis);
+    });
+</script>
+</body>
+</html>

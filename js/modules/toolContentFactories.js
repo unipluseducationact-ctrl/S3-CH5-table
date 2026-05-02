@@ -1,12 +1,13 @@
 // CSS is now loaded in index.html to support native ES modules without a bundler
 
-import { t } from "./langController.js";
+import { t, getLang } from "./langController.js";
 
 const TOOL_CONTENT_FACTORIES = {
   balancer: generateBalancerToolContent,
   "molar-mass": generateMolarMassToolContent,
   empirical: generateEmpiricalToolContent,
   solubility: generateSolubilityToolContent,
+  "atomic-arcade": generateAtomicArcadeToolContent,
 };
 
 export function getChemToolContent(toolType) {
@@ -2044,3 +2045,16 @@ function generateSolubilityToolContent() {
         </div>
     `;
 }
+
+function generateAtomicArcadeToolContent() {
+  const title = t("tools.atomNinjaName");
+  const lang = encodeURIComponent(getLang());
+  return `
+        <div class="tool-modal-content atomic-arcade-wrap">
+            <iframe class="atomic-arcade-iframe"
+                src="tools/atomic-structure-arcade.html?lang=${lang}"
+                title="${title.replace(/"/g, "&quot;")}"></iframe>
+        </div>
+    `;
+}
+

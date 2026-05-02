@@ -290,15 +290,131 @@ const WORKSHEET_PHRASE_MAP = {
         fa: 'تولید شده توسط Uni+',
         ur: 'Uni+ کی جانب سے تیار کردہ',
         tl: 'Nabuo ng Uni+'
+    },
+    'Uni+ — Balancing Chemical Equations Worksheet': {
+        'zh-Hant': 'Uni+ — 化學方程式配平練習',
+        fr: 'Uni+ — Feuille d\'equations chimiques a equilibrer',
+        ru: 'Uni+ — Рабочий лист: балансировка уравнений',
+        fa: 'Uni+ — برگه تعادل معادلات شیمیایی',
+        ur: 'Uni+ — کیمیائی مساوات بیلنس ورک شیٹ',
+        tl: 'Uni+ — Balancing Chemical Equations Worksheet'
+    },
+    'Answer Key (Teacher Use Only)': {
+        'zh-Hant': '答案頁（僅供教師使用）',
+        fr: 'Corrige (enseignants uniquement)',
+        ru: 'Ответы (только для преподавателя)',
+        fa: 'پاسخنامه (فقط برای معلم)',
+        ur: 'جوابی کلید (صرف اساتذہ)',
+        tl: 'Answer Key (Teacher Use Only)'
+    },
+    'Name:': {
+        'zh-Hant': '姓名：',
+        fr: 'Nom :',
+        ru: 'Имя:',
+        fa: 'نام:',
+        ur: 'نام:',
+        tl: 'Pangalan:'
+    },
+    'Date:': {
+        'zh-Hant': '日期：',
+        fr: 'Date :',
+        ru: 'Дата:',
+        fa: 'تاریخ:',
+        ur: 'تاریخ:',
+        tl: 'Petsa:'
+    },
+    'Balance the following chemical equations by filling in the correct coefficients.': {
+        'zh-Hant': '在橫線上填入正確的係數以配平方程式。',
+        fr: 'Equilibrez les equations suivantes en indiquant les bons coefficients.',
+        ru: 'Сбалансируйте уравнения, вписав правильные коэффициенты.',
+        fa: 'معادلات زیر را با نوشتن ضرایب درست موازنه کنید.',
+        ur: 'درست ضرایب بھر کر مساوات کو متوازن کریں۔',
+        tl: 'I-balance ang mga sumusunod na ekwasyon sa pamamagitan ng paglalagay ng tamang coefficients.'
     }
 };
 
-// Translation helper
-function tr(en, zh) {
-    const lang = (document.documentElement.lang || 'en').toLowerCase();
-    if (lang.startsWith('zh')) return zh;
-    const translated = WORKSHEET_PHRASE_MAP[en]?.[lang] || WORKSHEET_PHRASE_MAP[en]?.[lang.split('-')[0]];
-    return translated || en;
+/**
+ * Worksheet copy: second arg is Simplified Chinese (zh-CN). Traditional (zh-Hant, zh-TW, …)
+ * uses WORKSHEET_PHRASE_MAP['zh-Hant']. Do not return zhSc for every `zh*` language.
+ */
+function tr(en, zhSc) {
+    const raw = (document.documentElement.getAttribute('lang') || 'en').trim();
+    const langLower = raw.toLowerCase();
+
+    const entry = WORKSHEET_PHRASE_MAP[en];
+    if (entry) {
+        for (const [code, text] of Object.entries(entry)) {
+            if (code.toLowerCase() === langLower) return text;
+        }
+        if (
+            langLower === 'zh-tw' || langLower.startsWith('zh-tw-') ||
+            langLower === 'zh-hk' || langLower.startsWith('zh-hk-') ||
+            langLower === 'zh-mo'
+        ) {
+            const hKey = Object.keys(entry).find(c => c.toLowerCase() === 'zh-hant');
+            if (hKey) return entry[hKey];
+        }
+        const base = langLower.split('-')[0];
+        for (const [code, text] of Object.entries(entry)) {
+            if (code.toLowerCase() === base) return text;
+        }
+    }
+
+    if (langLower.startsWith('zh')) return zhSc;
+
+    return en;
+}
+
+/** Measured max-height so preview scrolls even when nested % / flex heights collapse (Safari, absolute panels). */
+let worksheetPreviewResizeObs = null;
+
+function syncWorksheetPreviewScrollArea() {
+    const panel = document.getElementById('worksheet-panel-equation');
+    const preview = document.querySelector('#worksheet-panel-equation .worksheet-preview');
+    const content = document.getElementById('worksheet-preview-content');
+    if (!panel || !preview || !content) return;
+
+    if (panel.hasAttribute('hidden')) {
+        content.style.maxHeight = '';
+        return;
+    }
+
+    if (preview.getBoundingClientRect().height < 8) {
+        content.style.maxHeight = '';
+        return;
+    }
+
+    const header = preview.querySelector('.preview-header');
+    if (!header) {
+        content.style.maxHeight = '';
+        return;
+    }
+
+    const innerTop = header.getBoundingClientRect().bottom;
+    const innerBottom = preview.getBoundingClientRect().bottom;
+    const available = Math.floor(innerBottom - innerTop);
+    if (available > 64) {
+        content.style.maxHeight = `${available}px`;
+    } else {
+        content.style.maxHeight = '';
+    }
+}
+
+function setupWorksheetPreviewScrollSync() {
+    const preview = document.querySelector('#worksheet-panel-equation .worksheet-preview');
+    if (!preview || worksheetPreviewResizeObs) return;
+
+    worksheetPreviewResizeObs = new ResizeObserver(() => {
+        syncWorksheetPreviewScrollArea();
+    });
+    worksheetPreviewResizeObs.observe(preview);
+
+    const onResize = () => syncWorksheetPreviewScrollArea();
+    window.addEventListener('resize', onResize);
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', onResize);
+        window.visualViewport.addEventListener('scroll', onResize);
+    }
 }
 
 // Initialize Worksheet Generator
@@ -342,6 +458,9 @@ function initWorksheetGenerator() {
     if (exportPdfBtn) {
         exportPdfBtn.addEventListener('click', exportToPDF);
     }
+
+    setupWorksheetPreviewScrollSync();
+    syncWorksheetPreviewScrollArea();
 }
 
 // Fill today's date (Toggle)
@@ -706,6 +825,12 @@ function renderWorksheet(worksheet, mode) {
             });
         }
     }
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            syncWorksheetPreviewScrollArea();
+        });
+    });
 }
 
 function checkSingleAnswer(questionIndex) {

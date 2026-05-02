@@ -1,0 +1,464 @@
+/* Chem flashcard app — Uni+ light theme, scoped */
+
+/* Wider reading column so the card can use horizontal space */
+#flashcards-page .chapter-scroll {
+  max-width: min(1000px, calc(100vw - 32px));
+}
+
+    #flashcards-page .chem-fc-app {
+      --bg: transparent;
+      --surface: #ffffff;
+      --surface2: #f1f5f9;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #6366f1;
+      --accent-dim: #4f46e5;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --radius: 14px;
+      --font-ui: system-ui, "Segoe UI", sans-serif;
+      --font-zh: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", "Heiti TC", var(--font-ui);
+    }
+
+@scope (#flashcards-page .chem-fc-app-inner) {
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :scope {
+    margin: 0 auto;
+    max-width: min(920px, 100%);
+    padding: 0 0 1.5rem;
+    font-family: inherit;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .seg {
+      display: inline-flex;
+      border-radius: 999px;
+      background: var(--surface);
+      padding: 3px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .seg button {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .seg button[aria-pressed="true"] {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    select.deck-select {
+      width: 100%;
+      max-width: min(520px, 100%);
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius);
+      padding: 0.5rem 2rem 0.5rem 0.75rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+      font-family: inherit;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b9cb3'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.6rem center;
+    }
+
+    select.deck-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .progress {
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 0.65rem;
+      font-variant-numeric: tabular-nums;
+      min-height: 1.35em;
+    }
+
+    .chem-fc-view { display: none; }
+    .chem-fc-view.is-active { display: block; }
+
+    /* Tall stage so typical Q/A + diagrams fit without in-card scroll (page may still scroll) */
+    .card-scene {
+      perspective: 1000px;
+      margin-bottom: 1rem;
+      min-height: max(22rem, min(68vh, 44rem));
+    }
+
+    .card-flip {
+      position: relative;
+      width: 100%;
+      min-height: max(22rem, min(68vh, 44rem));
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      background: none;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      border-radius: var(--radius);
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-flip.is-flipped { transform: rotateY(180deg); }
+
+    .card-flip:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: var(--radius);
+      padding: 1.35rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      border: 1px solid var(--border-color, #e2e8f0);
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      overflow: visible;
+    }
+
+    .card-front {
+      background: linear-gradient(145deg, var(--surface2), var(--surface));
+    }
+
+    .card-back {
+      background: linear-gradient(145deg, #eef2ff, #f8fafc);
+      transform: rotateY(180deg);
+    }
+
+    .card-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 0.45rem;
+      font-weight: 600;
+    }
+
+    .card-main {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      word-break: break-word;
+    }
+
+    .card-main .notn { font-size: 1.5rem; line-height: 1.35; }
+    .notn sup, .notn sub { font-size: 0.65em; line-height: 0; }
+
+    .card-sub {
+      margin-top: 0.55rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      white-space: pre-line;
+    }
+
+    .card-hint {
+      margin-top: auto;
+      padding-top: 0.85rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      opacity: 0.85;
+    }
+
+    #flashcards-page.chem-fc-lang-zh .chem-fc-app .card-main,
+    #flashcards-page.chem-fc-lang-zh .chem-fc-app .card-sub,
+    #flashcards-page.chem-fc-lang-zh .chem-fc-app .card-hint,
+    #flashcards-page.chem-fc-lang-zh .chem-fc-app .shell-caption {
+      font-family: var(--font-zh);
+    }
+
+    .nav-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--surface);
+      color: var(--text);
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn:hover { background: var(--surface2); border-color: rgba(255,255,255,0.2); }
+    .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .btn-primary { background: var(--accent-dim); border-color: var(--accent); }
+    .btn-primary:hover { background: var(--accent); }
+
+    .kbd-hint {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .kbd-hint kbd {
+      display: inline-block;
+      padding: 0.12rem 0.35rem;
+      border-radius: 4px;
+      background: var(--surface);
+      border: 1px solid #e2e8f0;
+      font-size: 0.68rem;
+      font-family: ui-monospace, monospace;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Speed round */
+    .speed-box {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1rem;
+      border: 1px solid var(--border-color, #e2e8f0);
+      margin-bottom: 1rem;
+    }
+
+    .speed-prompt {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .speed-prompt .notn { font-size: 1.2rem; }
+
+    .speed-timer-wrap {
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+    }
+
+    .speed-timer-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--accent), #60c4ff);
+      transform-origin: left;
+      transition: transform linear;
+    }
+
+    .speed-input-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .speed-input-row input {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.55rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: #f8fafc;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: ui-monospace, monospace;
+    }
+
+    .speed-input-row input:focus-visible { outline: 2px solid var(--accent); }
+
+    .speed-feedback {
+      margin-top: 0.65rem;
+      text-align: center;
+      font-size: 0.88rem;
+      min-height: 1.4em;
+    }
+
+    .speed-feedback.ok { color: var(--success); }
+    .speed-feedback.bad { color: var(--danger); }
+
+    .speed-time-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem 0.75rem;
+      margin-bottom: 0.65rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .speed-time-row label {
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .speed-time-control {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .speed-time-control input[type="range"] {
+      width: min(200px, 55vw);
+      accent-color: var(--accent);
+    }
+
+    .speed-time-val {
+      min-width: 1.5ch;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Bohr diagram (Set 4) */
+    .shell-diagram {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .shell-caption {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .nucleus-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .bohr-svg {
+      display: block;
+      width: 100%;
+      max-width: min(320px, 85%);
+      height: auto;
+      margin: 0.15rem auto 0;
+    }
+
+    .bohr-orbit {
+      fill: none;
+      stroke: rgba(139, 156, 179, 0.5);
+      stroke-width: 1.5;
+    }
+
+    .bohr-nucleus {
+      fill: #fbbf24;
+      filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.45));
+    }
+
+    .bohr-electron {
+      fill: var(--accent);
+      opacity: 0;
+      filter: drop-shadow(0 0 3px rgba(61, 156, 240, 0.55));
+      animation: bohrPopIn 0.35s ease forwards;
+    }
+
+    @keyframes bohrPopIn {
+      to { opacity: 1; }
+    }
+
+    /* Inline graphs (Q&A + symbol backs) */
+    #cf-frontExtra:empty { display: none; }
+    #cf-frontExtra:not(:empty) { display: block; margin-top: 0.5rem; }
+
+    .fc-graph-wrap {
+      margin-top: 0.6rem;
+      padding: 0.75rem 0.65rem;
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .fc-graph-caption {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 0.55rem;
+      line-height: 1.35;
+    }
+
+    .fc-graph {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: min(280px, 38vh);
+    }
+
+    .fc-graph text {
+      fill: var(--muted);
+      font-size: 11px;
+      font-family: var(--font-ui);
+    }
+
+    .fc-graph .fc-num {
+      fill: var(--text);
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .fc-set1-art {
+      display: block;
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      margin: 0.35rem auto 0;
+    }
+
+    /* Set 1: shapes paint first (back); labels on top — DOM order in JS matches */
+    .fc-set1-art .fc-set1-fg {
+      pointer-events: none;
+    }
+
+    .fc-photo {
+      display: block;
+      width: 100%;
+      max-height: min(340px, 42vh);
+      object-fit: contain;
+      border-radius: 8px;
+      margin-top: 0.35rem;
+    }
+
+    .fc-photo-credit {
+      font-size: 0.62rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+      line-height: 1.35;
+    }
+}

@@ -4,3 +4,4 @@ dist/
 .eslintcache
 .deploy-gh-pages/
 uniplus-dist.zip
+_extract_chem/

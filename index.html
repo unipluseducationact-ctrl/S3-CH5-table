@@ -75,9 +75,11 @@
     <link rel="stylesheet" href="css/base.css?v=2.1.2">
     <link rel="stylesheet" href="css/grid.css?v=2.1.2">
     <link rel="stylesheet" href="css/modal.css?v=2.1.2">
-    <link rel="stylesheet" href="css/tools.css?v=2.1.2">
+    <link rel="stylesheet" href="css/tools.css?v=2.1.3">
     <link rel="stylesheet" href="css/ions.css?v=2.1.2">
-    <link rel="stylesheet" href="css/worksheet-styles.css?v=2.1.2">
+    <link rel="stylesheet" href="css/worksheet-styles.css?v=2.1.3">
+    <link rel="stylesheet" href="css/chapter-pages.css?v=2.1.5">
+    <link rel="stylesheet" href="css/chem-flashcard.css?v=2.1.3">
     <link rel="stylesheet" href="css/ion-animations.css?v=2.1.2">
     <!-- Legacy showcase landing removed -->
     <link rel="stylesheet" href="css/tool-modals/shared.css?v=2.1.2">
@@ -116,11 +118,12 @@
         <!-- 中间：导航链接 -->
         <div class="nav-center-group">
             <div class="global-nav-pill">
-                <button class="nav-pill-btn active" data-page="table" data-i18n="nav.table">Table</button>
-                <button class="nav-pill-btn" data-page="ions" data-i18n="nav.ions">Ions</button>
-                <button class="nav-pill-btn" data-page="tools" data-i18n="nav.tools">Tools</button>
-                <button class="nav-pill-btn" data-page="worksheet" data-i18n="nav.worksheet">Worksheet</button>
-                <button class="nav-pill-btn" data-page="settings" data-i18n="nav.settings">Settings</button>
+                <button class="nav-pill-btn active" data-page="table" data-i18n="nav.table">1. Table</button>
+                <button class="nav-pill-btn" data-page="notes" data-i18n="nav.notes">2. Notes</button>
+                <button class="nav-pill-btn" data-page="tools" data-i18n="nav.interactiveTools">3. Interactive Tools</button>
+                <button class="nav-pill-btn" data-page="worksheet" data-i18n="nav.worksheets">4. Worksheets</button>
+                <button class="nav-pill-btn" data-page="flashcards" data-i18n="nav.flashcards">5. Flashcards</button>
+                <button class="nav-pill-btn" data-page="summary" data-i18n="nav.summary">6. Summary</button>
             </div>
         </div>
 
@@ -172,110 +175,329 @@
         </div>
     </div>
 
-    <!-- Chemistry Tools Page (Blank Page 1) -->
-    <div id="blank-page-1" class="blank-page chemistry-tools-page">
-        <div class="blank-page-content" id="page-tools">
-            <div class="chem-tools-container">
-                <h1 class="chem-tools-title" data-i18n="tools.pageTitle">Chemistry Tools</h1>
-
-
-                <div class="chem-tools-grid">
-                    <!-- Equation Balancer (Position 1) -->
-                    <div class="chem-tool-card" data-tool="balancer">
-                        <div class="chem-tool-header">
-                            <div class="chem-tool-icon-box balancer-icon">
-                                <span class="chem-tool-number">1</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 3v18" />
-                                    <path d="M3 9l9-4 9 4" />
-                                    <path d="M3 9v4c0 2 2 4 4 4s4-2 4-4" />
-                                    <path d="M21 9v4c0 2-2 4-4 4s-4-2-4-4" />
-                                    <line x1="8" y1="21" x2="16" y2="21" />
-                                </svg>
+    <!-- Notes: Chapter 5 PDFs (EN + Traditional Chinese) -->
+    <div id="notes-page" class="blank-page chapter-page notes-page">
+        <div class="chapter-scroll chapter-scroll--notes">
+            <header class="chapter-hero">
+                <p class="chapter-eyebrow" data-i18n="chapter.notesEyebrow">Chapter</p>
+                <h1 class="chapter-title" data-i18n="chapter.notesTitle">Notes</h1>
+                <p class="chapter-lead" data-i18n="chapter.notesLead">Chapter 5 study notes (PDF). English and Traditional Chinese versions side by side.</p>
+            </header>
+            <div class="chapter-section-stack notes-section-stack">
+                <section class="chapter-section notes-topic" aria-labelledby="notes-topic-1">
+                    <h2 id="notes-topic-1" class="chapter-section-title" data-i18n="chapter.notesTopic1Title">1. Atomic structure &amp; atomic symbol</h2>
+                    <p class="notes-pdf-hint" data-i18n="chapter.notesPdfFallback">If the preview does not appear, open the PDF in a new tab.</p>
+                    <div class="notes-pdf-grid">
+                        <article class="notes-pdf-card">
+                            <h3 class="notes-pdf-card__label" data-i18n="chapter.notesLangEn">English</h3>
+                            <div class="notes-pdf-frame-wrap">
+                                <iframe class="notes-pdf-frame" title="Atomic structure and atomic symbol (English)"
+                                    src="./notes/en/ch5-1-atomic-structure-and-symbol.pdf#view=FitH"></iframe>
                             </div>
-                            <span class="chem-tool-arrow">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
-                            </span>
+                            <div class="notes-pdf-actions">
+                                <a class="notes-pdf-link" href="./notes/en/ch5-1-atomic-structure-and-symbol.pdf" target="_blank" rel="noopener noreferrer" data-i18n="chapter.notesOpenPdf">Open PDF</a>
+                            </div>
+                        </article>
+                        <article class="notes-pdf-card">
+                            <h3 class="notes-pdf-card__label" data-i18n="chapter.notesLangZhHant">Traditional Chinese</h3>
+                            <div class="notes-pdf-frame-wrap">
+                                <iframe class="notes-pdf-frame" title="原子結構與原子符號（繁體中文）"
+                                    src="./notes/zh-hant/ch5-1-atomic-structure-and-symbol.pdf#view=FitH"></iframe>
+                            </div>
+                            <div class="notes-pdf-actions">
+                                <a class="notes-pdf-link" href="./notes/zh-hant/ch5-1-atomic-structure-and-symbol.pdf" target="_blank" rel="noopener noreferrer" data-i18n="chapter.notesOpenPdf">Open PDF</a>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+                <section class="chapter-section notes-topic" aria-labelledby="notes-topic-2">
+                    <h2 id="notes-topic-2" class="chapter-section-title" data-i18n="chapter.notesTopic2Title">2. Isotope</h2>
+                    <p class="notes-pdf-hint" data-i18n="chapter.notesPdfFallback">If the preview does not appear, open the PDF in a new tab.</p>
+                    <div class="notes-pdf-grid">
+                        <article class="notes-pdf-card">
+                            <h3 class="notes-pdf-card__label" data-i18n="chapter.notesLangEn">English</h3>
+                            <div class="notes-pdf-frame-wrap">
+                                <iframe class="notes-pdf-frame" title="Isotope (English)"
+                                    src="./notes/en/ch5-2-isotope.pdf#view=FitH"></iframe>
+                            </div>
+                            <div class="notes-pdf-actions">
+                                <a class="notes-pdf-link" href="./notes/en/ch5-2-isotope.pdf" target="_blank" rel="noopener noreferrer" data-i18n="chapter.notesOpenPdf">Open PDF</a>
+                            </div>
+                        </article>
+                        <article class="notes-pdf-card">
+                            <h3 class="notes-pdf-card__label" data-i18n="chapter.notesLangZhHant">Traditional Chinese</h3>
+                            <div class="notes-pdf-frame-wrap">
+                                <iframe class="notes-pdf-frame" title="同位素（繁體中文）"
+                                    src="./notes/zh-hant/ch5-2-isotope.pdf#view=FitH"></iframe>
+                            </div>
+                            <div class="notes-pdf-actions">
+                                <a class="notes-pdf-link" href="./notes/zh-hant/ch5-2-isotope.pdf" target="_blank" rel="noopener noreferrer" data-i18n="chapter.notesOpenPdf">Open PDF</a>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <!-- Flashcards: Form 3 chemistry decks (chem_flashcard.zip) -->
+    <div id="flashcards-page" class="blank-page chapter-page">
+        <div class="chapter-scroll">
+            <header class="chapter-hero">
+                <p class="chapter-eyebrow" data-i18n="chapter.flashEyebrow">Study</p>
+                <h1 class="chapter-title" id="cf-appTitle">Flashcards</h1>
+                <p class="chapter-lead" id="cf-appSubtitle">Five sets · Symbol fronts · Shell drill</p>
+            </header>
+            <div class="chem-fc-app">
+                <div class="chem-fc-app-inner">
+                    <div class="toolbar">
+                        <div class="seg" role="group" aria-label="Flashcard language">
+                            <button type="button" id="cf-langEn" aria-pressed="true">English</button>
+                            <button type="button" id="cf-langZh" aria-pressed="false">繁體中文</button>
                         </div>
-                        <div class="chem-tool-info">
-                            <h3 class="chem-tool-name" data-i18n="tools.balancerName">Equation Balancer</h3>
-                            <p class="chem-tool-desc" data-i18n="tools.balancerDesc">Balance complex chemical equations automatically with visual
-                                stoichiometry feedback.</p>
-                        </div>
+                        <label class="visually-hidden" for="cf-deckSelect" id="cf-deckLabel">Deck</label>
+                        <select class="deck-select" id="cf-deckSelect" aria-labelledby="cf-deckLabel"></select>
                     </div>
 
-                    <!-- Molar Mass Calculator (Position 2) -->
-                    <div class="chem-tool-card" data-tool="molar-mass">
-                        <div class="chem-tool-header">
-                            <div class="chem-tool-icon-box molar-icon">
-                                <span class="chem-tool-number">2</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="4" y="4" width="16" height="16" rx="3" ry="3" />
-                                    <line x1="8" y1="9" x2="16" y2="9" />
-                                    <line x1="8" y1="13" x2="10" y2="13" />
-                                    <line x1="14" y1="13" x2="16" y2="13" />
-                                    <line x1="8" y1="17" x2="10" y2="17" />
-                                    <line x1="14" y1="17" x2="16" y2="17" />
-                                </svg>
-                            </div>
-                            <span class="chem-tool-arrow">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
-                            </span>
+                    <div class="progress" id="cf-progress" aria-live="polite"></div>
+
+                    <div class="chem-fc-view is-active" id="cf-viewFlash" data-view="flash">
+                        <div class="card-scene">
+                            <button type="button" class="card-flip" id="cf-cardFlip" aria-label="Flip card">
+                                <div class="card-face card-front">
+                                    <span class="card-label" id="cf-frontLabel">Question</span>
+                                    <div class="card-main" id="cf-frontMain"></div>
+                                    <div class="card-sub" id="cf-frontSub" hidden></div>
+                                    <div id="cf-frontExtra"></div>
+                                    <div class="card-hint" id="cf-frontHint"></div>
+                                </div>
+                                <div class="card-face card-back">
+                                    <span class="card-label" id="cf-backLabel">Answer</span>
+                                    <div class="card-main" id="cf-backMain"></div>
+                                    <div class="card-sub" id="cf-backSub"></div>
+                                    <div id="cf-backExtra"></div>
+                                    <div class="card-hint" id="cf-backHint"></div>
+                                </div>
+                            </button>
                         </div>
-                        <div class="chem-tool-info">
-                            <h3 class="chem-tool-name" data-i18n="tools.molarMassName">Molar Mass</h3>
-                            <p class="chem-tool-desc" data-i18n="tools.molarMassDesc">Instantly compute molecular weights with a detailed
-                                element-by-element mass breakdown.</p>
+                        <div class="nav-row">
+                            <button type="button" class="btn" id="cf-btnPrev">Previous</button>
+                            <button type="button" class="btn btn-primary" id="cf-btnNext">Next</button>
+                            <button type="button" class="btn" id="cf-btnShuffle">Shuffle</button>
                         </div>
+                        <p class="kbd-hint" id="cf-kbdHint"></p>
                     </div>
 
-                    <!-- Solubility Table (Position 3) -->
-                    <div class="chem-tool-card" data-tool="solubility">
-                        <div class="chem-tool-header">
-                            <div class="chem-tool-icon-box solubility-icon"
-                                style="background:linear-gradient(135deg, #d1f4e0 0%, #a7f3d0 100%);">
-                                <span class="chem-tool-number">3</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4.5 3h15" />
-                                    <path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3" />
-                                    <path d="M6 14h12" />
-                                    <circle cx="10" cy="18" r="1.5" fill="#059669" stroke="none" />
-                                    <circle cx="14" cy="16" r="1.5" fill="#059669" stroke="none" />
-                                </svg>
+                    <div class="chem-fc-view" id="cf-viewSpeed" data-view="speed">
+                        <div class="speed-box">
+                            <p class="speed-prompt" id="cf-speedPrompt"></p>
+                            <div class="speed-timer-wrap" aria-hidden="true">
+                                <div class="speed-timer-bar" id="cf-speedTimerBar"></div>
                             </div>
-                            <span class="chem-tool-arrow">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
-                            </span>
+                            <div class="speed-time-row">
+                                <label for="cf-speedTimeSec" id="cf-speedTimeLabel"></label>
+                                <div class="speed-time-control">
+                                    <input
+                                        type="range"
+                                        id="cf-speedTimeSec"
+                                        min="1"
+                                        max="15"
+                                        step="1"
+                                        aria-valuemin="1"
+                                        aria-valuemax="15"
+                                        aria-valuenow="3"
+                                    />
+                                    <span class="speed-time-val" id="cf-speedTimeSecVal" aria-hidden="true">3</span>
+                                </div>
+                            </div>
+                            <p class="shell-caption" id="cf-speedInstr" style="text-align:center;margin-bottom:0.5rem;"></p>
+                            <div class="speed-input-row">
+                                <input type="text" id="cf-speedInput" autocomplete="off" placeholder="2,8,1" />
+                                <button type="button" class="btn btn-primary" id="cf-btnSpeedSubmit">OK</button>
+                            </div>
+                            <div class="speed-feedback" id="cf-speedFeedback" aria-live="polite"></div>
                         </div>
-                        <div class="chem-tool-info">
-                            <h3 class="chem-tool-name" data-i18n="tools.solubilityName">Solubility Table</h3>
-                            <p class="chem-tool-desc" data-i18n="tools.solubilityDesc">Quickly reference interactive charts and rules for ionic compound
-                                solubilities.</p>
+                        <div class="nav-row">
+                            <button type="button" class="btn" id="cf-btnSpeedSkip">Skip</button>
+                            <button type="button" class="btn btn-primary" id="cf-btnSpeedNext">Next round</button>
                         </div>
+                        <p class="kbd-hint" id="cf-speedKbd"></p>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Page 2: Worksheet Generator -->
-    <div id="blank-page-2" class="blank-page">
+    <!-- Chemistry Tools Page (Blank Page 1) -->
+    <div id="blank-page-1" class="blank-page chemistry-tools-page">
+        <div class="blank-page-content" id="page-tools">
+            <div class="chem-tools-container">
+                <h1 class="chem-tools-title" data-i18n="tools.pageTitle">Interactive Tools</h1>
+
+
+                <div class="chem-tools-grid chem-tools-grid--pending">
+                    <div class="chem-tool-card" data-tool="atomic-arcade" role="button" tabindex="0">
+                        <div class="chem-tool-header">
+                            <div class="chem-tool-icon-box balancer-icon">
+                                <span class="chem-tool-number">1</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="8" />
+                                    <line x1="12" y1="2" x2="12" y2="5" />
+                                    <line x1="12" y1="19" x2="12" y2="22" />
+                                    <line x1="2" y1="12" x2="5" y2="12" />
+                                    <line x1="19" y1="12" x2="22" y2="12" />
+                                    <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="chem-tool-info">
+                            <h3 class="chem-tool-name" data-i18n="tools.atomNinjaName">Atom Ninja</h3>
+                            <p class="chem-tool-desc" data-i18n="tools.atomNinjaDesc">Build atoms and play Atom Ninja — atomic symbols, mass number, and atomic number practice.</p>
+                        </div>
+                    </div>
+                    <div class="chem-tool-card chem-tool-card--pending" aria-disabled="true">
+                        <div class="chem-tool-header">
+                            <div class="chem-tool-icon-box chem-tool-icon-box--pending">
+                                <span class="chem-tool-number">2</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="chem-tool-info">
+                            <h3 class="chem-tool-name" data-i18n="tools.pendingName">Pending</h3>
+                            <p class="chem-tool-desc" data-i18n="tools.pendingDesc">Tool slot reserved. Content will be connected later.</p>
+                        </div>
+                    </div>
+                    <div class="chem-tool-card chem-tool-card--pending" aria-disabled="true">
+                        <div class="chem-tool-header">
+                            <div class="chem-tool-icon-box chem-tool-icon-box--pending">
+                                <span class="chem-tool-number">3</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="chem-tool-info">
+                            <h3 class="chem-tool-name" data-i18n="tools.pendingName">Pending</h3>
+                            <p class="chem-tool-desc" data-i18n="tools.pendingDesc">Tool slot reserved. Content will be connected later.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Worksheets: hub + equation generator panel -->
+    <div id="blank-page-2" class="blank-page worksheet-root-page">
+        <div id="worksheet-shell" class="worksheet-shell">
+            <div id="worksheet-hub" class="worksheet-hub">
+                <div class="chem-tools-container worksheet-hub-inner">
+                    <h1 class="chem-tools-title" data-i18n="worksheets.hubTitle">Worksheets</h1>
+                    <p class="chem-tools-subtitle" data-i18n="worksheets.hubSubtitle">Choose a worksheet type</p>
+                    <div class="chem-tools-grid worksheet-hub-grid">
+                        <div class="chem-tool-card worksheet-type-card" data-worksheet-subtype="equation" role="button" tabindex="0">
+                            <div class="chem-tool-header">
+                                <div class="chem-tool-icon-box balancer-icon">
+                                    <span class="chem-tool-number">1</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                    </svg>
+                                </div>
+                                <span class="chem-tool-arrow" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="chem-tool-info">
+                                <h3 class="chem-tool-name" data-i18n="worksheets.subtypeEquation">Equation practice</h3>
+                                <p class="chem-tool-desc" data-i18n="worksheets.subtypeEquationDesc">Generate balanced equation worksheets.</p>
+                            </div>
+                        </div>
+                        <div class="chem-tool-card worksheet-type-card" data-worksheet-subtype="atomic-structure" role="button" tabindex="0">
+                            <div class="chem-tool-header">
+                                <div class="chem-tool-icon-box balancer-icon">
+                                    <span class="chem-tool-number">2</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="3" />
+                                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                                    </svg>
+                                </div>
+                                <span class="chem-tool-arrow" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="chem-tool-info">
+                                <h3 class="chem-tool-name" data-i18n="worksheets.subtypeAtomicStructure">Atomic structure</h3>
+                                <p class="chem-tool-desc" data-i18n="worksheets.subtypeAtomicStructureDesc">Electron configuration, periodic trends, and structure practice.</p>
+                            </div>
+                        </div>
+                        <div class="chem-tool-card worksheet-type-card" data-worksheet-subtype="isotope-ram" role="button" tabindex="0">
+                            <div class="chem-tool-header">
+                                <div class="chem-tool-icon-box balancer-icon">
+                                    <span class="chem-tool-number">3</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M4 19h16" />
+                                        <path d="M6 16l3-8 3 5 3-9 3 12" />
+                                        <circle cx="9" cy="8" r="1.5" fill="currentColor" stroke="none" />
+                                        <circle cx="12" cy="13" r="1.5" fill="currentColor" stroke="none" />
+                                        <circle cx="15" cy="4" r="1.5" fill="currentColor" stroke="none" />
+                                        <circle cx="18" cy="16" r="1.5" fill="currentColor" stroke="none" />
+                                    </svg>
+                                </div>
+                                <span class="chem-tool-arrow" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="chem-tool-info">
+                                <h3 class="chem-tool-name" data-i18n="worksheets.subtypeIsotopeRam">Isotopes &amp; relative atomic mass</h3>
+                                <p class="chem-tool-desc" data-i18n="worksheets.subtypeIsotopeRamDesc">Isotope abundance and RAM calculations.</p>
+                            </div>
+                        </div>
+                        <div class="chem-tool-card worksheet-type-card" data-worksheet-subtype="cursor-chem" role="button" tabindex="0">
+                            <div class="chem-tool-header">
+                                <div class="chem-tool-icon-box balancer-icon">
+                                    <span class="chem-tool-number">4</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M8 12h8" />
+                                        <path d="M12 8v8" />
+                                        <path d="M12 2v4" />
+                                        <path d="M12 18v4" />
+                                    </svg>
+                                </div>
+                                <span class="chem-tool-arrow" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="chem-tool-info">
+                                <h3 class="chem-tool-name" data-i18n="worksheets.subtypeCursorChem">Atomic structure quiz</h3>
+                                <p class="chem-tool-desc" data-i18n="worksheets.subtypeCursorChemDesc">Practise element symbols, shells, and electron placement for elements 1-20.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="worksheet-panel-equation" class="worksheet-panel" hidden aria-hidden="true">
+                <div class="worksheet-panel-bar">
+                    <button type="button" class="worksheet-back-btn" data-i18n="worksheets.backToHub">Back to worksheets</button>
+                </div>
+                <div class="worksheet-panel-body">
         <div class="worksheet-generator-page">
             <div class="worksheet-container">
                 <!-- Left Panel: Controls -->
@@ -410,11 +632,155 @@
                 </div>
             </div>
         </div>
+                </div>
+            </div>
+            <div id="worksheet-panel-atomic-structure" class="worksheet-panel worksheet-panel--embed-full" hidden aria-hidden="true">
+                <div class="worksheet-panel-bar">
+                    <button type="button" class="worksheet-back-btn" data-i18n="worksheets.backToHub">Back to worksheets</button>
+                </div>
+                <div class="worksheet-embed-fs">
+                    <iframe class="worksheet-embed-fs-frame" title="Atomic structure worksheet (Ch.5)"
+                        src="./worksheets/ch5-atomic-structure/worksheet.html"></iframe>
+                </div>
+            </div>
+            <div id="worksheet-panel-isotope-ram" class="worksheet-panel worksheet-panel--embed-full" hidden aria-hidden="true">
+                <div class="worksheet-panel-bar">
+                    <button type="button" class="worksheet-back-btn" data-i18n="worksheets.backToHub">Back to worksheets</button>
+                </div>
+                <div class="worksheet-embed-fs">
+                    <iframe class="worksheet-embed-fs-frame" title="Isotopes and relative atomic mass (Ch.5)"
+                        src="./worksheets/ch5-isotope-ram/RAM_calculation.html"></iframe>
+                </div>
+            </div>
+            <div id="worksheet-panel-cursor-chem" class="worksheet-panel worksheet-panel--embed-full" hidden aria-hidden="true">
+                <div class="worksheet-panel-bar">
+                    <button type="button" class="worksheet-back-btn" data-i18n="worksheets.backToHub">Back to worksheets</button>
+                </div>
+                <div class="worksheet-embed-fs">
+                    <iframe class="worksheet-embed-fs-frame" title="Atomic structure quiz"
+                        src="./worksheets/cursor-chem/index.html"></iframe>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Page 5: Settings -->
-    <div id="settings-page" class="blank-page">
-        <div class="settings-viewport" id="page-settings"></div>
+    <!-- Summary (uses settings-page id for existing CSS / nav mapping) -->
+    <div id="settings-page" class="blank-page chapter-page">
+        <div class="settings-viewport chapter-summary-shell" id="page-settings">
+            <div class="chapter-scroll">
+                <figure class="summary-hero-figure">
+                    <img
+                        class="summary-hero-image"
+                        src="./images/ch5-summary-visual-guide.png"
+                        alt=""
+                        data-i18n-alt="chapter.summaryHeroAlt"
+                        width="1024"
+                        height="747"
+                        loading="eager"
+                        decoding="async"
+                    />
+                    <div class="summary-hero-actions">
+                        <a
+                            class="summary-download-btn"
+                            href="./images/ch5-summary-visual-guide.png"
+                            download="ch5-summary-visual-guide.png"
+                            data-i18n="chapter.summaryDownloadPoster"
+                        >Download infographic (PNG)</a>
+                    </div>
+                </figure>
+                <header class="chapter-hero">
+                    <p class="chapter-eyebrow" data-i18n="chapter.summaryEyebrow">Wrap-up</p>
+                    <h1 class="chapter-title" data-i18n="chapter.summaryTitle">Summary</h1>
+                    <p class="chapter-lead" data-i18n="chapter.summaryLead">A visual study guide for Chapter 5.</p>
+                </header>
+
+                <section class="summary-block summary-study-section" aria-labelledby="summary-s1">
+                    <h2 id="summary-s1" class="chapter-section-title" data-i18n="chapter.summaryS1Title">Atomic structure</h2>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS1Body"></p>
+                </section>
+
+                <section class="summary-block summary-study-section" aria-labelledby="summary-s2">
+                    <h2 id="summary-s2" class="chapter-section-title" data-i18n="chapter.summaryS2Title">Subatomic particles</h2>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS2Intro"></p>
+                    <div class="summary-study-table-wrap">
+                        <table class="summary-study-table">
+                            <thead>
+                                <tr>
+                                    <th data-i18n="chapter.summaryThParticle">Particle</th>
+                                    <th data-i18n="chapter.summaryThLocation">Where</th>
+                                    <th data-i18n="chapter.summaryThCharge">Charge</th>
+                                    <th data-i18n="chapter.summaryThMass">Relative mass</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-i18n="chapter.summaryRowProton">Proton</td>
+                                    <td data-i18n="chapter.summaryRowProtonLoc">Nucleus</td>
+                                    <td data-i18n="chapter.summaryRowProtonCh">+1</td>
+                                    <td data-i18n="chapter.summaryRowProtonMass">1</td>
+                                </tr>
+                                <tr>
+                                    <td data-i18n="chapter.summaryRowNeutron">Neutron</td>
+                                    <td data-i18n="chapter.summaryRowNeutronLoc">Nucleus</td>
+                                    <td data-i18n="chapter.summaryRowNeutronCh">0</td>
+                                    <td data-i18n="chapter.summaryRowNeutronMass">1</td>
+                                </tr>
+                                <tr>
+                                    <td data-i18n="chapter.summaryRowElectron">Electron</td>
+                                    <td data-i18n="chapter.summaryRowElectronLoc">Outside nucleus (shells / cloud)</td>
+                                    <td data-i18n="chapter.summaryRowElectronCh">−1</td>
+                                    <td data-i18n="chapter.summaryRowElectronMass">≈ 0 (≈ 1/1840 of a proton)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="summary-block summary-study-section" aria-labelledby="summary-s3">
+                    <h2 id="summary-s3" class="chapter-section-title" data-i18n="chapter.summaryS3Title">Atomic symbol</h2>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS3Z"></p>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS3A"></p>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS3Neutral"></p>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS3Example"></p>
+                </section>
+
+                <section class="summary-block summary-study-section" aria-labelledby="summary-s4">
+                    <h2 id="summary-s4" class="chapter-section-title" data-i18n="chapter.summaryS4Title">Electronic structure</h2>
+                    <ul class="summary-study-list">
+                        <li data-i18n="chapter.summaryS4Rule1"></li>
+                        <li data-i18n="chapter.summaryS4Rule2"></li>
+                        <li data-i18n="chapter.summaryS4Rule3"></li>
+                    </ul>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS4Mg"></p>
+                    <p class="summary-study-callout" data-i18n="chapter.summaryS4PairsNote"></p>
+                </section>
+
+                <section class="summary-block summary-study-section" aria-labelledby="summary-s5">
+                    <h2 id="summary-s5" class="chapter-section-title" data-i18n="chapter.summaryS5Title">Isotopes</h2>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS5Props"></p>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS5Def"></p>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS5Note"></p>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS5HydrogenIntro"></p>
+                    <ul class="summary-study-list">
+                        <li data-i18n="chapter.summaryS5Protium"></li>
+                        <li data-i18n="chapter.summaryS5Deuterium"></li>
+                        <li data-i18n="chapter.summaryS5Tritium"></li>
+                    </ul>
+                    <p class="summary-study-p" data-i18n="chapter.summaryS5RAM"></p>
+                </section>
+
+                <section class="summary-block" aria-labelledby="summary-ck">
+                    <h2 id="summary-ck" class="chapter-section-title" data-i18n="chapter.summaryChecklist">Review checklist</h2>
+                    <ul class="summary-checklist">
+                        <li><label><input type="checkbox" disabled> <span data-i18n="chapter.summaryCk1"></span></label></li>
+                        <li><label><input type="checkbox" disabled> <span data-i18n="chapter.summaryCk2"></span></label></li>
+                        <li><label><input type="checkbox" disabled> <span data-i18n="chapter.summaryCk3"></span></label></li>
+                        <li><label><input type="checkbox" disabled> <span data-i18n="chapter.summaryCk4"></span></label></li>
+                        <li><label><input type="checkbox" disabled> <span data-i18n="chapter.summaryCk5"></span></label></li>
+                    </ul>
+                </section>
+            </div>
+        </div>
     </div>
 
     <!-- Feature Modal for Chemistry Tools -->

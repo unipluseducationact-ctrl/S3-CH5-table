@@ -650,7 +650,9 @@ body.hide-nav .floating-about-btn {
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-#settings-page.active ~ .floating-about-btn {
+#settings-page.active ~ .floating-about-btn,
+#notes-page.active ~ .floating-about-btn,
+#flashcards-page.active ~ .floating-about-btn {
   transform: translateY(150%);
   opacity: 0;
   pointer-events: none;
@@ -677,7 +679,9 @@ body.hide-nav .copyright-notice {
   opacity: 0;
 }
 
-#settings-page.active ~ .copyright-notice {
+#settings-page.active ~ .copyright-notice,
+#notes-page.active ~ .copyright-notice,
+#flashcards-page.active ~ .copyright-notice {
   opacity: 0;
 }
 

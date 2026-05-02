@@ -17,6 +17,7 @@ const TOOL_LISTENER_MAP = {
   "molar-mass": attachMolarMassListeners,
   empirical: attachEmpiricalListeners,
   solubility: attachSolubilityListeners,
+  "atomic-arcade": () => {},
 };
 
 export function attachToolEventListeners(toolType) {

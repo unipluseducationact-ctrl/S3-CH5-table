@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Atom Ninja</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #1a0a08;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Fruit Ninja (Halfbrick-style) bamboo sunset — asset from open-source clone reference */
+  .fn-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: url('assets/fruit-ninja-bg.jpg') center center / cover no-repeat;
+  }
+
+  #app { max-width: 1200px; margin: 0 auto; padding: 12px 14px; position: relative; z-index: 1; }
+
+  h1 {
+    text-align: center;
+    font-size: clamp(1.35rem, 4vw, 2rem);
+    margin-bottom: 6px;
+    color: #fff;
+    text-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.85),
+      0 0 24px rgba(255, 200, 80, 0.45);
+  }
+  .subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.92);
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
+    animation: fadeUp 0.8s ease-out both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== Atom Ninja play area ===== */
+  #sniperArea {
+    position: relative;
+    height: clamp(375px, 45vh, 550px);
+    max-height: 65vh;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 64, 129, 0.45);
+    cursor: crosshair;
+    touch-action: none;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06) inset,
+      0 12px 48px rgba(0, 0, 0, 0.45);
+    transition: box-shadow 0.3s;
+  }
+  #sniperArea.sniper-shake {
+    animation: sniperShake 0.45s ease;
+  }
+  @keyframes sniperShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+  }
+  .sniper-fx {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 0%, transparent 35%, rgba(0, 0, 0, 0.25) 100%),
+      radial-gradient(ellipse 90% 70% at 50% 100%, rgba(40, 20, 10, 0.45), transparent 55%);
+  }
+  .sniper-fx::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,0.55), transparent),
+      radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.35), transparent),
+      radial-gradient(1.5px 1.5px at 40% 80%, rgba(255,255,255,0.45), transparent),
+      radial-gradient(1px 1px at 90% 15%, rgba(255,255,255,0.4), transparent);
+    background-size: 100% 100%;
+    animation: starTwinkle 5s ease-in-out infinite alternate;
+    opacity: 0.65;
+  }
+  @keyframes starTwinkle {
+    0% { opacity: 0.45; }
+    100% { opacity: 0.85; }
+  }
+  .sniper-fx::after {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: conic-gradient(from 0deg, transparent, rgba(0, 229, 255, 0.03), transparent 25%, rgba(236, 72, 153, 0.04), transparent 50%);
+    animation: sniperAurora 20s linear infinite;
+  }
+  @keyframes sniperAurora {
+    to { transform: rotate(360deg); }
+  }
+  .sniper-scanline {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.12) 2px,
+      rgba(0, 0, 0, 0.12) 4px
+    );
+    opacity: 0.35;
+    mix-blend-mode: overlay;
+  }
+  .sniper-atoms-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .sniper-atoms-layer .target-atom { pointer-events: auto; }
+
+  /* Fruit Ninja–style blade layer (swords.js: swipe trail); pointer-events none so atoms stay clickable */
+  #sniperBladeCanvas {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+  }
+
+  .target-atom {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: crosshair;
+    user-select: none;
+    border: 2px solid rgba(255, 255, 255, 0.28);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.28),
+      inset 0 2px 8px rgba(255, 255, 255, 0.22);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s;
+    font-weight: bold;
+    animation: atomFloatPulse 3.4s ease-in-out infinite;
+  }
+  @keyframes atomFloatPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.06); }
+  }
+  .target-atom:hover {
+    transform: scale(1.12);
+    filter: brightness(1.08);
+    z-index: 5;
+  }
+  .target-atom.target-hit {
+    animation: atomPop 0.35s ease forwards;
+    pointer-events: none;
+  }
+  @keyframes atomPop {
+    to {
+      transform: scale(1.35);
+      opacity: 0;
+      filter: blur(2px);
+    }
+  }
+  .target-atom .symbol { font-size: 1.6em; text-shadow: 0 2px 8px rgba(0,0,0,0.35); }
+  .target-atom .numbers { font-size: 0.75em; opacity: 0.92; text-shadow: 0 1px 4px rgba(0,0,0,0.4); }
+
+  /* Fruit Ninja–style bomb — slice = game over */
+  .target-atom--boom {
+    background: radial-gradient(circle at 35% 30%, #57534e, #1c1917 55%, #0c0a09);
+    border-color: rgba(239, 68, 68, 0.85);
+    animation: boomPulse 0.9s ease-in-out infinite;
+    box-shadow:
+      0 0 28px rgba(239, 68, 68, 0.65),
+      0 4px 20px rgba(0, 0, 0, 0.5),
+      inset 0 2px 10px rgba(255, 255, 255, 0.12);
+  }
+  .target-atom--boom .boom-face {
+    font-size: 2.2rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+  }
+  .target-atom--boom .boom-txt {
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    color: #fecaca;
+    text-shadow: 0 0 12px rgba(239, 68, 68, 0.9);
+  }
+  @keyframes boomPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.15); }
+  }
+  .target-atom--boom:hover {
+    box-shadow:
+      0 0 40px rgba(239, 68, 68, 0.85),
+      0 6px 24px rgba(0, 0, 0, 0.45),
+      inset 0 2px 10px rgba(255, 255, 255, 0.15);
+  }
+
+  .burst-particle {
+    position: absolute;
+    margin-left: -5px;
+    margin-top: -5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 15;
+    --dx: 0px;
+    --dy: 0px;
+    box-shadow: 0 0 8px currentColor;
+    animation: burstFly 0.72s ease-out forwards;
+  }
+  @keyframes burstFly {
+    0% {
+      transform: translate(0, 0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(var(--dx), var(--dy)) scale(0.15);
+      opacity: 0;
+    }
+  }
+
+  .hud {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(15, 10, 30, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 8px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  }
+  .hud-item { text-align: center; }
+  .hud-item .label { font-size: 0.72em; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.05em; }
+  .hud-item .value {
+    font-size: 1.2em;
+    font-weight: 800;
+    background: linear-gradient(180deg, #e0f2fe, #22d3ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.35));
+  }
+
+  .quest-box {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(125deg, #34d399, #10b981, #6ee7b7);
+    background-size: 220% 220%;
+    animation: questBarMove 8s ease infinite;
+    color: #052e26;
+    padding: 8px 12px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 8px;
+    font-weight: 800;
+    font-size: 0.92em;
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow: 0 6px 28px rgba(16, 185, 129, 0.35);
+  }
+  .quest-box.quest-updated {
+    animation: questBarMove 8s ease infinite, questFlash 0.6s ease;
+  }
+  @keyframes questBarMove {
+    0%, 100% { background-position: 0% 40%; }
+    50% { background-position: 100% 60%; }
+  }
+  @keyframes questFlash {
+    0% { filter: brightness(1); box-shadow: 0 6px 28px rgba(16, 185, 129, 0.35); }
+    35% { filter: brightness(1.18) saturate(1.08); box-shadow: 0 8px 36px rgba(16, 185, 129, 0.55); }
+    100% { filter: brightness(1); box-shadow: 0 6px 28px rgba(16, 185, 129, 0.35); }
+  }
+
+  .feedback {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(2rem, 8vw, 3.2em);
+    font-weight: 900;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1000;
+    letter-spacing: 0.02em;
+  }
+  .feedback.show { animation: popFade 1.05s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @keyframes popFade {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.35) rotate(-6deg);
+      filter: blur(6px);
+    }
+    35% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.15) rotate(2deg);
+      filter: blur(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.92);
+      filter: blur(2px);
+    }
+  }
+
+  .hidden { display: none !important; }
+
+  .start-screen {
+    text-align: center;
+    padding: 44px 36px;
+    background: rgba(12, 8, 28, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+    animation: fadeUp 0.6s ease-out both;
+  }
+  .start-screen h2 {
+    background: linear-gradient(90deg, #67e8f9, #a5f3fc, #c4b5fd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    font-weight: 800;
+  }
+  .start-screen p { margin-bottom: 20px; color: #ccc; line-height: 1.6; }
+  .big-btn {
+    padding: 16px 42px;
+    font-size: 1.3em;
+    background: linear-gradient(135deg, #f472b6, #ec4899, #db2777);
+    background-size: 200% auto;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 800;
+    box-shadow: 0 6px 32px rgba(236, 72, 153, 0.45);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+    animation: btnGradient 4s ease infinite;
+  }
+  @keyframes btnGradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .big-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 40px rgba(236, 72, 153, 0.55);
+  }
+  .big-btn:active { transform: translateY(0) scale(0.98); }
+
+  .diff-label {
+    display: block;
+    margin: 16px 0 8px;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .difficulty-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+  .diff-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .diff-option:has(input:checked) {
+    background: rgba(236, 72, 153, 0.25);
+    border-color: rgba(244, 114, 182, 0.65);
+  }
+  .diff-option input { accent-color: #ec4899; }
+
+  .sniper-countdown {
+    position: absolute;
+    inset: 0;
+    z-index: 25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.35);
+    font-size: clamp(4rem, 18vw, 7rem);
+    font-weight: 900;
+    color: #fff;
+    text-shadow:
+      0 4px 0 #0f172a,
+      0 0 48px rgba(236, 72, 153, 0.85),
+      0 0 80px rgba(34, 211, 238, 0.45);
+    letter-spacing: 0.06em;
+    animation: cdPulse 0.85s ease-in-out infinite;
+  }
+  .sniper-countdown.sniper-countdown--go {
+    font-size: clamp(2.8rem, 14vw, 5rem);
+    color: #6ee7b7;
+    text-shadow:
+      0 4px 0 #052e26,
+      0 0 40px rgba(52, 211, 153, 0.9);
+  }
+  @keyframes cdPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.06); opacity: 0.92; }
+  }
+
+  .rank-tiers-blurb {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 32em;
+    margin: 8px auto 4px;
+    text-align: center;
+  }
+  .rank-tiers-blurb.hidden { display: none !important; }
+
+  @media (max-width: 768px) {
+    #sniperArea { height: min(60vh, 500px); max-height: 65vh; }
+  }
+</style>
+</head>
+<body>
+<div class="fn-bg" aria-hidden="true"></div>
+<div id="app">
+  <h1 id="arcadeH1">⚔️ Atom Ninja</h1>
+  <p id="arcadeSubtitle" class="subtitle">S3 Chemistry Ch.5 · slice the element that matches the clue</p>
+
+  <div id="sniperScreen">
+    <div id="sniperStart" class="start-screen">
+      <h2 id="arcadeStartH2">🎯 Atom Ninja</h2>
+      <p id="arcadeStartHelp"></p>
+      <span id="arcadeDiffLabel" class="diff-label">Difficulty</span>
+      <div id="arcadeDiffRow" class="difficulty-row" role="radiogroup" aria-label="Difficulty">
+        <label class="diff-option"><input type="radio" name="sniper-difficulty" value="easy" /> <span class="arcade-diff-txt" data-diff="easy">Easy</span></label>
+        <label class="diff-option"><input type="radio" name="sniper-difficulty" value="normal" checked /> <span class="arcade-diff-txt" data-diff="normal">Normal</span></label>
+        <label class="diff-option"><input type="radio" name="sniper-difficulty" value="hard" /> <span class="arcade-diff-txt" data-diff="hard">Hard</span></label>
+        <label class="diff-option"><input type="radio" name="sniper-difficulty" value="expert" /> <span class="arcade-diff-txt" data-diff="expert">Expert</span></label>
+      </div>
+      <button id="arcadeStartBtn" class="big-btn" onclick="startSniper()">Start Game ▶</button>
+    </div>
+
+    <div id="sniperGame" class="hidden">
+      <div class="hud">
+        <div class="hud-item"><div class="label" data-i18n-hud="time">Time</div><div class="value" id="sniperTime">90</div></div>
+        <div class="hud-item"><div class="label" data-i18n-hud="score">Score</div><div class="value" id="sniperScore">0</div></div>
+        <div class="hud-item"><div class="label" data-i18n-hud="combo">Combo</div><div class="value" id="sniperCombo">x1</div></div>
+        <div class="hud-item"><div class="label" data-i18n-hud="level">Level</div><div class="value" id="sniperLevel">1</div></div>
+        <div class="hud-item"><div class="label" data-i18n-hud="mode">Mode</div><div class="value" id="sniperDiffHud">Normal</div></div>
+        <div class="hud-item"><div class="label" data-i18n-hud="lives">Lives</div><div class="value" id="sniperLives">❤❤❤</div></div>
+      </div>
+      <div class="quest-box" id="questBox">Loading quest...</div>
+      <div id="sniperArea">
+        <div class="sniper-fx" aria-hidden="true"></div>
+        <div class="sniper-scanline" aria-hidden="true"></div>
+        <div id="sniperAtomsLayer" class="sniper-atoms-layer"></div>
+        <canvas id="sniperBladeCanvas" width="800" height="550" aria-hidden="true"></canvas>
+        <div id="sniperCountdown" class="sniper-countdown hidden" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div id="sniperEnd" class="start-screen hidden">
+      <h2 id="endTitle">Game Over!</h2>
+      <p><span id="finalScoreLabel">Final Score:</span> <span id="finalScore" style="color:#00e5ff;font-size:1.5em;font-weight:bold;">0</span></p>
+      <p id="rankText"></p>
+      <p id="rankTiersBlurb" class="rank-tiers-blurb hidden" aria-live="polite"></p>
+      <button id="arcadePlayAgainBtn" class="big-btn" onclick="startSniper()">Play Again 🔄</button>
+      <button id="arcadeHowToBtn" class="big-btn" onclick="showSniperLanding()" style="background:#666;margin-left:10px;">How to play</button>
+    </div>
+  </div>
+
+  <div id="feedback" class="feedback"></div>
+</div>
+
+<script>
+/* ============ I18N (matches hot bar: en / zh / zh-Hant via ?lang=) ============ */
+function resolveArcadeLang() {
+  const raw = new URLSearchParams(location.search).get('lang');
+  if (!raw) return 'en';
+  const c = String(raw).trim();
+  if (c === 'zh') return 'zh';
+  if (c === 'zh-Hant' || c === 'zh_Hant' || c === 'zhHant') return 'zh-Hant';
+  return 'en';
+}
+const ARCADE_LANG = resolveArcadeLang();
+
+/** Final-score rank thresholds (inclusive minimum for that tier; raised from earlier 50 / 150 / 300). */
+const RANK_SCORE_APPRENTICE_MIN = 85;
+const RANK_SCORE_SHARP_MIN = 260;
+const RANK_SCORE_MASTER_MIN = 480;
+
+const ARCADE_STRINGS = {
+  en: {
+    pageTitle: 'Atom Ninja',
+    htmlLang: 'en',
+    h1: '⚔️ Atom Ninja',
+    subtitle: 'S3 Chemistry Ch.5 · slice the element that matches the clue',
+    startH2: '🎯 Atom Ninja',
+    startHelpHtml: 'Atoms fly up from the bottom like <strong>Fruit Ninja</strong>. <strong>Slash</strong> the blade through an atom to answer — some targets match the clue, others are decoys. A <strong>💣 bomb</strong> appears every few tosses — <strong>do not slice it</strong> or it is game over!<br>Each run starts with <strong>3 — 2 — 1 — GO!</strong> The clue <strong>changes every 7–10 seconds</strong>. <strong>Wrong slice</strong> loses a life. <strong>Letting the correct atom fall</strong> does not cost a life — only resets your <strong>combo</strong> to ×1. <strong>Level</strong> speeds up spawns over time. <strong>Hard / Expert</strong> sometimes ask for <strong>any</strong> element matching shells, valence electrons, period, or group (several correct answers). The clock runs for 90 seconds after GO.',
+    diffSection: 'Difficulty',
+    diffAria: 'Difficulty',
+    diffEasy: 'Easy',
+    diffNormal: 'Normal',
+    diffHard: 'Hard',
+    diffExpert: 'Expert',
+    startBtn: 'Start Game ▶',
+    hudTime: 'Time',
+    hudScore: 'Score',
+    hudCombo: 'Combo',
+    hudLevel: 'Level',
+    hudMode: 'Mode',
+    hudLives: 'Lives',
+    questLoading: 'Loading quest…',
+    finalScore: 'Final Score:',
+    playAgain: 'Play Again 🔄',
+    howToPlay: 'How to play',
+    countdownGo: 'GO!',
+    feedbackBoom: '💥 BOOM!',
+    feedbackWrong: '❌ Wrong!',
+    feedbackMissed: '⏳ Missed — combo reset (no life lost).',
+    feedbackClueRotate: '🔁 New clue!',
+    levelFaster: '⚡ Level {n} — faster!',
+    rankMaster: '🏆 Atomic Master!',
+    rankSharp: '🥈 Atomic Ace!',
+    rankApprentice: '🥉 Apprentice',
+    rankPractice: '🔬 Keep practicing!',
+    endTimeUp: '⏰ Time Up!',
+    endBoom: '💣 You sliced the bomb!',
+    endLives: '💀 Out of Lives!',
+    hkdseGroup0: 'Group 0',
+    hkdseGroupN: 'Group {r}',
+    boomTxt: 'BOOM',
+    quest_shells: '🔍 Slice any atom with {n} electron shell{s}',
+    quest_valence: '🔍 Slice any atom with {v} electron{s} in the outermost shell',
+    quest_period: '🔍 Slice any atom in period {p}',
+    quest_group: '🔍 Slice any atom in {g} (HKDSE main groups, H–Ca)',
+    quest_neutrons: '🔍 Find the atom with {n} neutrons ({name})',
+    quest_electrons: '🔍 Find the atom with {z} electrons',
+    quest_config: '🔍 Find the atom with config [{cfg}]',
+    quest_name: '🔍 Find {name} ({sym})',
+    quest_mass: '🔍 Find atom with mass number {a} & {z} protons',
+    startHelpRankLine:
+      '<br><br><strong>Final score ranks:</strong> Atomic Master ≥{m} · Atomic Ace {s}–{m1} · Apprentice {a}–{s1} · Practice: under {a}.',
+    endScreenRankTiers: 'Tiers: Master ≥{m} · Ace {s}–{m1} · Apprentice {a}–{s1} · Practice under {a}',
+  },
+  zh: {
+    pageTitle: '原子忍者',
+    htmlLang: 'zh-Hans',
+    h1: '⚔️ 原子忍者',
+    subtitle: 'S3 化学 第5章 · 切开符合提示的元素',
+    startH2: '🎯 原子忍者',
+    startHelpHtml: '原子像<strong>水果忍者</strong>一样从底部飞出。<strong>挥动</strong>刀刃划过原子作答——部分目标符合线索，部分为干扰项。每隔几次会出现<strong>💣 炸弹</strong>——<strong>千万不要切到</strong>，否则立即结束！<br>每局以<strong>3 — 2 — 1 — 开始！</strong>提示约<strong>每 7–10 秒</strong>更换。<strong>切错</strong>会失去一条生命；<strong>漏切符合当前线索的正确原子</strong>不扣生命，只把<strong>连击</strong>重置为 ×1。<strong>等级</strong>提高会加快速度。<strong>困难 / 专家</strong>有时会问<strong>任意</strong>符合电子层、最外层电子、周期或族（HKDSE 主族，H–Ca）的元素（多个正确答案）。开始计时后共 90 秒。',
+    diffSection: '难度',
+    diffAria: '难度',
+    diffEasy: '简单',
+    diffNormal: '普通',
+    diffHard: '困难',
+    diffExpert: '专家',
+    startBtn: '开始游戏 ▶',
+    hudTime: '时间',
+    hudScore: '分数',
+    hudCombo: '连击',
+    hudLevel: '等级',
+    hudMode: '模式',
+    hudLives: '生命',
+    questLoading: '加载任务中…',
+    finalScore: '最终得分：',
+    playAgain: '再玩一次 🔄',
+    howToPlay: '玩法说明',
+    countdownGo: '开始！',
+    feedbackBoom: '💥 爆炸！',
+    feedbackWrong: '❌ 切错了！',
+    feedbackMissed: '⏳ 漏切 — 连击重置（不扣生命）。',
+    feedbackClueRotate: '🔁 新条件！',
+    levelFaster: '⚡ 第 {n} 级 —— 更快了！',
+    rankMaster: '🏆 原子大师！',
+    rankSharp: '🥈 原子能手！',
+    rankApprentice: '🥉 学徒',
+    rankPractice: '🔬 继续练习！',
+    endTimeUp: '⏰ 时间到！',
+    endBoom: '💣 你切到炸弹了！',
+    endLives: '💀 生命用尽！',
+    hkdseGroup0: '0 族',
+    hkdseGroupN: '{r} 族（主族）',
+    boomTxt: '炸',
+    quest_shells: '🔍 切开有 {n} 个电子层的任意原子',
+    quest_valence: '🔍 切开具有 {v} 个最外层电子的任意原子',
+    quest_period: '🔍 切开位于第 {p} 周期的任意原子',
+    quest_group: '🔍 切开属于 {g}（HKDSE 主族，H–Ca）的任意原子',
+    quest_neutrons: '🔍 找出有 {n} 个中子的原子（{name}）',
+    quest_electrons: '🔍 找出有 {z} 个电子的原子',
+    quest_config: '🔍 找出电子排布为 [{cfg}] 的原子',
+    quest_name: '🔍 找出 {name}（{sym}）',
+    quest_mass: '🔍 找出质量数 {a}、质子数 {z} 的原子',
+    startHelpRankLine:
+      '<br><br><strong>结算分数等级：</strong>原子大师 ≥{m} · 原子能手 {s}–{m1} · 学徒 {a}–{s1} · 继续练习：{a} 分以下。',
+    endScreenRankTiers: '等级：大师 ≥{m} · 原子能手 {s}–{m1} · 学徒 {a}–{s1} · {a} 分以下为练习级',
+  },
+  'zh-Hant': {
+    pageTitle: '原子忍者',
+    htmlLang: 'zh-Hant',
+    h1: '⚔️ 原子忍者',
+    subtitle: 'S3 化學 第5章 · 切開符合提示的元素',
+    startH2: '🎯 原子忍者',
+    startHelpHtml: '原子像<strong>水果忍者</strong>一樣從底部飛出。<strong>揮動</strong>刀刃劃過原子作答——部分目標符合線索，部分為干擾項。每隔幾次會出現<strong>💣 炸彈</strong>——<strong>千萬不要切到</strong>，否則立即結束！<br>每局以<strong>3 — 2 — 1 — 開始！</strong>提示約<strong>每 7–10 秒</strong>更換。<strong>切錯</strong>會失去一條生命；<strong>漏切符合目前線索的正確原子</strong>不扣生命，只把<strong>連擊</strong>重置為 ×1。<strong>等級</strong>提高會加快速度。<strong>困難 / 專家</strong>有時會問<strong>任意</strong>符合電子層、最外層電子、週期或族（HKDSE 主族，H–Ca）的元素（多個正確答案）。開始計時後共 90 秒。',
+    diffSection: '難度',
+    diffAria: '難度',
+    diffEasy: '簡單',
+    diffNormal: '普通',
+    diffHard: '困難',
+    diffExpert: '專家',
+    startBtn: '開始遊戲 ▶',
+    hudTime: '時間',
+    hudScore: '分數',
+    hudCombo: '連擊',
+    hudLevel: '等級',
+    hudMode: '模式',
+    hudLives: '生命',
+    questLoading: '載入任務中…',
+    finalScore: '最終得分：',
+    playAgain: '再玩一次 🔄',
+    howToPlay: '玩法說明',
+    countdownGo: '開始！',
+    feedbackBoom: '💥 爆炸！',
+    feedbackWrong: '❌ 切錯了！',
+    feedbackMissed: '⏳ 漏切 — 連擊重置（不扣生命）。',
+    feedbackClueRotate: '🔁 新條件！',
+    levelFaster: '⚡ 第 {n} 級 —— 更快了！',
+    rankMaster: '🏆 原子大師！',
+    rankSharp: '🥈 原子能手！',
+    rankApprentice: '🥉 學徒',
+    rankPractice: '🔬 繼續練習！',
+    endTimeUp: '⏰ 時間到！',
+    endBoom: '💣 你切到炸彈了！',
+    endLives: '💀 生命用盡！',
+    hkdseGroup0: '0 族',
+    hkdseGroupN: '{r} 族（主族）',
+    boomTxt: '炸',
+    quest_shells: '🔍 切開有 {n} 個電子層的任意原子',
+    quest_valence: '🔍 切開具有 {v} 個最外層電子的任意原子',
+    quest_period: '🔍 切開位於第 {p} 週期的任意原子',
+    quest_group: '🔍 切開屬於 {g}（HKDSE 主族，H–Ca）的任意原子',
+    quest_neutrons: '🔍 找出有 {n} 個中子的原子（{name}）',
+    quest_electrons: '🔍 找出有 {z} 個電子的原子',
+    quest_config: '🔍 找出電子排布為 [{cfg}] 的原子',
+    quest_name: '🔍 找出 {name}（{sym}）',
+    quest_mass: '🔍 找出質量數 {a}、質子數 {z} 的原子',
+    startHelpRankLine:
+      '<br><br><strong>結算分數等級：</strong>原子大師 ≥{m} · 原子能手 {s}–{m1} · 學徒 {a}–{s1} · 繼續練習：{a} 分以下。',
+    endScreenRankTiers: '等級：大師 ≥{m} · 原子能手 {s}–{m1} · 學徒 {a}–{s1} · {a} 分以下為練習級',
+  },
+};
+
+function L(key) {
+  const pack = ARCADE_STRINGS[ARCADE_LANG] || ARCADE_STRINGS.en;
+  const v = pack[key];
+  if (v != null) return v;
+  return ARCADE_STRINGS.en[key] != null ? ARCADE_STRINGS.en[key] : key;
+}
+
+function fillRankTierTemplate(str) {
+  if (!str) return '';
+  const m = RANK_SCORE_MASTER_MIN;
+  const s = RANK_SCORE_SHARP_MIN;
+  const a = RANK_SCORE_APPRENTICE_MIN;
+  return str
+    .replace(/\{m\}/g, String(m))
+    .replace(/\{m1\}/g, String(m - 1))
+    .replace(/\{s\}/g, String(s))
+    .replace(/\{s1\}/g, String(s - 1))
+    .replace(/\{a\}/g, String(a));
+}
+
+function applyArcadeStaticStrings() {
+  document.documentElement.lang = L('htmlLang');
+  document.title = L('pageTitle');
+  const h1 = document.getElementById('arcadeH1');
+  if (h1) h1.textContent = L('h1');
+  const sub = document.getElementById('arcadeSubtitle');
+  if (sub) sub.textContent = L('subtitle');
+  const h2 = document.getElementById('arcadeStartH2');
+  if (h2) h2.textContent = L('startH2');
+  const help = document.getElementById('arcadeStartHelp');
+  if (help) help.innerHTML = L('startHelpHtml') + fillRankTierTemplate(L('startHelpRankLine'));
+  const dl = document.getElementById('arcadeDiffLabel');
+  if (dl) dl.textContent = L('diffSection');
+  const dr = document.getElementById('arcadeDiffRow');
+  if (dr) dr.setAttribute('aria-label', L('diffAria'));
+  document.querySelectorAll('.arcade-diff-txt').forEach((el) => {
+    const k = el.getAttribute('data-diff');
+    if (k) el.textContent = L('diff' + k.charAt(0).toUpperCase() + k.slice(1));
+  });
+  const sb = document.getElementById('arcadeStartBtn');
+  if (sb) sb.textContent = L('startBtn');
+  document.querySelectorAll('[data-i18n-hud]').forEach((el) => {
+    const k = el.getAttribute('data-i18n-hud');
+    if (k) el.textContent = L('hud' + k.charAt(0).toUpperCase() + k.slice(1));
+  });
+  const qb = document.getElementById('questBox');
+  if (qb) qb.textContent = L('questLoading');
+  const fl = document.getElementById('finalScoreLabel');
+  if (fl) fl.textContent = L('finalScore');
+  const pa = document.getElementById('arcadePlayAgainBtn');
+  if (pa) pa.textContent = L('playAgain');
+  const ht = document.getElementById('arcadeHowToBtn');
+  if (ht) ht.textContent = L('howToPlay');
+}
+applyArcadeStaticStrings();
+
+const LOCALE_ELEMENT_NAMES = {
+  zh: { H:'氢', He:'氦', Li:'锂', Be:'铍', B:'硼', C:'碳', N:'氮', O:'氧', F:'氟', Ne:'氖', Na:'钠', Mg:'镁', Al:'铝', Si:'硅', P:'磷', S:'硫', Cl:'氯', Ar:'氩', K:'钾', Ca:'钙' },
+  'zh-Hant': { H:'氫', He:'氦', Li:'鋰', Be:'鈹', B:'硼', C:'碳', N:'氮', O:'氧', F:'氟', Ne:'氖', Na:'鈉', Mg:'鎂', Al:'鋁', Si:'硅', P:'磷', S:'硫', Cl:'氯', Ar:'氬', K:'鉀', Ca:'鈣' },
+};
+
+function localizedElementName(el) {
+  if (!el) return '';
+  if (ARCADE_LANG === 'en') return el.name;
+  const m = LOCALE_ELEMENT_NAMES[ARCADE_LANG];
+  return (m && m[el.sym]) || el.name;
+}
+
+function getDifficultyLabel(key) {
+  const k = key || 'normal';
+  const map = { easy: 'diffEasy', normal: 'diffNormal', hard: 'diffHard', expert: 'diffExpert' };
+  return L(map[k] || 'diffNormal');
+}
+
+/* ============ ELEMENT DATA ============ */
+const ELEMENTS = [
+  {z:1, n:0, sym:'H',  name:'Hydrogen',  config:[1]},
+  {z:2, n:2, sym:'He', name:'Helium',    config:[2]},
+  {z:3, n:4, sym:'Li', name:'Lithium',   config:[2,1]},
+  {z:4, n:5, sym:'Be', name:'Beryllium', config:[2,2]},
+  {z:5, n:6, sym:'B',  name:'Boron',     config:[2,3]},
+  {z:6, n:6, sym:'C',  name:'Carbon',    config:[2,4]},
+  {z:7, n:7, sym:'N',  name:'Nitrogen',  config:[2,5]},
+  {z:8, n:8, sym:'O',  name:'Oxygen',    config:[2,6]},
+  {z:9, n:10,sym:'F',  name:'Fluorine',  config:[2,7]},
+  {z:10,n:10,sym:'Ne', name:'Neon',      config:[2,8]},
+  {z:11,n:12,sym:'Na', name:'Sodium',    config:[2,8,1]},
+  {z:12,n:12,sym:'Mg', name:'Magnesium', config:[2,8,2]},
+  {z:13,n:14,sym:'Al', name:'Aluminium', config:[2,8,3]},
+  {z:14,n:14,sym:'Si', name:'Silicon',   config:[2,8,4]},
+  {z:15,n:16,sym:'P',  name:'Phosphorus',config:[2,8,5]},
+  {z:16,n:16,sym:'S',  name:'Sulphur',   config:[2,8,6]},
+  {z:17,n:18,sym:'Cl', name:'Chlorine',  config:[2,8,7]},
+  {z:18,n:22,sym:'Ar', name:'Argon',     config:[2,8,8]},
+  {z:19,n:20,sym:'K',  name:'Potassium', config:[2,8,8,1]},
+  {z:20,n:20,sym:'Ca', name:'Calcium',   config:[2,8,8,2]}
+];
+
+/** Periodic table legend categories — colours aligned with css/grid.css (.legend-swatch / .element.*) */
+const Z_TO_ARCADE_CAT = {
+  1: 'other-nonmetal',
+  2: 'noble-gas',
+  3: 'alkali-metal',
+  4: 'alkaline-earth-metal',
+  5: 'metalloid',
+  6: 'other-nonmetal',
+  7: 'other-nonmetal',
+  8: 'other-nonmetal',
+  9: 'halogen',
+  10: 'noble-gas',
+  11: 'alkali-metal',
+  12: 'alkaline-earth-metal',
+  13: 'post-transition-metal',
+  14: 'metalloid',
+  15: 'other-nonmetal',
+  16: 'other-nonmetal',
+  17: 'halogen',
+  18: 'noble-gas',
+  19: 'alkali-metal',
+  20: 'alkaline-earth-metal',
+};
+
+const ARCADE_CAT_BASE = {
+  'alkali-metal': { bg: '#ffcccc', text: '#5d2e2e' },
+  'alkaline-earth-metal': { bg: '#ffe5cc', text: '#5d402e' },
+  'transition-metal': { bg: '#fff2cc', text: '#5d522e' },
+  'post-transition-metal': { bg: '#d9e2f3', text: '#2e3a5d' },
+  metalloid: { bg: '#d1e7dd', text: '#2e5d4b' },
+  'other-nonmetal': { bg: '#e2f0d9', text: '#3a5d2e' },
+  halogen: { bg: '#ffffcc', text: '#5d5d2e' },
+  'noble-gas': { bg: '#e0ccff', text: '#4b2e5d' },
+  lanthanide: { bg: '#fce4d6', text: '#5d3a2e' },
+  actinide: { bg: '#fddddd', text: '#5d2e2e' },
+};
+
+function arcadeHexToRgb(hex) {
+  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(hex).trim());
+  return m
+    ? { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) }
+    : { r: 220, g: 224, b: 218 };
+}
+
+function arcadeMixRgb(a, b, t) {
+  return {
+    r: Math.round(a.r + (b.r - a.r) * t),
+    g: Math.round(a.g + (b.g - a.g) * t),
+    b: Math.round(a.b + (b.b - a.b) * t),
+  };
+}
+
+function arcadeRgbStr(rgb) {
+  return `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+}
+
+function applyArcadeAtomCategoryStyle(atom, z) {
+  const cat = Z_TO_ARCADE_CAT[z] || 'other-nonmetal';
+  const row = ARCADE_CAT_BASE[cat] || ARCADE_CAT_BASE['other-nonmetal'];
+  const base = arcadeHexToRgb(row.bg);
+  const hi = arcadeMixRgb(base, { r: 255, g: 255, b: 255 }, 0.38);
+  const lo = arcadeMixRgb(base, { r: 26, g: 30, b: 42 }, 0.44);
+  const grad = `radial-gradient(circle at 32% 26%, ${arcadeRgbStr(hi)}, ${arcadeRgbStr(base)} 50%, ${arcadeRgbStr(lo)} 100%)`;
+  const glow = `rgba(${Math.min(255, Math.round(base.r * 0.5 + 100))}, ${Math.min(255, Math.round(base.g * 0.5 + 100))}, ${Math.min(255, Math.round(base.b * 0.5 + 100))}, 0.48)`;
+  atom.style.background = grad;
+  atom.style.color = row.text;
+  atom.style.boxShadow = `0 0 20px ${glow}, 0 4px 16px rgba(0,0,0,0.3), inset 0 2px 8px rgba(255,255,255,0.24)`;
+}
+
+/**
+ * HKDSE-style main groups for Li–Ca (Roman I–VII and Group 0), not IUPAC 1–18.
+ * H is omitted: it is not placed in Group I (alkali metals) in typical HKDSE layouts.
+ */
+const Z_TO_HKDSE_GROUP = {
+  2: '0', 3: 'I', 4: 'II', 5: 'III', 6: 'IV', 7: 'V', 8: 'VI', 9: 'VII', 10: '0',
+  11: 'I', 12: 'II', 13: 'III', 14: 'IV', 15: 'V', 16: 'VI', 17: 'VII', 18: '0',
+  19: 'I', 20: 'II',
+};
+
+function getPeriodForElement(el) {
+  const z = el.z;
+  if (z <= 2) return 1;
+  if (z <= 10) return 2;
+  if (z <= 18) return 3;
+  return 4;
+}
+
+function getHkdseGroupKey(el) {
+  if (!el || el.z == null) return undefined;
+  return Z_TO_HKDSE_GROUP[el.z];
+}
+
+/** Display e.g. "Group I", "Group 0" for quest UI (localized) */
+function formatHkdseGroupLabel(key) {
+  if (key === '0') return L('hkdseGroup0');
+  return L('hkdseGroupN').replace('{r}', key);
+}
+
+function countShells(el) {
+  return el.config.length;
+}
+
+function valenceCount(el) {
+  const c = el.config;
+  return c[c.length - 1];
+}
+
+/**
+ * Atom Ninja — mechanics aligned with Fruit Ninja (verma-anushka/Fruit-Ninja, js/fruit.js):
+ * spawn y = bottom, ySpeed negative (up), xSpeed toward centre, ySpeed += gravity, remove when y > height.
+ * Speeds scaled down via SNIPER_SPEED_SCALE (~half of p5 sketch).
+ */
+const SNIPER_GAME_SECONDS = 90;
+/** Correct-slice score = base + perCombo * current combo (before increment); softer than 10×combo. */
+const SNIPER_SCORE_BASE = 8;
+const SNIPER_SCORE_PER_COMBO = 2;
+const SNIPER_ATOM_SIZE = 90;
+const SNIPER_ATOM_RADIUS = SNIPER_ATOM_SIZE / 2;
+
+/** Overlap area / area of one disc; used to cap pairwise overlap at spawn (≤ 50%). */
+function circleOverlapFractionSameR(R, d) {
+  if (d >= 2 * R) return 0;
+  if (d <= 0) return 1;
+  const overlap =
+    2 * R * R * Math.acos(d / (2 * R)) -
+    (d / 2) * Math.sqrt(4 * R * R - d * d);
+  return overlap / (Math.PI * R * R);
+}
+
+function minCenterDistanceForMaxOverlapFraction(R, maxFrac) {
+  let lo = 0;
+  let hi = 2 * R;
+  for (let i = 0; i < 48; i++) {
+    const mid = (lo + hi) / 2;
+    if (circleOverlapFractionSameR(R, mid) > maxFrac) lo = mid;
+    else hi = mid;
+  }
+  return hi;
+}
+
+/** Minimum centre–centre distance so two atoms (r = SNIPER_ATOM_RADIUS) overlap by at most half of one disc. */
+const MIN_ATOM_CENTER_DIST = minCenterDistanceForMaxOverlapFraction(SNIPER_ATOM_RADIUS, 0.5);
+
+const SNIPER_SPAWN_MARGIN = 10;
+/** Overall slower than p5 Fruit Ninja (fruit.js uses ySpeed ~ -7.4..-10.4, gravity 0.1 per frame @ ~60fps). */
+const SNIPER_SPEED_SCALE = 0.5;
+/** Per “60fps frame” step, scaled — matches ySpeed += gravity in fruit.js; ×1.2 faster drop than prior build */
+const SNIPER_DROP_SPEED_MULT = 1.2;
+const SNIPER_GRAVITY = 0.1 * SNIPER_SPEED_SCALE * SNIPER_DROP_SPEED_MULT;
+const SPAWN_INTERVAL_MIN_MS = 680;
+
+/**
+ * Difficulty: speed, spawn interval, atoms per wave, correct:wrong ratio, bomb behaviour.
+ */
+/** Expert speed is the anchor: hard = 0.9×expert, normal = 0.9×hard (easy slightly below normal). */
+const DIFFICULTY = {
+  easy: {
+    short: 'E',
+    spawnMs: 4000,
+    speed: 0.933,
+    levelEverySec: 30,
+    levelSpeedPerLevel: 0.055,
+  },
+  normal: {
+    short: 'N',
+    spawnMs: 3200,
+    speed: 1.037,
+    levelEverySec: 22,
+    levelSpeedPerLevel: 0.065,
+  },
+  hard: {
+    short: 'H',
+    spawnMs: 2600,
+    speed: 1.152,
+    levelEverySec: 16,
+    levelSpeedPerLevel: 0.075,
+  },
+  expert: {
+    short: 'X',
+    spawnMs: 2100,
+    speed: 1.28,
+    levelEverySec: 12,
+    levelSpeedPerLevel: 0.085,
+  },
+};
+
+function getSelectedDifficultyKey() {
+  const el = document.querySelector('input[name="sniper-difficulty"]:checked');
+  return el && el.value && DIFFICULTY[el.value] ? el.value : 'normal';
+}
+
+/** Combined difficulty preset + in-game level (capped) */
+function getEffectiveSpeedMult() {
+  const key = sniperData.difficultyKey || 'normal';
+  const cfg = DIFFICULTY[key] || DIFFICULTY.normal;
+  const lv = Math.max(1, sniperData.level || 1);
+  const fromLevel = 1 + cfg.levelSpeedPerLevel * (lv - 1);
+  return Math.min(2.45, cfg.speed * fromLevel);
+}
+
+function getSpawnIntervalMs() {
+  const key = sniperData.difficultyKey || 'normal';
+  const cfg = DIFFICULTY[key] || DIFFICULTY.normal;
+  const lv = Math.max(1, sniperData.level || 1);
+  const shrink = Math.pow(0.91, lv - 1);
+  return Math.max(SPAWN_INTERVAL_MIN_MS, Math.round(cfg.spawnMs * shrink));
+}
+
+/** Atoms per element wave (not counting bomb-only / mixed bomb waves). */
+function getParallelSpawns() {
+  const key = sniperData.difficultyKey || 'normal';
+  if (key === 'expert') return 4;
+  if (key === 'hard' || key === 'normal') return 3;
+  return 2;
+}
+
+/** P(correct pool) for each spawn: normal/easy 6:4, hard/expert 5:5. */
+function getQuestCorrectSpawnBias() {
+  const k = sniperData.difficultyKey || 'normal';
+  if (k === 'hard' || k === 'expert') return 0.5;
+  return 0.6;
+}
+
+/** Whether an element satisfies the current quest (single symbol or multi-answer). */
+function questAcceptsElement(el) {
+  const q = sniperData.currentQuest;
+  if (!q || !el) return false;
+  if (q.acceptSyms && q.acceptSyms.size) return q.acceptSyms.has(el.sym);
+  return el.sym === q.sym;
+}
+
+/** After clue change, re-tag in-flight atoms so missed-atom combo logic matches the latest quest. */
+function refreshAtomQuestFlags() {
+  if (!sniperData.currentQuest) return;
+  const layer = document.getElementById('sniperAtomsLayer');
+  if (!layer) return;
+  layer.querySelectorAll('.target-atom').forEach((atom) => {
+    const p = atom._phys;
+    if (!p || p.isBoom || p.dead || !atom._element) return;
+    p.isQuest = questAcceptsElement(atom._element);
+  });
+}
+
+function runSniperCountdownThen(then) {
+  const overlay = document.getElementById('sniperCountdown');
+  if (!overlay) {
+    then();
+    return;
+  }
+  const steps = [
+    { t: '3', ms: 850, go: false },
+    { t: '2', ms: 850, go: false },
+    { t: '1', ms: 850, go: false },
+    { t: L('countdownGo'), ms: 600, go: true },
+  ];
+  let i = 0;
+  function tick() {
+    if (i >= steps.length) {
+      overlay.textContent = '';
+      overlay.classList.add('hidden');
+      overlay.classList.remove('sniper-countdown--go');
+      overlay.setAttribute('aria-hidden', 'true');
+      then();
+      return;
+    }
+    const s = steps[i];
+    overlay.textContent = s.t;
+    overlay.classList.toggle('sniper-countdown--go', s.go);
+    overlay.classList.remove('hidden');
+    overlay.setAttribute('aria-hidden', 'false');
+    i += 1;
+    setTimeout(tick, s.ms);
+  }
+  tick();
+}
+
+function rescheduleSpawnTimer() {
+  if (spawnTimer) {
+    clearInterval(spawnTimer);
+    spawnTimer = null;
+  }
+  if (!sniperData.playing) return;
+  const ms = getSpawnIntervalMs();
+  spawnTimer = setInterval(spawnWave, ms);
+}
+
+function showSniperLanding() {
+  stopSniper();
+  const end = document.getElementById('sniperEnd');
+  const game = document.getElementById('sniperGame');
+  const start = document.getElementById('sniperStart');
+  if (end) end.classList.add('hidden');
+  if (game) game.classList.add('hidden');
+  if (start) start.classList.remove('hidden');
+  const rtb = document.getElementById('rankTiersBlurb');
+  if (rtb) {
+    rtb.classList.add('hidden');
+    rtb.textContent = '';
+  }
+}
+
+function showFeedback(text, color='#1de9b6') {
+  const fb = document.getElementById('feedback');
+  fb.textContent = text;
+  fb.style.color = color;
+  fb.style.textShadow = `0 0 40px ${color}, 0 0 80px rgba(255,255,255,0.35)`;
+  fb.classList.remove('show');
+  void fb.offsetWidth;
+  fb.classList.add('show');
+}
+
+function getAtomCenterInArea(atom, area) {
+  const ar = area.getBoundingClientRect();
+  const br = atom.getBoundingClientRect();
+  return { x: br.left - ar.left + br.width / 2, y: br.top - ar.top + br.height / 2 };
+}
+
+function burstParticles(container, x, y, success) {
+  const colors = success
+    ? ['#34d399', '#6ee7b7', '#2dd4bf', '#22d3ee', '#a7f3d0']
+    : ['#fb7185', '#f43f5e', '#fda4af'];
+  const n = success ? 16 : 10;
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement('div');
+    p.className = 'burst-particle';
+    const ang = (Math.PI * 2 * i) / n + (Math.random() - 0.5) * 0.4;
+    const dist = 36 + Math.random() * 56;
+    p.style.left = `${x}px`;
+    p.style.top = `${y}px`;
+    p.style.background = colors[i % colors.length];
+    p.style.setProperty('--dx', `${Math.cos(ang) * dist}px`);
+    p.style.setProperty('--dy', `${Math.sin(ang) * dist}px`);
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 750);
+  }
+}
+
+/** swords.js-style slice: blade segment vs atom disc (circle) */
+function distPointToSegment(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len2 = dx * dx + dy * dy;
+  if (len2 < 1e-8) return Math.hypot(px - x1, py - y1);
+  let t = ((px - x1) * dx + (py - y1) * dy) / len2;
+  t = Math.max(0, Math.min(1, t));
+  const nx = x1 + t * dx;
+  const ny = y1 + t * dy;
+  return Math.hypot(px - nx, py - ny);
+}
+
+function bladeHitsAtomSegment(x1, y1, x2, y2, atom) {
+  const p = atom._phys;
+  if (!p || p.dead || p.sliceLock) return false;
+  const cx = p.x + SNIPER_ATOM_SIZE / 2;
+  const cy = p.y + SNIPER_ATOM_SIZE / 2;
+  const r = SNIPER_ATOM_SIZE * 0.48;
+  return distPointToSegment(cx, cy, x1, y1, x2, y2) <= r;
+}
+
+function sniperTrySliceAlongSegment(x1, y1, x2, y2) {
+  const layer = document.getElementById('sniperAtomsLayer');
+  if (!layer || !sniperData.playing) return;
+  const atoms = layer.querySelectorAll('.target-atom');
+  for (const atom of atoms) {
+    if (bladeHitsAtomSegment(x1, y1, x2, y2, atom)) {
+      sniperResolveSlice(atom);
+      break;
+    }
+  }
+}
+
+function sniperResolveSlice(atom) {
+  const p = atom._phys;
+  const area = document.getElementById('sniperArea');
+  if (!p || p.sliceLock || p.dead || !area) return;
+
+  if (p.isBoom) {
+    p.sliceLock = true;
+    p.dead = true;
+    const c = getAtomCenterInArea(atom, area);
+    burstParticles(area, c.x, c.y, false);
+    showFeedback(L('feedbackBoom'), '#fca5a5');
+    atom.remove();
+    endSniper('boom');
+    return;
+  }
+
+  const el = atom._element;
+  if (!el) return;
+  p.sliceLock = true;
+  p.dead = true;
+  const c = getAtomCenterInArea(atom, area);
+  if (questAcceptsElement(el)) {
+    const gain = SNIPER_SCORE_BASE + SNIPER_SCORE_PER_COMBO * sniperData.combo;
+    sniperData.score += gain;
+    sniperData.combo++;
+    burstParticles(area, c.x, c.y, true);
+    showFeedback('+' + gain + ' ⭐', '#1de9b6');
+    atom.style.background = 'radial-gradient(circle, #5eead4, #059669)';
+    atom.style.color = '#fff';
+    atom.style.boxShadow = '0 0 24px rgba(52, 211, 153, 0.55), 0 4px 16px rgba(0,0,0,0.35), inset 0 2px 8px rgba(255,255,255,0.2)';
+    atom.classList.add('target-hit');
+    setTimeout(() => {
+      atom.remove();
+    }, 380);
+  } else {
+    burstParticles(area, c.x, c.y, false);
+    sniperData.lives--;
+    sniperData.combo = 1;
+    showFeedback(L('feedbackWrong'), '#ff4081');
+    area.classList.add('sniper-shake');
+    setTimeout(() => area.classList.remove('sniper-shake'), 480);
+    atom.remove();
+    if (sniperData.lives <= 0) endSniper('lives');
+  }
+  updateSniperHUD();
+}
+
+/* ============ ATOM NINJA (element sniper mode) ============ */
+let sniperData = {};
+let sniperTimer = null;
+let spawnTimer = null;
+/** Rotates the clue every 7–10s (in-flight atoms re-tagged to match the new clue). */
+let questRotationTimerId = null;
+let sniperRafId = null;
+let sniperPhysLastMs = 0;
+/** Fruit Ninja swords.js–style swipe samples for blade trail */
+let sniperSwipePoints = [];
+/** Active primary pointer id while blade is held inside #sniperArea (-1 = none). */
+let sniperBladePointerId = -1;
+let sniperBladeAreaHandlers = null;
+
+/** fruit.js randomXSpeed: right half of screen → drift left; left half → drift right (arcs toward centre). */
+function resizeSniperBladeCanvas() {
+  const area = document.getElementById('sniperArea');
+  const canvas = document.getElementById('sniperBladeCanvas');
+  if (!area || !canvas) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = area.clientWidth;
+  const h = area.clientHeight;
+  if (w < 1 || h < 1) return;
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+  canvas.style.width = `${w}px`;
+  canvas.style.height = `${h}px`;
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function updateSniperBladeTrail(now) {
+  const maxAge = 420;
+  sniperSwipePoints = sniperSwipePoints.filter((p) => now - p.t < maxAge);
+  while (sniperSwipePoints.length > 26) sniperSwipePoints.shift();
+}
+
+/** swords.js draw: ellipse along trail, size maps along stroke */
+function drawSniperBlade() {
+  const canvas = document.getElementById('sniperBladeCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = canvas.width / dpr;
+  const h = canvas.height / dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  const pts = sniperSwipePoints;
+  if (pts.length < 1) return;
+
+  if (pts.length >= 2) {
+    ctx.save();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.shadowColor = 'rgba(103, 232, 249, 0.9)';
+    ctx.shadowBlur = 14;
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.92)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  const n = pts.length;
+  for (let i = 0; i < n; i++) {
+    const size = 2 + (i / Math.max(n - 1, 1)) * 20;
+    const alpha = 0.25 + (i / Math.max(n - 1, 1)) * 0.7;
+    ctx.beginPath();
+    ctx.arc(pts[i].x, pts[i].y, size * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+    ctx.fill();
+  }
+}
+
+function clearSniperBlade() {
+  sniperSwipePoints = [];
+  const canvas = document.getElementById('sniperBladeCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+}
+
+function sniperBladePointerDown(e) {
+  if (!sniperData.playing) return;
+  const area = document.getElementById('sniperArea');
+  if (!area) return;
+  if (!area.contains(e.target)) return;
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  if (sniperBladePointerId !== -1) return;
+  sniperBladePointerId = e.pointerId;
+  try {
+    area.setPointerCapture(e.pointerId);
+  } catch (_) {}
+  sniperBladePointerMove(e);
+}
+
+function sniperBladePointerMove(e) {
+  if (!sniperData.playing) return;
+  if (sniperBladePointerId === -1 || e.pointerId !== sniperBladePointerId) return;
+  const area = document.getElementById('sniperArea');
+  if (!area) return;
+  const r = area.getBoundingClientRect();
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  if (x < -32 || y < -32 || x > r.width + 32 || y > r.height + 32) return;
+  sniperSwipePoints.push({ x, y, t: performance.now() });
+  while (sniperSwipePoints.length > 32) sniperSwipePoints.shift();
+  const pts = sniperSwipePoints;
+  if (pts.length >= 2) {
+    const a = pts[pts.length - 2];
+    const b = pts[pts.length - 1];
+    sniperTrySliceAlongSegment(a.x, a.y, b.x, b.y);
+  }
+}
+
+function sniperBladePointerUp(e) {
+  if (sniperBladePointerId === -1 || e.pointerId !== sniperBladePointerId) return;
+  const area = document.getElementById('sniperArea');
+  try {
+    if (area && area.hasPointerCapture(e.pointerId)) area.releasePointerCapture(e.pointerId);
+  } catch (_) {}
+  sniperBladePointerId = -1;
+  sniperSwipePoints = [];
+}
+
+function attachSniperBladeInput() {
+  const area = document.getElementById('sniperArea');
+  if (!area || sniperBladeAreaHandlers) return;
+  const down = (ev) => {
+    sniperBladePointerDown(ev);
+  };
+  const move = (ev) => {
+    sniperBladePointerMove(ev);
+  };
+  const up = (ev) => {
+    sniperBladePointerUp(ev);
+  };
+  area.addEventListener('pointerdown', down);
+  area.addEventListener('pointermove', move, { passive: true });
+  area.addEventListener('pointerup', up);
+  area.addEventListener('pointercancel', up);
+  sniperBladeAreaHandlers = { area, down, move, up };
+}
+
+function detachSniperBladeInput() {
+  if (!sniperBladeAreaHandlers) {
+    sniperBladePointerId = -1;
+    return;
+  }
+  const { area, down, move, up } = sniperBladeAreaHandlers;
+  if (sniperBladePointerId !== -1) {
+    try {
+      if (area.hasPointerCapture(sniperBladePointerId)) area.releasePointerCapture(sniperBladePointerId);
+    } catch (_) {}
+    sniperBladePointerId = -1;
+  }
+  area.removeEventListener('pointerdown', down);
+  area.removeEventListener('pointermove', move);
+  area.removeEventListener('pointerup', up);
+  area.removeEventListener('pointercancel', up);
+  sniperBladeAreaHandlers = null;
+}
+
+function sniperRandomLaunchVx(xCenter, widthPx) {
+  const half = widthPx / 2;
+  const lo = 0.5 * SNIPER_SPEED_SCALE;
+  const hi = 2.8 * SNIPER_SPEED_SCALE;
+  if (xCenter > half) return -(Math.random() * (hi - lo) + lo);
+  return Math.random() * (hi - lo) + lo;
+}
+
+function sniperPhysicsTick(now) {
+  if (!sniperData.playing) {
+    sniperRafId = null;
+    return;
+  }
+  const area = document.getElementById('sniperArea');
+  const layer = document.getElementById('sniperAtomsLayer');
+  if (!area || !layer) {
+    if (sniperData.playing) sniperRafId = requestAnimationFrame(sniperPhysicsTick);
+    return;
+  }
+  const dt = sniperPhysLastMs
+    ? Math.min(Math.max((now - sniperPhysLastMs) / (1000 / 60), 0.35), 3.2)
+    : 1;
+  sniperPhysLastMs = now;
+
+  const ah = area.clientHeight;
+  const aw = area.clientWidth;
+
+  updateSniperBladeTrail(now);
+  drawSniperBlade();
+
+  let aborted = false;
+  layer.querySelectorAll('.target-atom').forEach((atom) => {
+    if (aborted || !sniperData.playing) return;
+    const p = atom._phys;
+    if (!p || p.dead) return;
+    const sm = p.spawnSpeedMult != null ? p.spawnSpeedMult : 1;
+    p.vy += SNIPER_GRAVITY * sm * dt;
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    atom.style.left = `${Math.round(p.x)}px`;
+    atom.style.top = `${Math.round(p.y)}px`;
+
+    if (p.y > ah) {
+      p.dead = true;
+      if (p.isQuest) {
+        sniperData.combo = 1;
+        showFeedback(L('feedbackMissed'), '#ffa726');
+        updateSniperHUD();
+      }
+      atom.remove();
+    } else if (p.x < -SNIPER_ATOM_SIZE - 40 || p.x > aw + 40) {
+      p.dead = true;
+      atom.remove();
+    }
+  });
+
+  if (sniperData.playing) {
+    sniperRafId = requestAnimationFrame(sniperPhysicsTick);
+  } else {
+    sniperRafId = null;
+  }
+}
+
+function startSniper() {
+  document.getElementById('sniperStart').classList.add('hidden');
+  document.getElementById('sniperEnd').classList.add('hidden');
+  document.getElementById('sniperGame').classList.remove('hidden');
+  const rtb0 = document.getElementById('rankTiersBlurb');
+  if (rtb0) {
+    rtb0.classList.add('hidden');
+    rtb0.textContent = '';
+  }
+
+  const cd = document.getElementById('sniperCountdown');
+  if (cd) {
+    cd.classList.add('hidden');
+    cd.textContent = '';
+    cd.classList.remove('sniper-countdown--go');
+  }
+
+  const dkey = getSelectedDifficultyKey();
+  const dcfg = DIFFICULTY[dkey] || DIFFICULTY.normal;
+  sniperData = {
+    score: 0,
+    time: SNIPER_GAME_SECONDS,
+    lives: 3,
+    combo: 1,
+    currentQuest: null,
+    playing: false,
+    difficultyKey: dkey,
+    level: 1,
+    secondsToNextLevel: dcfg.levelEverySec,
+    /** After this many waves, next wave is a bomb (random 4–6, Fruit Ninja style) */
+    spawnsUntilNextBoom: 4 + Math.floor(Math.random() * 3),
+    spawnStreak: 0,
+  };
+  const layer = document.getElementById('sniperAtomsLayer');
+  if (layer) layer.innerHTML = '';
+  updateSniperHUD();
+  newQuest();
+
+  if (sniperRafId) cancelAnimationFrame(sniperRafId);
+  sniperRafId = null;
+  resizeSniperBladeCanvas();
+  clearSniperBlade();
+  sniperBladePointerId = -1;
+  attachSniperBladeInput();
+  window.addEventListener('resize', resizeSniperBladeCanvas);
+
+  if (spawnTimer) {
+    clearInterval(spawnTimer);
+    spawnTimer = null;
+  }
+  if (sniperTimer) {
+    clearInterval(sniperTimer);
+    sniperTimer = null;
+  }
+  clearQuestRotationTimer();
+
+  runSniperCountdownThen(() => {
+    if (!document.getElementById('sniperGame') || document.getElementById('sniperGame').classList.contains('hidden')) {
+      return;
+    }
+    sniperData.playing = true;
+    sniperPhysLastMs = performance.now();
+    sniperRafId = requestAnimationFrame(sniperPhysicsTick);
+    scheduleNextQuestRotation();
+
+    sniperTimer = setInterval(() => {
+      if (!sniperData.playing) return;
+      sniperData.time -= 1;
+      document.getElementById('sniperTime').textContent = sniperData.time;
+
+      sniperData.secondsToNextLevel -= 1;
+      if (sniperData.secondsToNextLevel <= 0) {
+        sniperData.level += 1;
+        const cfg = DIFFICULTY[sniperData.difficultyKey] || DIFFICULTY.normal;
+        sniperData.secondsToNextLevel = cfg.levelEverySec;
+        rescheduleSpawnTimer();
+        document.getElementById('sniperLevel').textContent = sniperData.level;
+        updateSniperHUD();
+        showFeedback(L('levelFaster').replace('{n}', String(sniperData.level)), '#fde047');
+      }
+
+      if (sniperData.time <= 0) endSniper('time');
+    }, 1000);
+
+    rescheduleSpawnTimer();
+    spawnWave();
+  });
+}
+
+function stopSniper() {
+  sniperData.playing = false;
+  const cd = document.getElementById('sniperCountdown');
+  if (cd) {
+    cd.classList.add('hidden');
+    cd.textContent = '';
+    cd.classList.remove('sniper-countdown--go');
+  }
+  detachSniperBladeInput();
+  window.removeEventListener('resize', resizeSniperBladeCanvas);
+  clearSniperBlade();
+  if (sniperRafId) {
+    cancelAnimationFrame(sniperRafId);
+    sniperRafId = null;
+  }
+  if (sniperTimer) clearInterval(sniperTimer);
+  if (spawnTimer) clearInterval(spawnTimer);
+  sniperTimer = spawnTimer = null;
+  clearQuestRotationTimer();
+}
+
+function updateSniperHUD() {
+  document.getElementById('sniperScore').textContent = sniperData.score;
+  document.getElementById('sniperCombo').textContent = 'x'+sniperData.combo;
+  document.getElementById('sniperTime').textContent = sniperData.time;
+  document.getElementById('sniperLives').textContent = '❤'.repeat(sniperData.lives) || '💀';
+  const lvEl = document.getElementById('sniperLevel');
+  if (lvEl) lvEl.textContent = sniperData.level != null ? sniperData.level : 1;
+  const dh = document.getElementById('sniperDiffHud');
+  if (dh) {
+    const k = sniperData.difficultyKey || 'normal';
+    dh.textContent = getDifficultyLabel(k);
+  }
+}
+
+function newQuest() {
+  const dkey = sniperData.difficultyKey || 'normal';
+  const hardish = dkey === 'hard' || dkey === 'expert';
+  const singleTypes = ['neutrons', 'electrons', 'config', 'name', 'mass'];
+  const multiTypes = ['shells', 'valence', 'period', 'group'];
+
+  const useMulti = hardish && Math.random() < 0.48;
+
+  if (useMulti) {
+    const mt = multiTypes[Math.floor(Math.random() * multiTypes.length)];
+    let target;
+    if (mt === 'group') {
+      const groupPool = ELEMENTS.filter((e) => e.z !== 1);
+      target = groupPool[Math.floor(Math.random() * groupPool.length)];
+    } else {
+      target = ELEMENTS[Math.floor(Math.random() * ELEMENTS.length)];
+    }
+    const acceptSyms = new Set();
+    let questText = '';
+    switch (mt) {
+      case 'shells': {
+        const ns = countShells(target);
+        ELEMENTS.forEach((e) => {
+          if (countShells(e) === ns) acceptSyms.add(e.sym);
+        });
+        questText = L('quest_shells')
+          .replace('{n}', String(ns))
+          .replace('{s}', ns > 1 ? (ARCADE_LANG === 'en' ? 's' : '') : '');
+        break;
+      }
+      case 'valence': {
+        const v = valenceCount(target);
+        ELEMENTS.forEach((e) => {
+          if (valenceCount(e) === v) acceptSyms.add(e.sym);
+        });
+        questText = L('quest_valence')
+          .replace('{v}', String(v))
+          .replace('{s}', v > 1 ? (ARCADE_LANG === 'en' ? 's' : '') : '');
+        break;
+      }
+      case 'period': {
+        const p = getPeriodForElement(target);
+        ELEMENTS.forEach((e) => {
+          if (getPeriodForElement(e) === p) acceptSyms.add(e.sym);
+        });
+        questText = L('quest_period').replace('{p}', String(p));
+        break;
+      }
+      case 'group': {
+        const g = getHkdseGroupKey(target);
+        ELEMENTS.forEach((e) => {
+          if (getHkdseGroupKey(e) === g) acceptSyms.add(e.sym);
+        });
+        questText = L('quest_group').replace('{g}', formatHkdseGroupLabel(g));
+        break;
+      }
+      default:
+        break;
+    }
+    if (acceptSyms.size === 0) {
+      acceptSyms.add(target.sym);
+    }
+    sniperData.currentQuest = {
+      questType: 'multi',
+      sym: target.sym,
+      acceptSyms,
+    };
+    const qb = document.getElementById('questBox');
+    qb.textContent = questText;
+    qb.classList.remove('quest-updated');
+    void qb.offsetWidth;
+    qb.classList.add('quest-updated');
+    refreshAtomQuestFlags();
+    return;
+  }
+
+  const target = ELEMENTS[Math.floor(Math.random() * ELEMENTS.length)];
+  const type = singleTypes[Math.floor(Math.random() * singleTypes.length)];
+  let questText = '';
+  switch (type) {
+    case 'neutrons':
+      questText = L('quest_neutrons')
+        .replace('{n}', String(target.n))
+        .replace('{name}', localizedElementName(target));
+      break;
+    case 'electrons':
+      questText = L('quest_electrons').replace('{z}', String(target.z));
+      break;
+    case 'config':
+      questText = L('quest_config').replace('{cfg}', target.config.join(','));
+      break;
+    case 'name':
+      questText = L('quest_name')
+        .replace('{name}', localizedElementName(target))
+        .replace('{sym}', target.sym);
+      break;
+    case 'mass':
+      questText = L('quest_mass')
+        .replace('{a}', String(target.z + target.n))
+        .replace('{z}', String(target.z));
+      break;
+  }
+  sniperData.currentQuest = {
+    questType: 'single',
+    sym: target.sym,
+    acceptSyms: new Set([target.sym]),
+  };
+  const qb = document.getElementById('questBox');
+  qb.textContent = questText;
+  qb.classList.remove('quest-updated');
+  void qb.offsetWidth;
+  qb.classList.add('quest-updated');
+  refreshAtomQuestFlags();
+}
+
+function clearQuestRotationTimer() {
+  if (questRotationTimerId != null) {
+    clearTimeout(questRotationTimerId);
+    questRotationTimerId = null;
+  }
+}
+
+/** New clue every 7–10s; atoms stay on screen — flags refresh in newQuest(). */
+function scheduleNextQuestRotation() {
+  clearQuestRotationTimer();
+  if (!sniperData.playing) return;
+  const delayMs = Math.round(7000 + Math.random() * 3000);
+  questRotationTimerId = setTimeout(() => {
+    questRotationTimerId = null;
+    if (!sniperData.playing) return;
+    newQuest();
+    showFeedback(L('feedbackClueRotate'), '#94a3b8');
+    updateSniperHUD();
+    scheduleNextQuestRotation();
+  }, delayMs);
+}
+
+/**
+ * Pick horizontal spawn so this atom’s disc overlaps each existing atom’s disc by ≤ 50% (equal radii).
+ */
+function findSpawnXNonOverlapping(area, layer, yTop) {
+  const aw = area.clientWidth;
+  const maxX = Math.max(0, aw - SNIPER_ATOM_SIZE - 2 * SNIPER_SPAWN_MARGIN);
+  const R = SNIPER_ATOM_RADIUS;
+  const minD = MIN_ATOM_CENTER_DIST;
+
+  function clashes(x) {
+    const cx = x + R;
+    const cy = yTop + R;
+    for (const node of layer.querySelectorAll('.target-atom')) {
+      const p = node._phys;
+      if (!p || p.dead) continue;
+      const ocx = p.x + R;
+      const ocy = p.y + R;
+      if (Math.hypot(cx - ocx, cy - ocy) < minD) return true;
+    }
+    return false;
+  }
+
+  for (let t = 0; t < 48; t++) {
+    const x = SNIPER_SPAWN_MARGIN + Math.random() * maxX;
+    if (!clashes(x)) return x;
+  }
+  const step = Math.max(MIN_ATOM_CENTER_DIST * 0.65, SNIPER_ATOM_SIZE * 0.34);
+  for (let x = SNIPER_SPAWN_MARGIN; x <= SNIPER_SPAWN_MARGIN + maxX + 0.5; x += step) {
+    const xClamped = Math.min(x, SNIPER_SPAWN_MARGIN + maxX);
+    if (!clashes(xClamped)) return xClamped;
+  }
+  return SNIPER_SPAWN_MARGIN + Math.random() * maxX;
+}
+
+function spawnBoomAtom(area, layer) {
+  const aw = area.clientWidth;
+  const ah = area.clientHeight;
+  const y = ah - SNIPER_ATOM_SIZE;
+  const x = findSpawnXNonOverlapping(area, layer, y);
+  const xCenter = x + SNIPER_ATOM_SIZE / 2;
+  const m = getEffectiveSpeedMult();
+  const vx = sniperRandomLaunchVx(xCenter, aw) * m;
+  const vy = -(Math.random() * 3 + 7.4) * SNIPER_SPEED_SCALE * m;
+
+  const atom = document.createElement('div');
+  atom.className = 'target-atom target-atom--boom';
+  atom.innerHTML = '<div class="boom-face">💣</div><div class="boom-txt">' + L('boomTxt') + '</div>';
+  atom._phys = {
+    x,
+    y,
+    vx,
+    vy,
+    spawnSpeedMult: m,
+    isQuest: false,
+    isBoom: true,
+    dead: false,
+    sliceLock: false,
+  };
+  atom.style.left = `${Math.round(x)}px`;
+  atom.style.top = `${Math.round(y)}px`;
+  layer.appendChild(atom);
+}
+
+function spawnSingleElementAtom(area, layer) {
+  const q = sniperData.currentQuest;
+  let el;
+  if (Math.random() < getQuestCorrectSpawnBias()) {
+    const good = ELEMENTS.filter((e) => questAcceptsElement(e));
+    el = good.length
+      ? good[Math.floor(Math.random() * good.length)]
+      : ELEMENTS[Math.floor(Math.random() * ELEMENTS.length)];
+  } else {
+    let wrongPool = ELEMENTS.filter((e) => !questAcceptsElement(e));
+    if (wrongPool.length === 0) wrongPool = ELEMENTS.slice();
+    el = wrongPool[Math.floor(Math.random() * wrongPool.length)];
+  }
+  const atom = document.createElement('div');
+  atom.className = 'target-atom';
+  const isQuest = questAcceptsElement(el);
+  atom.innerHTML = `<div class="numbers">${el.z + el.n}</div>
+                    <div class="symbol">${el.sym}</div>
+                    <div class="numbers">${el.z}</div>`;
+
+  const aw = area.clientWidth;
+  const ah = area.clientHeight;
+  const y = ah - SNIPER_ATOM_SIZE;
+  const x = findSpawnXNonOverlapping(area, layer, y);
+  const xCenter = x + SNIPER_ATOM_SIZE / 2;
+  const m = getEffectiveSpeedMult();
+  const vx = sniperRandomLaunchVx(xCenter, aw) * m;
+  const vy = -(Math.random() * 3 + 7.4) * SNIPER_SPEED_SCALE * m;
+
+  atom._phys = {
+    x,
+    y,
+    vx,
+    vy,
+    spawnSpeedMult: m,
+    isQuest,
+    isBoom: false,
+    dead: false,
+    sliceLock: false,
+  };
+  atom._element = el;
+  applyArcadeAtomCategoryStyle(atom, el.z);
+  atom.style.left = `${Math.round(x)}px`;
+  atom.style.top = `${Math.round(y)}px`;
+
+  layer.appendChild(atom);
+}
+
+function spawnWave() {
+  if (!sniperData.playing) return;
+  const area = document.getElementById('sniperArea');
+  const layer = document.getElementById('sniperAtomsLayer');
+  if (!area || !layer) return;
+
+  sniperData.spawnStreak++;
+  if (sniperData.spawnStreak >= sniperData.spawnsUntilNextBoom) {
+    sniperData.spawnStreak = 0;
+    sniperData.spawnsUntilNextBoom = 4 + Math.floor(Math.random() * 3);
+    const dkey = sniperData.difficultyKey || 'normal';
+    const bombWithAtoms =
+      (dkey === 'hard' || dkey === 'expert') && Math.random() < 0.5;
+
+    if (bombWithAtoms) {
+      const n = getParallelSpawns();
+      for (let i = 0; i < n; i++) spawnSingleElementAtom(area, layer);
+      spawnBoomAtom(area, layer);
+    } else {
+      layer.querySelectorAll('.target-atom').forEach((node) => node.remove());
+      spawnBoomAtom(area, layer);
+    }
+    return;
+  }
+
+  const n = getParallelSpawns();
+  for (let i = 0; i < n; i++) {
+    spawnSingleElementAtom(area, layer);
+  }
+}
+
+function endSniper(reason) {
+  stopSniper();
+  document.getElementById('sniperGame').classList.add('hidden');
+  document.getElementById('sniperEnd').classList.remove('hidden');
+  document.getElementById('finalScore').textContent = sniperData.score;
+  const m = RANK_SCORE_MASTER_MIN;
+  const s = RANK_SCORE_SHARP_MIN;
+  const a = RANK_SCORE_APPRENTICE_MIN;
+  let rank = '';
+  if (sniperData.score >= m) rank = L('rankMaster');
+  else if (sniperData.score >= s) rank = L('rankSharp');
+  else if (sniperData.score >= a) rank = L('rankApprentice');
+  else rank = L('rankPractice');
+  document.getElementById('rankText').textContent = rank;
+  const rtb = document.getElementById('rankTiersBlurb');
+  if (rtb) {
+    rtb.textContent = fillRankTierTemplate(L('endScreenRankTiers'));
+    rtb.classList.remove('hidden');
+  }
+  let title = L('endTimeUp');
+  if (reason === 'boom') title = L('endBoom');
+  else if (reason === 'lives' || sniperData.lives <= 0) title = L('endLives');
+  document.getElementById('endTitle').textContent = title;
+}
+</script>
+</body>
+</html>

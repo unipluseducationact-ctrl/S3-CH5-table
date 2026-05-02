@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HKDSE Chem — Atomic structure worksheet (HTML)</title>
+  <style>
+    /* Soft UI / pastel — aligned with Uni+ periodic table style */
+    :root {
+      --bg: #f0f2f5;
+      --bg-elevated: #f8f9fa;
+      --card: #ffffff;
+      --text: #2d3436;
+      --muted: #636e72;
+      --border: #e9ecef;
+      --shadow: 0 4px 14px rgba(45, 52, 54, 0.06);
+      --shadow-hover: 0 8px 24px rgba(45, 52, 54, 0.1);
+      /* Pastel accents (periodic-table palette) */
+      --accent: #7c9ce0;
+      --accent-soft: #dfe6fb;
+      --accent2: #7bc9a8;
+      --accent2-soft: #d5f4e6;
+      --danger: #e5989b;
+      --danger-soft: #ffe5e5;
+      --ok: #8fbc8f;
+      --ok-soft: #e8f5e9;
+      --pill-active-bg: #636e72;
+      --pill-active-text: #ffffff;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-pill: 9999px;
+      font-family: system-ui, "Segoe UI", "Microsoft JhengHei", 微軟正黑體, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.25rem;
+      padding: 1.35rem 1.75rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header > div:first-child {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.35rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .header h1 { margin: 0 0 0.35rem; font-size: 1.28rem; font-weight: 650; letter-spacing: -0.02em; color: var(--text); }
+    .subtitle { margin: 0; color: var(--muted); font-size: 0.92rem; }
+    .lang-switch {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      background: var(--card);
+      padding: 0.4rem;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .lang-switch button {
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      padding: 0.5rem 1.1rem;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .lang-switch button:hover {
+      background: var(--bg-elevated);
+      color: var(--text);
+    }
+    .lang-switch button.active {
+      background: var(--pill-active-bg);
+      color: var(--pill-active-text);
+      box-shadow: 0 2px 8px rgba(99, 110, 114, 0.25);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 380px) 1fr;
+      gap: 1.35rem;
+      padding: 0.25rem 1.5rem 2.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.35rem;
+      box-shadow: var(--shadow);
+    }
+    .card h2 { margin: 0 0 0.85rem; font-size: 1.08rem; font-weight: 650; color: var(--text); }
+    .card h3 { margin: 1.15rem 0 0.4rem; font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+    label { display: block; margin-top: 0.8rem; font-size: 0.84rem; color: var(--muted); font-weight: 500; }
+    input[type="number"], input[type="text"], select {
+      width: 100%;
+      margin-top: 0.3rem;
+      padding: 0.55rem 0.85rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text);
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="number"]:focus, input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .checks { display: flex; flex-direction: column; gap: 0.45rem; margin-top: 0.4rem; }
+    .checks label.row {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin: 0;
+      padding: 0.45rem 0.65rem;
+      border-radius: var(--radius-md);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    .actions { margin-top: 1.1rem; display: flex; gap: 0.55rem; flex-wrap: wrap; }
+    button.primary {
+      background: linear-gradient(135deg, #a8d4f0 0%, #b8b5f0 100%);
+      border: 1px solid rgba(124, 156, 224, 0.35);
+      color: #2d3436;
+      padding: 0.6rem 1.35rem;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.92rem;
+      box-shadow: 0 2px 10px rgba(124, 156, 224, 0.25);
+      transition: transform 0.15s, box-shadow 0.2s;
+    }
+    button.primary:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-1px);
+    }
+    .actions button:not(.primary) {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.55rem 1.1rem;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      font-size: 0.86rem;
+      font-weight: 500;
+      box-shadow: 0 1px 4px rgba(45, 52, 54, 0.04);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .actions button:not(.primary):hover {
+      background: var(--bg-elevated);
+      box-shadow: var(--shadow);
+    }
+    .hint { font-size: 0.82rem; color: var(--muted); margin: 0.35rem 0 0.55rem; line-height: 1.45; }
+    .quiz-empty { color: var(--muted); padding: 1.25rem 0; text-align: center; font-size: 0.92rem; }
+    .q-block {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.1rem;
+      margin-bottom: 0.9rem;
+      background: var(--bg-elevated);
+      box-shadow: 0 2px 8px rgba(45, 52, 54, 0.04);
+    }
+    .q-head { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+    .stem { margin: 0.3rem 0; }
+    .stem-zh { color: #4a5568; font-size: 0.93rem; }
+    .options label { margin: 0.4rem 0 0; color: var(--text); cursor: pointer; padding: 0.35rem 0; }
+    .feedback { margin-top: 0.65rem; font-size: 0.88rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-md); }
+    .feedback.hint { color: #2d6a4f; background: var(--accent2-soft); }
+    .feedback.bad { color: #9d4e52; background: var(--danger-soft); }
+    .feedback.ok { color: #2d5a2d; background: var(--ok-soft); }
+    .text-ans {
+      width: 100%;
+      margin-top: 0.35rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 0.55rem 0.85rem;
+    }
+    .text-ans:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    input[type="radio"], input[type="checkbox"] {
+      accent-color: #7c9ce0;
+      width: 1.05em;
+      height: 1.05em;
+    }
+    .options label:hover { color: var(--text); }
+    .q-block .primary { margin-top: 0.65rem; }
+    .summary-actions { margin-top: 0.75rem; }
+    .summary-actions button {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.55rem 1.1rem;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      font-size: 0.86rem;
+      font-weight: 500;
+      box-shadow: 0 1px 4px rgba(45, 52, 54, 0.04);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .summary-actions button:hover {
+      background: var(--bg-elevated);
+      box-shadow: var(--shadow);
+    }
+    .summary-panel {
+      margin-top: 1rem;
+      padding: 1rem 1.1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      box-shadow: 0 2px 10px rgba(45, 52, 54, 0.04);
+    }
+    .summary-panel[hidden] { display: none !important; }
+    .summary-panel h3 {
+      margin: 0 0 0.65rem;
+      font-size: 1rem;
+      font-weight: 650;
+      color: var(--text);
+    }
+    .summary-score {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .summary-sub {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin: 0 0 0.85rem;
+    }
+    .summary-wrong-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 0.75rem 0 0.45rem;
+    }
+    .summary-wrong-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .summary-wrong-list li {
+      margin-bottom: 0.45rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: var(--radius-md);
+      background: var(--danger-soft);
+      border: 1px solid rgba(229, 152, 155, 0.45);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #7a3d42;
+    }
+    .summary-wrong-list li .type-code {
+      font-weight: 500;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .summary-none {
+      font-size: 0.88rem;
+      color: var(--ok);
+      font-weight: 600;
+      margin: 0.25rem 0 0;
+    }
+    .summary-by-type-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 1rem 0 0.5rem;
+    }
+    .summary-type-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      margin: 0 0 0.5rem;
+    }
+    .summary-type-table th,
+    .summary-type-table td {
+      padding: 0.45rem 0.5rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-type-table th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: none;
+    }
+    .summary-type-table td.num {
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .summary-type-table tr:last-child td { border-bottom: none; }
+    .summary-type-table .type-name { font-weight: 600; color: var(--text); }
+    .summary-type-table .type-code-cell {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .summary-revision {
+      margin-top: 1rem;
+      padding: 0.95rem 1.05rem;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(124, 156, 224, 0.38);
+      background: var(--accent-soft);
+    }
+    .summary-revision h4 {
+      margin: 0 0 0.55rem;
+      font-size: 0.92rem;
+      font-weight: 650;
+      color: var(--text);
+    }
+    .summary-revision ul {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+    .summary-revision li {
+      margin-bottom: 0.4rem;
+      font-size: 0.86rem;
+      line-height: 1.48;
+      color: var(--text);
+    }
+    .summary-revision li:last-child { margin-bottom: 0; }
+    .footer { padding: 1rem 1.5rem 2rem; max-width: 1200px; margin: 0 auto; font-size: 0.8rem; color: var(--muted); }
+    /* Print sheet: collapsed on screen; expanded in @media print */
+    #pdfSheet {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 12mm;
+      box-sizing: border-box;
+      background: #fff;
+      color: #111;
+      font-family: "Segoe UI", "Microsoft JhengHei", sans-serif;
+      font-size: 10pt;
+      line-height: 1.35;
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    #pdfSheet h1 { font-size: 14pt; margin: 0 0 6pt; }
+    #pdfSheet .pdf-q { margin-bottom: 10pt; }
+    #pdfSheet .meta { font-size: 9pt; color: #444; margin-bottom: 12pt; }
+    /*
+      Print / Save as PDF: do NOT use visibility:hidden on the whole body — hidden nodes
+      still consume layout height, which creates extra blank pages. Hide UI with display:none.
+    */
+    @media print {
+      @page {
+        size: auto;
+        margin: 10mm;
+      }
+      html,
+      body {
+        height: auto !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        color: #111 !important;
+      }
+      .header,
+      .grid,
+      .footer {
+        display: none !important;
+      }
+      #pdfSheet {
+        visibility: visible !important;
+        position: static !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        max-width: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        pointer-events: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div>
+      <h1 id="appTitle">HKDSE Chemistry — Atomic structure worksheet</h1>
+      <p class="subtitle" id="appSubtitle">Standalone HTML · English / 繁體中文</p>
+    </div>
+    <div class="lang-switch">
+      <button type="button" id="btnLangEn" class="active">English</button>
+      <button type="button" id="btnLangZh">繁體中文</button>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card">
+      <h2 id="hSettings">Worksheet settings</h2>
+      <label id="lblTypes">Question types</label>
+      <div id="typeChecks" class="checks"></div>
+      <label for="numCount" id="lblCount">Number of questions</label>
+      <input type="number" id="numCount" min="1" max="50" value="10" />
+      <label for="selDiff" id="lblDiff">Difficulty</label>
+      <select id="selDiff"></select>
+      <label for="txtSeed" id="lblSeed">Random seed (optional)</label>
+      <input type="text" id="txtSeed" placeholder="e.g. classA-2026" />
+      <div class="actions">
+        <button type="button" id="btnGenerate" class="primary">Generate</button>
+      </div>
+      <h3 id="hExport">Export</h3>
+      <p class="hint" id="txtExportHint">Word: opens in Microsoft Word. Use Print → Save as PDF for a PDF copy.</p>
+      <div class="actions wrap">
+        <button type="button" id="btnDocQ">Word — Questions</button>
+        <button type="button" id="btnDocA">Word — Answers</button>
+        <button type="button" id="btnPrint">Print / Save as PDF</button>
+      </div>
+    </section>
+    <section class="card">
+      <h2 id="hPractice">On-screen practice</h2>
+      <p class="hint" id="txtPracticeHint">First wrong attempt: hint only. Second wrong: model answer.</p>
+      <div class="summary-actions">
+        <button type="button" id="btnSummary">Session summary</button>
+      </div>
+      <div id="summaryPanel" class="summary-panel" hidden role="region" aria-live="polite"></div>
+      <div id="quizArea" class="quiz-empty"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span id="footerNote">HKDSE-style atomic structure practice.</span>
+  </footer>
+
+  <div id="pdfSheet" aria-hidden="true"></div>
+
+  <script>
+(function () {
+  "use strict";
+
+  const ELEMENTS = [
+    { z: 1, sym: "H", name_en: "Hydrogen", name_zh: "氫", shells: "1" },
+    { z: 2, sym: "He", name_en: "Helium", name_zh: "氦", shells: "2" },
+    { z: 3, sym: "Li", name_en: "Lithium", name_zh: "鋰", shells: "2,1" },
+    { z: 4, sym: "Be", name_en: "Beryllium", name_zh: "鈹", shells: "2,2" },
+    { z: 5, sym: "B", name_en: "Boron", name_zh: "硼", shells: "2,3" },
+    { z: 6, sym: "C", name_en: "Carbon", name_zh: "碳", shells: "2,4" },
+    { z: 7, sym: "N", name_en: "Nitrogen", name_zh: "氮", shells: "2,5" },
+    { z: 8, sym: "O", name_en: "Oxygen", name_zh: "氧", shells: "2,6" },
+    { z: 9, sym: "F", name_en: "Fluorine", name_zh: "氟", shells: "2,7" },
+    { z: 10, sym: "Ne", name_en: "Neon", name_zh: "氖", shells: "2,8" },
+    { z: 11, sym: "Na", name_en: "Sodium", name_zh: "鈉", shells: "2,8,1" },
+    { z: 12, sym: "Mg", name_en: "Magnesium", name_zh: "鎂", shells: "2,8,2" },
+    { z: 13, sym: "Al", name_en: "Aluminium", name_zh: "鋁", shells: "2,8,3" },
+    { z: 14, sym: "Si", name_en: "Silicon", name_zh: "矽", shells: "2,8,4" },
+    { z: 15, sym: "P", name_en: "Phosphorus", name_zh: "磷", shells: "2,8,5" },
+    { z: 16, sym: "S", name_en: "Sulphur", name_zh: "硫", shells: "2,8,6" },
+    { z: 17, sym: "Cl", name_en: "Chlorine", name_zh: "氯", shells: "2,8,7" },
+    { z: 18, sym: "Ar", name_en: "Argon", name_zh: "氬", shells: "2,8,8" },
+    { z: 19, sym: "K", name_en: "Potassium", name_zh: "鉀", shells: "2,8,8,1" },
+    { z: 20, sym: "Ca", name_en: "Calcium", name_zh: "鈣", shells: "2,8,8,2" },
+  ];
+
+  const QUESTION_TYPES = [
+    { id: "mcq", label_en: "Multiple choice", label_zh: "選擇題" },
+    { id: "short", label_en: "Short / structured answer", label_zh: "短答／結構題" },
+    { id: "calc", label_en: "Calculation (Z, A, particles)", label_zh: "計算題（原子序、質量數、粒子數）" },
+    { id: "symbol", label_en: "Atomic symbol & notation", label_zh: "原子符號與表示法" },
+    { id: "concept", label_en: "Definitions & concepts", label_zh: "定義與概念" },
+    { id: "isotope", label_en: "Isotopes (no RAM calculation)", label_zh: "同位素（不含相對原子質量計算）" },
+  ];
+
+  const DIFFICULTIES = [
+    { id: "easy", label_en: "Easy", label_zh: "易" },
+    { id: "medium", label_en: "Medium", label_zh: "中" },
+    { id: "hard", label_en: "Hard", label_zh: "難" },
+  ];
+
+  const UI = {
+    en: {
+      appTitle: "HKDSE Chemistry — Atomic structure worksheet",
+      appSubtitle: "Standalone HTML · bilingual EN / 繁體中文",
+      hSettings: "Worksheet settings",
+      lblTypes: "Question types",
+      lblCount: "Number of questions (1–50)",
+      lblDiff: "Difficulty",
+      lblSeed: "Random seed (optional)",
+      btnGenerate: "Generate questions",
+      hExport: "Export",
+      txtExportHint: "Word: .doc for Microsoft Word. Use Print → Save as PDF for a PDF copy.",
+      btnDocQ: "Word — Questions",
+      btnDocA: "Word — Answers",
+      btnPrint: "Print / Save as PDF",
+      hPractice: "On-screen practice",
+      txtPracticeHint: "First wrong: hint only. Second wrong: model answer.",
+      footerNote: "Topic: atomic structure, Z, A, symbols — HKDSE-style practice.",
+      quizCheck: "Check answer",
+      empty: "Generate questions first.",
+      btnSummary: "Session summary",
+      summaryTitle: "Summary",
+      summaryScoreLabel: "Score (correct / total)",
+      summaryFirstTry: "Correct on first attempt",
+      summaryWrongTitle: "Wrong twice — review these (Q no. & type)",
+      summaryNoneWrong: "None — no questions failed after two attempts.",
+      summaryIncomplete: "Still in progress (not yet correct)",
+      alertNoQuiz: "Generate questions first.",
+      summaryByTypeTitle: "Correct rate by question type",
+      summaryByTypeColType: "Type",
+      summaryByTypeColFraction: "Correct / in type",
+      summaryByTypeColRate: "Rate",
+      summaryByTypeColFirst: "First-try / in type",
+      revTitle: "Comments & revision suggestions",
+      revBandExcellent: "Overall accuracy is very high this session. Keep mixing question types so recall stays sharp for the exam.",
+      revBandGood: "Good overall result. Use the table above to spot any weaker types and add a short targeted round on those skills.",
+      revBandFair: "Mixed performance: the table shows where accuracy dipped. Re-read your notes for those areas, then regenerate with the same types ticked.",
+      revBandLow: "Several concepts still need consolidation. Review atomic number, mass number, symbol notation, and isotope ideas in your notes before the next full worksheet.",
+      revWeakOne: "Prioritise revision on {type} — this time you scored {c}/{t} ({pct}%) in that category.",
+      revStrongOne: "Strength: you answered every {type} item correctly ({n} questions). Keep a light warm-up on this type between harder sessions.",
+      revTwoStrike: "Questions missed twice: study the model answer wording, then regenerate practice with those question types selected.",
+      revIncomplete: "Finish the questions still in progress so your strengths and gaps are measured fairly next time.",
+      revFirstTryLow: "Many items needed two attempts. Read each stem slowly before answering to turn first-try accuracy around.",
+      revBalanced: "No single type dominated the errors—continue balanced practice across the types you selected.",
+    },
+    zh: {
+      appTitle: "香港中學文憑試 化學 — 原子結構工作紙（純 HTML）",
+      appSubtitle: "無需伺服器 · 雙語（英文／繁體中文）",
+      hSettings: "工作紙設定",
+      lblTypes: "題型",
+      lblCount: "題數（1–50）",
+      lblDiff: "難度",
+      lblSeed: "隨機種子（可留空）",
+      btnGenerate: "產生題目",
+      hExport: "匯出",
+      txtExportHint: "Word：下載 .doc 以 Word 開啟。需要 PDF 時請使用「列印」→「另存 PDF」。",
+      btnDocQ: "Word — 試題",
+      btnDocA: "Word — 答案",
+      btnPrint: "列印／另存 PDF",
+      hPractice: "互動練習",
+      txtPracticeHint: "第一次答錯只顯示提示；第二次答錯顯示參考答案。",
+      footerNote: "課題：原子結構、原子序、質量數、符號等。",
+      quizCheck: "檢查答案",
+      empty: "請先按「產生題目」。",
+      btnSummary: "學習摘要",
+      summaryTitle: "摘要",
+      summaryScoreLabel: "得分（答對／總題數）",
+      summaryFirstTry: "首次即答對",
+      summaryWrongTitle: "兩次皆錯 — 需重溫（題號與題型）",
+      summaryNoneWrong: "沒有此類題目 — 尚未出現「兩次皆錯」。",
+      summaryIncomplete: "尚未答對（進行中）",
+      alertNoQuiz: "請先產生題目。",
+      summaryByTypeTitle: "各題型答對率",
+      summaryByTypeColType: "題型",
+      summaryByTypeColFraction: "答對／該題型題數",
+      summaryByTypeColRate: "答對率",
+      summaryByTypeColFirst: "首次即對／該題型題數",
+      revTitle: "評語與溫習建議",
+      revBandExcellent: "整體答對率很高，表現出色。建議持續混合各題型練習，鞏固應試反應。",
+      revBandGood: "整體表現不錯。可參考上表答對率，對偏低題型加做一輪針對練習。",
+      revBandFair: "表現參差：上表顯示哪些題型較弱。請先重溫相關筆記，再勾選同類題型重新產生題目。",
+      revBandLow: "多個概念仍需鞏固。建議先溫習原子序、質量數、符號表示法與同位素等基本概念，再完成整份工作紙。",
+      revWeakOne: "建議優先溫習「{type}」：本次該題型為 {c}/{t}（{pct}%）。",
+      revStrongOne: "強項：「{type}」本次全對（共 {n} 題）。可在較難練習前用此題型作暖身。",
+      revTwoStrike: "曾「兩次皆錯」的題目：請細讀參考答案的用字與步驟，再在設定中只勾選相關題型重新練習。",
+      revIncomplete: "尚有未答對題目，建議先完成，下次摘要才能更準確反映強弱項。",
+      revFirstTryLow: "不少題目需第二次才答對。作答前宜放慢速度，完整閱讀題幹與選項。",
+      revBalanced: "錯誤分散在不同題型，宜維持均衡練習，並針對上表較低答對率者加強。",
+    },
+  };
+
+  function createRng(seed) {
+    let s = (seed >>> 0) || 1;
+    return {
+      random() {
+        s = (1664525 * s + 1013904223) >>> 0;
+        return s / 0x100000000;
+      },
+      randint(a, b) {
+        return a + Math.floor(this.random() * (b - a + 1));
+      },
+      choice(arr) {
+        return arr[Math.floor(this.random() * arr.length)];
+      },
+      shuffle(arr) {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(this.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      },
+    };
+  }
+
+  async function stableSeed(userSeed, count, types, difficulty) {
+    const raw = `${userSeed || ""}|${count}|${[...types].sort().join(",")}|${difficulty}`;
+    const enc = new TextEncoder().encode(raw);
+    const buf = await crypto.subtle.digest("SHA-256", enc);
+    const hex = Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
+    return parseInt(hex.slice(0, 8), 16) >>> 0;
+  }
+
+  function allowedByDifficulty(q, difficulty) {
+    if (difficulty === "easy") return q.qtype === "mcq" || q.qtype === "calc" || q.qtype === "isotope";
+    if (difficulty === "medium") return ["mcq", "calc", "short", "symbol", "isotope"].includes(q.qtype);
+    return true;
+  }
+
+  function mcqNeutral(rng, diff) {
+    const correct = rng.randint(0, 3);
+    let opts_en = [
+      "Number of protons equals number of electrons.",
+      "Number of protons equals number of neutrons.",
+      "Number of neutrons equals number of electrons.",
+      "There are no charged particles in an atom.",
+    ];
+    let opts_zh = ["質子數目等於電子數目。", "質子數目等於中子數目。", "中子數目等於電子數目。", "原子內沒有帶電粒子。"];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "mcq_neutral",
+      qtype: "mcq",
+      difficulty: diff,
+      stem_en: "Why is a neutral atom electrically neutral?",
+      stem_zh: "為什麼一粒電中性原子整體呈電中性？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Compare the charges on protons and electrons, and their counts in a neutral atom.",
+      hint_zh: "比較質子與電子的電荷，以及電中性原子中兩者的數量關係。",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function mcqMassNumber(rng, diff) {
+    const correct = 0;
+    let opts_en = [
+      "Protons + neutrons in the nucleus",
+      "Protons + electrons in the atom",
+      "Number of protons only",
+      "Number of electrons in the outer shell",
+    ];
+    let opts_zh = ["原子核內質子數 + 中子數", "原子內質子數 + 電子數", "僅質子數目", "最外層電子數目"];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "mcq_mass_no",
+      qtype: "mcq",
+      difficulty: diff,
+      stem_en: "What does the mass number of an atom represent?",
+      stem_zh: "原子的「質量數」代表什麼？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Mass is concentrated in the nucleus; which particles there contribute to mass number?",
+      hint_zh: "質量主要集中在原子核；哪兩種粒子會計入質量數？",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function mcqAtomicNumber(rng, diff) {
+    const correct = 0;
+    let opts_en = [
+      "Number of protons in the nucleus",
+      "Number of neutrons in the nucleus",
+      "Number of electrons only",
+      "Total number of subatomic particles",
+    ];
+    let opts_zh = ["原子核內的質子數目", "原子核內的中子數目", "僅電子數目", "次原子粒子總數"];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "mcq_z",
+      qtype: "mcq",
+      difficulty: diff,
+      stem_en: "In modern notation, the atomic number (Z) is equal to:",
+      stem_zh: "在現代表示法中，原子序（Z）等於：",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Z defines the identity of the element in the periodic table.",
+      hint_zh: "原子序決定元素在週期表中的身份。",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function mcqParticleCharge(rng, diff) {
+    const particle = rng.choice(["proton", "electron", "neutron"]);
+    let correct, ans_en, ans_zh;
+    const base = ["+1", "-1", "0", "+2"];
+    if (particle === "proton") {
+      correct = 0;
+      ans_en = "+1";
+      ans_zh = "+1";
+    } else if (particle === "electron") {
+      correct = 1;
+      ans_en = "-1";
+      ans_zh = "-1";
+    } else {
+      correct = 2;
+      ans_en = "0";
+      ans_zh = "0";
+    }
+    const order = rng.shuffle([0, 1, 2, 3]);
+    const opts_en = order.map((i) => base[i]);
+    const opts_zh = order.map((i) => base[i]);
+    const ci = order.indexOf(correct);
+    const names = { proton: ["proton", "質子"], electron: ["electron", "電子"], neutron: ["neutron", "中子"] };
+    const [ne, nz] = names[particle];
+    return {
+      id: "mcq_charge",
+      qtype: "mcq",
+      difficulty: diff,
+      stem_en: "What is the charge on a " + ne + "?",
+      stem_zh: "「" + nz + "」的電荷是多少？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Recall the standard particle table: proton, electron, neutron.",
+      hint_zh: "回想課本中質子、電子、中子的標準電荷表。",
+      answer_en: ans_en,
+      answer_zh: ans_zh,
+      marks: 1,
+    };
+  }
+
+  function mcqLocation(rng, diff) {
+    const kind = rng.choice(["e", "p", "n"]);
+    const opts_en = [
+      "Mostly inside the nucleus",
+      "In the electron cloud / space outside the nucleus",
+      "Evenly throughout the atom with the same density everywhere",
+    ];
+    const opts_zh = ["主要在原子核內", "在原子核外的電子雲／空間中", "在整粒原子內均勻分佈且各處密度相同"];
+    let correct, target_en, target_zh;
+    if (kind === "e") {
+      correct = 1;
+      target_en = "electrons";
+      target_zh = "電子";
+    } else {
+      correct = 0;
+      target_en = "protons and neutrons";
+      target_zh = "質子與中子";
+    }
+    const order = rng.shuffle([0, 1, 2]);
+    const sh_en = order.map((i) => opts_en[i]);
+    const sh_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "mcq_loc_" + kind,
+      qtype: "mcq",
+      difficulty: diff,
+      stem_en: "Where are " + target_en + " mainly located in a simple atomic model?",
+      stem_zh: "「" + target_zh + "」在簡化原子模型中主要位於哪裡？",
+      options_en: sh_en,
+      options_zh: sh_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Nucleus contains protons and neutrons; electrons occupy outer region.",
+      hint_zh: "原子核包含質子與中子；電子佔據外圍區域。",
+      answer_en: sh_en[ci],
+      answer_zh: sh_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function calcNeutrons(rng, diff) {
+    const el = rng.choice(ELEMENTS.slice(2));
+    const z = el.z;
+    const extra = rng.randint(0, diff === "hard" ? 10 : 6);
+    const a = z + extra;
+    const n = a - z;
+    return {
+      id: "calc_n_" + el.sym + "_" + a,
+      qtype: "calc",
+      difficulty: diff,
+      stem_en: "For a neutral atom of " + el.name_en + " (" + el.sym + ") with mass number " + a + ", atomic number " + z + ", find the number of neutrons.",
+      stem_zh: "一粒電中性的" + el.name_zh + "（" + el.sym + "）原子，質量數為 " + a + "，原子序為 " + z + "，求中子數目。（以數字作答）",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: [String(n), String(n) + " neutrons"],
+      accepted_answers_zh: [String(n), n + "個中子"],
+      hint_en: "Neutrons = mass number − atomic number (N = A − Z).",
+      hint_zh: "中子數 = 質量數 − 原子序（N = A − Z）。",
+      answer_en: String(n),
+      answer_zh: String(n),
+      marks: diff === "hard" ? 2 : 1,
+    };
+  }
+
+  function calcElectrons(rng, diff) {
+    const el = rng.choice(ELEMENTS);
+    const z = el.z;
+    return {
+      id: "calc_e_" + el.sym,
+      qtype: "calc",
+      difficulty: diff,
+      stem_en: "How many electrons are in ONE neutral atom of " + el.name_en + " (symbol " + el.sym + ")?",
+      stem_zh: "一粒電中性的" + el.name_zh + "（符號 " + el.sym + "）有多少個電子？（數字）",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: [String(z)],
+      accepted_answers_zh: [String(z)],
+      hint_en: "In a neutral atom, electrons equal protons; protons = atomic number.",
+      hint_zh: "電中性原子：電子數 = 質子數 = 原子序。",
+      answer_en: String(z),
+      answer_zh: String(z),
+      marks: 1,
+    };
+  }
+
+  function symbolNotation(rng, diff) {
+    const el = rng.choice(ELEMENTS.slice(3));
+    const z = el.z;
+    const sym = el.sym;
+    const a = z + rng.randint(0, 5);
+    return {
+      id: "sym_" + sym + "_" + a,
+      qtype: "symbol",
+      difficulty: diff,
+      stem_en:
+        "Write the nuclide notation for " +
+        el.name_en +
+        " with mass number " +
+        a +
+        " and atomic number " +
+        z +
+        ". You may answer in one line as: " +
+        a +
+        " " +
+        sym +
+        " " +
+        z +
+        " or " +
+        sym +
+        "-" +
+        a +
+        "-" +
+        z +
+        ".",
+      stem_zh:
+        "寫出" + el.name_zh + " 的核素／原子符號表示：質量數 " + a + "、原子序 " + z + "。可一行作答，例如：" + a + " " + sym + " " + z + " 或 " + sym + "-" + a + "-" + z + "。",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: [String(a) + sym, sym + " " + a, a + " " + sym + " " + z, sym + "-" + a + "-" + z, "^" + a + "_" + z + sym],
+      accepted_answers_zh: [String(a) + sym, sym + " " + a, a + " " + sym + " " + z, sym + "-" + a + "-" + z],
+      hint_en: "Mass number A is the superscript; atomic number Z is the subscript before the symbol.",
+      hint_zh: "質量數寫在左上角（或標在符號前），原子序寫在左下角（或一併標出）。",
+      answer_en: "^" + a + "_" + z + sym + " (or " + a + ", " + z + ", " + sym + " labelled)",
+      answer_zh: "^" + a + "_" + z + sym + "（或清楚標示 " + a + "、" + z + "、" + sym + "）",
+      marks: 1,
+    };
+  }
+
+  function shortShells(rng, diff) {
+    const el = rng.choice(ELEMENTS);
+    const sh = el.shells;
+    return {
+      id: "short_sh_" + el.sym,
+      qtype: "short",
+      difficulty: diff,
+      stem_en: "State the electronic arrangement (shell distribution) of a neutral " + el.name_en + " atom (" + el.sym + ").",
+      stem_zh: "寫出一粒電中性" + el.name_zh + "（" + el.sym + "）原子的電子排佈（各電子層電子數）。",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: [sh, sh.replace(/,/g, ", ")],
+      accepted_answers_zh: [sh, sh.replace(/,/g, "，")],
+      hint_en: "Fill shells from inner to outer; total electrons = atomic number for a neutral atom.",
+      hint_zh: "由內到外填滿各層；電中性時總電子數 = 原子序。",
+      answer_en: sh,
+      answer_zh: sh,
+      marks: 2,
+    };
+  }
+
+  function shortMassNucleus(rng, diff) {
+    return {
+      id: "short_mass_nucleus",
+      qtype: "short",
+      difficulty: diff,
+      stem_en: "Explain briefly why most of the mass of an atom is in the nucleus.",
+      stem_zh: "簡要解釋為何原子的大部分質量集中在原子核。",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: ["protons and neutrons are much heavier than electrons", "mass concentrated in nucleus protons neutrons"],
+      accepted_answers_zh: ["質子與中子比電子重得多", "質量集中在原子核的質子和中子"],
+      hint_en: "Compare relative masses of nucleons and electrons.",
+      hint_zh: "比較質子、中子與電子的相對質量。",
+      answer_en: "Protons and neutrons have relative mass ~1 each and sit in the nucleus; electrons are much lighter.",
+      answer_zh: "質子與中子相對質量約為 1，位於原子核；電子輕得多。",
+      marks: diff === "easy" ? 1 : 2,
+    };
+  }
+
+  function conceptSameElement(rng, diff) {
+    return {
+      id: "concept_same_element",
+      qtype: "concept",
+      difficulty: diff,
+      stem_en: "Two neutral atoms are samples of the SAME element but are isotopes. What quantity must be identical in both atoms?",
+      stem_zh: "兩粒電中性原子屬於同一元素，但為不同同位素。兩者哪一個量必定相同？",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: ["number of protons", "protons", "atomic number", "same number of protons"],
+      accepted_answers_zh: ["質子數", "質子數目相同", "原子序", "原子序相同"],
+      hint_en: "Isotopes differ in neutron count; identity of an element is fixed by...",
+      hint_zh: "同位素的中子數不同；元素身份由哪個數字決定？",
+      answer_en: "Number of protons (atomic number).",
+      answer_zh: "質子數（原子序）。",
+      marks: 2,
+    };
+  }
+
+  function conceptCrust(rng, diff) {
+    return {
+      id: "concept_crust",
+      qtype: "concept",
+      difficulty: diff,
+      stem_en: "Name the FOUR most abundant elements in the Earth's crust in decreasing order (English names, comma separated).",
+      stem_zh: "寫出地殼中含量最高的四種元素，按豐度由高到低排列（可用英文元素名，逗號分隔）。",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: ["oxygen, silicon, aluminium, iron", "oxygen,silicon,aluminium,iron", "o, si, al, fe"],
+      accepted_answers_zh: ["氧,矽,鋁,鐵", "氧，矽，鋁，鐵", "oxygen, silicon, aluminium, iron"],
+      hint_en: "Think silicate rocks: two common non-metals first, then two common metals.",
+      hint_zh: "想想矽酸鹽岩石：前兩種多為非金屬；之後是常見金屬。",
+      answer_en: "Oxygen, silicon, aluminium, iron",
+      answer_zh: "氧、矽、鋁、鐵（或 Oxygen, silicon, aluminium, iron）",
+      marks: 2,
+    };
+  }
+
+  function isoMcqDefinition(rng, diff) {
+    const correct = 0;
+    let opts_en = [
+      "Same number of protons but different numbers of neutrons",
+      "Same number of neutrons but different numbers of protons",
+      "Same mass number but different atomic numbers",
+      "Same number of electrons but different numbers of protons",
+    ];
+    let opts_zh = ["質子數相同，中子數不同", "中子數相同，質子數不同", "質量數相同，原子序不同", "電子數相同，質子數不同"];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "iso_def",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en: "Which statement best describes isotopes of an element?",
+      stem_zh: "以下哪一句最準確描述同一元素的同位素？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Think about what defines the element identity vs what can differ between isotopes.",
+      hint_zh: "元素身份由哪個數字決定？同位素之間哪個數可以不同？",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function isoMcqChemicalProperties(rng, diff) {
+    const correct = 0;
+    let opts_en = [
+      "They have the same electronic arrangement.",
+      "They have the same mass number.",
+      "They have the same number of neutrons.",
+      "They have different atomic numbers.",
+    ];
+    let opts_zh = ["它們具有相同的電子排佈。", "它們具有相同的質量數。", "它們具有相同的中子數。", "它們具有不同的原子序。"];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "iso_chem",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en: "Why do isotopes of an element show the SAME chemical properties?",
+      stem_zh: "為什麼同一元素的不同同位素會表現出相同的化學性質？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Chemical properties depend on electrons, especially outer-shell electrons.",
+      hint_zh: "化學性質主要取決於電子，尤其是最外層電子。",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function isoMcqChemicalSeparation(rng, diff) {
+    const correct = 1;
+    let opts_en = [
+      "Yes — isotopes can be separated easily by chemical reactions.",
+      "No — isotopes cannot be separated by chemical methods.",
+      "Yes — fractional distillation of compounds always separates isotopes.",
+      "No — isotopes cannot be separated by any laboratory method.",
+    ];
+    let opts_zh = [
+      "可以——同位素可輕易藉化學反應分離。",
+      "不可以——同位素不能藉化學方法分離。",
+      "可以——化合物的分餾總能分離同位素。",
+      "不可以——同位素不能以任何實驗方法分離。",
+    ];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "iso_chem_sep",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en: "Can isotopes of the same element be separated from one another by chemical methods?",
+      stem_zh: "同一元素的不同同位素能否藉化學方法彼此分離？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Isotopes react in the same way chemically; think about what differs between them.",
+      hint_zh: "同位素的化學反應方式相同；想想它們之間有什麼不同。",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function isoMcqPhysicalSeparation(rng, diff) {
+    const correct = 0;
+    let opts_en = [
+      "Physical methods (e.g. mass-based techniques)",
+      "Only chemical displacement reactions",
+      "Only electrolysis of aqueous solutions",
+      "They cannot be separated in practice",
+    ];
+    let opts_zh = ["物理方法（例如依質量差異的技術）", "只有化學置換反應", "只有水溶液電解", "實際上無法分離"];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "iso_phys_sep",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en: "Isotopes of an element have slightly different physical properties (e.g. mass). They can be separated by:",
+      stem_zh: "同一元素的不同同位素物理性質略有不同（例如質量）。它們可以藉以下哪種方式分離？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Chemical methods do not separate isotopes; what class of methods exploits mass or motion differences?",
+      hint_zh: "化學方法不能分離同位素；哪類方法利用質量或運動差異？",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function isoCalcMassNumberNamed(rng, diff) {
+    const el = rng.choice(ELEMENTS.slice(2));
+    const z = el.z;
+    const extra = rng.randint(0, 5);
+    const a = z + extra;
+    return {
+      id: "iso_mass_" + el.sym + "_" + a,
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en:
+        'The isotope is written in the form "' + el.name_en + "-" + a + '". What is its mass number? (number only)',
+      stem_zh: "某同位素寫成「" + el.name_zh + "-" + a + "」。它的質量數是多少？（只填數字）",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: [String(a)],
+      accepted_answers_zh: [String(a)],
+      hint_en: 'In "element-mass number", the number after the hyphen is the mass number A.',
+      hint_zh: "「元素-質量數」寫法中，連字號後的數字就是質量數 A。",
+      answer_en: String(a),
+      answer_zh: String(a),
+      marks: 1,
+    };
+  }
+
+  function isoMcqDeuteriumMass(rng, diff) {
+    return {
+      id: "iso_d_mass",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en: "Deuterium (²H or hydrogen-2) is an isotope of hydrogen. What is the mass number of deuterium? (number only)",
+      stem_zh: "氘（²H 或氫-2）是氫的一種同位素。氘的質量數是多少？（只填數字）",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: ["2"],
+      accepted_answers_zh: ["2"],
+      hint_en: "Mass number = protons + neutrons. ¹H has 1 proton and 0 neutrons; deuterium has 1 neutron.",
+      hint_zh: "質量數 = 質子數 + 中子數。¹H 有 1 個質子、0 個中子；氘多 1 個中子。",
+      answer_en: "2",
+      answer_zh: "2",
+      marks: 1,
+    };
+  }
+
+  function isoMcqSameChemCompounds(rng, diff) {
+    const correct = 0;
+    let opts_en = [
+      "Yes — isotopes of an element have the same chemical properties.",
+      "No — different isotopes always give compounds with different chemical properties.",
+      "Yes — because the compounds have the same mass number.",
+      "No — only if the isotopes have the same number of neutrons.",
+    ];
+    let opts_zh = [
+      "是——同一元素的同位素具有相同的化學性質。",
+      "否——不同同位素形成的化合物化學性質必定不同。",
+      "是——因為化合物具有相同的質量數。",
+      "否——只有當同位素的中子數相同時才成立。",
+    ];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "iso_same_chem_rx",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en:
+        "Compounds formed from different isotopes of hydrogen with the same other element (e.g. both with chlorine-35). Do they have the same chemical properties?",
+      stem_zh: "由氫的不同同位素與同一種其他元素（例如都是氯-35）形成的化合物，是否具有相同的化學性質？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Think about whether isotopes change how the atoms bond or react overall.",
+      hint_zh: "想想同位素會否改變原子整體的鍵結或反應方式。",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function isoMcqNeutronField(rng, diff) {
+    const correct = 1;
+    let opts_en = [
+      "Yes — it is positively charged.",
+      "No — it is electrically neutral.",
+      "Yes — it is negatively charged.",
+      "No — it does not exist in the nucleus.",
+    ];
+    let opts_zh = ["會——它帶正電。", "不會——它是電中性的。", "會——它帶負電。", "不會——它不存在於原子核內。"];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "iso_n_field",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en: "The particle symbol ¹₀n represents one neutron. Will this particle be deflected in an electric field?",
+      stem_zh: "次原子粒子符號 ¹₀n 代表一粒中子。它在電場中會偏轉嗎？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Recall the charge on a neutron.",
+      hint_zh: "回想中子的電荷。",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function isoMcqNeutronParticleType(rng, diff) {
+    const correct = 2;
+    const base_en = ["Proton", "Electron", "Neutron", "Positron"];
+    const base_zh = ["質子", "電子", "中子", "正電子"];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    const opts_en = order.map((i) => base_en[i]);
+    const opts_zh = order.map((i) => base_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "iso_n_type",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en:
+        "In nuclear equations, the symbol ¹₀n (mass number 1, 'atomic number' 0) represents which type of subatomic particle?",
+      stem_zh: "在核反應式中，符號 ¹₀n（質量數 1、「原子序」0）代表哪一種次原子粒子？",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Atomic number 0 means it is not a proton (Z=1) in this notation.",
+      hint_zh: "原子序為 0 表示在此符號中它不是質子（Z=1）。",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  function isoShortDefine(rng, diff) {
+    return {
+      id: "iso_define_short",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en: "Explain what is meant by the term isotopes (same element).",
+      stem_zh: "解釋「同位素」的意思（同一元素）。",
+      options_en: null,
+      options_zh: null,
+      correct_index: null,
+      accepted_answers_en: [
+        "same number of protons different number of neutrons",
+        "same protons different neutrons",
+        "same atomic number different mass number",
+        "atoms of same element with different numbers of neutrons",
+      ],
+      accepted_answers_zh: ["相同質子數不同中子數", "質子數相同中子數不同", "同一元素質子數相同中子數不同", "相同原子序不同中子數目"],
+      hint_en: "Same Z, different N (neutron count); same element.",
+      hint_zh: "同一元素：原子序（質子數）相同，中子數可以不同。",
+      answer_en:
+        "Atoms of the same element (same number of protons / same atomic number) with different numbers of neutrons (different mass numbers).",
+      answer_zh: "同一元素的不同原子：質子數（原子序）相同，中子數不同（質量數不同）。",
+      marks: 2,
+    };
+  }
+
+  function isoMcqH1NoNeutron(rng, diff) {
+    const correct = 1;
+    let opts_en = [
+      "True — every atom must contain at least one neutron.",
+      "False — ordinary hydrogen-1 (¹H) has no neutrons.",
+      "True — neutrons are found in all nuclei including hydrogen.",
+      "False — only ions lack neutrons.",
+    ];
+    let opts_zh = [
+      "正確——每粒原子必定至少有一粒中子。",
+      "錯誤——普通氫-1（¹H）沒有中子。",
+      "正確——包括氫在內，所有原子核都有中子。",
+      "錯誤——只有離子沒有中子。",
+    ];
+    const order = rng.shuffle([0, 1, 2, 3]);
+    opts_en = order.map((i) => opts_en[i]);
+    opts_zh = order.map((i) => opts_zh[i]);
+    const ci = order.indexOf(correct);
+    return {
+      id: "iso_h1_neutron",
+      qtype: "isotope",
+      difficulty: diff,
+      stem_en: "True or false: All atoms contain neutrons in the nucleus.",
+      stem_zh: "判斷：所有原子的原子核內都含有中子。",
+      options_en: opts_en,
+      options_zh: opts_zh,
+      correct_index: ci,
+      accepted_answers_en: [],
+      accepted_answers_zh: [],
+      hint_en: "Think of the lightest isotope of hydrogen.",
+      hint_zh: "想想最輕的氫同位素。",
+      answer_en: opts_en[ci],
+      answer_zh: opts_zh[ci],
+      marks: 1,
+    };
+  }
+
+  const BUILDERS = {
+    mcq: [mcqNeutral, mcqMassNumber, mcqAtomicNumber, mcqParticleCharge, mcqLocation],
+    calc: [calcNeutrons, calcElectrons],
+    symbol: [symbolNotation],
+    short: [shortShells, shortMassNucleus],
+    concept: [conceptSameElement, conceptCrust],
+    isotope: [
+      isoMcqDefinition,
+      isoMcqChemicalProperties,
+      isoMcqChemicalSeparation,
+      isoMcqPhysicalSeparation,
+      isoCalcMassNumberNamed,
+      isoMcqDeuteriumMass,
+      isoMcqSameChemCompounds,
+      isoMcqNeutronField,
+      isoMcqNeutronParticleType,
+      isoShortDefine,
+      isoMcqH1NoNeutron,
+    ],
+  };
+
+  async function generateQuestions(count, types, difficulty, userSeed) {
+    const seed = await stableSeed(String(userSeed || ""), count, types, difficulty);
+    const rng = createRng(seed);
+    let buildersFlat = [];
+    types.forEach((t) => {
+      (BUILDERS[t] || []).forEach((b) => buildersFlat.push(b));
+    });
+    if (!buildersFlat.length) buildersFlat = [mcqNeutral];
+    const out = [];
+    for (let i = 0; i < count; i++) {
+      let builder = rng.choice(buildersFlat);
+      let q = builder(rng, difficulty);
+      let guard = 0;
+      while (!allowedByDifficulty(q, difficulty) && guard < 20) {
+        builder = rng.choice(buildersFlat);
+        q = builder(rng, difficulty);
+        guard++;
+      }
+      q.id = q.id + "_" + i;
+      out.push(q);
+    }
+    return out;
+  }
+
+  /* ——— UI ——— */
+  let lang = (() => {
+    const q = (new URLSearchParams(window.location.search).get("lang") || "").toLowerCase();
+    if (q === "zh" || q === "zh-hant" || q === "zh-tw" || q === "zh-hk") return "zh";
+    if (q === "en") return "en";
+    return "en";
+  })();
+  let lastQuestions = [];
+  const attemptMap = new Map();
+
+  function t(key) {
+    return (UI[lang] && UI[lang][key]) || UI.en[key] || key;
+  }
+
+  function applyLang() {
+    document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+    document.getElementById("appTitle").textContent = t("appTitle");
+    document.getElementById("appSubtitle").textContent = t("appSubtitle");
+    document.getElementById("hSettings").textContent = t("hSettings");
+    document.getElementById("lblTypes").textContent = t("lblTypes");
+    document.getElementById("lblCount").textContent = t("lblCount");
+    document.getElementById("lblDiff").textContent = t("lblDiff");
+    document.getElementById("lblSeed").textContent = t("lblSeed");
+    document.getElementById("btnGenerate").textContent = t("btnGenerate");
+    document.getElementById("hExport").textContent = t("hExport");
+    document.getElementById("txtExportHint").textContent = t("txtExportHint");
+    document.getElementById("btnDocQ").textContent = t("btnDocQ");
+    document.getElementById("btnDocA").textContent = t("btnDocA");
+    document.getElementById("btnPrint").textContent = t("btnPrint");
+    document.getElementById("hPractice").textContent = t("hPractice");
+    document.getElementById("txtPracticeHint").textContent = t("txtPracticeHint");
+    document.getElementById("btnSummary").textContent = t("btnSummary");
+    document.getElementById("footerNote").textContent = t("footerNote");
+    document.getElementById("btnLangEn").classList.toggle("active", lang === "en");
+    document.getElementById("btnLangZh").classList.toggle("active", lang === "zh");
+    initMeta();
+    renderQuiz();
+    const sp = document.getElementById("summaryPanel");
+    if (!sp.hidden && lastQuestions.length) renderSummary();
+  }
+
+  function initMeta() {
+    const diff = document.getElementById("selDiff");
+    diff.innerHTML = "";
+    DIFFICULTIES.forEach((d) => {
+      const o = document.createElement("option");
+      o.value = d.id;
+      o.textContent = lang === "zh" ? d.label_zh : d.label_en;
+      diff.appendChild(o);
+    });
+    const tc = document.getElementById("typeChecks");
+    tc.innerHTML = "";
+    QUESTION_TYPES.forEach((qt) => {
+      const lab = document.createElement("label");
+      lab.className = "row";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.value = qt.id;
+      cb.checked = ["mcq", "calc", "isotope"].includes(qt.id);
+      const span = document.createElement("span");
+      span.textContent = lang === "zh" ? qt.label_zh : qt.label_en;
+      lab.appendChild(cb);
+      lab.appendChild(span);
+      tc.appendChild(lab);
+    });
+  }
+
+  function selectedTypes() {
+    return Array.from(document.querySelectorAll("#typeChecks input:checked")).map((x) => x.value);
+  }
+
+  async function generate() {
+    const types = selectedTypes();
+    if (!types.length) {
+      alert(lang === "zh" ? "請至少選擇一種題型。" : "Select at least one question type.");
+      return;
+    }
+    const count = Math.min(50, Math.max(1, Number(document.getElementById("numCount").value) || 10));
+    const difficulty = document.getElementById("selDiff").value;
+    const seed = document.getElementById("txtSeed").value;
+    lastQuestions = await generateQuestions(count, types, difficulty, seed);
+    attemptMap.clear();
+    lastQuestions.forEach((q) => attemptMap.set(q.id, { wrong: 0, solved: false }));
+    const sp = document.getElementById("summaryPanel");
+    sp.hidden = true;
+    sp.innerHTML = "";
+    renderQuiz();
+  }
+
+  function qtypeLabel(typeId) {
+    const row = QUESTION_TYPES.find((x) => x.id === typeId);
+    if (!row) return typeId;
+    return lang === "zh" ? row.label_zh : row.label_en;
+  }
+
+  function revFill(template, map) {
+    let out = template;
+    Object.keys(map).forEach((k) => {
+      out = out.split("{" + k + "}").join(map[k]);
+    });
+    return out;
+  }
+
+  function buildRevisionSuggestions(total, correct, firstTry, failed, incomplete, byType) {
+    const lines = [];
+    const seen = new Set();
+    function addLine(s) {
+      if (!s || seen.has(s)) return;
+      seen.add(s);
+      lines.push(s);
+    }
+
+    const pctAll = total ? Math.round((100 * correct) / total) : 0;
+    const ftPctAll = total ? Math.round((100 * firstTry) / total) : 0;
+
+    if (pctAll >= 85) addLine(t("revBandExcellent"));
+    else if (pctAll >= 65) addLine(t("revBandGood"));
+    else if (pctAll >= 40) addLine(t("revBandFair"));
+    else addLine(t("revBandLow"));
+
+    const typeRows = [];
+    byType.forEach((agg, tid) => {
+      if (!agg || !agg.total) return;
+      const pct = Math.round((100 * agg.correct) / agg.total);
+      typeRows.push({
+        name: qtypeLabel(tid),
+        total: agg.total,
+        correct: agg.correct,
+        pct
+      });
+    });
+    typeRows.sort((a, b) => a.pct - b.pct || b.total - a.total);
+
+    let weakPick = typeRows.filter((r) => r.total >= 2 && r.pct < 66);
+    if (!weakPick.length) weakPick = typeRows.filter((r) => r.total >= 1 && r.pct < 50);
+    weakPick = weakPick.slice(0, 2);
+
+    weakPick.forEach((r) => {
+      addLine(
+        revFill(t("revWeakOne"), {
+          type: r.name,
+          c: String(r.correct),
+          t: String(r.total),
+          pct: String(r.pct)
+        })
+      );
+    });
+
+    const strongOnes = typeRows.filter((r) => r.total >= 2 && r.pct === 100);
+    if (strongOnes.length && !weakPick.length) {
+      const r0 = strongOnes[0];
+      addLine(
+        revFill(t("revStrongOne"), {
+          type: r0.name,
+          n: String(r0.total)
+        })
+      );
+    }
+
+    if (total >= 4 && pctAll >= 45 && ftPctAll < 40) {
+      addLine(t("revFirstTryLow"));
+    }
+
+    if (failed.length) addLine(t("revTwoStrike"));
+
+    if (incomplete.length) addLine(t("revIncomplete"));
+
+    if (!weakPick.length && typeRows.length >= 2 && pctAll >= 35 && pctAll < 78) {
+      addLine(t("revBalanced"));
+    }
+
+    return lines;
+  }
+
+  function renderSummary() {
+    if (!lastQuestions.length) {
+      alert(t("alertNoQuiz"));
+      return;
+    }
+    const total = lastQuestions.length;
+    let correct = 0;
+    let firstTry = 0;
+    const failed = [];
+    const incomplete = [];
+    const byType = new Map();
+    lastQuestions.forEach((q, idx) => {
+      const st = attemptMap.get(q.id) || { wrong: 0, solved: false };
+      const n = idx + 1;
+      const tid = q.qtype || "unknown";
+      if (!byType.has(tid)) {
+        byType.set(tid, { total: 0, correct: 0, firstTry: 0 });
+      }
+      const agg = byType.get(tid);
+      agg.total += 1;
+      if (st.solved && st.wrong < 2) {
+        agg.correct += 1;
+        if (st.wrong === 0) agg.firstTry += 1;
+      }
+      if (st.solved && st.wrong < 2) {
+        correct += 1;
+        if (st.wrong === 0) firstTry += 1;
+      } else if (st.solved && st.wrong >= 2) {
+        failed.push({ n, q });
+      } else {
+        incomplete.push(n);
+      }
+    });
+    const panel = document.getElementById("summaryPanel");
+    panel.hidden = false;
+    let html = "<h3>" + escHtml(t("summaryTitle")) + "</h3>";
+    html += "<div class=\"summary-score\">" + escHtml(t("summaryScoreLabel")) + "：" + correct + " / " + total + "</div>";
+    html += "<p class=\"summary-sub\">" + escHtml(t("summaryFirstTry")) + "：" + firstTry + " / " + total + "</p>";
+    html += "<div class=\"summary-by-type-title\">" + escHtml(t("summaryByTypeTitle")) + "</div>";
+    html += "<table class=\"summary-type-table\" aria-label=\"" + escHtml(t("summaryByTypeTitle")) + "\">";
+    html +=
+      "<thead><tr><th>" +
+      escHtml(t("summaryByTypeColType")) +
+      "</th><th class=\"num\">" +
+      escHtml(t("summaryByTypeColFraction")) +
+      "</th><th class=\"num\">" +
+      escHtml(t("summaryByTypeColRate")) +
+      "</th><th class=\"num\">" +
+      escHtml(t("summaryByTypeColFirst")) +
+      "</th></tr></thead><tbody>";
+    QUESTION_TYPES.forEach((qt) => {
+      const agg = byType.get(qt.id);
+      if (!agg || !agg.total) return;
+      const pct = agg.total ? Math.round((100 * agg.correct) / agg.total) : 0;
+      const ftPct = agg.total ? Math.round((100 * agg.firstTry) / agg.total) : 0;
+      const name = lang === "zh" ? qt.label_zh : qt.label_en;
+      html +=
+        "<tr><td><span class=\"type-name\">" +
+        escHtml(name) +
+        '</span> <span class="type-code-cell">(' +
+        escHtml(qt.id) +
+        ")</span></td><td class=\"num\">" +
+        agg.correct +
+        " / " +
+        agg.total +
+        "</td><td class=\"num\">" +
+        pct +
+        "%</td><td class=\"num\">" +
+        agg.firstTry +
+        " / " +
+        agg.total +
+        " (" +
+        ftPct +
+        "%)</td></tr>";
+    });
+    byType.forEach((agg, tid) => {
+      if (QUESTION_TYPES.some((x) => x.id === tid)) return;
+      const pct = agg.total ? Math.round((100 * agg.correct) / agg.total) : 0;
+      const ftPct = agg.total ? Math.round((100 * agg.firstTry) / agg.total) : 0;
+      html +=
+        "<tr><td><span class=\"type-name\">" +
+        escHtml(tid) +
+        "</span></td><td class=\"num\">" +
+        agg.correct +
+        " / " +
+        agg.total +
+        "</td><td class=\"num\">" +
+        pct +
+        "%</td><td class=\"num\">" +
+        agg.firstTry +
+        " / " +
+        agg.total +
+        " (" +
+        ftPct +
+        "%)</td></tr>";
+    });
+    html += "</tbody></table>";
+    const revLines = buildRevisionSuggestions(total, correct, firstTry, failed, incomplete, byType);
+    html += '<div class="summary-revision"><h4>' + escHtml(t("revTitle")) + "</h4><ul>";
+    revLines.forEach((line) => {
+      html += "<li>" + escHtml(line) + "</li>";
+    });
+    html += "</ul></div>";
+    html += "<div class=\"summary-wrong-title\">" + escHtml(t("summaryWrongTitle")) + "</div>";
+    if (!failed.length) {
+      html += "<p class=\"summary-none\">" + escHtml(t("summaryNoneWrong")) + "</p>";
+    } else {
+      html += "<ul class=\"summary-wrong-list\">";
+      failed.forEach(({ n, q }) => {
+        const label = qtypeLabel(q.qtype);
+        html +=
+          "<li>Q" +
+          n +
+          " · " +
+          escHtml(label) +
+          ' <span class="type-code">(' +
+          escHtml(q.qtype) +
+          ")</span></li>";
+      });
+      html += "</ul>";
+    }
+    if (incomplete.length) {
+      html +=
+        '<p class="summary-sub" style="margin-top:0.75rem">' +
+        escHtml(t("summaryIncomplete")) +
+        "：" +
+        incomplete.map((x) => "Q" + x).join(lang === "zh" ? "、" : ", ") +
+        "</p>";
+    }
+    panel.innerHTML = html;
+  }
+
+  function normAns(s) {
+    return String(s)
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .replace(/，/g, ",")
+      .replace(/、/g, ",");
+  }
+
+  function checkText(q, raw) {
+    const u = normAns(raw);
+    if (!u) return false;
+    const lists = [...(q.accepted_answers_en || []), ...(q.accepted_answers_zh || [])];
+    if (lists.some((a) => u === normAns(a))) return true;
+    for (const a of lists) {
+      const t = normAns(a);
+      if (t && u.includes(t) && u.length <= t.length + 8) return true;
+    }
+    return false;
+  }
+
+  function renderQuiz() {
+    const el = document.getElementById("quizArea");
+    el.classList.remove("quiz-empty");
+    if (!lastQuestions.length) {
+      el.classList.add("quiz-empty");
+      el.textContent = t("empty");
+      return;
+    }
+    el.innerHTML = "";
+    lastQuestions.forEach((q, idx) => {
+      const wrap = document.createElement("div");
+      wrap.className = "q-block";
+      const head = document.createElement("div");
+      head.className = "q-head";
+      head.textContent = "Q" + (idx + 1) + " · " + q.qtype + " · " + q.difficulty;
+      wrap.appendChild(head);
+      const se = document.createElement("p");
+      se.className = "stem";
+      se.textContent = q.stem_en;
+      wrap.appendChild(se);
+      const sz = document.createElement("p");
+      sz.className = "stem stem-zh";
+      sz.textContent = q.stem_zh;
+      wrap.appendChild(sz);
+      let inputEl = null;
+      if (q.options_en && q.correct_index != null) {
+        const og = document.createElement("div");
+        og.className = "options";
+        q.options_en.forEach((opt, j) => {
+          const lab = document.createElement("label");
+          const rd = document.createElement("input");
+          rd.type = "radio";
+          rd.name = "mcq_" + q.id;
+          rd.value = String(j);
+          const oz = q.options_zh ? q.options_zh[j] : "";
+          lab.appendChild(rd);
+          lab.appendChild(document.createTextNode(" " + opt + (oz ? " / " + oz : "")));
+          og.appendChild(lab);
+        });
+        wrap.appendChild(og);
+      } else {
+        inputEl = document.createElement("input");
+        inputEl.type = "text";
+        inputEl.className = "text-ans";
+        inputEl.placeholder = lang === "zh" ? "在此輸入答案" : "Type your answer";
+        wrap.appendChild(inputEl);
+      }
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = t("quizCheck");
+      btn.className = "primary";
+      const fb = document.createElement("div");
+      fb.className = "feedback";
+      fb.style.display = "none";
+      btn.addEventListener("click", () => {
+        const st = attemptMap.get(q.id) || { wrong: 0, solved: false };
+        if (st.solved) return;
+        let ok = false;
+        if (q.options_en && q.correct_index != null) {
+          const picked = wrap.querySelector('input[name="mcq_' + q.id + '"]:checked');
+          const sel = picked ? Number(picked.value) : null;
+          ok = sel === q.correct_index;
+        } else ok = checkText(q, inputEl ? inputEl.value : "");
+        fb.style.display = "block";
+        if (ok) {
+          st.solved = true;
+          attemptMap.set(q.id, st);
+          fb.className = "feedback ok";
+          fb.textContent = lang === "zh" ? "正確。" : "Correct.";
+          return;
+        }
+        st.wrong += 1;
+        attemptMap.set(q.id, st);
+        if (st.wrong === 1) {
+          fb.className = "feedback hint";
+          fb.innerHTML = (lang === "zh" ? "<b>提示：</b>" : "<b>Hint:</b>") + " " + (lang === "zh" ? q.hint_zh : q.hint_en);
+        } else {
+          st.solved = true;
+          attemptMap.set(q.id, st);
+          fb.className = "feedback bad";
+          fb.innerHTML = (lang === "zh" ? "<b>參考答案：</b>" : "<b>Model answer:</b>") + " " + (lang === "zh" ? q.answer_zh : q.answer_en);
+        }
+      });
+      wrap.appendChild(btn);
+      wrap.appendChild(fb);
+      el.appendChild(wrap);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function buildPdfInnerHtml(answersMode) {
+    const titleEn = answersMode
+      ? "HKDSE Chemistry — Atomic structure (Answers & hints)"
+      : "HKDSE Chemistry — Atomic structure (Questions)";
+    const titleZh = answersMode ? "化學 — 原子結構（答案及提示）" : "化學 — 原子結構（試題）";
+    let html = "<h1>" + escHtml(titleEn) + "</h1><div class=\"meta\">" + escHtml(titleZh) + "</div>";
+    lastQuestions.forEach((q, i) => {
+      html += "<div class=\"pdf-q\"><strong>Q" + (i + 1) + "</strong> [" + escHtml(q.qtype) + "]<br/>";
+      html += "<strong>EN:</strong> " + escHtml(q.stem_en) + "<br/>";
+      html += "<strong>中文：</strong> " + escHtml(q.stem_zh) + "<br/>";
+      if (q.options_en && !answersMode) {
+        q.options_en.forEach((op, j) => {
+          const oz = q.options_zh ? q.options_zh[j] : "";
+          html += "(" + (j + 1) + ") " + escHtml(op) + " / " + escHtml(oz) + "<br/>";
+        });
+      }
+      if (answersMode) {
+        if (q.options_en && q.correct_index != null) {
+          const ce = q.options_en[q.correct_index];
+          const cz = (q.options_zh || q.options_en)[q.correct_index];
+          html += "<strong>Answer / 答案：</strong> (" + (q.correct_index + 1) + ") " + escHtml(ce) + " / " + escHtml(cz) + "<br/>";
+        } else {
+          html += "<strong>Answer (EN)：</strong> " + escHtml(q.answer_en) + "<br/>";
+          html += "<strong>答案（中文）：</strong> " + escHtml(q.answer_zh) + "<br/>";
+        }
+        html += "<em>Hint / 提示：</em> " + escHtml(q.hint_en) + " | " + escHtml(q.hint_zh);
+      }
+      html += "</div>";
+    });
+    return html;
+  }
+
+  function fillPdfSheet(answersMode) {
+    document.getElementById("pdfSheet").innerHTML = buildPdfInnerHtml(answersMode);
+  }
+
+  function downloadWord(answersMode) {
+    if (!lastQuestions.length) {
+      alert(lang === "zh" ? "請先產生題目。" : "Generate questions first.");
+      return;
+    }
+    const titleEn = answersMode ? "Atomic structure — Answers" : "Atomic structure — Questions";
+    const titleZh = answersMode ? "原子結構 — 答案" : "原子結構 — 試題";
+    let body = "";
+    lastQuestions.forEach((q, i) => {
+      body += "<h2>Q" + (i + 1) + " [" + escHtml(q.qtype) + "]</h2>";
+      body += "<p><b>EN:</b> " + escHtml(q.stem_en) + "</p>";
+      body += "<p><b>中文：</b> " + escHtml(q.stem_zh) + "</p>";
+      if (q.options_en && !answersMode) {
+        body += "<ul>";
+        q.options_en.forEach((op, j) => {
+          const oz = q.options_zh ? q.options_zh[j] : "";
+          body += "<li>" + escHtml(op) + " / " + escHtml(oz) + "</li>";
+        });
+        body += "</ul>";
+      }
+      if (answersMode) {
+        if (q.options_en && q.correct_index != null) {
+          const ce = q.options_en[q.correct_index];
+          const cz = (q.options_zh || q.options_en)[q.correct_index];
+          body += "<p><b>Answer / 答案：</b> (" + (q.correct_index + 1) + ") " + escHtml(ce) + " / " + escHtml(cz) + "</p>";
+        } else {
+          body += "<p><b>Answer (EN):</b> " + escHtml(q.answer_en) + "</p>";
+          body += "<p><b>答案（中文）:</b> " + escHtml(q.answer_zh) + "</p>";
+        }
+        body += "<p><i>Hint / 提示:</i> " + escHtml(q.hint_en) + " | " + escHtml(q.hint_zh) + "</p>";
+      }
+    });
+    const html =
+      "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" " +
+      "xmlns:w=\"urn:schemas-microsoft-com:office:word\" xmlns=\"http://www.w3.org/TR/REC-html40\">" +
+      "<head><meta charset=\"utf-8\"><title>" +
+      escHtml(titleEn) +
+      "</title></head><body>" +
+      "<h1>" +
+      escHtml(titleEn) +
+      "</h1><h2 style=\"font-size:14pt\">" +
+      escHtml(titleZh) +
+      "</h2>" +
+      body +
+      "</body></html>";
+    const blob = new Blob(["\ufeff", html], { type: "application/msword" });
+    const a = document.createElement("a");
+    const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
+    a.href = URL.createObjectURL(blob);
+    a.download = (answersMode ? "atomic_answers_" : "atomic_questions_") + ts + ".doc";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function printSheet(answersMode) {
+    if (!lastQuestions.length) {
+      alert(lang === "zh" ? "請先產生題目。" : "Generate questions first.");
+      return;
+    }
+    fillPdfSheet(answersMode);
+    window.print();
+  }
+
+  document.getElementById("btnLangEn").addEventListener("click", () => {
+    lang = "en";
+    applyLang();
+  });
+  document.getElementById("btnLangZh").addEventListener("click", () => {
+    lang = "zh";
+    applyLang();
+  });
+  document.getElementById("btnGenerate").addEventListener("click", generate);
+  document.getElementById("btnSummary").addEventListener("click", renderSummary);
+  document.getElementById("btnDocQ").addEventListener("click", () => downloadWord(false));
+  document.getElementById("btnDocA").addEventListener("click", () => downloadWord(true));
+  document.getElementById("btnPrint").addEventListener("click", () => {
+    if (!lastQuestions.length) {
+      alert(lang === "zh" ? "請先產生題目。" : "Generate questions first.");
+      return;
+    }
+    const want = confirm(lang === "zh" ? "要列印「答案版」嗎？（取消 = 試題版）" : "Print ANSWER sheet? (Cancel = questions only)");
+    printSheet(!!want);
+  });
+
+  applyLang();
+})();
+  </script>
+</body>
+</html>
