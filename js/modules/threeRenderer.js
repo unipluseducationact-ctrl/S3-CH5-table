@@ -123,6 +123,13 @@ function ensureSharedMaterials() {
   return sharedMaterials;
 }
 
+/** Resolved at build time — works on GitHub Pages and at domain root. */
+function getThreeScriptUrl() {
+  const base = typeof import.meta !== "undefined" && import.meta.env && import.meta.env.BASE_URL;
+  if (!base) return "three.min.js";
+  return base.endsWith("/") ? `${base}three.min.js` : `${base}/three.min.js`;
+}
+
 // ===== Lazy-load Three.js =====
 export function ensureThreeLibLoaded() {
   if (typeof window !== "undefined" && window.THREE) {
@@ -139,7 +146,7 @@ export function ensureThreeLibLoaded() {
       return;
     }
     const script = document.createElement("script");
-    script.src = "three.min.js";
+    script.src = getThreeScriptUrl();
     script.async = true;
     script.dataset.uniplusThree = "1";
     script.onload = () => resolve(window.THREE);
