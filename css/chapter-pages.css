@@ -258,6 +258,9 @@
 #settings-page.blank-page.chapter-page {
   align-items: flex-start;
   justify-content: flex-start;
+  /* height:100% + padding-top without border-box makes the fixed overlay TALLER than
+     the viewport — the bottom of the scroll area (hero PNG + sections) is clipped. */
+  box-sizing: border-box;
   /* Single shorthand overrides base.css #settings-page { overflow: hidden } — longhands
      alone can leave the shorthand’s block-axis behavior surprising in some engines. */
   overflow: auto;
@@ -265,6 +268,7 @@
   min-width: 0;
   /* Fixed nav: top 12px + pill height (~56px × scale). .chapter-page’s 56px sat under the bar. */
   padding-top: calc(12px + (56px * var(--global-nav-scale, 1)) + 12px);
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
   /* Avoid clipping the hero: 100vw-based columns can exceed the layout width when a
@@ -407,8 +411,10 @@
   width: 100%;
   max-width: 100%;
   height: auto;
+  max-height: none;
   /* Intrinsic aspect ratio from the file; avoid forcing a box that + overflow:hidden parents can clip */
   object-fit: contain;
+  object-position: top center;
   vertical-align: middle;
   border-radius: 14px;
   border: 1px solid var(--border-color, #e2e8f0);
