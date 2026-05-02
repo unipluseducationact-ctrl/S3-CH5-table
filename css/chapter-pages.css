@@ -258,10 +258,17 @@
 #settings-page.blank-page.chapter-page {
   align-items: flex-start;
   justify-content: flex-start;
+  /* Single shorthand overrides base.css #settings-page { overflow: hidden } — longhands
+     alone can leave the shorthand’s block-axis behavior surprising in some engines. */
+  overflow: auto;
+  min-height: 0;
+  min-width: 0;
+  /* Fixed nav: top 12px + pill height (~56px × scale). .chapter-page’s 56px sat under the bar. */
+  padding-top: calc(12px + (56px * var(--global-nav-scale, 1)) + 12px);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
   /* Avoid clipping the hero: 100vw-based columns can exceed the layout width when a
      vertical scrollbar is present; hidden-x then cuts the right edge on GitHub Pages. */
-  overflow-x: auto;
-  overflow-y: auto;
   overscroll-behavior-y: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
@@ -281,6 +288,8 @@
 .settings-viewport.chapter-summary-shell {
   display: flex;
   flex-direction: column;
+  /* Flex/grid: allow shrinking so width:100% children don’t spill past the scrollport. */
+  min-width: 0;
   /* Use 100% of the scroll parent instead of 100vw — avoids scrollbar-width overflow. */
   max-width: min(960px, 100%);
   width: 100%;
@@ -305,8 +314,12 @@
   max-width: none;
   flex: 0 0 auto;
   min-height: 0;
+  min-width: 0;
   max-height: none;
   overflow: visible;
+  /* Extra horizontal room so hero shadow + border aren’t clipped by the scrollport edge. */
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
 }
 
 .summary-progress {
